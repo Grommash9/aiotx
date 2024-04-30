@@ -1,5 +1,5 @@
-from _bitcoin_base_client import AioTxUTXOClient
-from _evm_base_client import AioTxEVMClient
+from ._bitcoin_base_client import AioTxUTXOClient
+from ._evm_base_client import AioTxEVMClient
 
 
 class AioTxBSCClient(AioTxEVMClient):
