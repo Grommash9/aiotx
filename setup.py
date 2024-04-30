@@ -43,6 +43,8 @@ setup(
     ],
     install_requires=[
         "aiohttp",
+        "eth_keys",
+        "eth_utils"
     ],
     extras_require={
         "test": extras_test,
