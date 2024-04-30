@@ -34,7 +34,6 @@ setup(
     description="An asynchronous library for interacting with various cryptocurrencies and blockchains",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    version="0.0.3",
     packages=find_packages(exclude=("tests", "scripts")),
     package_data={
         "aiotx": ["py.typed"],
