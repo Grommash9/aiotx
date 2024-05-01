@@ -1,0 +1,566 @@
+interactions:
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0x3ffeCb152F95f7122990ab16Eff4B0B5d533497e",
+      "latest"], "id": 1, "jsonrpc": "2.0"}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x507042f4054130"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 May 2024 18:07:30 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-10ebeaeae12fe5d7
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0x1284214b9b9c85549aB3D2b972df0dEEf66aC2c9",
+      "latest"], "id": 1, "jsonrpc": "2.0"}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x92926ba5b685ca31"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '55'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 May 2024 18:07:31 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-ecf10b7bc104d983
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0x3a82a5a2b77d33a12621e860d1d19cdfb8bf63b4",
+      "latest"], "id": 1, "jsonrpc": "2.0"}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x1624a893a053a2c"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '54'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 May 2024 18:07:31 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-84b84c7a90242c73
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0x0e28BD8B2D4efb8A3128f7fB310f4e227E25DB6F",
+      "latest"], "id": 1, "jsonrpc": "2.0"}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x997c64ee6683bf4"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '54'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 May 2024 18:07:31 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-10ebeaeae12fe5d7
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0xfb2bdebad0cb9486e714b053a2dbfaf7c05151c9",
+      "latest"], "id": 1, "jsonrpc": "2.0"}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0xf751a30dc400"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '51'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 May 2024 18:07:32 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-84b84c7a90242c73
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0x040bA056435A7675847F4D577d3Cb8Fc2646A946",
+      "latest"], "id": 1, "jsonrpc": "2.0"}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x17fbe3bc52400"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '52'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 May 2024 18:07:32 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-4291c05108b63f99
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["040bA056435A7675847F4D577d3Cb8Fc2646A946",
+      "latest"], "id": 1, "jsonrpc": "2.0"}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32602,"message":"invalid argument
+        0: json: cannot unmarshal hex string without 0x prefix into Go value of type
+        common.Address"}}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '170'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 May 2024 18:07:32 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-84b84c7a90242c73
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0x3ffeCb152F95f7122990ab16Eff4B0B5d533497e",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x5010c3bc518a20"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '53'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 May 2024 19:54:33 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-2bd95d6b916503dd
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0x1284214b9b9c85549aB3D2b972df0dEEf66aC2c9",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x92926ba5b685ca31"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '55'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 May 2024 19:54:33 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-2bd95d6b916503dd
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0x3a82a5a2b77d33a12621e860d1d19cdfb8bf63b4",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x1624a893a053a2c"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '54'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 May 2024 19:54:33 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-2bd95d6b916503dd
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0x0e28BD8B2D4efb8A3128f7fB310f4e227E25DB6F",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x997c64ee6683bf4"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '54'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 May 2024 19:54:34 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-10ebeaeae12fe5d7
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0xfb2bdebad0cb9486e714b053a2dbfaf7c05151c9",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0xf751a30dc400"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '51'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 May 2024 19:54:34 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-10ebeaeae12fe5d7
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0x040bA056435A7675847F4D577d3Cb8Fc2646A946",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x17fbe3bc52400"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '52'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 May 2024 19:54:34 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-10ebeaeae12fe5d7
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["040bA056435A7675847F4D577d3Cb8Fc2646A946",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32602,"message":"invalid argument
+        0: json: cannot unmarshal hex string without 0x prefix into Go value of type
+        common.Address"}}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '170'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 May 2024 19:54:35 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-dbb2877f11a402e9
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0x040bA056435A7675847F4D577d3Cb8Fc2646A947",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x0"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '40'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 May 2024 20:16:08 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-ecf10b7bc104d983
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0x040bA056435A7675847F4D577d3Cb8Fc2646A948",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x0"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '40'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 01 May 2024 20:16:14 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-84b84c7a90242c73
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+version: 1

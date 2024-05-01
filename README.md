@@ -22,15 +22,18 @@ Here's a simple example of how to use AioTx to create a wallet and retrieve its 
 from aiotx import AioTxBSCClient
 
 async def main():
-    bsc_client = AioTxBSCClient(node_url="https://example.com")
+    bsc_client = AioTxBSCClient(node_url="https://example.com", chain_id=97)
     
     # Create a new wallet
-    wallet = await bsc_client.create_wallet()
-    print(f"Wallet address: {wallet.address}")
+    address, private_key = await bsc_client.generate_address()
     
     # Retrieve the wallet balance
-    balance = await bsc_client.get_balance(wallet.address)
+    balance = await bsc_client.get_balance(address)
     print(f"Wallet balance: {balance}")
+
+    # Send transaction
+    tx_id = await bsc_client.send_transaction(private_key, to_address, amount, gas_price, gas_limit)
+    print(f"Your tx: {tx_id}")
 
 # Run the async main function
 asyncio.run(main())

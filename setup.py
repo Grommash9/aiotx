@@ -3,16 +3,15 @@ from setuptools import find_packages, setup
 
 extras_test = (
     [
-        "black",
-        "flake8",
         "hypothesis",
-        "isort",
-        "mypy>=0.910",
+        "ruff",
         "pyproj",
         "pytest",
         "pytest-cov",
+        "pytest-asyncio",
         "tox",
-        "build"
+        "build",
+        "vcrpy"
     ]
 )
 
@@ -44,7 +43,8 @@ setup(
     install_requires=[
         "aiohttp",
         "eth_keys",
-        "eth_utils"
+        "eth_utils",
+        "eth_account"
     ],
     extras_require={
         "test": extras_test,
