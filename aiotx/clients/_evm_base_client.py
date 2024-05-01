@@ -66,6 +66,8 @@ class AioTxEVMClient:
             }
         )
 
+        print("payload", payload)
+
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 self.node_url, data=payload, headers={"Content-Type": "application/json"}
@@ -113,6 +115,22 @@ class AioTxEVMClient:
             async with session.post(self.node_url, data=payload) as response:
                 result = await response.json()
                 return result
+
+    def build_raw_transaction(
+        self, private_key: str, to_address: str, nonce: int, amount_in_wei: int, gas_price: int, gas_limit: int = 21000
+    ):
+        transaction = {
+            "nonce": nonce,
+            "gasPrice": gas_price,
+            "gas": gas_limit,
+            "to": to_address,
+            "value": amount_in_wei,
+            "data": b"",
+            "chainId": self.chain_id,
+        }
+        signed_transaction = Account.sign_transaction(transaction, private_key)
+        raw_tx = to_hex(signed_transaction.rawTransaction)
+        return raw_tx
 
     async def send_token_transaction(
         self,
