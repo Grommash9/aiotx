@@ -3,11 +3,12 @@ import secrets
 
 import aiohttp
 import rlp
+from eth_abi import encode
 from eth_account import Account
 from eth_account.datastructures import SignedTransaction
 from eth_hash.auto import keccak
 from eth_keys import keys
-from eth_utils import decode_hex, encode_hex, keccak, to_bytes, to_checksum_address, to_hex
+from eth_utils import encode_hex, keccak, to_checksum_address, to_hex
 
 from aiotx.types import BlockParam
 
@@ -143,3 +144,43 @@ class AioTxEVMClient:
         signed_transaction = Account.sign_transaction(transaction, private_key)
         raw_tx = to_hex(signed_transaction.rawTransaction)
         return raw_tx
+
+    
+    async def send_token_transaction(self, private_key: str, to_address: str, token_address: str, amount: int, gas_price: int, gas_limit: int = 100000):
+        # Get the sender's address
+        sender_address = Account.from_key(private_key).address
+
+        # Prepare the transfer function call data
+        function_signature = "transfer(address,uint256)"
+        function_selector = keccak(function_signature.encode("utf-8"))[:4].hex()
+        transfer_data = encode(["address", "uint256"], [to_address, amount])
+        data = "0x" + function_selector + transfer_data.hex()
+
+        # Build the transaction
+        transaction = {
+            'nonce': await self.get_transaction_count(sender_address),
+            'gasPrice': gas_price,
+            'gas': gas_limit,
+            'to': token_address,
+            'value': 0,
+            'data': data,
+            'chainId': 97,  # BSC Testnet chainId
+        }
+
+        # Sign the transaction
+        signed_transaction = Account.sign_transaction(transaction, private_key)
+        raw_tx = to_hex(signed_transaction.rawTransaction)
+
+        # Send the signed transaction
+        payload = {
+            "jsonrpc": "2.0",
+            "method": "eth_sendRawTransaction",
+            "params": [raw_tx],
+            "id": 1
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.post(self.node_url, json=payload) as response:
+                result = await response.json()
+                if "error" in result:
+                    raise Exception(f"Error: {result['error']}")
+                return result["result"]
