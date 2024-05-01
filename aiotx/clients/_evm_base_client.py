@@ -2,36 +2,28 @@ import json
 import secrets
 
 import aiohttp
-import rlp
 from eth_abi import encode
 from eth_account import Account
-from eth_account.datastructures import SignedTransaction
 from eth_hash.auto import keccak
-from eth_keys import keys
-from eth_utils import encode_hex, keccak, to_checksum_address, to_hex
+from eth_utils import keccak, to_checksum_address, to_hex
 
 from aiotx.types import BlockParam
 
 
 class AioTxEVMClient:
-    def __init__(self, node_url):
+    def __init__(self, node_url, chain_id):
         self.node_url = node_url
+        self.chain_id = chain_id
 
     def generate_address(self):
-        private_key_bytes = secrets.token_bytes(32)
-        private_key = keys.PrivateKey(private_key_bytes)
-        public_key_bytes = private_key.public_key.to_bytes()
-        keccak_digest = keccak(public_key_bytes)[12:]
-        address = encode_hex(keccak_digest[-20:])
-        private_key_hex = private_key.to_hex()
-        return private_key_hex, to_checksum_address(address)
+        private_key_bytes = secrets.token_hex(32)
+        private_key = "0x" + private_key_bytes
+        acct = Account.from_key(private_key)
+        return private_key, acct.address
 
     def get_address_from_private_key(self, private_key: str):
-        private_key = keys.PrivateKey(bytes.fromhex(private_key))
-        public_key_bytes = private_key.public_key.to_bytes()
-        keccak_digest = keccak(public_key_bytes)[12:]
-        address = encode_hex(keccak_digest[-20:])
-        return to_checksum_address(address)
+        sender_address = Account.from_key(private_key).address
+        return to_checksum_address(sender_address)
 
     async def get_last_block(self):
         payload = json.dumps({"method": "eth_blockNumber", "params": [], "id": 1, "jsonrpc": "2.0"})
@@ -116,7 +108,7 @@ class AioTxEVMClient:
         self, private_key: str, to_address: str, amount: int, gas_price: int, gas_limit: int = 21000
     ):
 
-        from_address = self.get_address_from_private_key(private_key)
+        from_address = Account.from_key(private_key).address
         nonce = await self.get_transaction_count(from_address)
         raw_transaction = self.build_raw_transaction(private_key, to_address, nonce, amount, gas_price, gas_limit)
 
@@ -139,14 +131,21 @@ class AioTxEVMClient:
             "to": to_address,
             "value": amount_in_wei,
             "data": b"",
-            "chainId": 97,  # BSC Testnet chainId
+            "chainId": self.chain_id,
         }
         signed_transaction = Account.sign_transaction(transaction, private_key)
         raw_tx = to_hex(signed_transaction.rawTransaction)
         return raw_tx
 
-    
-    async def send_token_transaction(self, private_key: str, to_address: str, token_address: str, amount: int, gas_price: int, gas_limit: int = 100000):
+    async def send_token_transaction(
+        self,
+        private_key: str,
+        to_address: str,
+        token_address: str,
+        amount: int,
+        gas_price: int,
+        gas_limit: int = 100000,
+    ):
         # Get the sender's address
         sender_address = Account.from_key(private_key).address
 
@@ -158,13 +157,13 @@ class AioTxEVMClient:
 
         # Build the transaction
         transaction = {
-            'nonce': await self.get_transaction_count(sender_address),
-            'gasPrice': gas_price,
-            'gas': gas_limit,
-            'to': token_address,
-            'value': 0,
-            'data': data,
-            'chainId': 97,  # BSC Testnet chainId
+            "nonce": await self.get_transaction_count(sender_address),
+            "gasPrice": gas_price,
+            "gas": gas_limit,
+            "to": token_address,
+            "value": 0,
+            "data": data,
+            "chainId": self.chain_id,
         }
 
         # Sign the transaction
@@ -172,12 +171,7 @@ class AioTxEVMClient:
         raw_tx = to_hex(signed_transaction.rawTransaction)
 
         # Send the signed transaction
-        payload = {
-            "jsonrpc": "2.0",
-            "method": "eth_sendRawTransaction",
-            "params": [raw_tx],
-            "id": 1
-        }
+        payload = {"jsonrpc": "2.0", "method": "eth_sendRawTransaction", "params": [raw_tx], "id": 1}
         async with aiohttp.ClientSession() as session:
             async with session.post(self.node_url, json=payload) as response:
                 result = await response.json()
