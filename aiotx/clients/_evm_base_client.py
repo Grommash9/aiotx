@@ -4,7 +4,6 @@ import secrets
 import aiohttp
 from eth_abi import encode
 from eth_account import Account
-from eth_hash.auto import keccak
 from eth_utils import keccak, to_checksum_address, to_hex
 
 from aiotx.types import BlockParam
@@ -55,11 +54,7 @@ class AioTxEVMClient:
         function_signature = "balanceOf(address)".encode("UTF-8")
         hash_result = keccak(function_signature)
         method_id = hash_result.hex()[:8]
-
-        # Pad the address to 32 bytes (64 characters)
         padded_address = address.lower().replace("0x", "").zfill(64)
-
-        # Construct the data field
         data = f"0x{method_id}{padded_address}"
 
         payload = json.dumps(
@@ -70,8 +65,6 @@ class AioTxEVMClient:
                 "jsonrpc": "2.0",
             }
         )
-
-        print("payload", payload)
 
         async with aiohttp.ClientSession() as session:
             async with session.post(
@@ -121,22 +114,6 @@ class AioTxEVMClient:
                 result = await response.json()
                 return result
 
-    def build_raw_transaction(
-        self, private_key: str, to_address: str, nonce: int, amount_in_wei: int, gas_price: int, gas_limit: int = 21000
-    ):
-        transaction = {
-            "nonce": nonce,
-            "gasPrice": gas_price,
-            "gas": gas_limit,
-            "to": to_address,
-            "value": amount_in_wei,
-            "data": b"",
-            "chainId": self.chain_id,
-        }
-        signed_transaction = Account.sign_transaction(transaction, private_key)
-        raw_tx = to_hex(signed_transaction.rawTransaction)
-        return raw_tx
-
     async def send_token_transaction(
         self,
         private_key: str,
@@ -146,16 +123,13 @@ class AioTxEVMClient:
         gas_price: int,
         gas_limit: int = 100000,
     ):
-        # Get the sender's address
         sender_address = Account.from_key(private_key).address
 
-        # Prepare the transfer function call data
         function_signature = "transfer(address,uint256)"
         function_selector = keccak(function_signature.encode("utf-8"))[:4].hex()
         transfer_data = encode(["address", "uint256"], [to_address, amount])
         data = "0x" + function_selector + transfer_data.hex()
 
-        # Build the transaction
         transaction = {
             "nonce": await self.get_transaction_count(sender_address),
             "gasPrice": gas_price,
@@ -166,11 +140,9 @@ class AioTxEVMClient:
             "chainId": self.chain_id,
         }
 
-        # Sign the transaction
         signed_transaction = Account.sign_transaction(transaction, private_key)
         raw_tx = to_hex(signed_transaction.rawTransaction)
 
-        # Send the signed transaction
         payload = {"jsonrpc": "2.0", "method": "eth_sendRawTransaction", "params": [raw_tx], "id": 1}
         async with aiohttp.ClientSession() as session:
             async with session.post(self.node_url, json=payload) as response:
