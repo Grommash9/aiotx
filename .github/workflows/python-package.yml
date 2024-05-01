@@ -3,6 +3,9 @@
 
 name: Python package
 
+env:
+  TEST_BSC_WALLET_PRIVATE_KEY: ${{ secrets.TEST_BSC_WALLET_PRIVATE_KEY }}
+
 on:
   push:
     branches: [ "main" ]
