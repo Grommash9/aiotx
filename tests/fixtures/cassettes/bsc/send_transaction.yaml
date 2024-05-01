@@ -1,13 +1,13 @@
 interactions:
 - request:
     body: '{"method": "eth_getTransactionCount", "params": ["0x3ffeCb152F95f7122990ab16Eff4B0B5d533497e",
-      "latest"], "id": 1, "jsonrpc": "2.0"}'
+      "latest"], "jsonrpc": "2.0", "id": 1}'
     headers: {}
     method: POST
     uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x65"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x67"}
 
         '
     headers:
@@ -24,25 +24,25 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 May 2024 18:07:38 GMT
+      - Wed, 01 May 2024 20:18:25 GMT
       Vary:
       - Accept-Encoding
       X-Host-Id:
-      - f1b546936d23e3b5-ecf10b7bc104d983
+      - f1b546936d23e3b5-2bd95d6b916503dd
       X-Node-Id:
       - bnb-smart-chain_bsc-testnet_iad
     status:
       code: 200
       message: OK
 - request:
-    body: '{"method": "eth_sendRawTransaction", "params": ["0xf8676585012a05f20082520894f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a8227108081e5a086c9dcc0cd5be07ac4ffe2108a452c50fed71c9c58102dee505dd8de202bc619a07fcf4c620ed322016ada6d31129a0ed740b1af966b65c64055acffc7a4f41db1"],
-      "id": 1, "jsonrpc": "2.0"}'
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf8676785012a05f20082520894f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a8227108081e5a087edaeed5e3b7821247c57974bd9b14032aceccdc365888e98f2a8d139e4bb9ca037e518284d0225439c9b669b79863acb93d4b7f05585589833168a0a102e6c1b"],
+      "jsonrpc": "2.0", "id": 1}'
     headers: {}
     method: POST
     uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x24a3f2c8fe45306eea63e1f625d570af02053e275a3022519d108e7017f15962"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0xac6e035470f637ec73c1aabf680761a03061e02ca91174fd26f7b78e71df2083"}
 
         '
     headers:
@@ -59,7 +59,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 May 2024 18:07:39 GMT
+      - Wed, 01 May 2024 20:18:26 GMT
       Vary:
       - Accept-Encoding
       X-Host-Id:

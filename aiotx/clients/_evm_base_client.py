@@ -4,8 +4,29 @@ import secrets
 import aiohttp
 from eth_abi import encode
 from eth_account import Account
+from eth_typing import HexStr
 from eth_utils import keccak, to_checksum_address, to_hex
 
+from aiotx.exceptions import (
+    AioTxError,
+    BlockNotFoundError,
+    BlockRangeLimitExceededError,
+    ExecutionTimeoutError,
+    FilterNotFoundError,
+    InternalJSONRPCError,
+    InvalidArgumentError,
+    InvalidRequestError,
+    MethodHandlerCrashedError,
+    MethodNotFoundError,
+    NetworkError,
+    NonceTooLowError,
+    ReplacementTransactionUnderpriced,
+    StackLimitReachedError,
+    TraceRequestLimitExceededError,
+    TransactionCostExceedsGasLimitError,
+    TransactionNotFound,
+    VMExecutionError,
+)
 from aiotx.types import BlockParam
 
 
@@ -25,100 +46,62 @@ class AioTxEVMClient:
         return to_checksum_address(sender_address)
 
     async def get_last_block(self):
-        payload = json.dumps({"method": "eth_blockNumber", "params": [], "id": 1, "jsonrpc": "2.0"})
+        payload = {"method": "eth_blockNumber", "params": []}
+        result = await self._make_rpc_call(payload)
+        last_block = result["result"]
+        return int(last_block, 16)
 
-        async with aiohttp.ClientSession() as session:
-            async with session.post(self.node_url, data=payload) as response:
-                result = await response.json()
-                print(result)
+    async def get_balance(self, address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
+        payload = {"method": "eth_getBalance", "params": [address, block_parameter.value]}
 
-    async def get_balance(self, address, block_parameter: BlockParam = BlockParam.LATEST):
-        payload = json.dumps(
-            {"method": "eth_getBalance", "params": [address, block_parameter.value], "id": 1, "jsonrpc": "2.0"}
-        )
-
-        async with aiohttp.ClientSession() as session:
-            async with session.post(self.node_url, data=payload) as response:
-                result = await response.json()
-                print(result)
+        result = await self._make_rpc_call(payload)
+        balance = result["result"]
+        return 0 if balance == "0x" else int(result["result"], 16)
 
     async def get_transaction(self, hash):
-        payload = json.dumps({"method": "eth_getTransactionByHash", "params": [hash], "id": 1, "jsonrpc": "2.0"})
+        payload = {"method": "eth_getTransactionByHash", "params": [hash]}
+        result = await self._make_rpc_call(payload)
+        if result["result"] is None:
+            raise TransactionNotFound(f"Transaction {hash} not found!")
 
-        async with aiohttp.ClientSession() as session:
-            async with session.post(self.node_url, data=payload) as response:
-                result = await response.json()
-                print(result)
-
-    async def get_token_balance(self, address, contract_address, block_parameter: BlockParam = BlockParam.LATEST):
+    async def get_token_balance(self, address, contract_address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
         function_signature = "balanceOf(address)".encode("UTF-8")
         hash_result = keccak(function_signature)
         method_id = hash_result.hex()[:8]
         padded_address = address.lower().replace("0x", "").zfill(64)
         data = f"0x{method_id}{padded_address}"
 
-        payload = json.dumps(
-            {
+        payload = {
                 "method": "eth_call",
                 "params": [{"to": contract_address, "data": data}, block_parameter.value],
-                "id": 1,
-                "jsonrpc": "2.0",
             }
-        )
 
-        print("payload", payload)
+        result = await self._make_rpc_call(payload)
+        balance = result["result"]
+        return 0 if balance == "0x" else int(balance, 16)
 
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                self.node_url, data=payload, headers={"Content-Type": "application/json"}
-            ) as response:
-                result = await response.json()
-                print(result)
-
-                if "result" in result:
-                    balance_hex = result["result"]
-                    balance = int(balance_hex, 16)
-                    return balance
-                else:
-                    raise Exception(f"Error: {result}")
-
-    async def get_transaction_count(self, address, block_parameter: BlockParam = BlockParam.LATEST):
-        payload = json.dumps(
-            {"method": "eth_getTransactionCount", "params": [address, block_parameter.value], "id": 1, "jsonrpc": "2.0"}
-        )
-
-        async with aiohttp.ClientSession() as session:
-            async with session.post(self.node_url, data=payload) as response:
-                result = await response.json()
-                print("result", result)
-                if "result" in result:
-                    count_hex = result["result"]
-                    count = int(count_hex, 16)
-                    print("count, count", count)
-                    return count
-                else:
-                    raise Exception(f"Error: {result}")
+    async def get_transaction_count(self, address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
+        payload = {"method": "eth_getTransactionCount", "params": [address, block_parameter.value]}
+        result = await self._make_rpc_call(payload)
+        tx_count = result["result"]
+        return 0 if tx_count == "0x" else int(tx_count, 16)
 
     async def send_transaction(
         self, private_key: str, to_address: str, amount: int, gas_price: int, gas_limit: int = 21000
-    ):
+    ) -> str:
 
         from_address = Account.from_key(private_key).address
         nonce = await self.get_transaction_count(from_address)
         raw_transaction = self.build_raw_transaction(private_key, to_address, nonce, amount, gas_price, gas_limit)
 
-        payload = json.dumps(
-            {"method": "eth_sendRawTransaction", "params": [raw_transaction], "id": 1, "jsonrpc": "2.0"}
-        )
+        payload = {"method": "eth_sendRawTransaction", "params": [raw_transaction]}
 
-        async with aiohttp.ClientSession() as session:
-            async with session.post(self.node_url, data=payload) as response:
-                result = await response.json()
-                return result
+        result = await self._make_rpc_call(payload)
+        return result
 
     def build_raw_transaction(
         self, private_key: str, to_address: str, nonce: int, amount_in_wei: int, gas_price: int, gas_limit: int = 21000
-    ):
+    ) -> HexStr:
         transaction = {
             "nonce": nonce,
             "gasPrice": gas_price,
@@ -140,7 +123,7 @@ class AioTxEVMClient:
         amount: int,
         gas_price: int,
         gas_limit: int = 100000,
-    ):
+    ) -> str:
         sender_address = Account.from_key(private_key).address
 
         function_signature = "transfer(address,uint256)"
@@ -161,10 +144,56 @@ class AioTxEVMClient:
         signed_transaction = Account.sign_transaction(transaction, private_key)
         raw_tx = to_hex(signed_transaction.rawTransaction)
 
-        payload = {"jsonrpc": "2.0", "method": "eth_sendRawTransaction", "params": [raw_tx], "id": 1}
+        payload = {"method": "eth_sendRawTransaction", "params": [raw_tx]}
+        result = await self._make_rpc_call(payload)
+        return result["result"]
+
+    async def _make_rpc_call(self, payload) -> dict:
+        payload["jsonrpc"] = "2.0"
+        payload["id"] = 1
         async with aiohttp.ClientSession() as session:
-            async with session.post(self.node_url, json=payload) as response:
+            async with session.post(self.node_url, data=json.dumps(payload)) as response:
                 result = await response.json()
-                if "error" in result:
-                    raise Exception(f"Error: {result['error']}")
-                return result["result"]
+                if "error" not in result.keys():
+                    return result
+                error_code = result["error"]["code"]
+                error_message = result["error"]["message"]
+                if error_code == -32000:
+                    if "header not found" in error_message or "could not find block" in error_message:
+                        raise BlockNotFoundError(error_message)
+                    elif "stack limit reached" in error_message:
+                        raise StackLimitReachedError(error_message)
+                    elif "method handler crashed" in error_message:
+                        raise MethodHandlerCrashedError(error_message)
+                    elif "execution timeout" in error_message:
+                        raise ExecutionTimeoutError(error_message)
+                    elif "nonce too low" in error_message:
+                        raise NonceTooLowError(error_message)
+                    elif "filter not found" in error_message:
+                        raise FilterNotFoundError(error_message)
+                    elif "replacement transaction underpriced" in error_message:
+                        raise ReplacementTransactionUnderpriced(error_message)
+                    else:
+                        raise AioTxError(f"Error {error_code}: {error_message}")
+                elif error_code == -32009:
+                    raise TraceRequestLimitExceededError(error_message)
+                elif error_code == -32010:
+                    raise TransactionCostExceedsGasLimitError(error_message)
+                elif error_code == -32011:
+                    raise NetworkError(error_message)
+                elif error_code == -32015:
+                    raise VMExecutionError(error_message)
+                elif error_code == -32601:
+                    if "method not found" in error_message:
+                        raise MethodNotFoundError(error_message)
+                    elif "failed to parse request" in error_message:
+                        raise InvalidRequestError(error_message)
+                elif error_code == -32602:
+                    if "invalid argument" in error_message and "cannot unmarshal hex string without 0x prefix" in error_message or "cannot unmarshal hex string of odd length into" in error_message or "hex string has length" in error_message:
+                        raise InvalidArgumentError(error_message)
+                    elif "eth_getLogs and eth_newFilter are limited to a 10,000 blocks range" in error_message:
+                        raise BlockRangeLimitExceededError(error_message)
+                elif error_code == -32603:
+                    raise InternalJSONRPCError(error_message)
+                else:
+                    raise AioTxError(f"Error {error_code}: {error_message}")
