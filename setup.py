@@ -3,11 +3,8 @@ from setuptools import find_packages, setup
 
 extras_test = (
     [
-        "black",
-        "flake8",
         "hypothesis",
-        "isort",
-        "mypy>=0.910",
+        "ruff",
         "pyproj",
         "pytest",
         "pytest-cov",

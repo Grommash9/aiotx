@@ -66,7 +66,7 @@ async def test_get_transaction(tx_id):
 )
 @vcr_c.use_cassette("bsc/get_token_balance.yaml")
 async def test_get_token_balance(wallet_address, contract):
-    balance = await client.get_token_balance(wallet_address, contract)
+    await client.get_token_balance(wallet_address, contract)
 
 
 @pytest.mark.parametrize(
