@@ -1,11 +1,15 @@
-import secrets
-from eth_utils import keccak, encode_hex, to_checksum_address
-from eth_keys import keys
-import aiohttp
 import json
-from aiotx.types import BlockParam
-from eth_hash.auto import keccak
+import secrets
 
+import aiohttp
+import rlp
+from eth_account import Account
+from eth_account.datastructures import SignedTransaction
+from eth_hash.auto import keccak
+from eth_keys import keys
+from eth_utils import decode_hex, encode_hex, keccak, to_bytes, to_checksum_address, to_hex
+
+from aiotx.types import BlockParam
 
 
 class AioTxEVMClient:
@@ -21,22 +25,15 @@ class AioTxEVMClient:
         private_key_hex = private_key.to_hex()
         return private_key_hex, to_checksum_address(address)
 
-    
-    def get_address_from_private_key(self, private_key_hex: str):
-        private_key = keys.PrivateKey(bytes.fromhex(private_key_hex[2:]))
+    def get_address_from_private_key(self, private_key: str):
+        private_key = keys.PrivateKey(bytes.fromhex(private_key))
         public_key_bytes = private_key.public_key.to_bytes()
         keccak_digest = keccak(public_key_bytes)[12:]
         address = encode_hex(keccak_digest[-20:])
         return to_checksum_address(address)
 
-
     async def get_last_block(self):
-        payload = json.dumps({
-            "method": "eth_blockNumber",
-            "params": [],
-            "id": 1,
-            "jsonrpc": "2.0"
-        })
+        payload = json.dumps({"method": "eth_blockNumber", "params": [], "id": 1, "jsonrpc": "2.0"})
 
         async with aiohttp.ClientSession() as session:
             async with session.post(self.node_url, data=payload) as response:
@@ -44,31 +41,23 @@ class AioTxEVMClient:
                 print(result)
 
     async def get_balance(self, address, block_parameter: BlockParam = BlockParam.LATEST):
-        payload = json.dumps({
-            "method": "eth_getBalance",
-            "params": [address, block_parameter.value],
-            "id": 1,
-            "jsonrpc": "2.0"
-        })
+        payload = json.dumps(
+            {"method": "eth_getBalance", "params": [address, block_parameter.value], "id": 1, "jsonrpc": "2.0"}
+        )
 
         async with aiohttp.ClientSession() as session:
             async with session.post(self.node_url, data=payload) as response:
                 result = await response.json()
                 print(result)
-    
+
     async def get_transaction(self, hash):
-        payload = json.dumps({
-            "method": "eth_getTransactionByHash",
-            "params": [hash],
-            "id": 1,
-            "jsonrpc": "2.0"
-        })
+        payload = json.dumps({"method": "eth_getTransactionByHash", "params": [hash], "id": 1, "jsonrpc": "2.0"})
 
         async with aiohttp.ClientSession() as session:
             async with session.post(self.node_url, data=payload) as response:
                 result = await response.json()
                 print(result)
-    
+
     async def get_token_balance(self, address, contract_address, block_parameter: BlockParam = BlockParam.LATEST):
         function_signature = "balanceOf(address)".encode("UTF-8")
         hash_result = keccak(function_signature)
@@ -80,17 +69,21 @@ class AioTxEVMClient:
         # Construct the data field
         data = f"0x{method_id}{padded_address}"
 
-        payload = json.dumps({
-            "method": "eth_call",
-            "params": [{"to": contract_address, "data": data}, block_parameter.value],
-            "id": 1,
-            "jsonrpc": "2.0"
-        })
+        payload = json.dumps(
+            {
+                "method": "eth_call",
+                "params": [{"to": contract_address, "data": data}, block_parameter.value],
+                "id": 1,
+                "jsonrpc": "2.0",
+            }
+        )
 
         print("payload", payload)
 
         async with aiohttp.ClientSession() as session:
-            async with session.post(self.node_url, data=payload, headers={"Content-Type": "application/json"}) as response:
+            async with session.post(
+                self.node_url, data=payload, headers={"Content-Type": "application/json"}
+            ) as response:
                 result = await response.json()
                 print(result)
 
@@ -100,3 +93,53 @@ class AioTxEVMClient:
                     return balance
                 else:
                     raise Exception(f"Error: {result}")
+
+    async def get_transaction_count(self, address, block_parameter: BlockParam = BlockParam.LATEST):
+        payload = json.dumps(
+            {"method": "eth_getTransactionCount", "params": [address, block_parameter.value], "id": 1, "jsonrpc": "2.0"}
+        )
+
+        async with aiohttp.ClientSession() as session:
+            async with session.post(self.node_url, data=payload) as response:
+                result = await response.json()
+                print("result", result)
+                if "result" in result:
+                    count_hex = result["result"]
+                    count = int(count_hex, 16)
+                    print("count, count", count)
+                    return count
+                else:
+                    raise Exception(f"Error: {result}")
+
+    async def send_transaction(
+        self, private_key: str, to_address: str, amount: int, gas_price: int, gas_limit: int = 21000
+    ):
+
+        from_address = self.get_address_from_private_key(private_key)
+        nonce = await self.get_transaction_count(from_address)
+        raw_transaction = self.build_raw_transaction(private_key, to_address, nonce, amount, gas_price, gas_limit)
+
+        payload = json.dumps(
+            {"method": "eth_sendRawTransaction", "params": [raw_transaction], "id": 1, "jsonrpc": "2.0"}
+        )
+
+        async with aiohttp.ClientSession() as session:
+            async with session.post(self.node_url, data=payload) as response:
+                result = await response.json()
+                return result
+
+    def build_raw_transaction(
+        self, private_key: str, to_address: str, nonce: int, amount_in_wei: int, gas_price: int, gas_limit: int = 21000
+    ):
+        transaction = {
+            "nonce": nonce,
+            "gasPrice": gas_price,
+            "gas": gas_limit,
+            "to": to_address,
+            "value": amount_in_wei,
+            "data": b"",
+            "chainId": 97,  # BSC Testnet chainId
+        }
+        signed_transaction = Account.sign_transaction(transaction, private_key)
+        raw_tx = to_hex(signed_transaction.rawTransaction)
+        return raw_tx
