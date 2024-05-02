@@ -1,12 +1,13 @@
 import json
 import secrets
-
+import threading
+import time
 import aiohttp
 from eth_abi import encode
 from eth_account import Account
 from eth_typing import HexStr
 from eth_utils import keccak, to_checksum_address, to_hex
-
+import asyncio
 from aiotx.exceptions import (
     AioTxError,
     BlockNotFoundError,
@@ -31,9 +32,12 @@ from aiotx.types import BlockParam
 
 
 class AioTxEVMClient:
-    def __init__(self, node_url, chain_id):
+    def __init__(self, node_url, chain_id, monitoring_start_block: int):
         self.node_url = node_url
         self.chain_id = chain_id
+        self.monitoring_start_block = monitoring_start_block
+        self.monitor = EvmMonitor(self)
+        self.monitor_thread = None
 
     def generate_address(self):
         private_key_bytes = secrets.token_hex(32)
@@ -63,6 +67,11 @@ class AioTxEVMClient:
         result = await self._make_rpc_call(payload)
         if result["result"] is None:
             raise TransactionNotFound(f"Transaction {hash} not found!")
+        
+    async def get_block_by_number(self, block_number: int, transaction_detail_flag: bool = True):
+        payload = {"method": "eth_getBlockByNumber", "params": [hex(block_number), transaction_detail_flag]}
+        result = await self._make_rpc_call(payload)
+        return result
 
     async def get_token_balance(self, address, contract_address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
         function_signature = "balanceOf(address)".encode("UTF-8")
@@ -197,3 +206,56 @@ class AioTxEVMClient:
                     raise InternalJSONRPCError(error_message)
                 else:
                     raise AioTxError(f"Error {error_code}: {error_message}")
+                
+    def start_monitoring(self):
+        self.monitor_thread = threading.Thread(target=self.monitor.start)
+        self.monitor_thread.start()
+
+    def stop_monitoring(self):
+        self.monitor.stop()
+        if self.monitor_thread:
+            self.monitor_thread.join()
+                
+class EvmMonitor:
+    def __init__(self, client: AioTxEVMClient):
+        self.client = client
+        self.latest_block = client.monitoring_start_block
+        self.block_handlers = []
+        self.transaction_handlers = []
+        self.running = False
+
+    def on_block(self, func):
+        self.block_handlers.append(func)
+        return func
+
+    def on_transaction(self, func):
+        self.transaction_handlers.append(func)
+        return func
+
+    def start(self):
+        self.running = True
+        while self.running:
+            try:
+                self.poll_blocks()
+                time.sleep(1)
+            except Exception as e:
+                print(f"Error during polling: {e}")
+                time.sleep(2)
+
+    def stop(self):
+        self.running = False
+
+    def poll_blocks(self):
+        block = asyncio.run(self.client.get_block_by_number(self.latest_block))
+        self.process_block(block["result"])
+        self.latest_block = self.latest_block + 1
+
+    def process_block(self, block):
+        for handler in self.block_handlers:
+            print(block)
+            handler(int(block["number"], 16))
+
+        for transaction in block["transactions"]:
+            for handler in self.transaction_handlers:
+                handler(transaction)
+
