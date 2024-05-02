@@ -32,12 +32,11 @@ from aiotx.types import BlockParam
 
 
 class AioTxEVMClient:
-    def __init__(self, node_url, chain_id, monitoring_start_block: int):
+    def __init__(self, node_url, chain_id):
         self.node_url = node_url
         self.chain_id = chain_id
-        self.monitoring_start_block = monitoring_start_block
         self.monitor = EvmMonitor(self)
-        self.monitor_thread = None
+        self._monitor_thread = None
 
     def generate_address(self):
         private_key_bytes = secrets.token_hex(32)
@@ -207,22 +206,21 @@ class AioTxEVMClient:
                 else:
                     raise AioTxError(f"Error {error_code}: {error_message}")
                 
-    def start_monitoring(self):
-        self.monitor_thread = threading.Thread(target=self.monitor.start)
-        self.monitor_thread.start()
+    def start_monitoring(self, monitoring_start_block: int = None):
+        asyncio.run(self.monitor.start(monitoring_start_block))
 
     def stop_monitoring(self):
         self.monitor.stop()
-        if self.monitor_thread:
-            self.monitor_thread.join()
+        if self._monitor_thread:
+            self._monitor_thread.join()
                 
 class EvmMonitor:
     def __init__(self, client: AioTxEVMClient):
         self.client = client
-        self.latest_block = client.monitoring_start_block
         self.block_handlers = []
         self.transaction_handlers = []
         self.running = False
+        self._latest_block = None
 
     def on_block(self, func):
         self.block_handlers.append(func)
@@ -232,30 +230,37 @@ class EvmMonitor:
         self.transaction_handlers.append(func)
         return func
 
-    def start(self):
+    async def start(self, monitoring_start_block):
         self.running = True
+        self._latest_block = monitoring_start_block
         while self.running:
             try:
-                self.poll_blocks()
-                time.sleep(1)
+                await self.poll_blocks()
+                await asyncio.sleep(1)
             except Exception as e:
                 print(f"Error during polling: {e}")
-                time.sleep(2)
+                await asyncio.sleep(2)
 
     def stop(self):
         self.running = False
 
-    def poll_blocks(self):
-        block = asyncio.run(self.client.get_block_by_number(self.latest_block))
-        self.process_block(block["result"])
-        self.latest_block = self.latest_block + 1
+    async def poll_blocks(self,):
+        if self._latest_block is None:
+            self._latest_block = await self.client.get_last_block()
+        block = await self.client.get_block_by_number(self._latest_block)
+        await self.process_block(block["result"])
+        self._latest_block = self._latest_block + 1
 
-    def process_block(self, block):
+    async def process_block(self, block):
         for handler in self.block_handlers:
-            print(block)
-            handler(int(block["number"], 16))
+            if asyncio.iscoroutinefunction(handler):
+                await handler(int(block["number"], 16))
+            else:
+                handler(int(block["number"], 16))
 
         for transaction in block["transactions"]:
             for handler in self.transaction_handlers:
-                handler(transaction)
-
+                if asyncio.iscoroutinefunction(handler):
+                    await handler(transaction)
+                else:
+                    handler(transaction)
