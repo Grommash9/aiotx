@@ -7,7 +7,7 @@ interactions:
     uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x78"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x7f"}
 
         '
     headers:
@@ -24,25 +24,25 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Fri, 03 May 2024 10:09:33 GMT
+      - Fri, 03 May 2024 10:46:47 GMT
       Vary:
       - Accept-Encoding
       X-Host-Id:
-      - f1b546936d23e3b5-ecf10b7bc104d983
+      - f1b546936d23e3b5-84b84c7a90242c73
       X-Node-Id:
       - bnb-smart-chain_bsc-testnet_iad
     status:
       code: 200
       message: OK
 - request:
-    body: '{"method": "eth_sendRawTransaction", "params": ["0xf86b7885012a05f20082520894f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a8609184e72a0008081e6a0c8cde7ea0b70826962b3ae5851838734a6fa2a0a665a027ccad46f5b6779e3e7a069634a12734e8c7f54cad43b94532f77b0e110af62965583c39da2692f512d45"],
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf86b7f85012a05f20082520894f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a8609184e72a0008081e6a0dd2ec3a72bee9de8e0367fbf926550e1bbac5d4860184dfa22fec644571f1568a05b3b44321e5976a00e23b91aed9e900a0e854b4b31ca47662d375c524ec2a58f"],
       "jsonrpc": "2.0", "id": 1}'
     headers: {}
     method: POST
     uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0xe444ea5d497141dcfc46969826d7aaeb849b20b1435793ce04f6a9a9d924727b"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0xdad97e8972e7a4cc72f28944a16aa5782d6562aac483b527c27d1ee88e33ed5a"}
 
         '
     headers:
@@ -59,7 +59,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Fri, 03 May 2024 10:09:34 GMT
+      - Fri, 03 May 2024 10:46:47 GMT
       Vary:
       - Accept-Encoding
       X-Host-Id:
@@ -70,7 +70,7 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: '{"method": "eth_sendRawTransaction", "params": ["0xf86d7885012a05f20082520894f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a884563918244f400008081e5a09f0aa4d6920e77bd2120a509dca7dc931fcf72e70829d4df2f49d0c7885205e0a03f7f62d04c2430b3be4fbfdbcf9aa14598941369e40d8c695445252136566b81"],
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf86d7f85012a05f20082520894f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a884563918244f400008081e5a076bcd75b7ded882a7e7194a6588969a505b9b3e9d9f7fb0a7e0af90244cdd4e5a06b371861ae4283029ad8c2c4a6f8913190b949deeb815bd6028bd88564bc29a3"],
       "jsonrpc": "2.0", "id": 1}'
     headers: {}
     method: POST
@@ -78,8 +78,8 @@ interactions:
   response:
     body:
       string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32000,"message":"insufficient
-        funds for gas * price + value: balance 20606928000960000, tx cost 5000105000000000000,
-        overshot 4979498071999040000"}}
+        funds for gas * price + value: balance 19594850000960000, tx cost 5000105000000000000,
+        overshot 4980510149999040000"}}
 
         '
     headers:
@@ -96,18 +96,18 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Fri, 03 May 2024 10:09:34 GMT
+      - Fri, 03 May 2024 10:46:48 GMT
       Vary:
       - Accept-Encoding
       X-Host-Id:
-      - f1b546936d23e3b5-ecf10b7bc104d983
+      - f1b546936d23e3b5-2bd95d6b916503dd
       X-Node-Id:
       - bnb-smart-chain_bsc-testnet_iad
     status:
       code: 200
       message: OK
 - request:
-    body: '{"method": "eth_sendRawTransaction", "params": ["0xf866788082520894f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a8609184e72a0008081e5a021453460fef373f355bd213277bceaa867623809a342bc7bebdaa93095cc62c9a062ab842c37394dd6173c9594fd0bb37505c0488e0a33146b1806624bae29a047"],
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf8667f8082520894f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a8609184e72a0008081e6a0157babe76ee1d04f5dc9669b033779bc552f8047911e6ef74e20475e804282a7a06524c9fb61bbef7f4c77c67354d106742bd34eb8bc597c769ae9c1f4ebf638e4"],
       "jsonrpc": "2.0", "id": 1}'
     headers: {}
     method: POST
@@ -132,18 +132,18 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Fri, 03 May 2024 10:09:34 GMT
+      - Fri, 03 May 2024 10:46:48 GMT
       Vary:
       - Accept-Encoding
       X-Host-Id:
-      - f1b546936d23e3b5-84b84c7a90242c73
+      - f1b546936d23e3b5-dbb2877f11a402e9
       X-Node-Id:
       - bnb-smart-chain_bsc-testnet_iad
     status:
       code: 200
       message: OK
 - request:
-    body: '{"method": "eth_sendRawTransaction", "params": ["0xf8657885012a05f20082520894f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a808081e5a074b0b65058d32be99a917ae20a98250064f42d6d3bb8ce46244ff6283de62062a010916fa718b7ea360d1457c1016a7b5a43dbe89a245dc9fad0d91839216f4370"],
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf8657f85012a05f20082520894f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a808081e5a07650c5abd4d2e0f2d0a377c89381d0d56d762a0f9e94975cbb540363cd058959a01b626479385aad061246df6e54a9f59fa898c1f58b341716a533b5682921d28b"],
       "jsonrpc": "2.0", "id": 1}'
     headers: {}
     method: POST
@@ -168,7 +168,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Fri, 03 May 2024 10:09:35 GMT
+      - Fri, 03 May 2024 10:46:48 GMT
       Vary:
       - Accept-Encoding
       X-Host-Id:
@@ -179,7 +179,7 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: '{"method": "eth_sendRawTransaction", "params": ["0xf8697885012a05f2008094f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a8609184e72a0008081e6a0ebb1cb0b4fff7a9d356ebf1fe870fa33ba8758e6af818b258c1939810a332de9a0035d02e7304ad594a9b7ca6ce92974c5c6df3d12807343d64790335ed73889b4"],
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf8697f85012a05f2008094f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a8609184e72a0008081e5a08c87832c5608247b85f2c8d24852172e704ff0cb11edb0db3800c49599d1d5c4a017026aaa07c5ce6b31ce684680146ff681d6a8edfb4c73eaf3d83347b8f4ff97"],
       "jsonrpc": "2.0", "id": 1}'
     headers: {}
     method: POST
@@ -204,26 +204,26 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Fri, 03 May 2024 10:09:35 GMT
+      - Fri, 03 May 2024 10:46:49 GMT
       Vary:
       - Accept-Encoding
       X-Host-Id:
-      - f1b546936d23e3b5-ecf10b7bc104d983
+      - f1b546936d23e3b5-4291c05108b63f99
       X-Node-Id:
       - bnb-smart-chain_bsc-testnet_iad
     status:
       code: 200
       message: OK
 - request:
-    body: '{"method": "eth_sendRawTransaction", "params": ["0xf86b7885012a05f20082ee4894f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a8609184e72a0008081e6a0710384b423d757b5764cec4e2b41503a638af3147982458eeef2798a97b17a68a05a77469a7332174e6142db8b5e626b7fc9e1f736326a6820b10de8939b492a36"],
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf86b7f85012a05f20082ee4894f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a8609184e72a0008081e5a08eb0828e7d41dc68c8cbfbae52045328afbc4ddb490e982c356151b10d3ec630a00e8a57d4c6a159279e91fddb7f4e0f570a49cb08814da1b36d5828714afd4f16"],
       "jsonrpc": "2.0", "id": 1}'
     headers: {}
     method: POST
     uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32000,"message":"nonce too
-        low: next nonce 121, tx nonce 120"}}
+      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32000,"message":"replacement
+        transaction underpriced"}}
 
         '
     headers:
@@ -236,11 +236,11 @@ interactions:
       Access-Control-Allow-Origin:
       - ''
       Content-Length:
-      - '105'
+      - '97'
       Content-Type:
       - application/json
       Date:
-      - Fri, 03 May 2024 10:09:35 GMT
+      - Fri, 03 May 2024 10:46:49 GMT
       Vary:
       - Accept-Encoding
       X-Host-Id:
