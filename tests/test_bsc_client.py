@@ -1,14 +1,13 @@
 import os
 
 import pytest
-from confest import vcr_c, bsc_client
+from confest import vcr_c
 
 from aiotx.clients import AioTxBSCClient
 from aiotx.exceptions import (
     InvalidArgumentError,
     TransactionNotFound,
 )
-from aiotx.clients import AioTxBSCClient
 
 PRIVATE_KEY_TO_SEND_FROM = os.environ.get("TEST_BSC_WALLET_PRIVATE_KEY")
 CONTRACT = "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd"

@@ -1,8 +1,10 @@
 import logging
 import os
-from aiotx.clients import AioTxBSCClient
-import vcr
+
 import pytest
+import vcr
+
+from aiotx.clients import AioTxBSCClient
 
 # ALL = "all"
 # ANY = "any"

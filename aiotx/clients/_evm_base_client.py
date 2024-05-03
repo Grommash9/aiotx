@@ -1,13 +1,14 @@
+import asyncio
 import json
 import secrets
-import threading
-import time
+
 import aiohttp
 from eth_abi import encode
 from eth_account import Account
 from eth_typing import HexStr
 from eth_utils import keccak, to_checksum_address, to_hex
-import asyncio
+
+from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     AioTxError,
     BlockNotFoundError,
@@ -31,7 +32,7 @@ from aiotx.exceptions import (
 from aiotx.types import BlockParam
 
 
-class AioTxEVMClient:
+class AioTxEVMClient(AioTxClient):
     def __init__(self, node_url, chain_id):
         self.node_url = node_url
         self.chain_id = chain_id
@@ -48,7 +49,7 @@ class AioTxEVMClient:
         sender_address = Account.from_key(private_key).address
         return to_checksum_address(sender_address)
 
-    async def get_last_block(self):
+    async def get_last_block(self) -> int:
         payload = {"method": "eth_blockNumber", "params": []}
         result = await self._make_rpc_call(payload)
         last_block = result["result"]
@@ -206,49 +207,15 @@ class AioTxEVMClient:
                 else:
                     raise AioTxError(f"Error {error_code}: {error_message}")
                 
-    def start_monitoring(self, monitoring_start_block: int = None):
-        self._monitor_thread = threading.Thread(target=self._start_monitoring_thread, args=(monitoring_start_block,))
-        self._monitor_thread.daemon = True
-        self._monitor_thread.start()
 
-    def _start_monitoring_thread(self, monitoring_start_block):
-        
-        asyncio.run(self.monitor.start(monitoring_start_block))
-
-    def stop_monitoring(self):
-        self.monitor.stop()
-        if self._monitor_thread:
-            self._monitor_thread.join()
                 
-class EvmMonitor:
+class EvmMonitor(BlockMonitor):
     def __init__(self, client: AioTxEVMClient):
         self.client = client
         self.block_handlers = []
         self.transaction_handlers = []
         self.running = False
         self._latest_block = None
-
-    def on_block(self, func):
-        self.block_handlers.append(func)
-        return func
-
-    def on_transaction(self, func):
-        self.transaction_handlers.append(func)
-        return func
-
-    async def start(self, monitoring_start_block):
-        self.running = True
-        self._latest_block = monitoring_start_block
-        while self.running:
-            try:
-                await self.poll_blocks()
-                await asyncio.sleep(1)
-            except Exception as e:
-                print(f"Error during polling: {e}")
-                await asyncio.sleep(2)
-
-    def stop(self):
-        self.running = False
 
     async def poll_blocks(self,):
         if self._latest_block is None:

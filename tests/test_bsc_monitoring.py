@@ -1,7 +1,10 @@
 import asyncio
 import time
-from confest import vcr_c, bsc_client
+
+from confest import vcr_c
+
 from aiotx.clients import AioTxBSCClient
+
 
 @vcr_c.use_cassette("tests/fixtures/cassettes/bsc/test_monitoring.yaml")
 def test_monitoring(bsc_client: AioTxBSCClient):
