@@ -3,10 +3,16 @@ import json
 import secrets
 
 import aiohttp
-from eth_abi import encode
+from eth_abi import decode, encode
 from eth_account import Account
 from eth_typing import HexStr
-from eth_utils import keccak, to_checksum_address, to_hex
+from eth_utils import (
+    decode_hex,
+    function_signature_to_4byte_selector,
+    keccak,
+    to_checksum_address,
+    to_hex,
+)
 
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
@@ -38,6 +44,9 @@ class AioTxEVMClient(AioTxClient):
         self.chain_id = chain_id
         self.monitor = EvmMonitor(self)
         self._monitor_thread = None
+        with open("aiotx/utils/bep20_abi.json") as file:
+            bep_20_abi = json.loads(file.read())
+        self._bep20_abi = bep_20_abi
 
     def generate_address(self):
         private_key_bytes = secrets.token_hex(32)
@@ -62,11 +71,44 @@ class AioTxEVMClient(AioTxClient):
         balance = result["result"]
         return 0 if balance == "0x" else int(result["result"], 16)
 
-    async def get_transaction(self, hash):
+    async def get_transaction(self, hash) -> dict:
         payload = {"method": "eth_getTransactionByHash", "params": [hash]}
         result = await self._make_rpc_call(payload)
         if result["result"] is None:
             raise TransactionNotFound(f"Transaction {hash} not found!")
+        tx_data = result["result"]
+        tx_data["aiotx_decoded_input"] = self.decode_transaction_input(tx_data["input"])
+        return tx_data
+    
+    def decode_transaction_input(self, input_data: str) -> dict:
+        if input_data == "0x":
+            return {
+            'function_name': None,
+            'parameters': None
+        }
+        for abi_entry in self._bep20_abi:
+            function_name = abi_entry['name']
+            input_types = [inp['type'] for inp in abi_entry['inputs']]
+            function_signature = f"{function_name}({','.join(input_types)})"
+            function_selector = function_signature_to_4byte_selector(function_signature)
+
+            if input_data.startswith('0x' + function_selector.hex()):
+                decoded_data = decode(input_types, decode_hex(input_data[10:]))
+                decoded_params = {}
+                for i, param in enumerate(decoded_data):
+                    param_name = abi_entry["inputs"][i]["name"]
+                    param_value = param
+                    decoded_params[param_name] = param_value
+
+                return {
+                    'function_name': function_name,
+                    'parameters': decoded_params
+                }
+
+        return {
+            'function_name': None,
+            'parameters': None
+        }
         
     async def get_block_by_number(self, block_number: int, transaction_detail_flag: bool = True):
         payload = {"method": "eth_getBlockByNumber", "params": [hex(block_number), transaction_detail_flag]}
@@ -233,6 +275,7 @@ class EvmMonitor(BlockMonitor):
 
         for transaction in block["transactions"]:
             for handler in self.transaction_handlers:
+                transaction["aiotx_decoded_input"] = self.client.decode_transaction_input(transaction["input"])
                 if asyncio.iscoroutinefunction(handler):
                     await handler(transaction)
                 else:

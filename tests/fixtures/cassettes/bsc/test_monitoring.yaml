@@ -26,11 +26,11 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Fri, 03 May 2024 03:25:55 GMT
+      - Fri, 03 May 2024 04:33:01 GMT
       Vary:
       - Accept-Encoding
       X-Host-Id:
-      - f1b546936d23e3b5-10ebeaeae12fe5d7
+      - f1b546936d23e3b5-84b84c7a90242c73
       X-Node-Id:
       - bnb-smart-chain_bsc-testnet_iad
     status:
@@ -61,11 +61,11 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Fri, 03 May 2024 03:25:57 GMT
+      - Fri, 03 May 2024 04:33:03 GMT
       Vary:
       - Accept-Encoding
       X-Host-Id:
-      - f1b546936d23e3b5-ecf10b7bc104d983
+      - f1b546936d23e3b5-84b84c7a90242c73
       X-Node-Id:
       - bnb-smart-chain_bsc-testnet_iad
     status:
@@ -96,11 +96,11 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Fri, 03 May 2024 03:25:58 GMT
+      - Fri, 03 May 2024 04:33:04 GMT
       Vary:
       - Accept-Encoding
       X-Host-Id:
-      - f1b546936d23e3b5-dbb2877f11a402e9
+      - f1b546936d23e3b5-ecf10b7bc104d983
       X-Node-Id:
       - bnb-smart-chain_bsc-testnet_iad
     status:

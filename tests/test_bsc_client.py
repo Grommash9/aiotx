@@ -1,7 +1,7 @@
 import os
 
 import pytest
-from confest import vcr_c
+from confest import bsc_client, vcr_c  # noqa
 
 from aiotx.clients import AioTxBSCClient
 from aiotx.exceptions import (
@@ -63,7 +63,8 @@ async def test_get_transaction(bsc_client: AioTxBSCClient, tx_id, expected_excep
         with pytest.raises(expected_exception):
             await bsc_client.get_transaction(tx_id)
     else:
-        await bsc_client.get_transaction(tx_id)
+        tx = await bsc_client.get_transaction(tx_id)
+        assert "aiotx_decoded_input" in tx.keys()
 
 
 
