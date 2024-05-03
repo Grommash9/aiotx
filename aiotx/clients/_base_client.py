@@ -35,12 +35,6 @@ class AioTxClient:
     async def get_last_block(self) -> int:
         pass
 
-    async def get_block_by_number(self, block_number: int):
-        pass
-
-    async def get_last_block(self) -> int:
-        pass
-
 class BlockMonitor:   
     def __init__(self, client: AioTxClient):
         self.client = client
