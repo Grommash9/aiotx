@@ -20,7 +20,7 @@ DESTINATION_ADDRESS = "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a"
 
 @vcr_c.use_cassette("bsc/get_last_block.yaml")
 async def test_get_last_block(bsc_client: AioTxBSCClient):
-    block_id = await bsc_client.get_last_block()
+    block_id = await bsc_client.get_last_block_number()
     assert isinstance(block_id, int)
 
 @pytest.mark.parametrize(
@@ -90,9 +90,9 @@ async def test_get_token_balance(bsc_client: AioTxBSCClient, wallet_address, con
     
     if expected_exception:
         with pytest.raises(expected_exception):
-            await bsc_client.get_token_balance(wallet_address, contract)
+            await bsc_client.get_contract_balance(wallet_address, contract)
     else:
-        balance = await bsc_client.get_token_balance(wallet_address, contract)
+        balance = await bsc_client.get_contract_balance(wallet_address, contract)
         assert isinstance(balance, int)
         assert expected_balance == balance
 
@@ -114,9 +114,9 @@ async def test_get_token_balance(bsc_client: AioTxBSCClient, wallet_address, con
 async def test_get_transaction_count(bsc_client: AioTxBSCClient, wallet_address, expected_exception, expected_count):
     if expected_exception:
         with pytest.raises(expected_exception):
-            await bsc_client.get_transaction_count(wallet_address)
+            await bsc_client.get_transactions_count(wallet_address)
     else:
-        count = await bsc_client.get_transaction_count(wallet_address)
+        count = await bsc_client.get_transactions_count(wallet_address)
         assert isinstance(count, int)
         assert expected_count == count
 

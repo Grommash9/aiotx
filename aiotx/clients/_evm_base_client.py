@@ -8,7 +8,6 @@ from typing import Union
 import aiohttp
 from eth_abi import decode, encode
 from eth_account import Account
-from eth_typing import HexStr
 from eth_utils import (
     currency,
     decode_hex,
@@ -104,7 +103,7 @@ class AioTxEVMClient(AioTxClient):
             'parameters': None
         }
 
-    async def get_last_block(self) -> int:
+    async def get_last_block_number(self) -> int:
         payload = {"method": "eth_blockNumber", "params": []}
         result = await self._make_rpc_call(payload)
         last_block = result["result"]
@@ -122,7 +121,7 @@ class AioTxEVMClient(AioTxClient):
         balance = result["result"]
         return 0 if balance == "0x" else int(result["result"], 16)
     
-    async def get_token_balance(self, address, contract_address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
+    async def get_contract_balance(self, address, contract_address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
         function_signature = "balanceOf(address)".encode("UTF-8")
         hash_result = keccak(function_signature)
         method_id = hash_result.hex()[:8]
@@ -153,13 +152,7 @@ class AioTxEVMClient(AioTxClient):
         tx_data["aiotx_decoded_input"] = self.decode_transaction_input(tx_data["input"])
         return tx_data
     
-    
-        
-    
-
-    
-
-    async def get_transaction_count(self, address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
+    async def get_transactions_count(self, address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
         payload = {"method": "eth_getTransactionCount", "params": [address, block_parameter.value]}
         result = await self._make_rpc_call(payload)
         tx_count = result["result"]
@@ -172,7 +165,7 @@ class AioTxEVMClient(AioTxClient):
             gas_price = await self.get_gas_price()
 
         from_address = self.get_address_from_private_key(private_key)
-        nonce = await self.get_transaction_count(from_address, BlockParam.PENDING)
+        nonce = await self.get_transactions_count(from_address, BlockParam.PENDING)
         transaction = {
             "nonce": nonce,
             "gasPrice": gas_price,
@@ -198,7 +191,7 @@ class AioTxEVMClient(AioTxClient):
         gas_limit: int = 100000,
     ) -> str:
         from_address = self.get_address_from_private_key(private_key)
-        nonce = await self.get_transaction_count(from_address, BlockParam.PENDING)
+        nonce = await self.get_transactions_count(from_address, BlockParam.PENDING)
 
         function_signature = "transfer(address,uint256)"
         function_selector = keccak(function_signature.encode("utf-8"))[:4].hex()
@@ -284,7 +277,7 @@ class EvmMonitor(BlockMonitor):
 
     async def poll_blocks(self,):
         if self._latest_block is None:
-            self._latest_block = await self.client.get_last_block()
+            self._latest_block = await self.client.get_last_block_number()
         block = await self.client.get_block_by_number(self._latest_block)
         await self.process_block(block["result"])
         self._latest_block = self._latest_block + 1
