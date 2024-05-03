@@ -207,6 +207,12 @@ class AioTxEVMClient:
                     raise AioTxError(f"Error {error_code}: {error_message}")
                 
     def start_monitoring(self, monitoring_start_block: int = None):
+        self._monitor_thread = threading.Thread(target=self._start_monitoring_thread, args=(monitoring_start_block,))
+        self._monitor_thread.daemon = True
+        self._monitor_thread.start()
+
+    def _start_monitoring_thread(self, monitoring_start_block):
+        
         asyncio.run(self.monitor.start(monitoring_start_block))
 
     def stop_monitoring(self):

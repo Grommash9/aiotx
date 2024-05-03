@@ -1,7 +1,8 @@
 import logging
 import os
-
+from aiotx.clients import AioTxBSCClient
 import vcr
+import pytest
 
 # ALL = "all"
 # ANY = "any"
@@ -17,3 +18,10 @@ vcr_c = vcr.VCR(
     filter_headers=["Authorization", "Cookie"],
     ignore_hosts=["127.0.0.1", "localhost"],
 )
+
+BSC_TEST_NODE_URL = "https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/"
+BSC_TEST_CHAIN_ID = 97
+
+@pytest.fixture
+def bsc_client() -> AioTxBSCClient:
+    return AioTxBSCClient(BSC_TEST_NODE_URL, BSC_TEST_CHAIN_ID)
