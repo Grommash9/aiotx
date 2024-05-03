@@ -2,13 +2,11 @@ import os
 
 import pytest
 from confest import bsc_client, vcr_c  # noqa
-from eth_abi.exceptions import EncodingTypeError
 
 from aiotx.clients import AioTxBSCClient
 from aiotx.exceptions import (
     AioTxError,
     InvalidArgumentError,
-    NonceTooLowError,
     ReplacementTransactionUnderpriced,
     TransactionNotFound,
     WrongPrivateKey,
