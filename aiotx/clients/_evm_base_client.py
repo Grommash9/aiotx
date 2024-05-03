@@ -68,8 +68,11 @@ class AioTxEVMClient(AioTxClient):
         return currency.to_wei(number, unit)
 
     def get_address_from_private_key(self, private_key: str):
-        sender_address = Account.from_key(private_key).address
-        return to_checksum_address(sender_address)
+        try:
+            from_address = Account.from_key(private_key).address
+        except binascii.Error as e:
+            raise WrongPrivateKey(e)
+        return to_checksum_address(from_address)
 
     async def get_last_block(self) -> int:
         payload = {"method": "eth_blockNumber", "params": []}
@@ -156,16 +159,13 @@ class AioTxEVMClient(AioTxClient):
         tx_count = result["result"]
         return 0 if tx_count == "0x" else int(tx_count, 16)
 
-    async def send_transaction(
+    async def send(
         self, private_key: str, to_address: str, amount: int, gas_price: int = None, gas_limit: int = 21000
     ) -> str:
         if gas_price is None:
             gas_price = await self.get_gas_price()
-        try:
-            from_address = Account.from_key(private_key).address
-        except binascii.Error as e:
-            raise WrongPrivateKey(e)
 
+        from_address = self.get_address_from_private_key(private_key)
         nonce = await self.get_transaction_count(from_address, BlockParam.PENDING)
         transaction = {
             "nonce": nonce,
@@ -182,16 +182,17 @@ class AioTxEVMClient(AioTxClient):
         result = await self._make_rpc_call(payload)
         return result["result"]
 
-    async def send_token_transaction(
+    async def send_token(
         self,
         private_key: str,
         to_address: str,
-        token_address: str,
+        contract_address: str,
         amount: int,
         gas_price: int,
         gas_limit: int = 100000,
     ) -> str:
-        sender_address = Account.from_key(private_key).address
+        from_address = self.get_address_from_private_key(private_key)
+        nonce = await self.get_transaction_count(from_address, BlockParam.PENDING)
 
         function_signature = "transfer(address,uint256)"
         function_selector = keccak(function_signature.encode("utf-8"))[:4].hex()
@@ -199,10 +200,10 @@ class AioTxEVMClient(AioTxClient):
         data = "0x" + function_selector + transfer_data.hex()
 
         transaction = {
-            "nonce": await self.get_transaction_count(sender_address, BlockParam.PENDING),
+            "nonce": nonce,
             "gasPrice": gas_price,
             "gas": gas_limit,
-            "to": token_address,
+            "to": contract_address,
             "value": 0,
             "data": data,
             "chainId": self.chain_id,

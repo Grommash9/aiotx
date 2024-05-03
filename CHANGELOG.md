@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.4.0]
+- Added tests for send and send_token function, they was renamed and changed, getting pending for nonce now
+
 ## [0.3.0]
 - Function for getting current gas price is added and to_wai/from_wai functions are attached to EVM client now
 
