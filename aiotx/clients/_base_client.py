@@ -1,26 +1,39 @@
 import asyncio
-import threading
+import concurrent.futures
 
 
 class AioTxClient:
     def __init__(self, node_url):
         self.node_url = node_url
         self.monitor = BlockMonitor(self)
-        self._monitor_thread = None
+        self._monitoring_task = None
 
-    def start_monitoring(self, monitoring_start_block: int = None):
-        self._monitor_thread = threading.Thread(target=self._start_monitoring_thread, args=(monitoring_start_block,))
-        self._monitor_thread.daemon = True
-        self._monitor_thread.start()
-
-    def _start_monitoring_thread(self, monitoring_start_block):
-        
-        asyncio.run(self.monitor.start(monitoring_start_block))
+    async def start_monitoring(self, monitoring_start_block: int = None):
+        if self._monitoring_task is None:
+            self._monitoring_task = asyncio.create_task(self._run_monitoring(monitoring_start_block))
+        return self._monitoring_task
 
     def stop_monitoring(self):
-        self.monitor.stop()
-        if self._monitor_thread:
-            self._monitor_thread.join()
+        if self._monitoring_task is not None:
+            self._monitoring_task.cancel()
+            try:
+                asyncio.get_event_loop().run_until_complete(self._monitoring_task)
+            except asyncio.CancelledError:
+                pass
+            self._monitoring_task = None
+
+    async def _run_monitoring(self, monitoring_start_block):
+        try:
+            async with self.monitor:
+                await self.monitor.start(monitoring_start_block)
+        except asyncio.CancelledError:
+            pass
+
+    async def get_block_by_number(self, block_number: int):
+        pass
+
+    async def get_last_block(self) -> int:
+        pass
 
     async def get_block_by_number(self, block_number: int):
         pass
@@ -43,6 +56,13 @@ class BlockMonitor:
     def on_transaction(self, func):
         self.transaction_handlers.append(func)
         return func
+    
+    async def __aenter__(self):
+        self.running = True
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        self.stop()
 
     async def start(self, monitoring_start_block):
         self.running = True

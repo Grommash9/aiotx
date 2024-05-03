@@ -9,11 +9,11 @@ bot = Bot(token="BOT TOKEN")
 dispatcher = Dispatcher()
 
 # Create an instance of the AioTxBSCClient
-client = AioTxBSCClient("NODE URL", 97)
+bsc_client = AioTxBSCClient("NODE URL", 97)
 
 
 # Define the block handler
-@client.monitor.on_block
+@bsc_client.monitor.on_block
 async def handle_block(block):
     block_number = block
     chat_id = "5454053704"  # Replace with the actual chat ID
@@ -22,16 +22,16 @@ async def handle_block(block):
 
 
 # Define the transaction handler (optional)
-@client.monitor.on_transaction
+@bsc_client.monitor.on_transaction
 async def handle_transaction(transaction):
     transaction_hash = transaction["hash"]
     chat_id = "5454053704"  # Replace with the actual chat ID
     message = f"New transaction: {transaction_hash}"
     await bot.send_message(chat_id=chat_id, text=message)
 
+async def main():
+    monitoring_task = asyncio.create_task(bsc_client.start_monitoring(584))
+    await asyncio.gather(monitoring_task, dispatcher.start_polling(bot))
 
-# Start the monitoring process
-client.start_monitoring()
-
-# Start the aiogram bot
-asyncio.run(dispatcher.start_polling(bot))
+if __name__ == "__main__":
+    asyncio.run(main())

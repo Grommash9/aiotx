@@ -43,7 +43,7 @@ class AioTxEVMClient(AioTxClient):
         self.node_url = node_url
         self.chain_id = chain_id
         self.monitor = EvmMonitor(self)
-        self._monitor_thread = None
+        self._monitoring_task = None
         with open("aiotx/utils/bep20_abi.json") as file:
             bep_20_abi = json.loads(file.read())
         self._bep20_abi = bep_20_abi
