@@ -1,12 +1,15 @@
 import asyncio
+import decimal
 import json
 import secrets
+from typing import Union
 
 import aiohttp
 from eth_abi import decode, encode
 from eth_account import Account
 from eth_typing import HexStr
 from eth_utils import (
+    currency,
     decode_hex,
     function_signature_to_4byte_selector,
     keccak,
@@ -53,6 +56,14 @@ class AioTxEVMClient(AioTxClient):
         private_key = "0x" + private_key_bytes
         acct = Account.from_key(private_key)
         return private_key, acct.address
+    
+    @staticmethod
+    def from_wei(number: int, unit: str) -> Union[int, decimal.Decimal]:
+        return currency.from_wei(number, unit)
+    
+    @staticmethod
+    def to_wei(number: Union[int, float, str, decimal.Decimal], unit: str) -> int:
+        return currency.to_wei(number, unit)
 
     def get_address_from_private_key(self, private_key: str):
         sender_address = Account.from_key(private_key).address
@@ -70,7 +81,13 @@ class AioTxEVMClient(AioTxClient):
         result = await self._make_rpc_call(payload)
         balance = result["result"]
         return 0 if balance == "0x" else int(result["result"], 16)
-
+    
+    async def get_gas_price(self) -> int:
+        payload = {"method": "eth_gasPrice", "params": []}
+        result = await self._make_rpc_call(payload)
+        price = result["result"]
+        return 0 if price == "0x" else int(result["result"], 16)
+        
     async def get_transaction(self, hash) -> dict:
         payload = {"method": "eth_getTransactionByHash", "params": [hash]}
         result = await self._make_rpc_call(payload)

@@ -10,6 +10,7 @@ from aiotx.exceptions import (
 )
 
 PRIVATE_KEY_TO_SEND_FROM = os.environ.get("TEST_BSC_WALLET_PRIVATE_KEY")
+assert PRIVATE_KEY_TO_SEND_FROM is not None, "Please provide TEST_BSC_WALLET_PRIVATE_KEY"
 CONTRACT = "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd"
 DESTINATION_ADDRESS = "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a"
 
@@ -131,3 +132,10 @@ async def test_send_token_transaction(bsc_client: AioTxBSCClient):
     )
     assert isinstance(result, str)
     assert result.startswith("0x")
+
+
+@vcr_c.use_cassette("bsc/get_gas_price.yaml")
+async def test_send_token_transaction(bsc_client: AioTxBSCClient):
+    result = await bsc_client.get_gas_price()
+    assert isinstance(result, int)
+    assert result == 5000000000

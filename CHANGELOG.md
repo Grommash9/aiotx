@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [0.3.0]
+- Function for getting current gas price is added and to_wai/from_wai functions are attached to EVM client now
+
 ## [0.2.0]
 - block/transactions monitoring added, examples of usage added, tx input decoding added
 
