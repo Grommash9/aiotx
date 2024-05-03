@@ -1,4 +1,5 @@
 import asyncio
+import binascii
 import decimal
 import json
 import secrets
@@ -37,6 +38,7 @@ from aiotx.exceptions import (
     TransactionCostExceedsGasLimitError,
     TransactionNotFound,
     VMExecutionError,
+    WrongPrivateKey,
 )
 from aiotx.types import BlockParam
 
@@ -155,33 +157,30 @@ class AioTxEVMClient(AioTxClient):
         return 0 if tx_count == "0x" else int(tx_count, 16)
 
     async def send_transaction(
-        self, private_key: str, to_address: str, amount: int, gas_price: int, gas_limit: int = 21000
+        self, private_key: str, to_address: str, amount: int, gas_price: int = None, gas_limit: int = 21000
     ) -> str:
+        if gas_price is None:
+            gas_price = await self.get_gas_price()
+        try:
+            from_address = Account.from_key(private_key).address
+        except binascii.Error as e:
+            raise WrongPrivateKey(e)
 
-        from_address = Account.from_key(private_key).address
-        nonce = await self.get_transaction_count(from_address)
-        raw_transaction = self.build_raw_transaction(private_key, to_address, nonce, amount, gas_price, gas_limit)
-
-        payload = {"method": "eth_sendRawTransaction", "params": [raw_transaction]}
-
-        result = await self._make_rpc_call(payload)
-        return result
-
-    def build_raw_transaction(
-        self, private_key: str, to_address: str, nonce: int, amount_in_wei: int, gas_price: int, gas_limit: int = 21000
-    ) -> HexStr:
+        nonce = await self.get_transaction_count(from_address, BlockParam.PENDING)
         transaction = {
             "nonce": nonce,
             "gasPrice": gas_price,
             "gas": gas_limit,
             "to": to_address,
-            "value": amount_in_wei,
+            "value": amount,
             "data": b"",
             "chainId": self.chain_id,
         }
         signed_transaction = Account.sign_transaction(transaction, private_key)
         raw_tx = to_hex(signed_transaction.rawTransaction)
-        return raw_tx
+        payload = {"method": "eth_sendRawTransaction", "params": [raw_tx]}
+        result = await self._make_rpc_call(payload)
+        return result["result"]
 
     async def send_token_transaction(
         self,
@@ -200,7 +199,7 @@ class AioTxEVMClient(AioTxClient):
         data = "0x" + function_selector + transfer_data.hex()
 
         transaction = {
-            "nonce": await self.get_transaction_count(sender_address),
+            "nonce": await self.get_transaction_count(sender_address, BlockParam.PENDING),
             "gasPrice": gas_price,
             "gas": gas_limit,
             "to": token_address,
