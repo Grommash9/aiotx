@@ -5,8 +5,11 @@ from confest import bsc_client, vcr_c  # noqa
 
 from aiotx.clients import AioTxBSCClient
 from aiotx.exceptions import (
+    AioTxError,
     InvalidArgumentError,
+    ReplacementTransactionUnderpriced,
     TransactionNotFound,
+    WrongPrivateKey,
 )
 
 PRIVATE_KEY_TO_SEND_FROM = os.environ.get("TEST_BSC_WALLET_PRIVATE_KEY")
@@ -17,7 +20,7 @@ DESTINATION_ADDRESS = "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a"
 
 @vcr_c.use_cassette("bsc/get_last_block.yaml")
 async def test_get_last_block(bsc_client: AioTxBSCClient):
-    block_id = await bsc_client.get_last_block()
+    block_id = await bsc_client.get_last_block_number()
     assert isinstance(block_id, int)
 
 @pytest.mark.parametrize(
@@ -87,9 +90,9 @@ async def test_get_token_balance(bsc_client: AioTxBSCClient, wallet_address, con
     
     if expected_exception:
         with pytest.raises(expected_exception):
-            await bsc_client.get_token_balance(wallet_address, contract)
+            await bsc_client.get_contract_balance(wallet_address, contract)
     else:
-        balance = await bsc_client.get_token_balance(wallet_address, contract)
+        balance = await bsc_client.get_contract_balance(wallet_address, contract)
         assert isinstance(balance, int)
         assert expected_balance == balance
 
@@ -111,27 +114,12 @@ async def test_get_token_balance(bsc_client: AioTxBSCClient, wallet_address, con
 async def test_get_transaction_count(bsc_client: AioTxBSCClient, wallet_address, expected_exception, expected_count):
     if expected_exception:
         with pytest.raises(expected_exception):
-            await bsc_client.get_transaction_count(wallet_address)
+            await bsc_client.get_transactions_count(wallet_address)
     else:
-        count = await bsc_client.get_transaction_count(wallet_address)
+        count = await bsc_client.get_transactions_count(wallet_address)
         assert isinstance(count, int)
         assert expected_count == count
 
-
-@vcr_c.use_cassette("bsc/send_transaction.yaml")
-async def test_send_transaction(bsc_client: AioTxBSCClient):
-    result = await bsc_client.send_transaction(PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 10000, 5000000000)
-    assert isinstance(result, dict)
-    assert "result" in result
-
-
-@vcr_c.use_cassette("bsc/send_token_transaction.yaml")
-async def test_send_token_transaction(bsc_client: AioTxBSCClient):
-    result = await bsc_client.send_token_transaction(
-        PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1000000000000000000, 1000000000
-    )
-    assert isinstance(result, str)
-    assert result.startswith("0x")
 
 
 @vcr_c.use_cassette("bsc/get_gas_price.yaml")
@@ -139,3 +127,76 @@ async def test_send_token_transaction(bsc_client: AioTxBSCClient):
     result = await bsc_client.get_gas_price()
     assert isinstance(result, int)
     assert result == 5000000000
+
+
+@pytest.mark.parametrize(
+    "private_key, to_address, amount, gas_price, gas_limit, expected_exception",
+    [
+        ("87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd", DESTINATION_ADDRESS, 0.00001, 5, 21000, WrongPrivateKey),
+        ("87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938ch", DESTINATION_ADDRESS, 0.00001, 5, 21000, WrongPrivateKey),
+        ("e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd", DESTINATION_ADDRESS, 0.00001, 5, 21000, WrongPrivateKey),
+        (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5", 0.00001, 5, 21000, ValueError),
+        (PRIVATE_KEY_TO_SEND_FROM, "f9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", 0.00001, 5, 21000, None),
+        (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E84d3f6FF662Ba4c306b5a", 0.00001, 5, 21000, ValueError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0.00001, 5, 21000, None),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 5, 5, 21000, AioTxError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0.00001, 0, 21000, AioTxError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0, 5, 21000, ReplacementTransactionUnderpriced),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0.00001, 5, 0, AioTxError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0.00001, 5, 61000, ReplacementTransactionUnderpriced)
+    ],
+)
+@vcr_c.use_cassette("bsc/send_transaction.yaml")
+async def test_send_transaction(bsc_client: AioTxBSCClient, private_key, to_address, amount, gas_price, gas_limit, expected_exception):
+    """
+    Here it's raising ReplacementTransactionUnderpriced and NonceTooLowError because we have reusing
+    the same VCR data for every get nonce request, we should investigate how we can change that maybe?
+    """
+    gas_price = bsc_client.to_wei(gas_price, "gwei")
+    wei_amount = bsc_client.to_wei(amount, "ether")
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await bsc_client.send(private_key, to_address, wei_amount, gas_price, gas_limit)
+    else:
+        result = await bsc_client.send(private_key, to_address, wei_amount, gas_price, gas_limit)
+        assert isinstance(result, str)
+
+@pytest.mark.parametrize(
+    "private_key, to_address, contract, amount, gas_price, gas_limit, expected_exception",
+    [
+        ("87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd", DESTINATION_ADDRESS, CONTRACT, 1, 5, 61000, WrongPrivateKey),
+        ("87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938ch", DESTINATION_ADDRESS,CONTRACT, 1, 5, 61000, WrongPrivateKey),
+        ("e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd", DESTINATION_ADDRESS,CONTRACT, 1, 5, 61000, WrongPrivateKey),
+        (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E984d3f6FF662Ba4c306b5a",CONTRACT, 1, 5, 61000, ValueError),
+        (PRIVATE_KEY_TO_SEND_FROM, "f9E5E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", CONTRACT, 1, 5, 61000, ValueError),
+        (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b",CONTRACT, 1, 5, 61000, ValueError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, "0xf9E35E4e1CbcF08E984d3f6FF662Ba4c306b5a", 0.00001, 5, 61000, TypeError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, "f9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", 1, 5, 61000, TypeError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b", 1, 5, 61000, TypeError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1, 5, 61000, None),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1000, 5, 61000, ReplacementTransactionUnderpriced),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1, 0, 61000, AioTxError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 0, 5, 61000, ReplacementTransactionUnderpriced),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1, 5, 0, AioTxError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1, 5, 61000, None)
+    ],
+)
+@vcr_c.use_cassette("bsc/send_token_transaction.yaml")
+async def test_send_token_transaction(bsc_client: AioTxBSCClient, private_key, to_address, contract, amount, gas_price, gas_limit, expected_exception):
+    """
+    Here it's raising ReplacementTransactionUnderpriced and NonceTooLowError because we have reusing
+    the same VCR data for every get nonce request, we should investigate how we can change that maybe?
+    """
+    gas_price = bsc_client.to_wei(gas_price, "gwei")
+    wei_amount = bsc_client.to_wei(amount, "ether")
+
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await bsc_client.send_token(
+        private_key, to_address, contract, wei_amount, gas_price, gas_limit
+    )
+    else:
+        result = await bsc_client.send_token(
+        private_key, to_address, contract, wei_amount, gas_price, gas_limit
+    )
+        assert isinstance(result, str)

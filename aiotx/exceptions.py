@@ -55,3 +55,6 @@ class TransactionNotFound(AioTxError):
 
 class ReplacementTransactionUnderpriced(AioTxError):
     pass
+
+class WrongPrivateKey(AioTxError):
+    pass

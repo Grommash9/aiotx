@@ -1,5 +1,4 @@
 import asyncio
-import concurrent.futures
 
 
 class AioTxClient:
@@ -32,7 +31,7 @@ class AioTxClient:
     async def get_block_by_number(self, block_number: int):
         pass
 
-    async def get_last_block(self) -> int:
+    async def get_last_block_number(self) -> int:
         pass
 
 class BlockMonitor:   

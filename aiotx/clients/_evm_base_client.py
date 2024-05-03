@@ -1,4 +1,5 @@
 import asyncio
+import binascii
 import decimal
 import json
 import secrets
@@ -7,7 +8,6 @@ from typing import Union
 import aiohttp
 from eth_abi import decode, encode
 from eth_account import Account
-from eth_typing import HexStr
 from eth_utils import (
     currency,
     decode_hex,
@@ -37,6 +37,7 @@ from aiotx.exceptions import (
     TransactionCostExceedsGasLimitError,
     TransactionNotFound,
     VMExecutionError,
+    WrongPrivateKey,
 )
 from aiotx.types import BlockParam
 
@@ -57,6 +58,13 @@ class AioTxEVMClient(AioTxClient):
         acct = Account.from_key(private_key)
         return private_key, acct.address
     
+    def get_address_from_private_key(self, private_key: str):
+        try:
+            from_address = Account.from_key(private_key).address
+        except binascii.Error as e:
+            raise WrongPrivateKey(e)
+        return to_checksum_address(from_address)
+    
     @staticmethod
     def from_wei(number: int, unit: str) -> Union[int, decimal.Decimal]:
         return currency.from_wei(number, unit)
@@ -65,38 +73,6 @@ class AioTxEVMClient(AioTxClient):
     def to_wei(number: Union[int, float, str, decimal.Decimal], unit: str) -> int:
         return currency.to_wei(number, unit)
 
-    def get_address_from_private_key(self, private_key: str):
-        sender_address = Account.from_key(private_key).address
-        return to_checksum_address(sender_address)
-
-    async def get_last_block(self) -> int:
-        payload = {"method": "eth_blockNumber", "params": []}
-        result = await self._make_rpc_call(payload)
-        last_block = result["result"]
-        return int(last_block, 16)
-
-    async def get_balance(self, address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
-        payload = {"method": "eth_getBalance", "params": [address, block_parameter.value]}
-
-        result = await self._make_rpc_call(payload)
-        balance = result["result"]
-        return 0 if balance == "0x" else int(result["result"], 16)
-    
-    async def get_gas_price(self) -> int:
-        payload = {"method": "eth_gasPrice", "params": []}
-        result = await self._make_rpc_call(payload)
-        price = result["result"]
-        return 0 if price == "0x" else int(result["result"], 16)
-        
-    async def get_transaction(self, hash) -> dict:
-        payload = {"method": "eth_getTransactionByHash", "params": [hash]}
-        result = await self._make_rpc_call(payload)
-        if result["result"] is None:
-            raise TransactionNotFound(f"Transaction {hash} not found!")
-        tx_data = result["result"]
-        tx_data["aiotx_decoded_input"] = self.decode_transaction_input(tx_data["input"])
-        return tx_data
-    
     def decode_transaction_input(self, input_data: str) -> dict:
         if input_data == "0x":
             return {
@@ -126,13 +102,26 @@ class AioTxEVMClient(AioTxClient):
             'function_name': None,
             'parameters': None
         }
-        
+
+    async def get_last_block_number(self) -> int:
+        payload = {"method": "eth_blockNumber", "params": []}
+        result = await self._make_rpc_call(payload)
+        last_block = result["result"]
+        return int(last_block, 16)
+    
     async def get_block_by_number(self, block_number: int, transaction_detail_flag: bool = True):
         payload = {"method": "eth_getBlockByNumber", "params": [hex(block_number), transaction_detail_flag]}
         result = await self._make_rpc_call(payload)
         return result
 
-    async def get_token_balance(self, address, contract_address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
+    async def get_balance(self, address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
+        payload = {"method": "eth_getBalance", "params": [address, block_parameter.value]}
+
+        result = await self._make_rpc_call(payload)
+        balance = result["result"]
+        return 0 if balance == "0x" else int(result["result"], 16)
+    
+    async def get_contract_balance(self, address, contract_address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
         function_signature = "balanceOf(address)".encode("UTF-8")
         hash_result = keccak(function_signature)
         method_id = hash_result.hex()[:8]
@@ -147,63 +136,73 @@ class AioTxEVMClient(AioTxClient):
         result = await self._make_rpc_call(payload)
         balance = result["result"]
         return 0 if balance == "0x" else int(balance, 16)
-
-    async def get_transaction_count(self, address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
+    
+    async def get_gas_price(self) -> int:
+        payload = {"method": "eth_gasPrice", "params": []}
+        result = await self._make_rpc_call(payload)
+        price = result["result"]
+        return 0 if price == "0x" else int(result["result"], 16)
+        
+    async def get_transaction(self, hash) -> dict:
+        payload = {"method": "eth_getTransactionByHash", "params": [hash]}
+        result = await self._make_rpc_call(payload)
+        if result["result"] is None:
+            raise TransactionNotFound(f"Transaction {hash} not found!")
+        tx_data = result["result"]
+        tx_data["aiotx_decoded_input"] = self.decode_transaction_input(tx_data["input"])
+        return tx_data
+    
+    async def get_transactions_count(self, address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
         payload = {"method": "eth_getTransactionCount", "params": [address, block_parameter.value]}
         result = await self._make_rpc_call(payload)
         tx_count = result["result"]
         return 0 if tx_count == "0x" else int(tx_count, 16)
 
-    async def send_transaction(
-        self, private_key: str, to_address: str, amount: int, gas_price: int, gas_limit: int = 21000
+    async def send(
+        self, private_key: str, to_address: str, amount: int, gas_price: int = None, gas_limit: int = 21000
     ) -> str:
+        if gas_price is None:
+            gas_price = await self.get_gas_price()
 
-        from_address = Account.from_key(private_key).address
-        nonce = await self.get_transaction_count(from_address)
-        raw_transaction = self.build_raw_transaction(private_key, to_address, nonce, amount, gas_price, gas_limit)
-
-        payload = {"method": "eth_sendRawTransaction", "params": [raw_transaction]}
-
-        result = await self._make_rpc_call(payload)
-        return result
-
-    def build_raw_transaction(
-        self, private_key: str, to_address: str, nonce: int, amount_in_wei: int, gas_price: int, gas_limit: int = 21000
-    ) -> HexStr:
+        from_address = self.get_address_from_private_key(private_key)
+        nonce = await self.get_transactions_count(from_address, BlockParam.PENDING)
         transaction = {
             "nonce": nonce,
             "gasPrice": gas_price,
             "gas": gas_limit,
-            "to": to_address,
-            "value": amount_in_wei,
+            "to": to_checksum_address(to_address),
+            "value": amount,
             "data": b"",
             "chainId": self.chain_id,
         }
         signed_transaction = Account.sign_transaction(transaction, private_key)
         raw_tx = to_hex(signed_transaction.rawTransaction)
-        return raw_tx
+        payload = {"method": "eth_sendRawTransaction", "params": [raw_tx]}
+        result = await self._make_rpc_call(payload)
+        return result["result"]
 
-    async def send_token_transaction(
+    async def send_token(
         self,
         private_key: str,
         to_address: str,
-        token_address: str,
+        contract_address: str,
         amount: int,
         gas_price: int,
         gas_limit: int = 100000,
     ) -> str:
-        sender_address = Account.from_key(private_key).address
+        from_address = self.get_address_from_private_key(private_key)
+        nonce = await self.get_transactions_count(from_address, BlockParam.PENDING)
 
         function_signature = "transfer(address,uint256)"
         function_selector = keccak(function_signature.encode("utf-8"))[:4].hex()
-        transfer_data = encode(["address", "uint256"], [to_address, amount])
+        transfer_data = encode(["address", "uint256"], [to_checksum_address(to_address), amount])
         data = "0x" + function_selector + transfer_data.hex()
 
         transaction = {
-            "nonce": await self.get_transaction_count(sender_address),
+            "nonce": nonce,
             "gasPrice": gas_price,
             "gas": gas_limit,
-            "to": token_address,
+            "to": contract_address,
             "value": 0,
             "data": data,
             "chainId": self.chain_id,
@@ -278,7 +277,7 @@ class EvmMonitor(BlockMonitor):
 
     async def poll_blocks(self,):
         if self._latest_block is None:
-            self._latest_block = await self.client.get_last_block()
+            self._latest_block = await self.client.get_last_block_number()
         block = await self.client.get_block_by_number(self._latest_block)
         await self.process_block(block["result"])
         self._latest_block = self._latest_block + 1
