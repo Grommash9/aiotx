@@ -5,6 +5,7 @@ name: Test
 
 env:
   TEST_BSC_WALLET_PRIVATE_KEY: ${{ secrets.TEST_BSC_WALLET_PRIVATE_KEY }}
+  TEST_ETH_WALLET_PRIVATE_KEY: ${{ secrets.TEST_ETH_WALLET_PRIVATE_KEY }}
 
 on:
   push:

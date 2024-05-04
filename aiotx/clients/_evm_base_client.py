@@ -44,13 +44,10 @@ from aiotx.types import BlockParam
 
 class AioTxEVMClient(AioTxClient):
     def __init__(self, node_url, chain_id):
-        self.node_url = node_url
+        super().__init__(node_url)
         self.chain_id = chain_id
         self.monitor = EvmMonitor(self)
         self._monitoring_task = None
-        with open("aiotx/utils/bep20_abi.json") as file:
-            bep_20_abi = json.loads(file.read())
-        self._bep20_abi = bep_20_abi
 
     def generate_address(self):
         private_key_bytes = secrets.token_hex(32)
@@ -72,6 +69,10 @@ class AioTxEVMClient(AioTxClient):
     @staticmethod
     def to_wei(number: Union[int, float, str, decimal.Decimal], unit: str) -> int:
         return currency.to_wei(number, unit)
+    
+    def _get_abi_entries(self):
+        # Redefine that in you client
+        return []
 
     def decode_transaction_input(self, input_data: str) -> dict:
         if input_data == "0x":
@@ -79,8 +80,10 @@ class AioTxEVMClient(AioTxClient):
             'function_name': None,
             'parameters': None
         }
-        for abi_entry in self._bep20_abi:
-            function_name = abi_entry['name']
+        for abi_entry in self._get_abi_entries():
+            function_name = abi_entry.get("name")
+            if function_name is None:
+                continue
             input_types = [inp['type'] for inp in abi_entry['inputs']]
             function_signature = f"{function_name}({','.join(input_types)})"
             function_selector = function_signature_to_4byte_selector(function_signature)
@@ -116,7 +119,6 @@ class AioTxEVMClient(AioTxClient):
 
     async def get_balance(self, address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
         payload = {"method": "eth_getBalance", "params": [address, block_parameter.value]}
-
         result = await self._make_rpc_call(payload)
         balance = result["result"]
         return 0 if balance == "0x" else int(result["result"], 16)
@@ -137,6 +139,18 @@ class AioTxEVMClient(AioTxClient):
         balance = result["result"]
         return 0 if balance == "0x" else int(balance, 16)
     
+    async def get_contract_decimals(self, contract_address) -> int:
+        function_signature = "decimals()".encode("UTF-8")
+        hash_result = keccak(function_signature)
+        method_id = hash_result.hex()[:8]
+        payload = {
+            "method": "eth_call",
+            "params": [{"to": contract_address, "data": f"0x{method_id}"}, "latest"],
+        }
+        result = await self._make_rpc_call(payload)
+        decimals = result["result"]
+        return 0 if decimals == "0x" else int(decimals, 16)
+
     async def get_gas_price(self) -> int:
         payload = {"method": "eth_gasPrice", "params": []}
         result = await self._make_rpc_call(payload)
@@ -159,13 +173,14 @@ class AioTxEVMClient(AioTxClient):
         return 0 if tx_count == "0x" else int(tx_count, 16)
 
     async def send(
-        self, private_key: str, to_address: str, amount: int, gas_price: int = None, gas_limit: int = 21000
+        self, private_key: str, to_address: str, amount: int, nonce: int = None, gas_price: int = None, gas_limit: int = 21000
     ) -> str:
         if gas_price is None:
             gas_price = await self.get_gas_price()
 
         from_address = self.get_address_from_private_key(private_key)
-        nonce = await self.get_transactions_count(from_address, BlockParam.PENDING)
+        if nonce is None:
+            nonce = await self.get_transactions_count(from_address, BlockParam.PENDING)
         transaction = {
             "nonce": nonce,
             "gasPrice": gas_price,
@@ -187,12 +202,15 @@ class AioTxEVMClient(AioTxClient):
         to_address: str,
         contract_address: str,
         amount: int,
-        gas_price: int,
+        nonce: int = None,
+        gas_price: int = None,
         gas_limit: int = 100000,
     ) -> str:
         from_address = self.get_address_from_private_key(private_key)
-        nonce = await self.get_transactions_count(from_address, BlockParam.PENDING)
-
+        if nonce is None:
+            nonce = await self.get_transactions_count(from_address, BlockParam.PENDING)
+        if gas_price is None:
+            gas_price = await self.get_gas_price()
         function_signature = "transfer(address,uint256)"
         function_selector = keccak(function_signature.encode("utf-8"))[:4].hex()
         transfer_data = encode(["address", "uint256"], [to_checksum_address(to_address), amount])

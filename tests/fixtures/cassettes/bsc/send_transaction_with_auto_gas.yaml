@@ -1,0 +1,142 @@
+interactions:
+- request:
+    body: '{"method": "eth_gasPrice", "params": [], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x123f92da0"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '48'
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:18:20 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-2bd95d6b916503dd
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getTransactionCount", "params": ["0x3ffeCb152F95f7122990ab16Eff4B0B5d533497e",
+      "pending"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x81"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '41'
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:18:20 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-ecf10b7bc104d983
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf86c8181850123f92da082520894f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a8609184e72a0008081e5a0e8549b9ff88db8121591ae310584436769e56d72fd30f77be30a9517d758d723a019d2c5b14fec393b3895d7fa99c848f03ea6323627c45ffcb03ba468637b8bbf"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0xfa5bea328e0df0660778fe39903fa25864d641d74806e02f6cc729b191b95c76"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '103'
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:18:20 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-84b84c7a90242c73
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf86c8181850123f92da0825208943ffecb152f95f7122990ab16eff4b0b5d533497e8609184e72a0008081e5a090da591388cbc018c61bd226c62d03217b0b4f130dc2e90cb7ba8a494023928aa040f05dd41e6d3d9c8451199c3aa4125fd30cad89b4458f91c1de92656a0560a1"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32000,"message":"replacement
+        transaction underpriced"}}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '97'
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:18:21 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-dbb2877f11a402e9
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+version: 1
