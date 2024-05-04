@@ -13,7 +13,7 @@ def handle_transaction(transaction):
 
 
 async def main():
-    await client.start_monitoring(584)
+    await client.start_monitoring()
 
     try:
         while True:
