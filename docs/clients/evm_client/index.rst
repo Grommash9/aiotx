@@ -64,7 +64,6 @@ To create an instance of AioTxETHClient, you need to provide the ETH node URL an
 Methods
 -------
 
-
 .. toctree::
    :maxdepth: 1
 

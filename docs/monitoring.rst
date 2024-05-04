@@ -1,7 +1,9 @@
 Blockchain monitoring
 ============================
 
-AioTxBSCClient provides functionality to monitor new blocks and transactions on the BSC blockchain. It allows you to register handlers that will be called when new blocks or transactions are detected.
+AioTx provides functionality to monitor new blocks and transactions on the blockchain. It allows you to register handlers that will be called when new blocks or transactions are detected.
+
+Now it's working and checked for ETH, BSC, BTC and LTC
 
 Registering Handlers
 ^^^^^^^^^^^^^^^^^^^^
@@ -48,7 +50,7 @@ To stop monitoring, you can use the `stop_monitoring` method.
 Monitoring Multiple Clients
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-You can monitor multiple AioTxBSCClient instances simultaneously by creating separate instances and registering handlers for each one. Here's an example:
+You can monitor multiple instances simultaneously by creating separate instances and registering handlers for each one. Here's an example:
 
 .. code-block:: python
 

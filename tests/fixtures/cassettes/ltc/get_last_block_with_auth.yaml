@@ -1,0 +1,22 @@
+interactions:
+- request:
+    body: '{"method": "getblockcount", "params": [], "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: http://localhost:19332/wallet/main2
+  response:
+    body:
+      string: '{"result":3247854,"error":null,"id":"curltest"}
+
+        '
+    headers:
+      Content-Length:
+      - '48'
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 14:45:30 GMT
+    status:
+      code: 200
+      message: OK
+version: 1

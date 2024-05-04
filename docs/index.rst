@@ -7,7 +7,7 @@ Welcome to AioTx's documentation!
 ==================================
 
 .. toctree::
-   :maxdepth: 10
+   :maxdepth: 100
    :caption: Available Clients:
 
    clients/evm_client/index
@@ -15,13 +15,13 @@ Welcome to AioTx's documentation!
    clients/tron_client/index
 
 .. toctree::
-   :maxdepth: 10
+   :maxdepth: 100
    :caption: Monitoring:
 
    monitoring
 
 .. toctree::
-   :maxdepth: 10
+   :maxdepth: 100
    :caption: Testing:
 
    testing
