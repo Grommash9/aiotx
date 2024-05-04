@@ -241,7 +241,7 @@ async def test_send_token_transaction(eth_client: AioTxETHClient, private_key, t
     the same VCR data for every get nonce request, we should investigate how we can change that maybe?
     """
     gas_price = eth_client.to_wei(gas_price, "gwei")
-    wei_amount = eth_client.to_wei(amount, "ether")
+    wei_amount = eth_client.to_wei(amount, "mwei")
 
     if expected_exception:
         with pytest.raises(expected_exception):
@@ -256,3 +256,19 @@ async def test_send_token_transaction(eth_client: AioTxETHClient, private_key, t
 
 
 
+@vcr_c.use_cassette("eth/send_token_transaction_with_custom_nonce.yaml")
+async def test_send_transaction_with_custom_nonce(eth_client: AioTxETHClient):
+    wei_amount = eth_client.to_wei(0.00001, "mwei")
+    sender_address = eth_client.get_address_from_private_key(PRIVATE_KEY_TO_SEND_FROM)
+    nonce = await eth_client.get_transactions_count(sender_address)
+    first_tx = await eth_client.send_token(PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, wei_amount, nonce=nonce)
+    assert isinstance(first_tx, str)
+    second_tx = await eth_client.send_token(PRIVATE_KEY_TO_SEND_FROM, sender_address, CONTRACT, wei_amount, nonce=nonce + 1)
+    assert isinstance(second_tx, str)
+
+
+@vcr_c.use_cassette("eth/send_token_transaction_with_auto_params.yaml")
+async def test_send_transaction_with_custom_nonce(eth_client: AioTxETHClient):
+    wei_amount = eth_client.to_wei(0.00001, "mwei")
+    tx_id = await eth_client.send_token(PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, wei_amount)
+    assert isinstance(tx_id, str)
