@@ -44,13 +44,10 @@ from aiotx.types import BlockParam
 
 class AioTxEVMClient(AioTxClient):
     def __init__(self, node_url, chain_id):
-        self.node_url = node_url
+        super().__init__(node_url)
         self.chain_id = chain_id
         self.monitor = EvmMonitor(self)
         self._monitoring_task = None
-        with open("aiotx/utils/bep20_abi.json") as file:
-            bep_20_abi = json.loads(file.read())
-        self._bep20_abi = bep_20_abi
 
     def generate_address(self):
         private_key_bytes = secrets.token_hex(32)
@@ -72,6 +69,10 @@ class AioTxEVMClient(AioTxClient):
     @staticmethod
     def to_wei(number: Union[int, float, str, decimal.Decimal], unit: str) -> int:
         return currency.to_wei(number, unit)
+    
+    def _get_abi_entries(self):
+        # Redefine that in you client
+        return []
 
     def decode_transaction_input(self, input_data: str) -> dict:
         if input_data == "0x":
@@ -79,7 +80,7 @@ class AioTxEVMClient(AioTxClient):
             'function_name': None,
             'parameters': None
         }
-        for abi_entry in self._bep20_abi:
+        for abi_entry in self._get_abi_entries():
             function_name = abi_entry['name']
             input_types = [inp['type'] for inp in abi_entry['inputs']]
             function_signature = f"{function_name}({','.join(input_types)})"
@@ -116,7 +117,6 @@ class AioTxEVMClient(AioTxClient):
 
     async def get_balance(self, address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
         payload = {"method": "eth_getBalance", "params": [address, block_parameter.value]}
-
         result = await self._make_rpc_call(payload)
         balance = result["result"]
         return 0 if balance == "0x" else int(result["result"], 16)

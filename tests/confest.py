@@ -4,7 +4,7 @@ import os
 import pytest
 import vcr
 
-from aiotx.clients import AioTxBSCClient
+from aiotx.clients import AioTxBSCClient, AioTxETHClient
 
 # ALL = "all"
 # ANY = "any"
@@ -27,3 +27,11 @@ BSC_TEST_CHAIN_ID = 97
 @pytest.fixture
 def bsc_client() -> AioTxBSCClient:
     return AioTxBSCClient(BSC_TEST_NODE_URL, BSC_TEST_CHAIN_ID)
+
+
+ETH_TEST_NODE_URL = "https://ethereum-sepolia-rpc.publicnode.com"
+ETH_TEST_CHAIN_ID = 11155111
+
+@pytest.fixture
+def eth_client() -> AioTxETHClient:
+    return AioTxETHClient(ETH_TEST_NODE_URL, ETH_TEST_CHAIN_ID)

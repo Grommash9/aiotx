@@ -1,0 +1,42 @@
+interactions:
+- request:
+    body: '{"method": "eth_blockNumber", "params": [], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","result":"0x59044b","id":1}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e6fea72c4976e1-LHR
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '45'
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:07:01 GMT
+      Server:
+      - cloudflare
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '1'
+    status:
+      code: 200
+      message: OK
+version: 1

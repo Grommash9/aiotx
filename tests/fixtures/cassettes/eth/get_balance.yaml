@@ -1,0 +1,345 @@
+interactions:
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0x56ebc43d764761bc09d5918787672e2c8d46da5f",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x4f06926e8ee542"}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e6fea7fcd4947d-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:07:01 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '8'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0xf663792Be0EdD00AFFB8BBe4Ac6d8185efD5671d",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x3ef79e84896457694"}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e6fea8fef3654b-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:07:01 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '7'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0xA869aF2883DD6C881bC59594aDfB3e8b136321b4",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x20c3cb99a7f5b2e8"}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e6fea9de067773-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:07:01 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '6'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0xE27017DD9EF7e3D0A8321C2041Fc4402e89945b6",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x7ef55d771d856508"}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e6feaacdff531a-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:07:01 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '8'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0x39832298befa06a6db0c920ada31cfebAD2e33aB",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x7ffe1cfb1ac5eb"}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e6feabaca294c9-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:07:01 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '8'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0x50d2Ba5a6FA2AC392504a398dAe43c2bBB06b020",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x11eda7bc2248b44d"}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e6feac8b4f9407-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:07:01 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '7'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0x68EfbC84d1Eabc193979beab2E2DDc20B219A14",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32602,"message":"invalid argument
+        0: json: cannot unmarshal hex string of odd length into Go value of type common.Address"}}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e6feadaf5194f6-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:07:02 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '7'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["0xC4BfcCb1668d6e464f33a76bAdD8c8d7d341E04B",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x0"}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e7033dba58943d-LHR
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '40'
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:10:08 GMT
+      Server:
+      - cloudflare
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '7'
+    status:
+      code: 200
+      message: OK
+version: 1
