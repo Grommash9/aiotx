@@ -1,25 +1,18 @@
-from aiotx.clients._base_client import AioTxClient
-
-
 import asyncio
 import json
-import aiohttp
 from typing import Union
-from bitcoinlib.keys import Key, HDKey
-from bitcoinlib.transactions import Transaction, Input, Output
-from bitcoinlib.encoding import pubkeyhash_to_addr
-from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
+
+import aiohttp
+
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     AioTxError,
     BlockNotFoundError,
+    InternalJSONRPCError,
     InvalidArgumentError,
     InvalidRequestError,
-    InternalJSONRPCError,
     MethodNotFoundError,
-    NetworkError
 )
-from aiotx.types import BlockParam
 
 
 class AioTxUTXOClient(AioTxClient):
@@ -30,8 +23,8 @@ class AioTxUTXOClient(AioTxClient):
         self.node_password = node_password
         self.testnet = testnet
         # _derivation_path and _wallet_prefix should be implemented for all networks
-        self._derivation_path = ""
-        self._wallet_prefix = ""
+        # self._derivation_path = ""
+        # self._wallet_prefix = ""
 
     @staticmethod
     def to_satoshi(amount: Union[int, float]) -> int:
@@ -41,18 +34,18 @@ class AioTxUTXOClient(AioTxClient):
     def from_satoshi(amount: int) -> float:
         return amount / 10**8
 
-    def create_wallet(self) -> dict:        
-        hdkey = HDKey()
-        private_key = hdkey.subkey_for_path(self._derivation_path).private_hex
-        public_key = hdkey.subkey_for_path(self._derivation_path).public_hex
-        hash160 = hdkey.subkey_for_path(self._derivation_path).hash160
-        address = pubkeyhash_to_addr_bech32(hash160, prefix=self._wallet_prefix, witver=0, separator='1')
+    # def generate_address(self) -> dict:        
+    #     hdkey = HDKey()
+    #     private_key = hdkey.subkey_for_path(self._derivation_path).private_hex
+    #     public_key = hdkey.subkey_for_path(self._derivation_path).public_hex
+    #     hash160 = hdkey.subkey_for_path(self._derivation_path).hash160
+    #     address = pubkeyhash_to_addr_bech32(hash160, prefix=self._wallet_prefix, witver=0, separator='1')
 
-        return {
-            "private_key": private_key,
-            "public_key": public_key,
-            "address": address
-        }
+    #     return {
+    #         "private_key": private_key,
+    #         "public_key": public_key,
+    #         "address": address
+    #     }
 
     async def get_last_block_number(self) -> int:
         payload = {"method": "getblockcount", "params": []}
@@ -63,7 +56,7 @@ class AioTxUTXOClient(AioTxClient):
     async def get_block_by_number(self, block_number: int, verbosity: int = 2):
         payload = {"method": "getblockhash", "params": [block_number]}
         block_hash = await self._make_rpc_call(payload)
-        payload = {"method": "getblock", "params": [block_hash["result"], 2]}
+        payload = {"method": "getblock", "params": [block_hash["result"], verbosity]}
         result = await self._make_rpc_call(payload)
         return result["result"]
     
@@ -73,7 +66,6 @@ class AioTxUTXOClient(AioTxClient):
         async with aiohttp.ClientSession() as session:
             async with session.post(self.node_url, data=json.dumps(payload), auth=aiohttp.BasicAuth(self.node_username, self.node_password)) as response:
                 result = await response.json()
-                
                 error = result.get("error")
 
                 if error is None:

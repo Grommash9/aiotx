@@ -4,7 +4,7 @@ import os
 import pytest
 import vcr
 
-from aiotx.clients import AioTxBSCClient, AioTxETHClient, AioTxLTCClient
+from aiotx.clients import AioTxBSCClient, AioTxBTCClient, AioTxETHClient, AioTxLTCClient
 
 # ALL = "all"
 # ANY = "any"
@@ -40,13 +40,20 @@ LTC_TEST_NODE_URL = "https://api.tatum.io/v3/blockchain/node/litecoin-core-testn
 
 @pytest.fixture
 def ltc_public_client() -> AioTxLTCClient:
-    return AioTxLTCClient(LTC_TEST_NODE_URL)
+    return AioTxLTCClient(LTC_TEST_NODE_URL, testnet=True)
 
 
 LTC_TEST_NODE_URL_WITH_AUTH = "http://localhost:19332/wallet/main2"
 LTC_TEST_NODE_LOGIN = "litecoinrpc"
 LTC_TEST_NODE_PASSWORD = os.getenv("LTC_TEST_NODE_PASSWORD")
+assert LTC_TEST_NODE_PASSWORD is not None, "Provide LTC_TEST_NODE_PASSWORD"
 
 @pytest.fixture
 def ltc_client_with_auth() -> AioTxLTCClient:
-    return AioTxLTCClient(LTC_TEST_NODE_URL_WITH_AUTH, node_username=LTC_TEST_NODE_LOGIN, node_password=LTC_TEST_NODE_PASSWORD)
+    return AioTxLTCClient(LTC_TEST_NODE_URL_WITH_AUTH, node_username=LTC_TEST_NODE_LOGIN, node_password=LTC_TEST_NODE_PASSWORD, testnet=True)
+
+BTC_TEST_NODE_URL = "https://dry-compatible-cloud.btc-testnet.quiknode.pro/268755801856724a0c520053c0bc3b0a7b1a2d3e/"
+
+@pytest.fixture
+def btc_client() -> AioTxBTCClient:
+    return AioTxBTCClient(BTC_TEST_NODE_URL, testnet=True)

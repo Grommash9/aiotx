@@ -45,8 +45,7 @@ setup(
         "aiohttp",
         "eth_keys",
         "eth_utils",
-        "eth_account",
-        "bitcoinlib"
+        "eth_account"
     ],
     extras_require={
         "test": extras_test,
