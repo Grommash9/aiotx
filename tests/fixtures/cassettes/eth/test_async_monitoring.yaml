@@ -1,0 +1,131 @@
+interactions:
+- request:
+    body: '{"method": "eth_getBlockByNumber", "params": ["0x2b3e90", true], "jsonrpc":
+      "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":{"baseFeePerGas":"0x7","difficulty":"0x0","extraData":"0x","gasLimit":"0x1c9c380","gasUsed":"0x3775c","hash":"0x3884b979bfde719f3c56e861c67f9d8716d4f038abd33e94a3a1183c7fbeb8d5","logsBloom":"0x04000000000000008000000000000000000000000000000000000000000000000000000000000000000080000000000000000000000000000000000800040000000000000000000000000000000000000000000000048000000000000800000000000000020000000000000000000800000000000000000000000000000000080000000000000000000000020000000000000000000000000040000000000000000000080000000000000500000000000000000000000000000000000400000000000000000100000000000000000000000000000000000000000000000060000000000000000000000000000000000000000000008000000000000000000000","miner":"0x008b3b2f992c0e14edaa6e2c662bec549caa8df1","mixHash":"0x35c743d20bde185fd916f646f560eeb826810c276536d25d6594e370fa285b72","nonce":"0x0000000000000000","number":"0x2b3e90","parentHash":"0xf68c4ceeef0bcf85af351c0f1b4d3edc663c60bb0f5a0107dad45cb714af5c91","receiptsRoot":"0x08379ffe8863a27f3e496c917e359bb26db7eed9e343cd13c84da1f37b9b37ff","sha3Uncles":"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347","size":"0x374","stateRoot":"0x55a5d570eaf0373e464095f5ae0ad8e1f5c2ca366acf6a34a53fa135fe85125b","timestamp":"0x63decbe8","totalDifficulty":"0x3c656d23029ab0","transactions":[{"blockHash":"0x3884b979bfde719f3c56e861c67f9d8716d4f038abd33e94a3a1183c7fbeb8d5","blockNumber":"0x2b3e90","from":"0x08505f42d5666225d5d73b842dadb87cca44d1ae","gas":"0x57e40","gasPrice":"0x9502f907","hash":"0x10f4376f7efe2637be4d012eebad143dce58626146befa48204f1275476064d6","input":"0x","nonce":"0x96af","to":"0x94da44988d0ad68bca28c37a5473baf0f8b59c82","transactionIndex":"0x0","value":"0x10a741a46278000","type":"0x0","chainId":"0xaa36a7","v":"0x1546d72","r":"0xb9d98a89dba64da9e86805cdef363d0ff8ccdb56676c571feb68818352f01a88","s":"0x130edb65f275dec30a2d3c6d263bd1a0068b604bb955b8271a5b485d6755ac1c"},{"blockHash":"0x3884b979bfde719f3c56e861c67f9d8716d4f038abd33e94a3a1183c7fbeb8d5","blockNumber":"0x2b3e90","from":"0x91b126ff9af242408090a223829eb88a61724aa5","gas":"0x6691b7","gasPrice":"0x9502f907","maxFeePerGas":"0x9502f90e","maxPriorityFeePerGas":"0x9502f900","hash":"0x5b6fd8fda590e887531df12dec5faf2ce8c94a3eeb56bcc1fde760fabd64e56e","input":"0x1ff013f1000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000087950000000000000000000000969d499507b4f437953db24a4980fdeeda6db8a102acae881b77ca9964d9e5745fe53a7a7c16fc4f81e08afc50be49b92beba55f8e","nonce":"0xf38b","to":"0xe8b0a865e4663636bf4d6b159c57333210b0c229","transactionIndex":"0x1","value":"0x0","type":"0x2","accessList":[],"chainId":"0xaa36a7","v":"0x1","r":"0xe6561ad4a97e76fb654ff09d479ea6cc49f437b5f535b43e6a49f5f0ad104e2b","s":"0x4995f2e0e385269b883eaac8d437bbd90f975bb12f1502362b7c79478b6e28dd","yParity":"0x1"}],"transactionsRoot":"0x4febbcab950d997bc46784fd12015c4de2edd16f675c2b4817b6ed3082b36b40","uncles":[]}}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e74e2fbc9fd168-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '1227'
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 09:01:18 GMT
+      Server:
+      - cloudflare
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '9'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBlockByNumber", "params": ["0x2b3e91", true], "jsonrpc":
+      "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":{"baseFeePerGas":"0x7","difficulty":"0x0","extraData":"0x","gasLimit":"0x1c9c380","gasUsed":"0x0","hash":"0x70547e77076e93b0498b273efef8dfe9deb2e94419b0a456de0da9d532e0d131","logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000","miner":"0xd9a5179f091d85051d3c982785efd1455cec8699","mixHash":"0x95114c77a097693c36826606234335e9bb699c7d4b120ad4ba45214ad749611b","nonce":"0x0000000000000000","number":"0x2b3e91","parentHash":"0x3884b979bfde719f3c56e861c67f9d8716d4f038abd33e94a3a1183c7fbeb8d5","receiptsRoot":"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421","sha3Uncles":"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347","size":"0x201","stateRoot":"0x55a5d570eaf0373e464095f5ae0ad8e1f5c2ca366acf6a34a53fa135fe85125b","timestamp":"0x63decbf4","totalDifficulty":"0x3c656d23029ab0","transactions":[],"transactionsRoot":"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421","uncles":[]}}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e74e36dc974173-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 09:01:19 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '8'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBlockByNumber", "params": ["0x2b3e92", true], "jsonrpc":
+      "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":{"baseFeePerGas":"0x7","difficulty":"0x0","extraData":"0x","gasLimit":"0x1c9c380","gasUsed":"0x0","hash":"0xd8a6b340d074bf241b6d1cd6739169aeffcd403332ae8ed3f6b05a2fbaa56009","logsBloom":"0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000","miner":"0x9a6034c84cd431409ac1a35278c7da36ffda53e5","mixHash":"0xd2172c277718e6fe5dda81941cac4d17943e4990ea3743abbb1f70d4abccf053","nonce":"0x0000000000000000","number":"0x2b3e92","parentHash":"0x70547e77076e93b0498b273efef8dfe9deb2e94419b0a456de0da9d532e0d131","receiptsRoot":"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421","sha3Uncles":"0x1dcc4de8dec75d7aab85b567b6ccd41ad312451b948a7413f0a142fd40d49347","size":"0x201","stateRoot":"0x55a5d570eaf0373e464095f5ae0ad8e1f5c2ca366acf6a34a53fa135fe85125b","timestamp":"0x63decc00","totalDifficulty":"0x3c656d23029ab0","transactions":[],"transactionsRoot":"0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421","uncles":[]}}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e74e3dfd0148c8-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 09:01:21 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '8'
+    status:
+      code: 200
+      message: OK
+version: 1
