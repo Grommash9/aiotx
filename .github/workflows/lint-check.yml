@@ -26,3 +26,4 @@ jobs:
     - name: Analysing the code with pylint
       run: |
         ruff check --select I aiotx tests 
+        ruff check  aiotx tests

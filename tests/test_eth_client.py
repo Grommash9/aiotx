@@ -1,7 +1,7 @@
 import os
 
 import pytest
-from confest import eth_client, vcr_c  # noqa
+from confest import vcr_c
 
 from aiotx.clients import AioTxETHClient
 from aiotx.exceptions import (
@@ -123,7 +123,7 @@ async def test_get_transaction_count(eth_client: AioTxETHClient, wallet_address,
 
 
 @vcr_c.use_cassette("eth/get_gas_price.yaml")
-async def test_send_token_transaction(eth_client: AioTxETHClient):
+async def test_get_gas_price(eth_client: AioTxETHClient):
     result = await eth_client.get_gas_price()
     assert isinstance(result, int)
 
@@ -257,7 +257,7 @@ async def test_send_token_transaction(eth_client: AioTxETHClient, private_key, t
 
 
 @vcr_c.use_cassette("eth/send_token_transaction_with_custom_nonce.yaml")
-async def test_send_transaction_with_custom_nonce(eth_client: AioTxETHClient):
+async def send_token_transaction_with_custom_nonce(eth_client: AioTxETHClient):
     wei_amount = eth_client.to_wei(0.00001, "mwei")
     sender_address = eth_client.get_address_from_private_key(PRIVATE_KEY_TO_SEND_FROM)
     nonce = await eth_client.get_transactions_count(sender_address)
@@ -268,7 +268,7 @@ async def test_send_transaction_with_custom_nonce(eth_client: AioTxETHClient):
 
 
 @vcr_c.use_cassette("eth/send_token_transaction_with_auto_params.yaml")
-async def test_send_transaction_with_custom_nonce(eth_client: AioTxETHClient):
+async def test_send_transaction_with_auto_params(eth_client: AioTxETHClient):
     wei_amount = eth_client.to_wei(0.00001, "mwei")
     tx_id = await eth_client.send_token(PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, wei_amount)
     assert isinstance(tx_id, str)

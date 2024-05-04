@@ -1,7 +1,7 @@
 import os
 
 import pytest
-from confest import bsc_client, vcr_c  # noqa
+from confest import vcr_c  # noqa
 
 from aiotx.clients import AioTxBSCClient
 from aiotx.exceptions import (
@@ -123,7 +123,7 @@ async def test_get_transaction_count(bsc_client: AioTxBSCClient, wallet_address,
 
 
 @vcr_c.use_cassette("bsc/get_gas_price.yaml")
-async def test_send_token_transaction(bsc_client: AioTxBSCClient):
+async def test_send_get_gas_price(bsc_client: AioTxBSCClient):
     result = await bsc_client.get_gas_price()
     assert isinstance(result, int)
     assert result == 5000000000

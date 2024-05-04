@@ -1,5 +1,4 @@
 import pytest
-from confest import bsc_client  # noqa
 
 
 @pytest.mark.parametrize("input_data, expected_output", [

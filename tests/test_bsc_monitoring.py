@@ -1,6 +1,6 @@
 import asyncio
 
-from confest import bsc_client, vcr_c  # noqa
+from confest import vcr_c
 
 from aiotx.clients import AioTxBSCClient
 

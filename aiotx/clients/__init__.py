@@ -1,6 +1,7 @@
-from ._bitcoin_base_client import AioTxUTXOClient
-from ._evm_base_client import AioTxEVMClient, EvmMonitor
 import json
+
+from ._bitcoin_base_client import AioTxUTXOClient
+from ._evm_base_client import AioTxEVMClient
 
 
 class AioTxBSCClient(AioTxEVMClient):
