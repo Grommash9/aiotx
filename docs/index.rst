@@ -10,9 +10,9 @@ Welcome to AioTx's documentation!
    :maxdepth: 10
    :caption: Available Clients:
 
-   clients/bsc_client/index
-   clients/eth_client/index
-   clients/btc_client/index
+   clients/evm_client/index
+   clients/utxo_client/index
+   clients/tron_client/index
 
 .. toctree::
    :maxdepth: 10

@@ -1,8 +1,11 @@
-BTC client
-==========
+UTXO client
+===========
 
 Introduction
 ------------
+
+In progress 
+Clients for UTXO based crypto currencies: BTC, LTC, DODGE, etc.
 
 
 Methods

@@ -6,16 +6,16 @@ get_address_from_private_key
     get_address_from_private_key(private_key: str)
 
 
-Get the BSC address corresponding to a private key.
+Get the address corresponding to a private key.
 
 Parameters:
-    - private_key (str): The private key.
+    - **private_key** (str): The private key.
 
 Returns:
-    str: The BSC address.
+    - **str**: The address.
 
 Example usage:
 
 .. code-block:: python
 
-    address = bsc_client.get_address_from_private_key(private_key)
+    address = eth_client.get_address_from_private_key(private_key)

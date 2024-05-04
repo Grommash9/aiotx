@@ -1,5 +1,5 @@
-ETH client
-==========
+TRON client
+===========
 
 Introduction
 ------------
