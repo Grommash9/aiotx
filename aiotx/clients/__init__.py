@@ -27,8 +27,16 @@ class AioTxETHClient(AioTxEVMClient):
 
 
 class AioTxBTCClient(AioTxUTXOClient):
-    pass
+
+    def __init__(self, node_url, node_username: str = "", node_password: str = "", testnet = False):
+        super().__init__(node_url, node_username, node_password, testnet)
+        self._derivation_path = "m/84'/0'/0'/0/0"
+        self._wallet_prefix = 'tb' if self.testnet else 'bc'
 
 
 class AioTxLTCClient(AioTxUTXOClient):
-    pass
+    
+    def __init__(self, node_url, node_username: str = "", node_password: str = "", testnet = False):
+        super().__init__(node_url, node_username, node_password, testnet)
+        self._derivation_path = "m/84'/2'/0'/0/0"
+        self._wallet_prefix = 'tltc' if self.testnet else 'ltc'

@@ -8,7 +8,7 @@ from typing import Union
 from bitcoinlib.keys import Key, HDKey
 from bitcoinlib.transactions import Transaction, Input, Output
 from bitcoinlib.encoding import pubkeyhash_to_addr
-
+from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     AioTxError,
@@ -23,11 +23,15 @@ from aiotx.types import BlockParam
 
 
 class AioTxUTXOClient(AioTxClient):
-    def __init__(self, node_url, node_username: str = "", node_password = ""):
+    def __init__(self, node_url, node_username, node_password, testnet):
         super().__init__(node_url)
         self.monitor = BitcoinMonitor(self)
         self.node_username = node_username
         self.node_password = node_password
+        self.testnet = testnet
+        # _derivation_path and _wallet_prefix should be implemented for all networks
+        self._derivation_path = ""
+        self._wallet_prefix = ""
 
     @staticmethod
     def to_satoshi(amount: Union[int, float]) -> int:
@@ -37,11 +41,12 @@ class AioTxUTXOClient(AioTxClient):
     def from_satoshi(amount: int) -> float:
         return amount / 10**8
 
-    def create_wallet(self) -> dict:
+    def create_wallet(self) -> dict:        
         hdkey = HDKey()
-        private_key = hdkey.subkey_for_path("m/44'/0'/0'/0/0").private_hex
-        public_key = hdkey.subkey_for_path("m/44'/0'/0'/0/0").public_hex
-        address = pubkeyhash_to_addr(hdkey.subkey_for_path("m/44'/0'/0'/0/0").hash160)
+        private_key = hdkey.subkey_for_path(self._derivation_path).private_hex
+        public_key = hdkey.subkey_for_path(self._derivation_path).public_hex
+        hash160 = hdkey.subkey_for_path(self._derivation_path).hash160
+        address = pubkeyhash_to_addr_bech32(hash160, prefix=self._wallet_prefix, witver=0, separator='1')
 
         return {
             "private_key": private_key,
