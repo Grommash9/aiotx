@@ -1,7 +1,7 @@
 import os
 
 import pytest
-from confest import vcr_c  # noqa
+from conftest import vcr_c  # noqa
 
 from aiotx.clients import AioTxBSCClient
 from aiotx.exceptions import (

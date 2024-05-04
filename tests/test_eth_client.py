@@ -1,7 +1,7 @@
 import os
 
 import pytest
-from confest import vcr_c
+from conftest import vcr_c
 
 from aiotx.clients import AioTxETHClient
 from aiotx.exceptions import (
