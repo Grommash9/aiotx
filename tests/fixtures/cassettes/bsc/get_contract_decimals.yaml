@@ -1,0 +1,109 @@
+interactions:
+- request:
+    body: '{"method": "eth_call", "params": [{"to": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
+      "data": "0x313ce567"}, "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x0000000000000000000000000000000000000000000000000000000000000012"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '103'
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:37:46 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-dbb2877f11a402e9
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_call", "params": [{"to": "0x337610d27c682E347C9cD60BD4b3b107C9d34dD",
+      "data": "0x313ce567"}, "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32602,"message":"invalid argument
+        0: json: cannot unmarshal hex string of odd length into Go struct field TransactionArgs.to
+        of type common.Address"}}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '192'
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:37:46 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-10ebeaeae12fe5d7
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_call", "params": [{"to": "0x757fc78bb4df4ce6605ae669bf0b71074176aac3",
+      "data": "0x313ce567"}, "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x0000000000000000000000000000000000000000000000000000000000000009"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '103'
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:37:46 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-dbb2877f11a402e9
+      X-Node-Id:
+      - bnb-smart-chain_bsc-testnet_iad
+    status:
+      code: 200
+      message: OK
+version: 1

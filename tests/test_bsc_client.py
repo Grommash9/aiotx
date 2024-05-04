@@ -156,10 +156,43 @@ async def test_send_transaction(bsc_client: AioTxBSCClient, private_key, to_addr
     wei_amount = bsc_client.to_wei(amount, "ether")
     if expected_exception:
         with pytest.raises(expected_exception):
-            await bsc_client.send(private_key, to_address, wei_amount, gas_price, gas_limit)
+            await bsc_client.send(private_key, to_address, wei_amount, gas_price=gas_price, gas_limit=gas_limit)
     else:
-        result = await bsc_client.send(private_key, to_address, wei_amount, gas_price, gas_limit)
+        result = await bsc_client.send(private_key, to_address, wei_amount, gas_price=gas_price, gas_limit=gas_limit)
         assert isinstance(result, str)
+
+
+@pytest.mark.parametrize(
+    "private_key, to_address, amount, expected_exception",
+    [
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0.00001, None),
+        (PRIVATE_KEY_TO_SEND_FROM, "0x3ffeCb152F95f7122990ab16Eff4B0B5d533497e", 0.00001, ReplacementTransactionUnderpriced),
+    ],
+)
+@vcr_c.use_cassette("bsc/send_transaction_with_auto_gas.yaml")
+async def test_send_transaction_with_auto_gas(bsc_client: AioTxBSCClient, private_key, to_address, amount, expected_exception):
+    """
+    Here it's raising ReplacementTransactionUnderpriced and NonceTooLowError because we have reusing
+    the same VCR data for every get nonce request, we should investigate how we can change that maybe?
+    """
+    wei_amount = bsc_client.to_wei(amount, "ether")
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await bsc_client.send(private_key, to_address, wei_amount)
+    else:
+        result = await bsc_client.send(private_key, to_address, wei_amount)
+        assert isinstance(result, str)
+
+
+@vcr_c.use_cassette("bsc/send_transaction_with_custom_nonce.yaml")
+async def test_send_transaction_with_custom_nonce(bsc_client: AioTxBSCClient):
+    wei_amount = bsc_client.to_wei(0.00001, "ether")
+    sender_address = bsc_client.get_address_from_private_key(PRIVATE_KEY_TO_SEND_FROM)
+    nonce = await bsc_client.get_transactions_count(sender_address)
+    first_tx = await bsc_client.send(PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, wei_amount, nonce=nonce)
+    assert isinstance(first_tx, str)
+    second_tx = await bsc_client.send(PRIVATE_KEY_TO_SEND_FROM, sender_address, wei_amount, nonce=nonce + 1)
+    assert isinstance(second_tx, str)
 
 @pytest.mark.parametrize(
     "private_key, to_address, contract, amount, gas_price, gas_limit, expected_exception",
@@ -193,10 +226,28 @@ async def test_send_token_transaction(bsc_client: AioTxBSCClient, private_key, t
     if expected_exception:
         with pytest.raises(expected_exception):
             await bsc_client.send_token(
-        private_key, to_address, contract, wei_amount, gas_price, gas_limit
+        private_key, to_address, contract, wei_amount, gas_price=gas_price, gas_limit=gas_limit
     )
     else:
         result = await bsc_client.send_token(
-        private_key, to_address, contract, wei_amount, gas_price, gas_limit
+        private_key, to_address, contract, wei_amount, gas_price=gas_price, gas_limit=gas_limit
     )
         assert isinstance(result, str)
+
+
+@pytest.mark.parametrize(
+    "contract, expected_decimals, expected_exception",
+    [
+        (CONTRACT, 18, None),
+        ("0x337610d27c682E347C9cD60BD4b3b107C9d34dD", 18, InvalidArgumentError),
+        ("0x757fc78bb4df4ce6605ae669bf0b71074176aac3", 9, None),
+    ],
+)
+@vcr_c.use_cassette("bsc/get_contract_decimals.yaml")
+async def test_get_contract_decimals(bsc_client: AioTxBSCClient, contract, expected_decimals, expected_exception):
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await bsc_client.get_contract_decimals(contract)
+    else:
+        decimals = await bsc_client.get_contract_decimals(contract)
+        assert decimals == expected_decimals
