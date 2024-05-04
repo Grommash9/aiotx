@@ -20,6 +20,12 @@ Welcome to AioTx's documentation!
 
    monitoring
 
+.. toctree::
+   :maxdepth: 10
+   :caption: Testing:
+
+   testing
+
 Indices and tables
 ==================
 
