@@ -1,0 +1,262 @@
+interactions:
+- request:
+    body: '{"method": "eth_getTransactionCount", "params": ["0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a",
+      "pending"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x38"}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e73252acf424e6-LHR
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '41'
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:42:17 GMT
+      Server:
+      - cloudflare
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '7'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf8ad3885012a05f20082ee4894419fe9f14ff3aa22e46ff1d03a73edf3b70a62ed80b844a9059cbb000000000000000000000000d515f5737044238b0f0d6c100109da44066be7490000000000000000000000000000000000000000000000000de0b6b3a76400008401546d72a01d835ad8629a25e64b5740800ceed3574f47b33ef146b00217dfdcd896e303b4a07d4a86ac092a41f6d96236ab23c1731e23e5a897b08808865697495677b5bfdd"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x7a0456c5d7788036655df114a17e96fe36ed64aa8de3a8c50c8ac551fae9d56a"}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e73253beec52d0-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:42:17 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '7'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf8ad3885012a05f20082ee4894419fe9f14ff3aa22e46ff1d03a73edf3b70a62ed80b844a9059cbb000000000000000000000000d515f5737044238b0f0d6c100109da44066be74900000000000000000000000000000000000000000000003635c9adc5dea000008401546d72a0161ca0c169929ad50ce6202caf679577be1fe894fd5e459c12f408c2fe1682b4a06e132782d7dc7ebe389e652c62e2de97ab1529fa468b76e23ad523554c2c0bdd"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32000,"message":"replacement
+        transaction underpriced"}}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e732548fe69589-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:42:17 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '7'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf8a8388082ee4894419fe9f14ff3aa22e46ff1d03a73edf3b70a62ed80b844a9059cbb000000000000000000000000d515f5737044238b0f0d6c100109da44066be7490000000000000000000000000000000000000000000000000de0b6b3a76400008401546d72a04ca41ddc6d97ea3d3cc130c4fd139a49478aa681b6f81b953f256561372a724ea051d6241a2eb4d6aeb45ce6b0dedea42f8f24bac3095b31db712c7272da4eea34"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32000,"message":"transaction
+        underpriced: gas tip cap 0, minimum needed 1"}}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e732556e1f23c6-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:42:17 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '7'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf8ad3885012a05f20082ee4894419fe9f14ff3aa22e46ff1d03a73edf3b70a62ed80b844a9059cbb000000000000000000000000d515f5737044238b0f0d6c100109da44066be74900000000000000000000000000000000000000000000000000000000000000008401546d71a03cc33739b5ceb1d909d5552d984d53771c9f0784e52d09500efb92113cb1dbdaa076d63d2aa5ca095946339f9be3fb9585fcbbf6f31bab7f16d01b8c93075a13e6"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32000,"message":"replacement
+        transaction underpriced"}}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e732566d8f768b-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:42:18 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '7'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf8ab3885012a05f2008094419fe9f14ff3aa22e46ff1d03a73edf3b70a62ed80b844a9059cbb000000000000000000000000d515f5737044238b0f0d6c100109da44066be7490000000000000000000000000000000000000000000000000de0b6b3a76400008401546d72a0d4ef4047554ad3d09155151b28c71519d92139700e528f4f98617873f3a8b4a8a03da9e08d6bf9b0f82f8a2512b175884255e2f14fe70e43b5a1671f0ed035ce96"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://ethereum-sepolia-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32000,"message":"intrinsic
+        gas too low: gas 0, minimum needed 21632"}}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 87e732576bac944b-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 04 May 2024 08:42:18 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '7'
+    status:
+      code: 200
+      message: OK
+version: 1

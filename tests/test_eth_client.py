@@ -214,42 +214,45 @@ async def test_get_contract_decimals(eth_client: AioTxETHClient, contract, expec
         assert decimals == expected_decimals
 
 
-# @pytest.mark.parametrize(
-#     "private_key, to_address, contract, amount, gas_price, gas_limit, expected_exception",
-#     [
-#         ("87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd", DESTINATION_ADDRESS, CONTRACT, 1, 5, 61000, WrongPrivateKey),
-#         ("87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938ch", DESTINATION_ADDRESS,CONTRACT, 1, 5, 61000, WrongPrivateKey),
-#         ("e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd", DESTINATION_ADDRESS,CONTRACT, 1, 5, 61000, WrongPrivateKey),
-#         (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E984d3f6FF662Ba4c306b5a",CONTRACT, 1, 5, 61000, ValueError),
-#         (PRIVATE_KEY_TO_SEND_FROM, "f9E5E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", CONTRACT, 1, 5, 61000, ValueError),
-#         (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b",CONTRACT, 1, 5, 61000, ValueError),
-#         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, "0xf9E35E4e1CbcF08E984d3f6FF662Ba4c306b5a", 0.00001, 5, 61000, TypeError),
-#         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, "f9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", 1, 5, 61000, TypeError),
-#         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b", 1, 5, 61000, TypeError),
-#         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1, 5, 61000, None),
-#         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1000, 5, 61000, ReplacementTransactionUnderpriced),
-#         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1, 0, 61000, AioTxError),
-#         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 0, 5, 61000, ReplacementTransactionUnderpriced),
-#         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1, 5, 0, AioTxError),
-#         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1, 5, 61000, None)
-#     ],
-# )
-# @vcr_c.use_cassette("eth/send_token_transaction.yaml")
-# async def test_send_token_transaction(eth_client: AioTxETHClient, private_key, to_address, contract, amount, gas_price, gas_limit, expected_exception):
-#     """
-#     Here it's raising ReplacementTransactionUnderpriced and NonceTooLowError because we have reusing
-#     the same VCR data for every get nonce request, we should investigate how we can change that maybe?
-#     """
-#     gas_price = eth_client.to_wei(gas_price, "gwei")
-#     wei_amount = eth_client.to_wei(amount, "ether")
+@pytest.mark.parametrize(
+    "private_key, to_address, contract, amount, gas_price, gas_limit, expected_exception",
+    [
+        ("87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd", DESTINATION_ADDRESS, CONTRACT, 1, 5, 61000, WrongPrivateKey),
+        ("87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938ch", DESTINATION_ADDRESS,CONTRACT, 1, 5, 61000, WrongPrivateKey),
+        ("e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd", DESTINATION_ADDRESS,CONTRACT, 1, 5, 61000, WrongPrivateKey),
+        (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E984d3f6FF662Ba4c306b5a",CONTRACT, 1, 5, 61000, ValueError),
+        (PRIVATE_KEY_TO_SEND_FROM, "f9E5E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", CONTRACT, 1, 5, 61000, ValueError),
+        (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b",CONTRACT, 1, 5, 61000, ValueError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, "0xf9E35E4e1CbcF08E984d3f6FF662Ba4c306b5a", 0.00001, 5, 61000, TypeError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, "f9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", 1, 5, 61000, TypeError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b", 1, 5, 61000, TypeError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1, 5, 61000, None),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1000, 5, 61000, ReplacementTransactionUnderpriced),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1, 0, 61000, AioTxError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 0, 5, 61000, ReplacementTransactionUnderpriced),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1, 5, 0, AioTxError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1, 5, 61000, None)
+    ],
+)
+@vcr_c.use_cassette("eth/send_token_transaction.yaml")
+async def test_send_token_transaction(eth_client: AioTxETHClient, private_key, to_address, contract, amount, gas_price, gas_limit, expected_exception):
+    """
+    Here it's raising ReplacementTransactionUnderpriced and NonceTooLowError because we have reusing
+    the same VCR data for every get nonce request, we should investigate how we can change that maybe?
+    """
+    gas_price = eth_client.to_wei(gas_price, "gwei")
+    wei_amount = eth_client.to_wei(amount, "ether")
 
-#     if expected_exception:
-#         with pytest.raises(expected_exception):
-#             await eth_client.send_token(
-#         private_key, to_address, contract, wei_amount, gas_price, gas_limit
-#     )
-#     else:
-#         result = await eth_client.send_token(
-#         private_key, to_address, contract, wei_amount, gas_price, gas_limit
-#     )
-#         assert isinstance(result, str)
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await eth_client.send_token(
+        private_key, to_address, contract, wei_amount, gas_price=gas_price, gas_limit=gas_limit
+    )
+    else:
+        result = await eth_client.send_token(
+        private_key, to_address, contract, wei_amount, gas_price=gas_price, gas_limit=gas_limit
+    )
+        assert isinstance(result, str)
+
+
+
