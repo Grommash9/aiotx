@@ -1,36 +1,36 @@
-from aiotx.clients import AioTxBSCClient
+from aiotx.clients import AioTxBSCClient, AioTxETHClient
 import asyncio
 
-client = AioTxBSCClient("NODE_URL", 97)
-client2 = AioTxBSCClient("NODE_URL", 97)
+bsc_client = AioTxBSCClient("NODE_URL", 97)
+eth_client = AioTxETHClient("NODE_URL", 1151511)
 
-@client.monitor.on_block
+@bsc_client.monitor.on_block
 def handle_block(block):
-    print("block", block)
+    print("bsc_client: block", block)
 
-@client.monitor.on_transaction
+@bsc_client.monitor.on_transaction
 def handle_transaction(transaction):
-    print("transaction", transaction)
+    print("bsc_client: transaction", transaction)
 
-@client2.monitor.on_block
+@eth_client.monitor.on_block
 def handle_block(block):
-    print("client2: block", block)
+    print("eth_client: block", block)
 
-@client2.monitor.on_transaction
+@eth_client.monitor.on_transaction
 def handle_transaction(transaction):
-    print("client2: transaction", transaction)
+    print("eth_client: transaction", transaction)
 
 async def main():
-    monitoring_task1 = asyncio.create_task(client.start_monitoring(584))
-    monitoring_task2 = asyncio.create_task(client2.start_monitoring(900))
+    monitoring_task1 = asyncio.create_task(bsc_client.start_monitoring(584))
+    monitoring_task2 = asyncio.create_task(eth_client.start_monitoring(900))
     await asyncio.gather(monitoring_task1, monitoring_task2)
 
     try:
         while True:
             await asyncio.sleep(1)
     except KeyboardInterrupt:
-        client.stop_monitoring()
-        client2.stop_monitoring()
+        bsc_client.stop_monitoring()
+        eth_client.stop_monitoring()
 
 
 if __name__ == "__main__":

@@ -9,11 +9,13 @@ to_wei
 Convert a value from the specified unit to wei.
 
 Parameters:
-    - number (Union[int, float, str, decimal.Decimal]): The value to convert.
-    - unit (str): The unit of the value (e.g., "ether", "gwei").
+
+    - **number** (Union[int, float, str, decimal.Decimal]): The value to convert.
+    - **unit** (str): The unit of the value (e.g., "ether", "gwei").
 
 Returns:
-    int: The converted value in wei.
+
+    - **int**: The converted value in wei.
 
 Example usage:
 

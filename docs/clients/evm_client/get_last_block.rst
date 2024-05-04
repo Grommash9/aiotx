@@ -6,10 +6,11 @@ get_last_block
     async get_last_block() -> int
 
 
-Get the number of the latest block on the BSC blockchain.
+Get the number of the latest block on the blockchain.
 
 Returns:
-    int: The latest block number.
+
+    - **int**: The latest block number.
 
 Example usage:
 

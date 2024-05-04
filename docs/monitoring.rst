@@ -52,23 +52,43 @@ You can monitor multiple AioTxBSCClient instances simultaneously by creating sep
 
 .. code-block:: python
 
-    client1 = AioTxBSCClient("NODE_URL", 97)
-    client2 = AioTxBSCClient("NODE_URL", 97)
+    from aiotx.clients import AioTxBSCClient, AioTxETHClient
+    import asyncio
 
-    @client1.monitor.on_block
-    def handle_block_client1(block):
-        print("Client 1 - Block:", block)
+    bsc_client = AioTxBSCClient("NODE_URL", 97)
+    eth_client = AioTxETHClient("NODE_URL", 1151511)
 
-    @client2.monitor.on_block
-    def handle_block_client2(block):
-        print("Client 2 - Block:", block)
+    @bsc_client.monitor.on_block
+    def handle_block(block):
+        print("bsc_client: block", block)
+
+    @bsc_client.monitor.on_transaction
+    def handle_transaction(transaction):
+        print("bsc_client: transaction", transaction)
+
+    @eth_client.monitor.on_block
+    def handle_block(block):
+        print("eth_client: block", block)
+
+    @eth_client.monitor.on_transaction
+    def handle_transaction(transaction):
+        print("eth_client: transaction", transaction)
 
     async def main():
-        monitoring_task1 = asyncio.create_task(client1.start_monitoring())
-        monitoring_task2 = asyncio.create_task(client2.start_monitoring())
-        await asyncio.gather(monitoring_task1, monitoring_task2)
+        bsc_task = asyncio.create_task(bsc_client.start_monitoring())
+        eth_task = asyncio.create_task(eth_client.start_monitoring())
+        await asyncio.gather(bsc_task, eth_task)
 
-    asyncio.run(main())
+        try:
+            while True:
+                await asyncio.sleep(1)
+        except KeyboardInterrupt:
+            bsc_client.stop_monitoring()
+            eth_client.stop_monitoring()
+
+
+    if __name__ == "__main__":
+        asyncio.run(main())
 
 Integration with Aiogram
 ^^^^^^^^^^^^^^^^^^^^^^^^

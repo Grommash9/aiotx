@@ -51,6 +51,10 @@ setup(
         "test": extras_test,
     },
     url="https://github.com/Grommash9/aiotx",
+    project_urls={
+        'Documentation': 'https://grommash9.github.io/aiotx/',
+        'Source': 'https://github.com/Grommash9/aiotx'
+        },
     author="Oleksandr Prudnikov",
     author_email="prudnikov21@icloud.com",
     classifiers=[

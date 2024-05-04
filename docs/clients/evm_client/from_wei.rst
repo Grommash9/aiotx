@@ -8,14 +8,14 @@ from_wei
 Convert a value in wei to its equivalent in the specified unit.
 
 Parameters:
-    - number (int): The value in wei.
-    - unit (str): The unit to convert to (e.g., "ether", "gwei").
+    - **number** (int): The value in wei.
+    - **unit** (str): The unit to convert to (e.g., "ether", "gwei").
 
 Returns:
-    Union[int, decimal.Decimal]: The converted value.
+    - Union[int, decimal.Decimal]: The converted value.
 
 Example usage:
 
 .. code-block:: python
 
-    value_in_ether = AioTxBSCClient.from_wei(1000000000000000000, "ether")
+    value_in_ether = eth_client.from_wei(1000000000000000000, "ether")
