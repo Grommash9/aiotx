@@ -2,6 +2,9 @@ import json
 
 from ._evm_base_client import AioTxEVMClient
 from ._utxo_base_client import AioTxUTXOClient
+from bitcoinlib.keys import Key, HDKey
+from bitcoinlib.transactions import Transaction, Input, Output
+from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
 
 
 class AioTxBSCClient(AioTxEVMClient):
@@ -33,6 +36,25 @@ class AioTxBTCClient(AioTxUTXOClient):
         self._derivation_path = "m/84'/0'/0'/0/0"
         self._wallet_prefix = 'tb' if self.testnet else 'bc'
 
+    def generate_address(self) -> dict:        
+        hdkey = HDKey()
+        private_key = hdkey.subkey_for_path(self._derivation_path).private_hex
+        hash160 = hdkey.subkey_for_path(self._derivation_path).hash160
+        address = pubkeyhash_to_addr_bech32(hash160, prefix=self._wallet_prefix, witver=0, separator='1')
+        return private_key, address
+    
+    def get_address_from_private_key(self, private_key):
+        key = Key(private_key)
+        public_key = key.public_hex
+        hash160 = key.hash160
+        address = pubkeyhash_to_addr_bech32(hash160, prefix=self._wallet_prefix, witver=0, separator='1')
+
+        return {
+            "private_key": private_key,
+            "public_key": public_key,
+            "address": address
+        }
+
 
 class AioTxLTCClient(AioTxUTXOClient):
     
@@ -40,3 +62,22 @@ class AioTxLTCClient(AioTxUTXOClient):
         super().__init__(node_url, node_username, node_password, testnet)
         self._derivation_path = "m/84'/2'/0'/0/0"
         self._wallet_prefix = 'tltc' if self.testnet else 'ltc'
+
+    def generate_address(self) -> dict:        
+        hdkey = HDKey()
+        private_key = hdkey.subkey_for_path(self._derivation_path).private_hex
+        hash160 = hdkey.subkey_for_path(self._derivation_path).hash160
+        address = pubkeyhash_to_addr_bech32(hash160, prefix=self._wallet_prefix, witver=0, separator='1')
+        return private_key, address
+    
+    def get_address_from_private_key(self, private_key):
+        key = Key(private_key)
+        public_key = key.public_hex
+        hash160 = key.hash160
+        address = pubkeyhash_to_addr_bech32(hash160, prefix=self._wallet_prefix, witver=0, separator='1')
+
+        return {
+            "private_key": private_key,
+            "public_key": public_key,
+            "address": address
+        }

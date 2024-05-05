@@ -1,9 +1,11 @@
 import asyncio
 import json
 from typing import Union
-
+from bitcoinlib.encoding import to_bytes
 import aiohttp
-
+from bitcoinlib.keys import Key, HDKey
+from bitcoinlib.transactions import Transaction, Input, Output
+from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     AioTxError,
@@ -22,9 +24,6 @@ class AioTxUTXOClient(AioTxClient):
         self.node_username = node_username
         self.node_password = node_password
         self.testnet = testnet
-        # _derivation_path and _wallet_prefix should be implemented for all networks
-        # self._derivation_path = ""
-        # self._wallet_prefix = ""
 
     @staticmethod
     def to_satoshi(amount: Union[int, float]) -> int:
@@ -34,18 +33,11 @@ class AioTxUTXOClient(AioTxClient):
     def from_satoshi(amount: int) -> float:
         return amount / 10**8
 
-    # def generate_address(self) -> dict:        
-    #     hdkey = HDKey()
-    #     private_key = hdkey.subkey_for_path(self._derivation_path).private_hex
-    #     public_key = hdkey.subkey_for_path(self._derivation_path).public_hex
-    #     hash160 = hdkey.subkey_for_path(self._derivation_path).hash160
-    #     address = pubkeyhash_to_addr_bech32(hash160, prefix=self._wallet_prefix, witver=0, separator='1')
-
-    #     return {
-    #         "private_key": private_key,
-    #         "public_key": public_key,
-    #         "address": address
-    #     }
+    def generate_address(self):        
+        pass
+    
+    def get_address_from_private_key(self, private_key):
+        pass
 
     async def get_last_block_number(self) -> int:
         payload = {"method": "getblockcount", "params": []}
@@ -59,6 +51,68 @@ class AioTxUTXOClient(AioTxClient):
         payload = {"method": "getblock", "params": [block_hash["result"], verbosity]}
         result = await self._make_rpc_call(payload)
         return result["result"]
+    
+    async def send(self, private_key: str, to_address: str, amount: float, fee: float) -> str:
+        from_address = self.get_address_from_private_key(private_key)
+        # # Получаем неизрасходованные выходы для адреса отправителя
+        # unspent_outputs = await self.get_unspent_outputs(from_address)
+
+        # # Выбираем входы и суммируем их значения
+        # inputs = []
+        # total_value = 0
+        # for output in unspent_outputs:
+        #     input_data = (output['txid'], output['vout'], output['amount'])
+        #     inputs.append(input_data)
+        #     total_value += output['amount']
+        #     if total_value >= amount + fee:
+        #         break
+        total_value = self.to_satoshi(1.5)
+        inputs = [("737bef3e8161d15e70f4b230d433f40fb3b5bb197a962289047de12ed9900bb4", 0, total_value)]
+
+        # Проверяем достаточно ли средств
+        # if total_value < amount + fee:
+        #     raise InsufficientFundsError(f"Insufficient funds. Available balance: {total_value} BTC")
+
+        # Определяем выходы
+        outputs = [
+            (to_address, amount),
+            (from_address["address"], total_value - amount - fee)
+        ]
+
+        # Создаем транзакцию
+        raw_transaction = await self.create_transaction(inputs, outputs, [private_key])
+
+        # Отправляем транзакцию
+        txid = await self.send_transaction(raw_transaction)
+        return txid
+
+    async def create_transaction(self, inputs: list, outputs: list, private_keys: list) -> str:
+        transaction = Transaction(network="litecoin_testnet")
+
+        for i, input_data in enumerate(inputs):
+            prev_tx_id, prev_out_index, value = input_data
+            data = to_bytes("737bef3e8161d15e70f4b230d433f40fb3b5bb197a962289047de12ed9900bb4")
+
+            # input_obj = Input()
+            transaction.add_input(prev_txid=data, output_n=prev_out_index)
+
+        for output_data in outputs:
+            address, value = output_data
+            print("value", value)
+            output_obj = Output(value=value, address=address, network="litecoin_testnet")
+            transaction.add_output(value=value, address=address)
+
+        for i, private_key in enumerate(private_keys):
+            key = Key(private_key)
+            transaction.sign(key, i)
+
+        return transaction.raw_hex()
+
+    async def send_transaction(self, raw_transaction: str) -> str:
+        payload = {"method": "sendrawtransaction", "params": [raw_transaction]}
+        result = await self._make_rpc_call(payload)
+        return result["result"]
+
     
     async def _make_rpc_call(self, payload) -> dict:
         payload["jsonrpc"] = "2.0"
