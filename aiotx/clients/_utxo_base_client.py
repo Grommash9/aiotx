@@ -21,10 +21,8 @@ from aiotx.exceptions import (
 
 
 class AioTxUTXOClient(AioTxClient):
-    def __init__(self, node_url, node_username, node_password, testnet, network_name, db_name):
+    def __init__(self, node_url, testnet, network_name, db_name):
         super().__init__(node_url)
-        self.node_username = node_username
-        self.node_password = node_password
         self.testnet = testnet
         self._network = Network(network_name)
         self.monitor = UTXOMonitor(self, self._network.name, db_name)
@@ -128,7 +126,7 @@ class AioTxUTXOClient(AioTxClient):
         payload["jsonrpc"] = "2.0"
         payload["id"] = "curltest"
         async with aiohttp.ClientSession() as session:
-            async with session.post(self.node_url, data=json.dumps(payload), auth=aiohttp.BasicAuth(self.node_username, self.node_password)) as response:
+            async with session.post(self.node_url, data=json.dumps(payload)) as response:
                 result = await response.json()
                 error = result.get("error")
 

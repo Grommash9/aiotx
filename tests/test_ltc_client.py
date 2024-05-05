@@ -9,12 +9,6 @@ async def test_get_last_block(ltc_public_client: AioTxLTCClient):
     assert isinstance(block_id, int)
 
 
-@vcr_c.use_cassette("ltc/get_last_block_with_auth.yaml")
-async def test_get_last_block_with_auth(ltc_client_with_auth: AioTxLTCClient):
-    block_id = await ltc_client_with_auth.get_last_block_number()
-    assert isinstance(block_id, int)
-
-
 @vcr_c.use_cassette("ltc/get_block_by_number.yaml")
 async def test_get_block_by_number(ltc_public_client: AioTxLTCClient):
     block = await ltc_public_client.get_block_by_number(3247846)
