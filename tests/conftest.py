@@ -3,7 +3,7 @@ import os
 
 import pytest
 import vcr
-
+from pytest import FixtureRequest
 from aiotx.clients import AioTxBSCClient, AioTxBTCClient, AioTxETHClient, AioTxLTCClient
 
 # ALL = "all"
@@ -39,8 +39,12 @@ def eth_client() -> AioTxETHClient:
 LTC_TEST_NODE_URL = "https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet"
 
 @pytest.fixture
-def ltc_public_client() -> AioTxLTCClient:
-    return AioTxLTCClient(LTC_TEST_NODE_URL, testnet=True)
+def ltc_public_client(request: FixtureRequest) -> AioTxLTCClient:
+    def teardown():
+        os.remove("test_ltc.sqlite")
+
+    request.addfinalizer(teardown)
+    return AioTxLTCClient(LTC_TEST_NODE_URL, testnet=True, db_name="test_ltc.sqlite")
 
 
 LTC_TEST_NODE_URL_WITH_AUTH = "http://localhost:19332/wallet/main2"
@@ -55,5 +59,9 @@ def ltc_client_with_auth() -> AioTxLTCClient:
 BTC_TEST_NODE_URL = "https://dry-compatible-cloud.btc-testnet.quiknode.pro/268755801856724a0c520053c0bc3b0a7b1a2d3e/"
 
 @pytest.fixture
-def btc_client() -> AioTxBTCClient:
-    return AioTxBTCClient(BTC_TEST_NODE_URL, testnet=True)
+def btc_client(request: FixtureRequest) -> AioTxBTCClient:
+    def teardown():
+        os.remove("test_btc.sqlite")
+
+    request.addfinalizer(teardown)
+    return AioTxBTCClient(BTC_TEST_NODE_URL, testnet=True, db_name="test_btc.sqlite")

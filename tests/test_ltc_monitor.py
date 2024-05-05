@@ -17,8 +17,10 @@ async def test_async_monitoring(ltc_public_client: AioTxLTCClient):
     @ltc_public_client.monitor.on_transaction
     async def handle_transaction(transaction):
         transactions.append(transaction)
-
-    await ltc_public_client.start_monitoring(3247853)
+        
+    await ltc_public_client.import_address("tltc1qsawz44ppfnxmnat7635f83exgf9mynrzs5tsgl", 3247853)
+    await ltc_public_client.start_monitoring()
+    
     try:
         await asyncio.sleep(3)
     except KeyboardInterrupt:

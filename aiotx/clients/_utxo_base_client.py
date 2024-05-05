@@ -21,13 +21,13 @@ from aiotx.exceptions import (
 
 
 class AioTxUTXOClient(AioTxClient):
-    def __init__(self, node_url, node_username, node_password, testnet, network_name):
+    def __init__(self, node_url, node_username, node_password, testnet, network_name, db_name):
         super().__init__(node_url)
         self.node_username = node_username
         self.node_password = node_password
         self.testnet = testnet
         self._network = Network(network_name)
-        self.monitor = UTXOMonitor(self, self._network.name)
+        self.monitor = UTXOMonitor(self, self._network.name, db_name)
         asyncio.run(self.monitor._init_db())
 
     @staticmethod
@@ -152,7 +152,7 @@ class AioTxUTXOClient(AioTxClient):
 
 
 class UTXOMonitor(BlockMonitor):
-    def __init__(self, client: AioTxUTXOClient, currency_name, db_name: str = "aiotx_utxo.sqlite"):
+    def __init__(self, client: AioTxUTXOClient, currency_name, db_name):
         self.client = client
         self.block_handlers = []
         self.transaction_handlers = []
