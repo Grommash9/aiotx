@@ -18,7 +18,9 @@ async def test_async_monitoring(btc_client: AioTxBTCClient):
     async def handle_transaction(transaction):
         transactions.append(transaction)
 
-    await btc_client.start_monitoring(555)
+    await btc_client.import_address("tb1pdgattqpwrzvrjhwkv0hs5lg6nkwwjpp48mhuh9mc259ftqagryyqvlv4we", 555)
+    await btc_client.start_monitoring()
+    
     try:
         await asyncio.sleep(3)
     except KeyboardInterrupt:
