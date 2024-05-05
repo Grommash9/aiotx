@@ -73,11 +73,8 @@ class AioTxUTXOClient(AioTxClient):
             (to_address, amount),
             (from_address["address"], total_value - amount - fee)
         ]
-
-        # Создаем транзакцию
         raw_transaction = await self.create_transaction(inputs, outputs, [private_key])
 
-        # Отправляем транзакцию
         txid = await self.send_transaction(raw_transaction)
         return txid
 
@@ -90,18 +87,11 @@ class AioTxUTXOClient(AioTxClient):
 
         for output_data in outputs:
             address, value = output_data
-            print("value", value)
-            output_obj = Output(value=value, address=address, network="litecoin_testnet")
             transaction.add_output(value=value, address=address)
-
-        print(json.dumps(transaction.as_dict(), indent=4))
 
         for i, private_key in enumerate(private_keys):
             key = Key(private_key)
             transaction.sign(key, i)
-
-        transaction
-
         return transaction.raw_hex()
 
     async def send_transaction(self, raw_transaction: str) -> str:
