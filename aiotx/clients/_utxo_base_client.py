@@ -69,11 +69,6 @@ class AioTxUTXOClient(AioTxClient):
         total_value = self.to_satoshi(1.5)
         inputs = [("737bef3e8161d15e70f4b230d433f40fb3b5bb197a962289047de12ed9900bb4", 0, total_value)]
 
-        # Проверяем достаточно ли средств
-        # if total_value < amount + fee:
-        #     raise InsufficientFundsError(f"Insufficient funds. Available balance: {total_value} BTC")
-
-        # Определяем выходы
         outputs = [
             (to_address, amount),
             (from_address["address"], total_value - amount - fee)
@@ -87,14 +82,11 @@ class AioTxUTXOClient(AioTxClient):
         return txid
 
     async def create_transaction(self, inputs: list, outputs: list, private_keys: list) -> str:
-        transaction = Transaction(network="litecoin_testnet")
+        transaction = Transaction(network="litecoin_testnet", witness_type="segwit")
 
-        for i, input_data in enumerate(inputs):
+        for input_data in inputs:
             prev_tx_id, prev_out_index, value = input_data
-            # data = to_bytes("737bef3e8161d15e70f4b230d433f40fb3b5bb197a962289047de12ed9900bb4")
-
-            # input_obj = Input()
-            transaction.add_input(prev_txid=prev_tx_id, output_n=prev_out_index)
+            transaction.add_input(prev_txid=prev_tx_id, output_n=prev_out_index, value=value, witness_type="segwit")
 
         for output_data in outputs:
             address, value = output_data
@@ -102,9 +94,13 @@ class AioTxUTXOClient(AioTxClient):
             output_obj = Output(value=value, address=address, network="litecoin_testnet")
             transaction.add_output(value=value, address=address)
 
+        print(json.dumps(transaction.as_dict(), indent=4))
+
         for i, private_key in enumerate(private_keys):
             key = Key(private_key)
             transaction.sign(key, i)
+
+        transaction
 
         return transaction.raw_hex()
 
