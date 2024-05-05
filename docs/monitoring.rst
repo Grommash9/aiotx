@@ -61,19 +61,19 @@ You can monitor multiple instances simultaneously by creating separate instances
     eth_client = AioTxETHClient("NODE_URL", 1151511)
 
     @bsc_client.monitor.on_block
-    def handle_block(block):
+    async def handle_block(block):
         print("bsc_client: block", block)
 
     @bsc_client.monitor.on_transaction
-    def handle_transaction(transaction):
+    async def handle_transaction(transaction):
         print("bsc_client: transaction", transaction)
 
     @eth_client.monitor.on_block
-    def handle_block(block):
+    async def handle_block(block):
         print("eth_client: block", block)
 
     @eth_client.monitor.on_transaction
-    def handle_transaction(transaction):
+    async def handle_transaction(transaction):
         print("eth_client: transaction", transaction)
 
     async def main():
