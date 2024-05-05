@@ -6,7 +6,7 @@ interactions:
     uri: http://localhost:19332/wallet/main2
   response:
     body:
-      string: '{"result":3247854,"error":null,"id":"curltest"}
+      string: '{"result":3248414,"error":null,"id":"curltest"}
 
         '
     headers:
@@ -15,7 +15,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 04 May 2024 14:45:30 GMT
+      - Sun, 05 May 2024 15:23:35 GMT
     status:
       code: 200
       message: OK
