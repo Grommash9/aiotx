@@ -168,19 +168,38 @@ class UTXOMonitor(BlockMonitor):
         await self._update_last_block(latest_block + 1)
 
     async def process_block(self, block_number, block_data):
+        await self._update_last_block(block_number)
         for handler in self.block_handlers:
-            if asyncio.iscoroutinefunction(handler):
-                await self._update_last_block(block_number)
-                await handler(block_number)
-            else:
-                handler(block_number)
+            await handler(block_number)
 
+        addresses = await self._get_addresses()
         for transaction in block_data["tx"]:
+            # if transaction["txid"] == "737bef3e8161d15e70f4b230d433f40fb3b5bb197a962289047de12ed9900bb4":
+            #     breakpoint()
+
+            for output in transaction["vout"]:
+                outputs_scriptPubKey = output.get("scriptPubKey")
+                if outputs_scriptPubKey is None:
+                    continue
+
+                output_address_list = outputs_scriptPubKey.get("addresses")
+                if output_address_list is None:
+                    continue
+
+                to_address = output_address_list[0]
+                if to_address not in addresses:
+                    continue
+
+                value = self.client.to_satoshi(output["value"])
+                output_n = output["n"]
+                await self._add_new_utxo(to_address, transaction["txid"], value, output_n)
+
+
             for handler in self.transaction_handlers:
-                if asyncio.iscoroutinefunction(handler):
-                    await handler(transaction)
-                else:
-                    handler(transaction)
+                await handler(transaction)
+
+
+    
 
     async def _init_db(self):
         async with aiosqlite.connect(self._db_name) as conn:
@@ -195,7 +214,7 @@ class UTXOMonitor(BlockMonitor):
 
                 # Создание таблицы для UTXO
                 await c.execute(f'''CREATE TABLE IF NOT EXISTS {self._utxo_table_name}
-                                    (address_uuid TEXT, tx_id TEXT, amount_satoshi INTEGER, output_n INTEGER) ''')
+                                    (address TEXT, tx_id TEXT, amount_satoshi INTEGER, output_n INTEGER) ''')
 
             await conn.commit()
 
@@ -228,31 +247,27 @@ class UTXOMonitor(BlockMonitor):
                     else:
                         raise e
 
-    async def _add_new_address(self, address: str, block_number: int) -> str:
-        uuid = str(uuid4())
+    async def _add_new_address(self, address: str, block_number: int):
         query = f'''INSERT INTO {self._addresses_table_name}
-                    (uuid, address, block_number) VALUES (?, ?, ?)'''
-        await self._run_query(query, (uuid, address, block_number))
-        # breakpoint()
+                    (address, block_number) VALUES (?, ?)'''
+        await self._run_query(query, (address, block_number))
         last_known_block = await self._get_last_block()
         if last_known_block > block_number:
             await self._update_last_block(block_number)
-        return uuid
 
-    async def _add_new_utxo(self, address_uuid, tx_id, amount, index) -> None:
+    async def _add_new_utxo(self, address: str, tx_id: str, amount: int, output_n: int) -> None:
         query = f'''INSERT INTO {self._utxo_table_name}
-                    (address_uuid, tx_id, amount, index) VALUES (?, ?, ?, ?)'''
-        await self._run_query(query, (address_uuid, tx_id, amount, index))
+                    (address, tx_id, amount_satoshi, output_n) VALUES (?, ?, ?, ?)'''
+        await self._run_query(query, (address, tx_id, amount, output_n))
 
-    async def _update_last_block(self, block_number) -> None:
+    async def _update_last_block(self, block_number: int) -> None:
         query = f'''UPDATE {self._last_block_table_name} SET block_number = ?'''
         await self._run_query(query, (block_number,))
 
-    async def _get_utxo_data(self, address):
-        query = f'''SELECT utxo.tx_id, utxo.amount, utxo.index
+    async def _get_utxo_data(self, address: str):
+        query = f'''SELECT utxo.tx_id, utxo.amount, utxo.output_n
                     FROM {self._utxo_table_name} utxo
-                    JOIN {self._addresses_table_name} addr ON utxo.address_uuid = addr.uuid
-                    WHERE addr.address = ?'''
+                    WHERE utxo.address = ?'''
         async with aiosqlite.connect(self._db_name) as conn:
             async with conn.cursor() as c:
                 await c.execute(query, (address,))
@@ -265,3 +280,11 @@ class UTXOMonitor(BlockMonitor):
                 await c.execute(query)
                 result = await c.fetchone()
                 return result[0] if result else None
+
+    async def _get_addresses(self) -> Optional[int]:
+        query = f'''SELECT address FROM {self._addresses_table_name}'''
+        async with aiosqlite.connect(self._db_name) as conn:
+            async with conn.cursor() as c:
+                await c.execute(query)
+                result = await c.fetchall()
+                return {address[0] for address in result}
