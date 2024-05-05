@@ -1,11 +1,14 @@
 import asyncio
 import json
 from typing import Union
-from bitcoinlib.encoding import to_bytes
+
 import aiohttp
-from bitcoinlib.keys import Key, HDKey
-from bitcoinlib.transactions import Transaction, Input, Output
+import aiosqlite
 from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
+from bitcoinlib.keys import HDKey, Key
+from bitcoinlib.networks import Network
+from bitcoinlib.transactions import Transaction
+
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     AioTxError,
@@ -24,6 +27,7 @@ class AioTxUTXOClient(AioTxClient):
         self.node_username = node_username
         self.node_password = node_password
         self.testnet = testnet
+        self._network = Network("bitcoinlib_test") if testnet else Network("bitcoin")
 
     @staticmethod
     def to_satoshi(amount: Union[int, float]) -> int:
@@ -31,13 +35,26 @@ class AioTxUTXOClient(AioTxClient):
 
     @staticmethod
     def from_satoshi(amount: int) -> float:
-        return amount / 10**8
+        return amount / 10**8     
 
-    def generate_address(self):        
-        pass
+    def generate_address(self) -> dict:        
+        hdkey = HDKey()
+        derivation_path = f"m/84'/{self._network.bip44_cointype}'/0'/0/0"
+        private_key = hdkey.subkey_for_path(derivation_path).private_hex
+        hash160 = hdkey.subkey_for_path(derivation_path).hash160
+        address = pubkeyhash_to_addr_bech32(hash160, prefix=self._network.prefix_bech32, witver=0, separator='1')
+        return private_key, address
     
     def get_address_from_private_key(self, private_key):
-        pass
+        key = Key(private_key)
+        address = pubkeyhash_to_addr_bech32(
+            key.hash160, prefix=self._network.prefix_bech32, witver=0, separator='1')
+
+        return {
+            "private_key": private_key,
+            "public_key": key.public_hex,
+            "address": address
+        }
 
     async def get_last_block_number(self) -> int:
         payload = {"method": "getblockcount", "params": []}
@@ -155,3 +172,17 @@ class UTXOMonitor(BlockMonitor):
                     await handler(transaction)
                 else:
                     handler(transaction)
+
+    async def init_db(self):
+        async with aiosqlite.connect(self.db_name) as conn:
+            async with conn.cursor() as c:
+                # Создание таблицы для транзакций
+                await c.execute('''CREATE TABLE IF NOT EXISTS transactions
+                                (hash TEXT PRIMARY KEY, block_number INTEGER,
+                                    from_address TEXT, to_address TEXT, value REAL)''')
+                
+                # Создание таблицы для адресов
+                await c.execute('''CREATE TABLE IF NOT EXISTS addresses
+                                (address TEXT PRIMARY KEY, block_number INTEGER)''')
+            
+            await conn.commit()
