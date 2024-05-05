@@ -20,7 +20,7 @@ from aiotx.exceptions import (
 class AioTxUTXOClient(AioTxClient):
     def __init__(self, node_url, node_username, node_password, testnet):
         super().__init__(node_url)
-        self.monitor = BitcoinMonitor(self)
+        self.monitor = UTXOMonitor(self)
         self.node_username = node_username
         self.node_password = node_password
         self.testnet = testnet
@@ -127,7 +127,7 @@ class AioTxUTXOClient(AioTxClient):
                     raise AioTxError(f"Error {error_code}: {error_message}")
 
 
-class BitcoinMonitor(BlockMonitor):
+class UTXOMonitor(BlockMonitor):
     def __init__(self, client: AioTxUTXOClient):
         self.client = client
         self.block_handlers = []
