@@ -1,7 +1,5 @@
 import json
 
-from bitcoinlib.networks import Network
-
 from ._evm_base_client import AioTxEVMClient
 from ._utxo_base_client import AioTxUTXOClient
 

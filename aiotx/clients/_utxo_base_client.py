@@ -1,14 +1,14 @@
 import asyncio
 import json
-from typing import Union
-from uuid import uuid4
+from typing import Optional, Union
+
 import aiohttp
 import aiosqlite
 from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
 from bitcoinlib.keys import HDKey, Key
 from bitcoinlib.networks import Network
 from bitcoinlib.transactions import Transaction
-from typing import Optional
+
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     AioTxError,
