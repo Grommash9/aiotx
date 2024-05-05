@@ -91,10 +91,10 @@ class AioTxUTXOClient(AioTxClient):
 
         for i, input_data in enumerate(inputs):
             prev_tx_id, prev_out_index, value = input_data
-            data = to_bytes("737bef3e8161d15e70f4b230d433f40fb3b5bb197a962289047de12ed9900bb4")
+            # data = to_bytes("737bef3e8161d15e70f4b230d433f40fb3b5bb197a962289047de12ed9900bb4")
 
             # input_obj = Input()
-            transaction.add_input(prev_txid=data, output_n=prev_out_index)
+            transaction.add_input(prev_txid=prev_tx_id, output_n=prev_out_index)
 
         for output_data in outputs:
             address, value = output_data
