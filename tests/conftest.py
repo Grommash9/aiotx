@@ -42,10 +42,13 @@ LTC_TEST_NODE_URL = "https://api.tatum.io/v3/blockchain/node/litecoin-core-testn
 @pytest.fixture
 def ltc_public_client(request: FixtureRequest) -> AioTxLTCClient:
     def teardown():
-        os.remove("test_ltc.sqlite")
+        try:
+            os.remove("test_ltc.sqlite")
+        except FileNotFoundError:
+            print("test_ltc.sqlite FileNotFoundError")
 
     request.addfinalizer(teardown)
-    return AioTxLTCClient(LTC_TEST_NODE_URL, testnet=True, db_name="test_ltc.sqlite")
+    return AioTxLTCClient(LTC_TEST_NODE_URL, testnet=True, db_url="sqlite+aiosqlite:///test_ltc.sqlite")
 
 
 BTC_TEST_NODE_URL = "https://dry-compatible-cloud.btc-testnet.quiknode.pro/268755801856724a0c520053c0bc3b0a7b1a2d3e/"
@@ -53,7 +56,10 @@ BTC_TEST_NODE_URL = "https://dry-compatible-cloud.btc-testnet.quiknode.pro/26875
 @pytest.fixture
 def btc_client(request: FixtureRequest) -> AioTxBTCClient:
     def teardown():
-        os.remove("test_btc.sqlite")
-
+        try:
+            os.remove("test_btc.sqlite")
+        except FileNotFoundError:
+            print("test_btc.sqlite FileNotFoundError")
+        
     request.addfinalizer(teardown)
-    return AioTxBTCClient(BTC_TEST_NODE_URL, testnet=True, db_name="test_btc.sqlite")
+    return AioTxBTCClient(BTC_TEST_NODE_URL, testnet=True, db_url="sqlite+aiosqlite:///test_btc.sqlite")
