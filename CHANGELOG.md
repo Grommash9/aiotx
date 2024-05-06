@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - username + pass auth removed for UTXO
 - LTC/BTC wallet generators added
 - monitoring handlers now only async
+- get_balance function added for UTXO
+- UTXO database BTC covered by tests
+- import address block number params is now optional
 
 ## [0.6.0]
 - UTXO client block monitoring logic added and tested for LTC and BTC (both covered by tests)

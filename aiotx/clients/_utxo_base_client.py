@@ -46,7 +46,7 @@ class AioTxUTXOClient(AioTxClient):
         await self.import_address(address, last_block_number)
         return private_key, address
     
-    async def import_address(self, address: str, block_number: int):
+    async def import_address(self, address: str, block_number: int = None):
         await self.monitor._add_new_address(address, block_number)
     
     def get_address_from_private_key(self, private_key):
@@ -72,6 +72,12 @@ class AioTxUTXOClient(AioTxClient):
         payload = {"method": "getblock", "params": [block_hash["result"], verbosity]}
         result = await self._make_rpc_call(payload)
         return result["result"]
+    
+    async def get_balance(self, address: str) -> int:
+        utxo_data = await self.monitor._get_utxo_data(address)
+        if len(utxo_data) == 0:
+            return 0
+        return sum(utxo[2] for utxo in utxo_data)
     
     async def send(self, private_key: str, to_address: str, amount: float, fee: float) -> str:
         from_wallet = self.get_address_from_private_key(private_key)
@@ -188,10 +194,16 @@ class UTXOMonitor(BlockMonitor):
                     continue
 
                 output_address_list = outputs_scriptPubKey.get("addresses")
-                if output_address_list is None:
+                output_address = outputs_scriptPubKey.get("address")
+
+                if output_address is None and output_address_list is None:
                     continue
 
-                to_address = output_address_list[0]
+                if output_address_list is not None:
+                    to_address = output_address_list[0]
+                else:
+                    to_address = output_address
+                
                 if to_address not in addresses:
                     continue
 
@@ -256,11 +268,15 @@ class UTXOMonitor(BlockMonitor):
                     else:
                         raise e
 
-    async def _add_new_address(self, address: str, block_number: int):
+    async def _add_new_address(self, address: str, block_number: Optional[int]):
+        last_known_block = await self.client.get_last_block_number()
+        if block_number is None:
+            block_number = last_known_block
+
         query = f'''INSERT OR REPLACE INTO {self._addresses_table_name}
                     (address, block_number) VALUES (?, ?)'''
         await self._run_query(query, (address, block_number))
-        last_known_block = await self._get_last_block()
+        
         if last_known_block > block_number:
             await self._update_last_block(block_number)
 
