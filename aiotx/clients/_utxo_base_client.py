@@ -180,9 +180,6 @@ class UTXOMonitor(BlockMonitor):
         addresses = await self._get_addresses()
         for transaction in block_data["tx"]:
 
-            # if transaction["txid"] == "4948b1fad3cf054726d10738839a61b0c5f1a9cf8492a53f45d67aace770463c":
-            #     breakpoint()
-
             for input_utxo in transaction["vin"]:
                 txid = input_utxo.get("txid")
                 vout = input_utxo.get("vout")
