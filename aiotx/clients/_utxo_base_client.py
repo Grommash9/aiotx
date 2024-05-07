@@ -1,7 +1,7 @@
 import asyncio
 import json
 from typing import Optional, Union
-
+from sqlalchemy.pool import NullPool
 import aiohttp
 from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
 from bitcoinlib.keys import HDKey, Key
@@ -197,7 +197,7 @@ class UTXOMonitor(BlockMonitor):
         self.transaction_handlers = []
         self.running = False
         self._db_url = db_url
-        self._engine = create_async_engine(db_url)
+        self._engine = create_async_engine(db_url, poolclass=NullPool)
         self._session = sessionmaker(self._engine, class_=AsyncSession, expire_on_commit=False)
         self.Address = create_address_model(currency_name)
         self.UTXO = create_utxo_model(currency_name)

@@ -4,7 +4,6 @@ import os
 import pytest
 import vcr
 from pytest import FixtureRequest
-
 from aiotx.clients import AioTxBSCClient, AioTxBTCClient, AioTxETHClient, AioTxLTCClient
 
 # ALL = "all"
@@ -63,3 +62,8 @@ def btc_client(request: FixtureRequest) -> AioTxBTCClient:
         
     request.addfinalizer(teardown)
     return AioTxBTCClient(BTC_TEST_NODE_URL, testnet=True, db_url="sqlite+aiosqlite:///test_btc.sqlite")
+
+
+@pytest.fixture
+def btc_client_mysql(request: FixtureRequest) -> AioTxBTCClient:
+    return AioTxBTCClient(BTC_TEST_NODE_URL, testnet=True, db_url="mysql+aiomysql://root:@127.0.0.1:3306/payouts_bot_db")
