@@ -28,7 +28,7 @@ def create_address_model(currency_name):
         __tablename__ = f"{currency_name}_addresses"
         __table_args__ = {'extend_existing': True}
 
-        address = Column(String, primary_key=True)
+        address = Column(String(255), primary_key=True)
         block_number = Column(Integer)
 
     return Address
@@ -38,9 +38,9 @@ def create_utxo_model(currency_name):
         __tablename__ = f"{currency_name}_utxo"
         __table_args__ = {'extend_existing': True}
 
-        tx_id = Column(String, primary_key=True)
+        tx_id = Column(String(255), primary_key=True)
         output_n = Column(Integer, primary_key=True)
-        address = Column(String)
+        address = Column(String(255))
         amount_satoshi = Column(Integer)
 
     return UTXO
@@ -269,6 +269,7 @@ class UTXOMonitor(BlockMonitor):
             async with session.begin():
                 session.add(self.Address(address=address, block_number=block_number))
                 await session.commit()
+
         last_known_block = await self._get_last_block()
         if last_known_block > block_number:
             await self._update_last_block(block_number)

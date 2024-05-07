@@ -48,6 +48,7 @@ setup(
         "eth_account",
         "bitcoinlib",
         "sqlalchemy",
+        "aiosqlite",
     ],
     extras_require={
         "test": extras_test,
