@@ -66,4 +66,4 @@ def btc_client(request: FixtureRequest) -> AioTxBTCClient:
 
 @pytest.fixture
 def btc_client_mysql(request: FixtureRequest) -> AioTxBTCClient:
-    return AioTxBTCClient(BTC_TEST_NODE_URL, testnet=True, db_url="mysql+aiomysql://root:@127.0.0.1:3306/payouts_bot_db")
+    return AioTxBTCClient(BTC_TEST_NODE_URL, testnet=True, db_url=f"mysql+aiomysql://{os.getenv("DB_USER")}:{os.getenv("DB_PASSWORD")}@{os.getenv("DB_HOST")}:{os.getenv("DB_PORT")}/{os.getenv("DB_NAME")}")
