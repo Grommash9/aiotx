@@ -63,3 +63,11 @@ def btc_client(request: FixtureRequest) -> AioTxBTCClient:
         
     request.addfinalizer(teardown)
     return AioTxBTCClient(BTC_TEST_NODE_URL, testnet=True, db_url="sqlite+aiosqlite:///test_btc.sqlite")
+
+
+@pytest.fixture
+def btc_client_mysql(request: FixtureRequest) -> AioTxBTCClient:
+    return AioTxBTCClient(
+        BTC_TEST_NODE_URL, 
+        testnet=True, 
+        db_url=f"mysql+aiomysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}")

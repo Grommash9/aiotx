@@ -33,8 +33,6 @@ class AioTxBTCClient(AioTxUTXOClient):
         super().__init__(node_url, testnet, network_name, db_url)
         
 
-
-
 class AioTxLTCClient(AioTxUTXOClient):
     
     def __init__(self, node_url, testnet = False, db_url="sqlite+aiosqlite:///aiotx_utxo.sqlite"):

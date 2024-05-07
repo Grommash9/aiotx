@@ -49,6 +49,8 @@ setup(
         "bitcoinlib",
         "sqlalchemy",
         "aiosqlite",
+        "aiomysql",
+        "cryptography",
     ],
     extras_require={
         "test": extras_test,

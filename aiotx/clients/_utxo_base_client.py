@@ -10,6 +10,7 @@ from bitcoinlib.transactions import Transaction
 from sqlalchemy import Column, Integer, String, select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.pool import NullPool
 
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
@@ -197,7 +198,7 @@ class UTXOMonitor(BlockMonitor):
         self.transaction_handlers = []
         self.running = False
         self._db_url = db_url
-        self._engine = create_async_engine(db_url)
+        self._engine = create_async_engine(db_url, poolclass=NullPool)
         self._session = sessionmaker(self._engine, class_=AsyncSession, expire_on_commit=False)
         self.Address = create_address_model(currency_name)
         self.UTXO = create_utxo_model(currency_name)
