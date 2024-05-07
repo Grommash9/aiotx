@@ -1,7 +1,7 @@
 import asyncio
 import json
 from typing import Optional, Union
-from sqlalchemy.pool import NullPool
+
 import aiohttp
 from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
 from bitcoinlib.keys import HDKey, Key
@@ -10,6 +10,7 @@ from bitcoinlib.transactions import Transaction
 from sqlalchemy import Column, Integer, String, select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.pool import NullPool
 
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
