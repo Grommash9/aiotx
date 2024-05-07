@@ -324,9 +324,7 @@ class UTXOMonitor(BlockMonitor):
     async def _get_last_block(self) -> Optional[int]:
         async with self._session() as session:
             result = await session.execute(select(self.LastBlock.block_number))
-            result = result.scalar()
-            print("result.scalar()", result)
-            return result
+            return result.scalar()
             
     async def _get_addresses(self) -> Optional[int]:
         async with self._session() as session:
