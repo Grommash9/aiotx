@@ -29,12 +29,14 @@ async def test_async_monitoring(btc_client: AioTxBTCClient):
     
     
     try:
-        await asyncio.sleep(2.5)
+        await asyncio.sleep(3)
     except KeyboardInterrupt:
         btc_client.stop_monitoring()
 
     assert len(blocks) > 0
     assert len(transactions) > 0
+
+    
 
     balance = await btc_client.get_balance("tb1pmuuv2qjujv9qawqcc424nhlnmux7mvsyqj7qgc6z0vwqujvx4k9s34kuxn")
     assert balance == 333
