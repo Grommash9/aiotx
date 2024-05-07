@@ -257,7 +257,7 @@ class UTXOMonitor(BlockMonitor):
         async with self._engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
             last_known_block = await self.client.get_last_block_number()
-            await self._update_last_block(last_known_block)
+            await self._init_last_block(last_known_block)
 
 
     async def _add_new_address(self, address: str, block_number: int):
@@ -286,10 +286,16 @@ class UTXOMonitor(BlockMonitor):
             async with session.begin():
                 data = await session.execute(select(self.LastBlock))
                 last_block = data.scalar()
+                last_block.block_number = block_number
+                await session.commit()
+    
+    async def _init_last_block(self, block_number: int) -> None:
+        async with self._session() as session:
+            async with session.begin():
+                data = await session.execute(select(self.LastBlock))
+                last_block = data.scalar()
                 if last_block is None:
                     session.add(self.LastBlock(block_number=block_number))
-                else:
-                    last_block.block_number = block_number
                 await session.commit()
     
     async def _process_input_utxo(self, txid: str, vout: int):
@@ -318,7 +324,9 @@ class UTXOMonitor(BlockMonitor):
     async def _get_last_block(self) -> Optional[int]:
         async with self._session() as session:
             result = await session.execute(select(self.LastBlock.block_number))
-            return result.scalar()
+            result = result.scalar()
+            print("result.scalar()", result)
+            return result
             
     async def _get_addresses(self) -> Optional[int]:
         async with self._session() as session:
