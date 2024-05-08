@@ -1,12 +1,12 @@
 import asyncio
+import hashlib
 import json
 from typing import Optional, Union
 
 import aiohttp
-from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
-from bitcoinlib.keys import HDKey, Key
-from bitcoinlib.networks import Network
-from bitcoinlib.transactions import Transaction
+import bech32
+import ecdsa
+from bech32 import bech32_encode, convertbits
 from sqlalchemy import Column, Integer, String, select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
@@ -57,11 +57,11 @@ def create_last_block_model(currency_name):
 
 
 class AioTxUTXOClient(AioTxClient):
-    def __init__(self, node_url, testnet, network_name, db_url):
+    def __init__(self, node_url, testnet, hrp, db_url):
         super().__init__(node_url)
         self.testnet = testnet
-        self._network = Network(network_name)
-        self.monitor = UTXOMonitor(self, self._network.name, db_url)
+        self._hrp = hrp
+        self.monitor = UTXOMonitor(self, db_url)
         asyncio.run(self.monitor._init_db())
 
     @staticmethod
@@ -72,29 +72,37 @@ class AioTxUTXOClient(AioTxClient):
     def from_satoshi(amount: int) -> float:
         return amount / 10**8     
 
-    async def generate_address(self) -> dict:
-        hdkey = HDKey()
-        derivation_path = f"m/84'/{self._network.bip44_cointype}'/0'/0/0"
-        private_key = hdkey.subkey_for_path(derivation_path).private_hex
-        hash160 = hdkey.subkey_for_path(derivation_path).hash160
-        address = pubkeyhash_to_addr_bech32(hash160, prefix=self._network.prefix_bech32, witver=0, separator='1')
-        last_block_number = await self.get_last_block_number()
-        await self.import_address(address, last_block_number)
-        return private_key, address
-    
-    async def import_address(self, address: str, block_number: int = None):
-        await self.monitor._add_new_address(address, block_number)
-    
+    def generate_address(self):
+        private_key = ecdsa.SigningKey.generate(curve=ecdsa.SECP256k1)
+        public_key = private_key.get_verifying_key()
+        public_key_bytes = public_key.to_string(encoding='compressed')
+        witness_version = 0
+        witness_program = hashlib.new('ripemd160', hashlib.sha256(public_key_bytes).digest()).digest()
+        data = [witness_version] + convertbits(witness_program, 8, 5)
+        
+        bech32_address = bech32_encode(self._hrp, data)
+        private_key_wif = private_key.to_string().hex()
+        return private_key_wif, bech32_address
+
     def get_address_from_private_key(self, private_key):
-        key = Key(private_key)
-        address = pubkeyhash_to_addr_bech32(
-            key.hash160, prefix=self._network.prefix_bech32, witver=0, separator='1')
+        private_key_bytes = bytes.fromhex(private_key)
+        signing_key = ecdsa.SigningKey.from_string(private_key_bytes, curve=ecdsa.SECP256k1)
+        verifying_key = signing_key.get_verifying_key()
+        public_key_bytes = verifying_key.to_string(encoding='compressed')
+        witness_version = 0
+        witness_program = hashlib.new('ripemd160', hashlib.sha256(public_key_bytes).digest()).digest()
+        data = [witness_version] + bech32.convertbits(witness_program, 8, 5)
+        bech32_address = bech32.bech32_encode(self._hrp, data)
 
         return {
             "private_key": private_key,
-            "public_key": key.public_hex,
-            "address": address
+            "public_key": public_key_bytes.hex(),
+            "address": bech32_address
         }
+    
+    async def import_address(self, address: str, block_number: int = None):
+        await self.monitor._add_new_address(address, block_number)
+
 
     async def get_last_block_number(self) -> int:
         payload = {"method": "getblockcount", "params": []}
@@ -115,48 +123,86 @@ class AioTxUTXOClient(AioTxClient):
             return 0
         return sum(utxo.amount_satoshi for utxo in utxo_data)
     
-    async def send(self, private_key: str, to_address: str, amount: float, fee: float) -> str:
+
+    async def send(self, private_key: str, to_address: str, amount: int, fee: float) -> str:
         from_wallet = self.get_address_from_private_key(private_key)
         from_address = from_wallet["address"]
-        # # Получаем неизрасходованные выходы для адреса отправителя
         utxo_list = await self.monitor._get_utxo_data(from_address)
 
-        # Выбираем входы и суммируем их значения
         inputs = []
         total_value = 0
         for utxo in utxo_list:
-            input_data = (utxo.tx_id, utxo.output_n, utxo.amount_satoshi)
+            input_data = {
+                "txid": utxo.tx_id,
+                "vout": utxo.output_n
+            }
             inputs.append(input_data)
             total_value += utxo.amount_satoshi
             if total_value >= amount + fee:
                 break
-        # total_value = self.to_satoshi(1.5)
-        # inputs = [("737bef3e8161d15e70f4b230d433f40fb3b5bb197a962289047de12ed9900bb4", 0, total_value)]
 
         outputs = [
-            (to_address, amount),
-            (from_address, total_value - amount - fee)
+            {
+                to_address: self.from_satoshi(amount)
+            },
+            {
+                from_address: self.from_satoshi(total_value - amount - fee)
+            }
         ]
-        raw_transaction = await self.create_transaction(inputs, outputs, [private_key])
+        raw_transaction = await self.create_transaction(inputs, outputs)
+        signed_tx = self.sign_transaction(raw_transaction, private_key)
+        print("signed_tx", signed_tx)
 
-        txid = await self.send_transaction(raw_transaction)
+        txid = await self.send_transaction(signed_tx)
         return txid
+    
+    async def create_transaction(self, inputs: list, outputs: dict) -> str:
+        payload = {"method": "createrawtransaction", "params": [inputs, outputs]}
+        result = await self._make_rpc_call(payload)
+        return result["result"]
 
-    async def create_transaction(self, inputs: list, outputs: list, private_keys: list) -> str:
-        transaction = Transaction(network="litecoin_testnet", witness_type="segwit")
+    def sign_transaction(self, raw_transaction, private_key):
+        private_key_bytes = bytes.fromhex(private_key)
+        signing_key = ecdsa.SigningKey.from_string(private_key_bytes, curve=ecdsa.SECP256k1)
 
-        for input_data in inputs:
-            prev_tx_id, prev_out_index, value = input_data
-            transaction.add_input(prev_txid=prev_tx_id, output_n=prev_out_index, value=value, witness_type="segwit")
+        transaction_bytes = bytes.fromhex(raw_transaction)
+        hash_tx = hashlib.sha256(hashlib.sha256(transaction_bytes).digest()).digest()
+        signature = signing_key.sign_digest(hash_tx, sigencode=ecdsa.util.sigencode_der)
+        encoded_signature = signature.hex()
+        sighash_all = '01'
+        final_signature = encoded_signature + sighash_all
 
-        for output_data in outputs:
-            address, value = output_data
-            transaction.add_output(value=value, address=address)
+        public_key = signing_key.get_verifying_key().to_string("compressed").hex()
 
-        for i, private_key in enumerate(private_keys):
-            key = Key(private_key)
-            transaction.sign(key, i)
-        return transaction.raw_hex()
+        # Construct the witness data
+        witness = [final_signature, public_key]
+
+        # Extract the script_pub_key from the raw transaction
+        script_pub_key = raw_transaction[-44:]
+
+        # Construct the signed transaction
+        signed_transaction = raw_transaction[:-44] + '00' + script_pub_key
+
+        # Append the witness data separately
+        witness_data = []
+        for item in witness:
+            witness_data.append('{:02x}'.format(len(item) // 2))
+            witness_data.append(item)
+
+        # Calculate the number of witness items
+        num_witness_items = len(witness_data) // 2
+
+        # Construct the witness data string
+        witness_data_str = '{:02x}'.format(num_witness_items) + ''.join(witness_data)
+
+        # Calculate the length of the witness data string
+        witness_data_len = '{:02x}'.format(len(witness_data_str) // 2)
+
+        # Append the witness data to the signed transaction
+        signed_transaction += '0100' + witness_data_len + witness_data_str
+
+        return signed_transaction
+    
 
     async def send_transaction(self, raw_transaction: str) -> str:
         payload = {"method": "sendrawtransaction", "params": [raw_transaction]}
@@ -168,8 +214,10 @@ class AioTxUTXOClient(AioTxClient):
         payload["jsonrpc"] = "2.0"
         payload["id"] = "curltest"
         async with aiohttp.ClientSession() as session:
-            async with session.post(self.node_url, data=json.dumps(payload)) as response:
+            async with session.post(self.node_url, data=json.dumps(payload), auth=aiohttp.BasicAuth("litecoinrpc", "7aON+t6CMysoGC7U7dOwCipjpzE=")) as response:
+                # print("response", response)
                 result = await response.json()
+                # print("result", result)
                 error = result.get("error")
 
                 if error is None:
@@ -192,7 +240,7 @@ class AioTxUTXOClient(AioTxClient):
 
 
 class UTXOMonitor(BlockMonitor):
-    def __init__(self, client: AioTxUTXOClient, currency_name, db_url):
+    def __init__(self, client: AioTxUTXOClient, db_url):
         self.client = client
         self.block_handlers = []
         self.transaction_handlers = []
@@ -200,9 +248,9 @@ class UTXOMonitor(BlockMonitor):
         self._db_url = db_url
         self._engine = create_async_engine(db_url, poolclass=NullPool)
         self._session = sessionmaker(self._engine, class_=AsyncSession, expire_on_commit=False)
-        self.Address = create_address_model(currency_name)
-        self.UTXO = create_utxo_model(currency_name)
-        self.LastBlock = create_last_block_model(currency_name)
+        self.Address = create_address_model(self.client._hrp)
+        self.UTXO = create_utxo_model(self.client._hrp)
+        self.LastBlock = create_last_block_model(self.client._hrp)
 
     async def poll_blocks(self):
         latest_block = await self._get_last_block()
