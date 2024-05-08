@@ -214,7 +214,7 @@ class AioTxUTXOClient(AioTxClient):
         payload["jsonrpc"] = "2.0"
         payload["id"] = "curltest"
         async with aiohttp.ClientSession() as session:
-            async with session.post(self.node_url, data=json.dumps(payload), auth=aiohttp.BasicAuth("litecoinrpc", "7aON+t6CMysoGC7U7dOwCipjpzE=")) as response:
+            async with session.post(self.node_url, data=json.dumps(payload)) as response:
                 # print("response", response)
                 result = await response.json()
                 # print("result", result)
