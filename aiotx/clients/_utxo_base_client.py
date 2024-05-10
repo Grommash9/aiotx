@@ -7,6 +7,8 @@ import aiohttp
 import bech32
 import ecdsa
 from bech32 import bech32_encode, convertbits
+from bitcoinlib.keys import Key
+from bitcoinlib.transactions import Transaction
 from sqlalchemy import Column, Integer, String, select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
@@ -72,7 +74,7 @@ class AioTxUTXOClient(AioTxClient):
     def from_satoshi(amount: int) -> float:
         return amount / 10**8     
 
-    def generate_address(self):
+    async def generate_address(self):
         private_key = ecdsa.SigningKey.generate(curve=ecdsa.SECP256k1)
         public_key = private_key.get_verifying_key()
         public_key_bytes = public_key.to_string(encoding='compressed')
@@ -82,6 +84,8 @@ class AioTxUTXOClient(AioTxClient):
         
         bech32_address = bech32_encode(self._hrp, data)
         private_key_wif = private_key.to_string().hex()
+        last_block_number = await self.get_last_block_number()
+        await self.import_address(bech32_address, last_block_number)
         return private_key_wif, bech32_address
 
     def get_address_from_private_key(self, private_key):
@@ -132,76 +136,85 @@ class AioTxUTXOClient(AioTxClient):
         inputs = []
         total_value = 0
         for utxo in utxo_list:
-            input_data = {
-                "txid": utxo.tx_id,
-                "vout": utxo.output_n
-            }
+            input_data = (
+                utxo.tx_id,
+                utxo.output_n,
+                utxo.amount_satoshi
+            )
             inputs.append(input_data)
             total_value += utxo.amount_satoshi
             if total_value >= amount + fee:
                 break
 
         outputs = [
-            {
-                to_address: self.from_satoshi(amount)
-            },
-            {
-                from_address: self.from_satoshi(total_value - amount - fee)
-            }
+            (
+                to_address, amount
+            ),
+            (
+                from_address, total_value - amount - fee
+            )
         ]
-        raw_transaction = await self.create_transaction(inputs, outputs)
-        signed_tx = self.sign_transaction(raw_transaction, private_key)
-        print("signed_tx", signed_tx)
-
+        signed_tx = await self.create_and_sign_transaction(inputs, outputs, [private_key])
         txid = await self.send_transaction(signed_tx)
         return txid
     
-    async def create_transaction(self, inputs: list, outputs: dict) -> str:
-        payload = {"method": "createrawtransaction", "params": [inputs, outputs]}
-        result = await self._make_rpc_call(payload)
-        return result["result"]
 
-    def sign_transaction(self, raw_transaction, private_key):
-        private_key_bytes = bytes.fromhex(private_key)
-        signing_key = ecdsa.SigningKey.from_string(private_key_bytes, curve=ecdsa.SECP256k1)
+    async def create_and_sign_transaction(self, inputs: list, outputs: list, private_keys: list) -> str:
+        transaction = Transaction(network="litecoin_testnet", witness_type="segwit")
+        for input_data in inputs:
+            prev_tx_id, prev_out_index, value = input_data
+            transaction.add_input(prev_txid=prev_tx_id, output_n=prev_out_index, value=value, witness_type="segwit")
 
-        transaction_bytes = bytes.fromhex(raw_transaction)
-        hash_tx = hashlib.sha256(hashlib.sha256(transaction_bytes).digest()).digest()
-        signature = signing_key.sign_digest(hash_tx, sigencode=ecdsa.util.sigencode_der)
-        encoded_signature = signature.hex()
-        sighash_all = '01'
-        final_signature = encoded_signature + sighash_all
+        for output_data in outputs:
+            address, value = output_data
+            transaction.add_output(value=value, address=address)
 
-        public_key = signing_key.get_verifying_key().to_string("compressed").hex()
+        for i, private_key in enumerate(private_keys):
+            key = Key(private_key)
+            transaction.sign(key, i)
+        return transaction.raw_hex()
 
-        # Construct the witness data
-        witness = [final_signature, public_key]
+    # def sign_transaction(self, raw_transaction, private_key):
+    #     private_key_bytes = bytes.fromhex(private_key)
+    #     signing_key = ecdsa.SigningKey.from_string(private_key_bytes, curve=ecdsa.SECP256k1)
 
-        # Extract the script_pub_key from the raw transaction
-        script_pub_key = raw_transaction[-44:]
+    #     transaction_bytes = bytes.fromhex(raw_transaction)
+    #     hash_tx = hashlib.sha256(hashlib.sha256(transaction_bytes).digest()).digest()
+    #     signature = signing_key.sign_digest(hash_tx, sigencode=ecdsa.util.sigencode_der)
+    #     encoded_signature = signature.hex()
+    #     sighash_all = '01'
+    #     final_signature = encoded_signature + sighash_all
 
-        # Construct the signed transaction
-        signed_transaction = raw_transaction[:-44] + '00' + script_pub_key
+    #     public_key = signing_key.get_verifying_key().to_string("compressed").hex()
 
-        # Append the witness data separately
-        witness_data = []
-        for item in witness:
-            witness_data.append('{:02x}'.format(len(item) // 2))
-            witness_data.append(item)
+    #     # Construct the witness data
+    #     witness = [final_signature, public_key]
 
-        # Calculate the number of witness items
-        num_witness_items = len(witness_data) // 2
+    #     # Extract the script_pub_key from the raw transaction
+    #     script_pub_key = raw_transaction[-44:]
 
-        # Construct the witness data string
-        witness_data_str = '{:02x}'.format(num_witness_items) + ''.join(witness_data)
+    #     # Construct the signed transaction
+    #     signed_transaction = raw_transaction[:-44] + '00' + script_pub_key
 
-        # Calculate the length of the witness data string
-        witness_data_len = '{:02x}'.format(len(witness_data_str) // 2)
+    #     # Append the witness data separately
+    #     witness_data = []
+    #     for item in witness:
+    #         witness_data.append('{:02x}'.format(len(item) // 2))
+    #         witness_data.append(item)
 
-        # Append the witness data to the signed transaction
-        signed_transaction += '0100' + witness_data_len + witness_data_str
+    #     # Calculate the number of witness items
+    #     num_witness_items = len(witness_data) // 2
 
-        return signed_transaction
+    #     # Construct the witness data string
+    #     witness_data_str = '{:02x}'.format(num_witness_items) + ''.join(witness_data)
+
+    #     # Calculate the length of the witness data string
+    #     witness_data_len = '{:02x}'.format(len(witness_data_str) // 2)
+
+    #     # Append the witness data to the signed transaction
+    #     signed_transaction += '0100' + witness_data_len + witness_data_str
+
+    #     return signed_transaction
     
 
     async def send_transaction(self, raw_transaction: str) -> str:
@@ -214,7 +227,7 @@ class AioTxUTXOClient(AioTxClient):
         payload["jsonrpc"] = "2.0"
         payload["id"] = "curltest"
         async with aiohttp.ClientSession() as session:
-            async with session.post(self.node_url, data=json.dumps(payload)) as response:
+            async with session.post(self.node_url, data=json.dumps(payload), auth=aiohttp.BasicAuth("litecoinrpc", "7aON+t6CMysoGC7U7dOwCipjpzE=")) as response:
                 # print("response", response)
                 result = await response.json()
                 # print("result", result)
@@ -309,7 +322,7 @@ class UTXOMonitor(BlockMonitor):
             await self._init_last_block(last_known_block)
 
 
-    async def _add_new_address(self, address: str, block_number: int):
+    async def _add_new_address(self, address: str, block_number: int = None):
         last_known_block = await self.client.get_last_block_number()
         if block_number is None:
             block_number = last_known_block

@@ -23,4 +23,22 @@ async def test_get_block_by_number(ltc_public_client: AioTxLTCClient):
 
 
 
-    
+@vcr_c.use_cassette("ltc/send_transaction.yaml")
+async def test_get_send_transaction(ltc_public_client: AioTxLTCClient):
+    await ltc_public_client.monitor._add_new_address("tltc1q24gng65qj3wr55878324w2eeeta4k2plfwaf54")
+    await ltc_public_client.monitor._add_new_utxo("tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7",
+                                            "b6ea5514e75b003a965ed9b28502084ccc60890c6e076e676ebe0595f225b232", 150000000, 0)
+
+    amount = ltc_public_client.to_satoshi(0.5)
+    fee = ltc_public_client.to_satoshi(0.005)
+    tx_id = await ltc_public_client.send("f92e4728b012829158028e4343d602b8187aa50cd2c03651c6fc95168af2e606",
+                                        "tltc1q24gng65qj3wr55878324w2eeeta4k2plfwaf54", amount, fee)
+    assert tx_id == "374bc22ae7ee399fc9ea051651d68a6378c23b0da605112ba2119bb5d4e7c6cb"
+    await ltc_public_client.monitor._delete_utxo("b6ea5514e75b003a965ed9b28502084ccc60890c6e076e676ebe0595f225b232", 0)
+
+    await ltc_public_client.monitor._add_new_utxo("tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7",
+                                            "374bc22ae7ee399fc9ea051651d68a6378c23b0da605112ba2119bb5d4e7c6cb", 99500000, 1)
+
+
+
+
