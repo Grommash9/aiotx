@@ -58,16 +58,16 @@ async def test_bulk_send_transaction(ltc_public_client: AioTxLTCClient):
     assert tx_id == "64a89e7e269469c126e96d1de7b553850716c71d9081b153429ff781758a59a1"
 
 
-# @vcr_c.use_cassette("ltc/send_from_two_utxo.yaml")
-# async def test_send_from_two_utxo(ltc_public_client: AioTxLTCClient):
-#     fee = ltc_public_client.to_satoshi(0.005)
-#     await ltc_public_client.monitor._add_new_address("tltc1q24gng65qj3wr55878324w2eeeta4k2plfwaf54")
-#     await ltc_public_client.monitor._add_new_utxo(TEST_LTC_ADDRESS,
-#                                             "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525", 39000000, 0)
-#     await ltc_public_client.monitor._add_new_utxo(TEST_LTC_ADDRESS,
-#                                             "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525", 30000000, 2)
-#     amount = ltc_public_client.to_satoshi(0.685)
-#     tx_id = await ltc_public_client.send(TEST_LTC_WALLET_PRIVATE_KEY, TEST_LTC_ADDRESS, amount, fee)
-#     print("tx_id", tx_id)
+@vcr_c.use_cassette("ltc/send_from_two_utxo.yaml")
+async def test_send_from_two_utxo(ltc_public_client: AioTxLTCClient):
+    fee = ltc_public_client.to_satoshi(0.005)
+    await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
+    await ltc_public_client.monitor._add_new_utxo(TEST_LTC_ADDRESS,
+                                            "a006aedf3a08f423434aa781988997a0526f9365fe228fb8934ea64bbbb9d055", 28500000, 0)
+    await ltc_public_client.monitor._add_new_utxo(TEST_LTC_ADDRESS,
+                                            "64a89e7e269469c126e96d1de7b553850716c71d9081b153429ff781758a59a1", 20000000, 0)
+    amount = 28500000 + 20000000 - fee
+    tx_id = await ltc_public_client.send(TEST_LTC_WALLET_PRIVATE_KEY, TEST_LTC_ADDRESS, amount, fee)
+    assert tx_id == "3fcd11698664ffea5fe00adef6bd2c1c35de66c3fafb50f9076c74ff13fea139"
 
 
