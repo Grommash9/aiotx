@@ -4,7 +4,6 @@ import json
 from typing import Optional, Union
 
 import aiohttp
-import base58
 import bech32
 import ecdsa
 from base58 import b58encode
