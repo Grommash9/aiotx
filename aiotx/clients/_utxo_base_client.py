@@ -6,6 +6,7 @@ from typing import Optional, Union
 import aiohttp
 import bech32
 import ecdsa
+from aiotx.utils.ripemd160 import RIPEMD160
 from base58 import b58encode
 from bech32 import bech32_encode, convertbits
 from bitcoinlib.keys import Key
@@ -102,14 +103,19 @@ class AioTxUTXOClient(AioTxClient):
         signing_key = ecdsa.SigningKey.from_string(private_key_bytes, curve=ecdsa.SECP256k1)
         verifying_key = signing_key.get_verifying_key()
         public_key_bytes = verifying_key.to_string(encoding='compressed')
+
         witness_version = 0
-        witness_program = hashlib.new('ripemd160', hashlib.sha256(public_key_bytes).digest()).digest()
+        sha256_hash = hashlib.sha256(public_key_bytes).digest()
+        ripemd160_hash = RIPEMD160(sha256_hash).digest()
+        witness_program = ripemd160_hash
+
         data = [witness_version] + bech32.convertbits(witness_program, 8, 5)
         bech32_address = bech32.bech32_encode(self._hrp, data)
+
         return {
-        "private_key": private_key,
-        "public_key": public_key_bytes.hex(),
-        "address": bech32_address
+            "private_key": private_key,
+            "public_key": public_key_bytes.hex(),
+            "address": bech32_address
         }
     
     async def import_address(self, address: str, block_number: int = None):
