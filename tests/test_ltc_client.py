@@ -1,7 +1,11 @@
 from conftest import vcr_c
-
+import os
 from aiotx.clients import AioTxLTCClient
 
+
+TEST_LTC_WALLET_PRIVATE_KEY = os.getenv("TEST_LTC_WALLET_PRIVATE_KEY")
+assert TEST_LTC_WALLET_PRIVATE_KEY is not None, "add TEST_LTC_WALLET_PRIVATE_KEY"
+TEST_LTC_ADDRESS = "tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7"
 
 @vcr_c.use_cassette("ltc/get_last_block.yaml")
 async def test_get_last_block(ltc_public_client: AioTxLTCClient):
@@ -26,12 +30,12 @@ async def test_get_block_by_number(ltc_public_client: AioTxLTCClient):
 @vcr_c.use_cassette("ltc/send_transaction.yaml")
 async def test_send_transaction(ltc_public_client: AioTxLTCClient):
     await ltc_public_client.monitor._add_new_address("tltc1q24gng65qj3wr55878324w2eeeta4k2plfwaf54")
-    await ltc_public_client.monitor._add_new_utxo("tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7",
+    await ltc_public_client.monitor._add_new_utxo(TEST_LTC_ADDRESS,
                                             "b6ea5514e75b003a965ed9b28502084ccc60890c6e076e676ebe0595f225b232", 150000000, 0)
 
     amount = ltc_public_client.to_satoshi(0.5)
     fee = ltc_public_client.to_satoshi(0.005)
-    tx_id = await ltc_public_client.send("5Ki2a1VHxVm7gS2vofi6csJNiA3X4r4MknK5xEwynbWeongpBW8",
+    tx_id = await ltc_public_client.send(TEST_LTC_WALLET_PRIVATE_KEY,
                                         "tltc1q24gng65qj3wr55878324w2eeeta4k2plfwaf54", amount, fee)
     assert tx_id == "374bc22ae7ee399fc9ea051651d68a6378c23b0da605112ba2119bb5d4e7c6cb"
     await ltc_public_client.monitor._delete_utxo("b6ea5514e75b003a965ed9b28502084ccc60890c6e076e676ebe0595f225b232", 0)
@@ -43,13 +47,13 @@ async def test_send_transaction(ltc_public_client: AioTxLTCClient):
 async def test_bulk_send_transaction(ltc_public_client: AioTxLTCClient):
     fee = ltc_public_client.to_satoshi(0.005)
     await ltc_public_client.monitor._add_new_address("tltc1q24gng65qj3wr55878324w2eeeta4k2plfwaf54")
-    await ltc_public_client.monitor._add_new_utxo("tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7",
+    await ltc_public_client.monitor._add_new_utxo(TEST_LTC_ADDRESS,
                                             "374bc22ae7ee399fc9ea051651d68a6378c23b0da605112ba2119bb5d4e7c6cb", 99500000, 1)
     
     amount = ltc_public_client.to_satoshi(0.3)
-    tx_id = await ltc_public_client.send_bulk("5Ki2a1VHxVm7gS2vofi6csJNiA3X4r4MknK5xEwynbWeongpBW8",
+    tx_id = await ltc_public_client.send_bulk(TEST_LTC_WALLET_PRIVATE_KEY,
                                         {"tltc1q24gng65qj3wr55878324w2eeeta4k2plfwaf54": amount,
-                                         "tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7": amount}, fee)
+                                         TEST_LTC_ADDRESS: amount}, fee)
     
     assert tx_id == "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525"
 
@@ -58,14 +62,13 @@ async def test_bulk_send_transaction(ltc_public_client: AioTxLTCClient):
 async def test_send_from_two_utxo(ltc_public_client: AioTxLTCClient):
     fee = ltc_public_client.to_satoshi(0.005)
     await ltc_public_client.monitor._add_new_address("tltc1q24gng65qj3wr55878324w2eeeta4k2plfwaf54")
-    await ltc_public_client.monitor._add_new_utxo("tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7",
+    await ltc_public_client.monitor._add_new_utxo(TEST_LTC_ADDRESS,
                                             "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525", 39000000, 0)
-    await ltc_public_client.monitor._add_new_utxo("tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7",
+    await ltc_public_client.monitor._add_new_utxo(TEST_LTC_ADDRESS,
                                             "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525", 30000000, 2)
     
     amount = ltc_public_client.to_satoshi(0.66)
-    tx_id = await ltc_public_client.send("5Ki2a1VHxVm7gS2vofi6csJNiA3X4r4MknK5xEwynbWeongpBW8",
-                                        "tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7", amount, fee)
+    tx_id = await ltc_public_client.send(TEST_LTC_WALLET_PRIVATE_KEY, TEST_LTC_ADDRESS, amount, fee)
     print("tx_id", tx_id)
 
 
