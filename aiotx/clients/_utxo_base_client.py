@@ -169,10 +169,10 @@ class AioTxUTXOClient(AioTxClient):
         return txid
 
 
-    async def send(self, private_key: str, to_address: str, amount: int, fee: float) -> str:
+    async def send(self, private_key: str, to_address: str, amount: int, fee: int) -> str:
         return await self._build_and_send_transaction(private_key, {to_address: amount}, fee)
     
-    async def send_bulk(self, private_key: str, destinations: dict[str, int], fee: float) -> str:
+    async def send_bulk(self, private_key: str, destinations: dict[str, int], fee: int) -> str:
         return await self._build_and_send_transaction(private_key, destinations, fee)
 
     async def create_and_sign_transaction(self, inputs: list, outputs: list, private_keys: list) -> str:
@@ -184,7 +184,7 @@ class AioTxUTXOClient(AioTxClient):
         for output_data in outputs:
             address, value = output_data
             transaction.add_output(value=value, address=address)
-            
+
         for i, private_key in enumerate(private_keys):
             key = Key(private_key)
             transaction.sign(key, i)

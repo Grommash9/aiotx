@@ -29,7 +29,7 @@ async def test_get_block_by_number(ltc_public_client: AioTxLTCClient):
 
 @vcr_c.use_cassette("ltc/send_transaction.yaml")
 async def test_send_transaction(ltc_public_client: AioTxLTCClient):
-    await ltc_public_client.monitor._add_new_address("tltc1q24gng65qj3wr55878324w2eeeta4k2plfwaf54")
+    await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
     await ltc_public_client.monitor._add_new_utxo(TEST_LTC_ADDRESS,
                                             "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525", 39000000, 0)
 
@@ -43,19 +43,19 @@ async def test_send_transaction(ltc_public_client: AioTxLTCClient):
     
 
 
-# @vcr_c.use_cassette("ltc/send_bulk.yaml")
-# async def test_bulk_send_transaction(ltc_public_client: AioTxLTCClient):
-#     fee = ltc_public_client.to_satoshi(0.005)
-#     await ltc_public_client.monitor._add_new_address("tltc1q24gng65qj3wr55878324w2eeeta4k2plfwaf54")
-#     await ltc_public_client.monitor._add_new_utxo(TEST_LTC_ADDRESS,
-#                                             "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525", 30000000, 1)
+@vcr_c.use_cassette("ltc/send_bulk.yaml")
+async def test_bulk_send_transaction(ltc_public_client: AioTxLTCClient):
+    fee = ltc_public_client.to_satoshi(0.005)
+    await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
+    await ltc_public_client.monitor._add_new_utxo(TEST_LTC_ADDRESS,
+                                            "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525", 30000000, 2)
     
-#     amount = ltc_public_client.to_satoshi(0.15) - fee / 2
-#     tx_id = await ltc_public_client.send_bulk(TEST_LTC_WALLET_PRIVATE_KEY,
-#                                         {"tltc1q24gng65qj3wr55878324w2eeeta4k2plfwaf54": amount,
-#                                          TEST_LTC_ADDRESS: amount}, fee)
+    amount = ltc_public_client.to_satoshi(0.05) - fee / 2
+    tx_id = await ltc_public_client.send_bulk(TEST_LTC_WALLET_PRIVATE_KEY,
+                                        {"tltc1q24gng65qj3wr55878324w2eeeta4k2plfwaf54": amount,
+                                         "tltc1qshy0jeejm4pw3ep4cedc5vlmxyz348epnk7etf": amount}, fee)
     
-#     assert tx_id == "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525"
+    assert tx_id == "64a89e7e269469c126e96d1de7b553850716c71d9081b153429ff781758a59a1"
 
 
 # @vcr_c.use_cassette("ltc/send_from_two_utxo.yaml")
