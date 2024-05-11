@@ -6,7 +6,6 @@ from typing import Optional, Union
 import aiohttp
 import bech32
 import ecdsa
-from aiotx.utils.ripemd160 import RIPEMD160
 from base58 import b58encode
 from bech32 import bech32_encode, convertbits
 from bitcoinlib.keys import Key
@@ -25,6 +24,7 @@ from aiotx.exceptions import (
     InvalidRequestError,
     MethodNotFoundError,
 )
+from aiotx.utils.ripemd160 import RIPEMD160
 
 Base = declarative_base()
 
