@@ -61,10 +61,11 @@ def create_last_block_model(currency_name):
 
 
 class AioTxUTXOClient(AioTxClient):
-    def __init__(self, node_url, testnet, hrp, db_url):
+    def __init__(self, node_url, testnet, hrp, network, db_url):
         super().__init__(node_url)
         self.testnet = testnet
         self._hrp = hrp
+        self._network = network
         self.monitor = UTXOMonitor(self, db_url)
         asyncio.run(self.monitor._init_db())
 
@@ -181,7 +182,7 @@ class AioTxUTXOClient(AioTxClient):
         return await self._build_and_send_transaction(private_key, destinations, fee)
 
     async def create_and_sign_transaction(self, inputs: list, outputs: list, private_keys: list) -> str:
-        transaction = Transaction(network="litecoin_testnet", witness_type="segwit")
+        transaction = Transaction(network=self._network, witness_type="segwit")
         for input_data in inputs:
             prev_tx_id, prev_out_index, value = input_data
             transaction.add_input(prev_txid=prev_tx_id, output_n=prev_out_index, value=value, witness_type="segwit")
