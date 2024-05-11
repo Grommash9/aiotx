@@ -83,25 +83,23 @@ class AioTxUTXOClient(AioTxClient):
         witness_version = 0
         witness_program = hashlib.new('ripemd160', hashlib.sha256(public_key_bytes).digest()).digest()
         data = [witness_version] + convertbits(witness_program, 8, 5)
-        
         bech32_address = bech32_encode(self._hrp, data)
         private_key_hex = private_key.to_string().hex()
+        last_block_number = await self.get_last_block_number()
+        await self.import_address(bech32_address, last_block_number)
+        return private_key_hex, bech32_address
+
+    def to_wif(private_key_hex):
         private_key_bytes = bytes.fromhex(private_key_hex)
         extended_key = b'\x80' + private_key_bytes
         hashed_key = hashlib.sha256(hashlib.sha256(extended_key).digest()).digest()
         checksum = hashed_key[:4]
         payload = extended_key + checksum
         wif_key = b58encode(payload).decode('utf-8')
-        last_block_number = await self.get_last_block_number()
-        await self.import_address(bech32_address, last_block_number)
-        return wif_key, bech32_address
-    
-
+        return wif_key   
 
     def get_address_from_private_key(self, private_key):
-        private_key_bytes = base58.b58decode_check(private_key)
-        private_key_hex = private_key_bytes[1:].hex()
-        private_key_bytes = bytes.fromhex(private_key_hex)
+        private_key_bytes = bytes.fromhex(private_key)
         signing_key = ecdsa.SigningKey.from_string(private_key_bytes, curve=ecdsa.SECP256k1)
         verifying_key = signing_key.get_verifying_key()
         public_key_bytes = verifying_key.to_string(encoding='compressed')
@@ -109,11 +107,10 @@ class AioTxUTXOClient(AioTxClient):
         witness_program = hashlib.new('ripemd160', hashlib.sha256(public_key_bytes).digest()).digest()
         data = [witness_version] + bech32.convertbits(witness_program, 8, 5)
         bech32_address = bech32.bech32_encode(self._hrp, data)
-
         return {
-            "private_key": private_key,
-            "public_key": public_key_bytes.hex(),
-            "address": bech32_address
+        "private_key": private_key,
+        "public_key": public_key_bytes.hex(),
+        "address": bech32_address
         }
     
     async def import_address(self, address: str, block_number: int = None):
@@ -187,7 +184,7 @@ class AioTxUTXOClient(AioTxClient):
         for output_data in outputs:
             address, value = output_data
             transaction.add_output(value=value, address=address)
-
+            
         for i, private_key in enumerate(private_keys):
             key = Key(private_key)
             transaction.sign(key, i)
