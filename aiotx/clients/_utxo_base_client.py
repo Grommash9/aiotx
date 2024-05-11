@@ -139,44 +139,13 @@ class AioTxUTXOClient(AioTxClient):
             return 0
         return sum(utxo.amount_satoshi for utxo in utxo_data)
     
-
-    async def send(self, private_key: str, to_address: str, amount: int, fee: float) -> str:
+    async def _build_and_send_transaction(self, private_key: str, destinations: dict[str, int], fee: float) -> str:
         from_wallet = self.get_address_from_private_key(private_key)
         from_address = from_wallet["address"]
         utxo_list = await self.monitor._get_utxo_data(from_address)
 
         inputs = []
-        total_value = 0
-        for utxo in utxo_list:
-            input_data = (
-                utxo.tx_id,
-                utxo.output_n,
-                utxo.amount_satoshi
-            )
-            inputs.append(input_data)
-            total_value += utxo.amount_satoshi
-            if total_value >= amount + fee:
-                break
-
-        outputs = [
-            (
-                to_address, amount
-            ),
-            (
-                from_address, total_value - amount - fee
-            )
-        ]
-        signed_tx = await self.create_and_sign_transaction(inputs, outputs, [private_key])
-        txid = await self.send_transaction(signed_tx)
-        return txid
-    
-
-    async def send_bulk(self, private_key: str, destinations: dict[str, int], fee: float) -> str:
-        from_wallet = self.get_address_from_private_key(private_key)
-        from_address = from_wallet["address"]
-        utxo_list = await self.monitor._get_utxo_data(from_address)
-
-        inputs = []
+        outputs = []
         total_amount = sum(destinations.values())
         total_value = 0
         for utxo in utxo_list:
@@ -189,18 +158,25 @@ class AioTxUTXOClient(AioTxClient):
             total_value += utxo.amount_satoshi
             if total_value >= total_amount + fee:
                 break
+            
+        leftover = total_value - total_amount - fee
 
-        outputs = [
-            (
-                from_address, total_value - total_amount - fee
-            )
-        ]
+        if leftover > 0:
+            outputs.append((from_address, leftover))
 
         for address, amount in destinations.items():
             outputs.append((address, amount))
-        signed_tx = await self.create_and_sign_transaction(inputs, outputs, [private_key])
+        
+        signed_tx = await self.create_and_sign_transaction(inputs, outputs, [private_key] * len(inputs))
         txid = await self.send_transaction(signed_tx)
         return txid
+
+
+    async def send(self, private_key: str, to_address: str, amount: int, fee: float) -> str:
+        return await self._build_and_send_transaction(private_key, {to_address: amount}, fee)
+    
+    async def send_bulk(self, private_key: str, destinations: dict[str, int], fee: float) -> str:
+        return await self._build_and_send_transaction(private_key, destinations, fee)
 
     async def create_and_sign_transaction(self, inputs: list, outputs: list, private_keys: list) -> str:
         transaction = Transaction(network="litecoin_testnet", witness_type="segwit")

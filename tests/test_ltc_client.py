@@ -67,7 +67,7 @@ async def test_send_from_two_utxo(ltc_public_client: AioTxLTCClient):
     await ltc_public_client.monitor._add_new_utxo(TEST_LTC_ADDRESS,
                                             "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525", 30000000, 2)
     
-    amount = ltc_public_client.to_satoshi(0.66)
+    amount = ltc_public_client.to_satoshi(0.685)
     tx_id = await ltc_public_client.send(TEST_LTC_WALLET_PRIVATE_KEY, TEST_LTC_ADDRESS, amount, fee)
     print("tx_id", tx_id)
 

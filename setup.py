@@ -53,6 +53,7 @@ setup(
         "bech32",
         "ecdsa",
         "bitcoinlib",
+        "base58"
     ],
     extras_require={
         "test": extras_test,
