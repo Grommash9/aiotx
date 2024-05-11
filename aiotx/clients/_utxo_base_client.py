@@ -4,8 +4,10 @@ import json
 from typing import Optional, Union
 
 import aiohttp
+import base58
 import bech32
 import ecdsa
+from base58 import b58encode
 from bech32 import bech32_encode, convertbits
 from bitcoinlib.keys import Key
 from bitcoinlib.transactions import Transaction
@@ -83,13 +85,23 @@ class AioTxUTXOClient(AioTxClient):
         data = [witness_version] + convertbits(witness_program, 8, 5)
         
         bech32_address = bech32_encode(self._hrp, data)
-        private_key_wif = private_key.to_string().hex()
+        private_key_hex = private_key.to_string().hex()
+        private_key_bytes = bytes.fromhex(private_key_hex)
+        extended_key = b'\x80' + private_key_bytes
+        hashed_key = hashlib.sha256(hashlib.sha256(extended_key).digest()).digest()
+        checksum = hashed_key[:4]
+        payload = extended_key + checksum
+        wif_key = b58encode(payload).decode('utf-8')
         last_block_number = await self.get_last_block_number()
         await self.import_address(bech32_address, last_block_number)
-        return private_key_wif, bech32_address
+        return wif_key, bech32_address
+    
+
 
     def get_address_from_private_key(self, private_key):
-        private_key_bytes = bytes.fromhex(private_key)
+        private_key_bytes = base58.b58decode_check(private_key)
+        private_key_hex = private_key_bytes[1:].hex()
+        private_key_bytes = bytes.fromhex(private_key_hex)
         signing_key = ecdsa.SigningKey.from_string(private_key_bytes, curve=ecdsa.SECP256k1)
         verifying_key = signing_key.get_verifying_key()
         public_key_bytes = verifying_key.to_string(encoding='compressed')

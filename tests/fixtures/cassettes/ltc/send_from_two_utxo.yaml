@@ -6,14 +6,14 @@ interactions:
     uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
   response:
     body:
-      string: '{"result":3251177,"error":null,"id":"curltest"}'
+      string: '{"result":3255117,"error":null,"id":"curltest"}'
     headers:
       Access-Control-Allow-Origin:
       - '*'
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 88194659f8d29496-LHR
+      - 8820067ac9c076c0-LHR
       Connection:
       - keep-alive
       Content-Length:
@@ -21,13 +21,13 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Fri, 10 May 2024 10:34:05 GMT
+      - Sat, 11 May 2024 06:13:50 GMT
       Etag:
-      - W/"2f-4W4dveUSzO7PS3UYm5p2xe8zvgs"
+      - W/"2f-/IJzqEa3qtb/N+hAsLabTlTqgDk"
       NEL:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=MafM4OSBGGbtG%2FGcnCFTmTNSsVoxDCs8RISnhFVrytPbrtpyaVUDSktWlIMDoh%2BX6Teu9t5BnHbtjagISp85P4QiIbNNcUtx1p6CuGtbgAXvgOt%2BEGQtlMpjn6iIjVo%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=e%2BJQLYDfRBcHSoFkvP8syHGrFcujhTPW9RTdUjKvZUDgoEkCbV9KsG1LQb%2Faq8KwG7HRvCsZuwFzBemIfWRLRxE1poR6BNlrker6q0Z5b90p7AbyH7p3F7iVykV7Q6I%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Via:
@@ -64,21 +64,21 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: '{"method": "sendrawtransaction", "params": ["01000000000101cbc6e7d4b59b11a22b1105a60d3bc278638ad6511605eac99f39eee72ac24b370100000000ffffffff03c01753020000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea80c3c901000000001600145551346a80945c3a50fe3c55572b39cafb5b283f80c3c9010000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea024730440220567a3155978d8e20439e31fd640a6534033798b7bf826ab4add19379c718c2bf02202714050086f3bde492678bd2717a2b6077bbc285284765f5121fe78a609f70480141042483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a9776f29df53eaafb74a2214c5e11d3f4295acd7118e3f1dafe2e4fb54bb7c1bf100000000"],
+    body: '{"method": "sendrawtransaction", "params": ["0100000000010225d5e1bd9c0618c6912128d30ec90f0c6503fbd6d38272c8c1c6e01dc63c86550000000000ffffffff25d5e1bd9c0618c6912128d30ec90f0c6503fbd6d38272c8c1c6e01dc63c86550200000000ffffffff028014ef030000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eeaa02526000000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea0248304502210089e15be17248876f8d27c3b2a24981b03c7173f82e94d3c0945a89cdba2b61bb0220046c0911fa6b8a698f3a6df6b01f6a0c3b50263fe5a7f20e32463f72861cf92c0141042483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a9776f29df53eaafb74a2214c5e11d3f4295acd7118e3f1dafe2e4fb54bb7c1bf10000000000"],
       "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
     uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
   response:
     body:
-      string: '{"result":"55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525","error":null,"id":"curltest"}'
+      string: '{"jsonrpc":"2.0","error":{"code":-32000,"message":"Server error"}}'
     headers:
       Access-Control-Allow-Origin:
       - '*'
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 8819633799dc76c3-LHR
+      - 8820067c6845dccb-LHR
       Connection:
       - keep-alive
       Content-Encoding:
@@ -86,13 +86,13 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Fri, 10 May 2024 10:53:48 GMT
+      - Sat, 11 May 2024 06:13:50 GMT
       Etag:
-      - W/"6a-n2N5Lv8L231KK0z0nf1SpRiJhhs"
+      - W/"42-YGhskqN89talfWXR2tQSD8PbneY"
       NEL:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=HekpMbCi2s5E8v1H3h1BiEh0uy%2BAwEhXZBfsCxt5NcJVfFpjju7Y4EEL6WMDJtETBGPgCSepD3YpJt%2FeeE9SygJy43BR6rlFsX%2FJdtOeji5PljG7LqWPOp4VzXyKC6M%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=ID49FqNHPpYUzNywUO7zxnQRWk2sqJodIzW6qdhkGd66Hx6CVo8UiBFxsQrMoD7bAmSnkDsTOUF4BrQGAI4mB%2By8Z9uEGh9m4s6oypuUNdMP1qSsloEyNq97phabLBg%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Transfer-Encoding:
@@ -130,3 +130,4 @@ interactions:
     status:
       code: 200
       message: OK
+version: 1
