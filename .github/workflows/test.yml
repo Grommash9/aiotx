@@ -3,6 +3,8 @@ name: Test
 env:
   TEST_BSC_WALLET_PRIVATE_KEY: ${{ secrets.TEST_BSC_WALLET_PRIVATE_KEY }}
   TEST_ETH_WALLET_PRIVATE_KEY: ${{ secrets.TEST_ETH_WALLET_PRIVATE_KEY }}
+  TEST_LTC_WALLET_PRIVATE_KEY: ${{ secrets.TEST_LTC_WALLET_PRIVATE_KEY }}
+  TEST_BTC_WALLET_PRIVATE_KEY: ${{ secrets.TEST_BTC_WALLET_PRIVATE_KEY }}
 
 on:
   push:
@@ -19,18 +21,17 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ["3.9", "3.10", "3.11", "3.12"]
-
-    services:
-      db:
-        image: mysql:latest
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: testdb
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-        # Run MySQL container only on Ubuntu runners
-        if: runner.os == 'Linux'
+        include:
+          - os: ubuntu-latest
+            services:
+              db:
+                image: mysql:latest
+                env:
+                  MYSQL_ROOT_PASSWORD: root
+                  MYSQL_DATABASE: testdb
+                ports:
+                  - 3306:3306
+                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
     - uses: actions/checkout@v4
@@ -47,14 +48,14 @@ jobs:
         pip install .[test]
 
     - name: Run tests and generate coverage
+      env:
+        DB_HOST: ${{ if matrix.services }}localhost${{ else }}''${{ end }}
+        DB_PORT: ${{ if matrix.services }}${{ job.services.db.ports[3306] }}${{ else }}''${{ end }}
+        DB_USER: ${{ if matrix.services }}root${{ else }}''${{ end }}
+        DB_PASSWORD: ${{ if matrix.services }}root${{ else }}''${{ end }}
+        DB_NAME: ${{ if matrix.services }}testdb${{ else }}''${{ end }}
       run: |
         pytest --cov=./ --cov-report=xml
-      env:
-        DB_HOST: ${{ if runner.os == 'Linux' }}localhost${{ else }}''${{ end }}
-        DB_PORT: ${{ if runner.os == 'Linux' }}${{ job.services.db.ports[3306] }}${{ else }}''${{ end }}
-        DB_USER: ${{ if runner.os == 'Linux' }}root${{ else }}''${{ end }}
-        DB_PASSWORD: ${{ if runner.os == 'Linux' }}root${{ else }}''${{ end }}
-        DB_NAME: ${{ if runner.os == 'Linux' }}testdb${{ else }}''${{ end }}
 
     - name: Upload coverage report
       uses: actions/upload-artifact@v3
