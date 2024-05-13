@@ -1,7 +1,8 @@
 import asyncio
 
-from conftest import vcr_c
 import pytest
+from conftest import vcr_c
+
 from aiotx.clients import AioTxBTCClient
 
 
