@@ -1,5 +1,7 @@
 import os
+import sys
 
+import pytest
 from conftest import vcr_c
 
 from aiotx.clients import AioTxLTCClient
@@ -27,7 +29,7 @@ async def test_get_block_by_number(ltc_public_client: AioTxLTCClient):
 
 
 
-
+@pytest.mark.skipif(sys.platform == "win32", reason="Skipping transaction signing tests on Windows")
 @vcr_c.use_cassette("ltc/send_transaction.yaml")
 async def test_send_transaction(ltc_public_client: AioTxLTCClient):
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
@@ -43,7 +45,7 @@ async def test_send_transaction(ltc_public_client: AioTxLTCClient):
 
     
 
-
+@pytest.mark.skipif(sys.platform == "win32", reason="Skipping transaction signing tests on Windows")
 @vcr_c.use_cassette("ltc/send_bulk.yaml")
 async def test_bulk_send_transaction(ltc_public_client: AioTxLTCClient):
     fee = ltc_public_client.to_satoshi(0.005)
@@ -59,6 +61,7 @@ async def test_bulk_send_transaction(ltc_public_client: AioTxLTCClient):
     assert tx_id == "64a89e7e269469c126e96d1de7b553850716c71d9081b153429ff781758a59a1"
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="Skipping transaction signing tests on Windows")
 @vcr_c.use_cassette("ltc/send_from_two_utxo.yaml")
 async def test_send_from_two_utxo(ltc_public_client: AioTxLTCClient):
     fee = ltc_public_client.to_satoshi(0.005)
@@ -72,6 +75,7 @@ async def test_send_from_two_utxo(ltc_public_client: AioTxLTCClient):
     assert tx_id == "3fcd11698664ffea5fe00adef6bd2c1c35de66c3fafb50f9076c74ff13fea139"
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="Skipping transaction signing tests on Windows")
 @vcr_c.use_cassette("ltc/send_to_legacy_address.yaml")
 async def test_send_to_legacy_address(ltc_public_client: AioTxLTCClient):
     fee = ltc_public_client.to_satoshi(0.005)
@@ -83,6 +87,7 @@ async def test_send_to_legacy_address(ltc_public_client: AioTxLTCClient):
     assert tx_id == "141c30ea6326ab447423465d2a7f4c3067812f06ef1e505c0443e85c06ed684a"
 
 
+@pytest.mark.skipif(sys.platform == "win32", reason="Skipping transaction signing tests on Windows")
 @vcr_c.use_cassette("ltc/send_to_legacy_and_segwit_addresses.yaml")
 async def test_send_to_legacy_and_segwit_address(ltc_public_client: AioTxLTCClient):
     fee = ltc_public_client.to_satoshi(0.005)
