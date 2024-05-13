@@ -10,7 +10,7 @@ TEST_BTC_WALLET_PRIVATE_KEY = os.getenv("TEST_BTC_WALLET_PRIVATE_KEY")
 assert TEST_BTC_WALLET_PRIVATE_KEY is not None, "add TEST_BTC_WALLET_PRIVATE_KEY"
 TEST_BTC_ADDRESS = "tb1qswslzcdulvlk62gdrg8wa0sw36f938h2pyfreh"
 
-@pytest.mark.skipif(sys.platform == "win32", reason="Skipping transaction signing tests on Windows")
+@pytest.mark.skipif(sys.platform == "win32", reason="Skipping transaction signing tests on Windows because we are not using RFC6979 from fastecdsa by default")
 @vcr_c.use_cassette("btc/send_transaction.yaml")
 async def test_send_transaction(btc_client: AioTxBTCClient):
     await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
