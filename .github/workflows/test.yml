@@ -21,17 +21,6 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ["3.9", "3.10", "3.11", "3.12"]
-        include:
-          - os: ubuntu-latest
-            services:
-              db:
-                image: mysql:latest
-                env:
-                  MYSQL_ROOT_PASSWORD: root
-                  MYSQL_DATABASE: testdb
-                ports:
-                  - 3306:3306
-                options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
     - uses: actions/checkout@v4
@@ -48,12 +37,6 @@ jobs:
         pip install .[test]
 
     - name: Run tests and generate coverage
-      env:
-        DB_HOST: ${{ if matrix.services }}localhost${{ else }}''${{ end }}
-        DB_PORT: ${{ if matrix.services }}${{ job.services.db.ports[3306] }}${{ else }}''${{ end }}
-        DB_USER: ${{ if matrix.services }}root${{ else }}''${{ end }}
-        DB_PASSWORD: ${{ if matrix.services }}root${{ else }}''${{ end }}
-        DB_NAME: ${{ if matrix.services }}testdb${{ else }}''${{ end }}
       run: |
         pytest --cov=./ --cov-report=xml
 
