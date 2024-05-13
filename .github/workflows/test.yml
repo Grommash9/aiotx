@@ -3,8 +3,6 @@ name: Test
 env:
   TEST_BSC_WALLET_PRIVATE_KEY: ${{ secrets.TEST_BSC_WALLET_PRIVATE_KEY }}
   TEST_ETH_WALLET_PRIVATE_KEY: ${{ secrets.TEST_ETH_WALLET_PRIVATE_KEY }}
-  TEST_LTC_WALLET_PRIVATE_KEY: ${{ secrets.TEST_LTC_WALLET_PRIVATE_KEY }}
-  TEST_BTC_WALLET_PRIVATE_KEY: ${{ secrets.TEST_BTC_WALLET_PRIVATE_KEY }}
 
 on:
   push:
@@ -31,6 +29,8 @@ jobs:
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        # Run MySQL container only on Ubuntu runners
+        if: runner.os == 'Linux'
 
     steps:
     - uses: actions/checkout@v4
@@ -50,11 +50,11 @@ jobs:
       run: |
         pytest --cov=./ --cov-report=xml
       env:
-        DB_HOST: localhost
-        DB_PORT: ${{ job.services.db.ports[3306] }}
-        DB_USER: root
-        DB_PASSWORD: root
-        DB_NAME: testdb
+        DB_HOST: ${{ if runner.os == 'Linux' }}localhost${{ else }}''${{ end }}
+        DB_PORT: ${{ if runner.os == 'Linux' }}${{ job.services.db.ports[3306] }}${{ else }}''${{ end }}
+        DB_USER: ${{ if runner.os == 'Linux' }}root${{ else }}''${{ end }}
+        DB_PASSWORD: ${{ if runner.os == 'Linux' }}root${{ else }}''${{ end }}
+        DB_NAME: ${{ if runner.os == 'Linux' }}testdb${{ else }}''${{ end }}
 
     - name: Upload coverage report
       uses: actions/upload-artifact@v3
