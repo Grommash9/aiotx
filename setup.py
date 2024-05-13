@@ -53,7 +53,8 @@ setup(
         "bech32",
         "ecdsa",
         "bitcoinlib",
-        "base58"
+        "base58",
+        "greenlet"
     ],
     extras_require={
         "test": extras_test,
