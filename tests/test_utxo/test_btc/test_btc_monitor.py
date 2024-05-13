@@ -1,31 +1,32 @@
 import asyncio
 
 from conftest import vcr_c
-
+import pytest
 from aiotx.clients import AioTxBTCClient
 
 
-# @vcr_c.use_cassette("btc/test_async_monitoring_mysql.yaml")
-# async def test_async_monitoring_mysql(btc_client_mysql: AioTxBTCClient):
-#     blocks = []
-#     transactions = []
+@pytest.mark.mysql
+@vcr_c.use_cassette("btc/test_async_monitoring_mysql.yaml")
+async def test_async_monitoring_mysql(btc_client_mysql: AioTxBTCClient):
+    blocks = []
+    transactions = []
 
-#     @btc_client_mysql.monitor.on_block
-#     async def handle_block(block):
-#         blocks.append(block)
+    @btc_client_mysql.monitor.on_block
+    async def handle_block(block):
+        blocks.append(block)
 
-#     @btc_client_mysql.monitor.on_transaction
-#     async def handle_transaction(transaction):
-#         transactions.append(transaction)
+    @btc_client_mysql.monitor.on_transaction
+    async def handle_transaction(transaction):
+        transactions.append(transaction)
 
-#     await btc_client_mysql.import_address("tb1pmuuv2qjujv9qawqcc424nhlnmux7mvsyqj7qgc6z0vwqujvx4k9s34kuxn", 2811502)
-#     await btc_client_mysql.import_address("tb1putn7zkfjr97xd77as09w5syy3x7xr5crp99wycjcxgdwrq3le9lse9fdkd")
-#     await btc_client_mysql.import_address("tb1p2z70my9zwxsuqevdxjn909c7jyp89z4qv3uhy5wggn47ruvfa65s4fnngd")
-#     await btc_client_mysql.import_address("tb1paf6damf5052arl3r2lsufuhyu48yth8mrgxdtqj9pervz624q6xqxm7ew3")
-#     await btc_client_mysql.monitor._add_new_utxo("tb1paf6damf5052arl3r2lsufuhyu48yth8mrgxdtqj9pervz624q6xqxm7ew3", "8b88ebe1d0bb1eda7b1512853e75d3884b99e6634317589b1f7457ab92f1e41f", 499824213,0)
-#     start_balance_utxo_wallet = await btc_client_mysql.get_balance("tb1paf6damf5052arl3r2lsufuhyu48yth8mrgxdtqj9pervz624q6xqxm7ew3")
-#     assert start_balance_utxo_wallet == 499824213
-#     await btc_client_mysql.start_monitoring()
+    await btc_client_mysql.import_address("tb1pmuuv2qjujv9qawqcc424nhlnmux7mvsyqj7qgc6z0vwqujvx4k9s34kuxn", 2811502)
+    await btc_client_mysql.import_address("tb1putn7zkfjr97xd77as09w5syy3x7xr5crp99wycjcxgdwrq3le9lse9fdkd")
+    await btc_client_mysql.import_address("tb1p2z70my9zwxsuqevdxjn909c7jyp89z4qv3uhy5wggn47ruvfa65s4fnngd")
+    await btc_client_mysql.import_address("tb1paf6damf5052arl3r2lsufuhyu48yth8mrgxdtqj9pervz624q6xqxm7ew3")
+    await btc_client_mysql.monitor._add_new_utxo("tb1paf6damf5052arl3r2lsufuhyu48yth8mrgxdtqj9pervz624q6xqxm7ew3", "8b88ebe1d0bb1eda7b1512853e75d3884b99e6634317589b1f7457ab92f1e41f", 499824213,0)
+    start_balance_utxo_wallet = await btc_client_mysql.get_balance("tb1paf6damf5052arl3r2lsufuhyu48yth8mrgxdtqj9pervz624q6xqxm7ew3")
+    assert start_balance_utxo_wallet == 499824213
+    await btc_client_mysql.start_monitoring()
     
     
     try:

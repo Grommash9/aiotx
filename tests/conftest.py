@@ -13,6 +13,7 @@ from aiotx.clients import AioTxBSCClient, AioTxBTCClient, AioTxETHClient, AioTxL
 # NONE = "none"
 # ONCE = "once"
 
+pytest.mark.mysql = pytest.mark.mysql
 logging.getLogger("vcr").setLevel(logging.WARNING)
 vcr_c = vcr.VCR(
     cassette_library_dir="tests/fixtures/cassettes",
@@ -63,6 +64,9 @@ def btc_client(request: FixtureRequest) -> AioTxBTCClient:
         
     request.addfinalizer(teardown)
     return AioTxBTCClient(BTC_TEST_NODE_URL, testnet=True, db_url="sqlite+aiosqlite:///test_btc.sqlite")
+
+
+
 
 
 @pytest.fixture
