@@ -50,10 +50,8 @@ setup(
         "aiosqlite",
         "aiomysql",
         "cryptography",
-        "bech32",
         "ecdsa",
         "bitcoinlib",
-        "base58",
         "greenlet"
     ],
     extras_require={

@@ -29,16 +29,14 @@ class AioTxETHClient(AioTxEVMClient):
 class AioTxBTCClient(AioTxUTXOClient):
 
     def __init__(self, node_url, testnet = False, db_url="sqlite+aiosqlite:///aiotx_utxo.sqlite"):
-        hrp = "tb" if testnet else "bc"
-        network = "testnet" if testnet else "bitcoin"
-        super().__init__(node_url, testnet, hrp, network, db_url)
+        network_name = "testnet" if testnet else "bitcoin"
+        super().__init__(node_url, testnet, network_name, db_url)
         
 
 class AioTxLTCClient(AioTxUTXOClient):
     
     def __init__(self, node_url, testnet = False, db_url="sqlite+aiosqlite:///aiotx_utxo.sqlite"):
-        hrp = "tltc" if testnet else "ltc"
-        network = "litecoin_testnet" if testnet else "litecoin"
-        super().__init__(node_url, testnet, hrp, network, db_url)
+        network_name = "litecoin_testnet" if testnet else "litecoin"
+        super().__init__(node_url, testnet, network_name, db_url)
         
 
