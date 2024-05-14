@@ -1,0 +1,107 @@
+interactions:
+- request:
+    body: '{"method": "getblockcount", "params": [], "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://dry-compatible-cloud.btc-testnet.quiknode.pro/268755801856724a0c520053c0bc3b0a7b1a2d3e/
+  response:
+    body:
+      string: '{"result":2815184,"error":null,"id":"curltest"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '48'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 14 May 2024 03:41:42 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-d46e6ad25adfe563
+      X-Node-Id:
+      - bitcoin_btc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "sendrawtransaction", "params": ["01000000000101b91af3cb667b7367bd56a5c8380e93dbe866bdc8588ef9d3004d5c3d696fd5250000000000ffffffff05ff2b00000000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eeae8030000000000001976a914912e2b234f941f30b18afbb4fa46171214bf66c888ace80300000000000017a914deb0be8cf350aced0168a5864cdc587d53cdb2e087e803000000000000160014057a4289cad910ee6055f3357837afaf4bf513b2e80300000000000022512072258d7a9a3e39a64f086674f5eb3dbade370ea17349b98c3910c390a220a2cf02473044022031c84a9eec646ae895425673042428573cf0aa5274c81e6117861894315620e7022044e068b4172c94d18fb4a48e3ece2f91cb48b2cf5fe2109f5d40cff6dd3f58530121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a900000000"],
+      "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://dry-compatible-cloud.btc-testnet.quiknode.pro/268755801856724a0c520053c0bc3b0a7b1a2d3e/
+  response:
+    body:
+      string: '{"result":null,"error":{"code":-26,"message":"mempool min fee not met,
+        1000 < 5982"},"id":"curltest"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '102'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 14 May 2024 03:46:40 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-a12d19355fbb795
+      X-Node-Id:
+      - bitcoin_btc-testnet_iad
+    status:
+      code: 500
+      message: Internal Server Error
+- request:
+    body: '{"method": "sendrawtransaction", "params": ["01000000000101b91af3cb667b7367bd56a5c8380e93dbe866bdc8588ef9d3004d5c3d696fd5250000000000ffffffff05771800000000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eeae8030000000000001976a914912e2b234f941f30b18afbb4fa46171214bf66c888ace80300000000000017a914deb0be8cf350aced0168a5864cdc587d53cdb2e087e803000000000000160014057a4289cad910ee6055f3357837afaf4bf513b2e80300000000000022512072258d7a9a3e39a64f086674f5eb3dbade370ea17349b98c3910c390a220a2cf02473044022043d9458b77a69e55477e3674ecc39160de9340703a81254a82dff7cf70c052b202202f29540d74e50f22c402986982789ccee7b1d0860139057217e4105a4c9e38410121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a900000000"],
+      "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://dry-compatible-cloud.btc-testnet.quiknode.pro/268755801856724a0c520053c0bc3b0a7b1a2d3e/
+  response:
+    body:
+      string: '{"result":"35158b7a8b6057bc67f6d904c64b5986adea8260f0bc96cbd755b530878e3cc2","error":null,"id":"curltest"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '107'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 14 May 2024 03:47:19 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-d46e6ad25adfe563
+      X-Node-Id:
+      - bitcoin_btc-testnet_iad
+    status:
+      code: 200
+      message: OK
+version: 1
