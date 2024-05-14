@@ -29,7 +29,7 @@ class AioTxETHClient(AioTxEVMClient):
 class AioTxBTCClient(AioTxUTXOClient):
 
     def __init__(self, node_url, testnet = False, db_url="sqlite+aiosqlite:///aiotx_utxo.sqlite"):
-        network_name = "bitcoinlib_test" if testnet else "bitcoin"
+        network_name = "testnet" if testnet else "bitcoin"
         super().__init__(node_url, testnet, network_name, db_url)
         
 

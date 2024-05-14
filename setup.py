@@ -46,11 +46,13 @@ setup(
         "eth_keys",
         "eth_utils",
         "eth_account",
-        "bitcoinlib",
         "sqlalchemy",
         "aiosqlite",
         "aiomysql",
         "cryptography",
+        "ecdsa",
+        "bitcoinlib",
+        "greenlet"
     ],
     extras_require={
         "test": extras_test,

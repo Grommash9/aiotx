@@ -1,10 +1,12 @@
 import asyncio
 
+import pytest
 from conftest import vcr_c
 
 from aiotx.clients import AioTxBTCClient
 
 
+@pytest.mark.mysql
 @vcr_c.use_cassette("btc/test_async_monitoring_mysql.yaml")
 async def test_async_monitoring_mysql(btc_client_mysql: AioTxBTCClient):
     blocks = []

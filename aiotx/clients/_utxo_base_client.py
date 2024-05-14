@@ -61,7 +61,7 @@ class AioTxUTXOClient(AioTxClient):
         super().__init__(node_url)
         self.testnet = testnet
         self._network = Network(network_name)
-        self.monitor = UTXOMonitor(self, self._network.name, db_url)
+        self.monitor = UTXOMonitor(self, db_url)
         asyncio.run(self.monitor._init_db())
 
     @staticmethod
@@ -81,10 +81,7 @@ class AioTxUTXOClient(AioTxClient):
         last_block_number = await self.get_last_block_number()
         await self.import_address(address, last_block_number)
         return private_key, address
-    
-    async def import_address(self, address: str, block_number: int = None):
-        await self.monitor._add_new_address(address, block_number)
-    
+
     def get_address_from_private_key(self, private_key):
         key = Key(private_key)
         address = pubkeyhash_to_addr_bech32(
@@ -95,6 +92,10 @@ class AioTxUTXOClient(AioTxClient):
             "public_key": key.public_hex,
             "address": address
         }
+    
+    async def import_address(self, address: str, block_number: int = None):
+        await self.monitor._add_new_address(address, block_number)
+
 
     async def get_last_block_number(self) -> int:
         payload = {"method": "getblockcount", "params": []}
@@ -115,36 +116,47 @@ class AioTxUTXOClient(AioTxClient):
             return 0
         return sum(utxo.amount_satoshi for utxo in utxo_data)
     
-    async def send(self, private_key: str, to_address: str, amount: float, fee: float) -> str:
+    async def _build_and_send_transaction(self, private_key: str, destinations: dict[str, int], fee: float) -> str:
         from_wallet = self.get_address_from_private_key(private_key)
         from_address = from_wallet["address"]
-        # # Получаем неизрасходованные выходы для адреса отправителя
         utxo_list = await self.monitor._get_utxo_data(from_address)
 
-        # Выбираем входы и суммируем их значения
         inputs = []
+        outputs = []
+        total_amount = sum(destinations.values())
         total_value = 0
         for utxo in utxo_list:
-            input_data = (utxo.tx_id, utxo.output_n, utxo.amount_satoshi)
+            input_data = (
+                utxo.tx_id,
+                utxo.output_n,
+                utxo.amount_satoshi
+            )
             inputs.append(input_data)
             total_value += utxo.amount_satoshi
-            if total_value >= amount + fee:
+            if total_value >= total_amount + fee:
                 break
-        # total_value = self.to_satoshi(1.5)
-        # inputs = [("737bef3e8161d15e70f4b230d433f40fb3b5bb197a962289047de12ed9900bb4", 0, total_value)]
+            
+        leftover = total_value - total_amount - fee
 
-        outputs = [
-            (to_address, amount),
-            (from_address, total_value - amount - fee)
-        ]
-        raw_transaction = await self.create_transaction(inputs, outputs, [private_key])
+        if leftover > 0:
+            outputs.append((from_address, leftover))
 
-        txid = await self.send_transaction(raw_transaction)
+        for address, amount in destinations.items():
+            outputs.append((address, amount))
+        
+        signed_tx = await self.create_and_sign_transaction(inputs, outputs, [private_key] * len(inputs))
+        txid = await self.send_transaction(signed_tx)
         return txid
 
-    async def create_transaction(self, inputs: list, outputs: list, private_keys: list) -> str:
-        transaction = Transaction(network="litecoin_testnet", witness_type="segwit")
 
+    async def send(self, private_key: str, to_address: str, amount: int, fee: int) -> str:
+        return await self._build_and_send_transaction(private_key, {to_address: amount}, fee)
+    
+    async def send_bulk(self, private_key: str, destinations: dict[str, int], fee: int) -> str:
+        return await self._build_and_send_transaction(private_key, destinations, fee)
+
+    async def create_and_sign_transaction(self, inputs: list, outputs: list, private_keys: list) -> str:
+        transaction = Transaction(network=self._network.name, witness_type="segwit")
         for input_data in inputs:
             prev_tx_id, prev_out_index, value = input_data
             transaction.add_input(prev_txid=prev_tx_id, output_n=prev_out_index, value=value, witness_type="segwit")
@@ -156,7 +168,7 @@ class AioTxUTXOClient(AioTxClient):
         for i, private_key in enumerate(private_keys):
             key = Key(private_key)
             transaction.sign(key, i)
-        return transaction.raw_hex()
+        return transaction.raw_hex()  
 
     async def send_transaction(self, raw_transaction: str) -> str:
         payload = {"method": "sendrawtransaction", "params": [raw_transaction]}
@@ -169,7 +181,9 @@ class AioTxUTXOClient(AioTxClient):
         payload["id"] = "curltest"
         async with aiohttp.ClientSession() as session:
             async with session.post(self.node_url, data=json.dumps(payload)) as response:
+                # print("response", response)
                 result = await response.json()
+                # print("result", result)
                 error = result.get("error")
 
                 if error is None:
@@ -192,7 +206,7 @@ class AioTxUTXOClient(AioTxClient):
 
 
 class UTXOMonitor(BlockMonitor):
-    def __init__(self, client: AioTxUTXOClient, currency_name, db_url):
+    def __init__(self, client: AioTxUTXOClient, db_url):
         self.client = client
         self.block_handlers = []
         self.transaction_handlers = []
@@ -200,9 +214,9 @@ class UTXOMonitor(BlockMonitor):
         self._db_url = db_url
         self._engine = create_async_engine(db_url, poolclass=NullPool)
         self._session = sessionmaker(self._engine, class_=AsyncSession, expire_on_commit=False)
-        self.Address = create_address_model(currency_name)
-        self.UTXO = create_utxo_model(currency_name)
-        self.LastBlock = create_last_block_model(currency_name)
+        self.Address = create_address_model(self.client._network.name)
+        self.UTXO = create_utxo_model(self.client._network.name)
+        self.LastBlock = create_last_block_model(self.client._network.name)
 
     async def poll_blocks(self):
         latest_block = await self._get_last_block()
@@ -261,7 +275,7 @@ class UTXOMonitor(BlockMonitor):
             await self._init_last_block(last_known_block)
 
 
-    async def _add_new_address(self, address: str, block_number: int):
+    async def _add_new_address(self, address: str, block_number: int = None):
         last_known_block = await self.client.get_last_block_number()
         if block_number is None:
             block_number = last_known_block
