@@ -98,3 +98,14 @@ async def test_send_to_legacy_and_segwit_address(ltc_public_client: AioTxLTCClie
     tx_id = await ltc_public_client.send_bulk(TEST_LTC_WALLET_PRIVATE_KEY, {"mq2PZs9p5ZNLbu23KLKb1tdQt1mrBJM7CX": amount,
                                                                             "tltc1q24gng65qj3wr55878324w2eeeta4k2plfwaf54": amount}, fee)
     assert tx_id == "33f67e7ac0dde523598f416f8efa5928d9e8a4a681db48f7df7d174701225dd0"
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="Skipping transaction signing tests on Windows because we are not using RFC6979 from fastecdsa by default")
+@vcr_c.use_cassette("ltc/send_with_auto_fee.yaml")
+async def test_send_with_auto_fee(ltc_public_client: AioTxLTCClient):
+    await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
+    await ltc_public_client.monitor._add_new_utxo(TEST_LTC_ADDRESS,
+                                            "33f67e7ac0dde523598f416f8efa5928d9e8a4a681db48f7df7d174701225dd0", 45500000, 0)
+    amount = ltc_public_client.to_satoshi(0.005)
+    tx_id = await ltc_public_client.send(TEST_LTC_WALLET_PRIVATE_KEY, "mq2PZs9p5ZNLbu23KLKb1tdQt1mrBJM7CX", amount)
+    assert tx_id == "ac3c62cb37887a41235fecbc8dd22c8a8b5b74e1d2695dbc78e6d05a0cbdf2e9"

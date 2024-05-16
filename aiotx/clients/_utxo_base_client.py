@@ -57,8 +57,10 @@ def create_last_block_model(currency_name):
 
 
 class AioTxUTXOClient(AioTxClient):
-    def __init__(self, node_url, testnet, network_name, db_url):
+    def __init__(self, node_url, testnet, node_username, node_password, network_name, db_url):
         super().__init__(node_url)
+        self.node_username = node_username
+        self.node_password = node_password
         self.testnet = testnet
         self._network = Network(network_name)
         self.monitor = UTXOMonitor(self, db_url)
@@ -116,27 +118,29 @@ class AioTxUTXOClient(AioTxClient):
             return 0
         return sum(utxo.amount_satoshi for utxo in utxo_data)
     
-    async def _build_and_send_transaction(self, private_key: str, destinations: dict[str, int], fee: int, conf_target: int = 6, estimate_mode: FeeEstimate=FeeEstimate.CONSERVATIVE) -> str:
+    async def _build_and_send_transaction(self, private_key: str, destinations: dict[str, int], conf_target: int, estimate_mode: FeeEstimate, fee: Optional[int] = None) -> str:
         from_wallet = self.get_address_from_private_key(private_key)
         from_address = from_wallet["address"]
         utxo_list = await self.monitor._get_utxo_data(from_address)
 
         if fee is None:
             empty_fee_transaction: Transaction = await self.create_transaction(destinations, utxo_list, from_address, 0)
-            empty_fee_transaction.fee_per_kb = await self.estimate_smart_fee(conf_target, estimate_mode.value)
+            empty_fee_transaction.fee_per_kb = await self.estimate_smart_fee(conf_target, estimate_mode)
+            empty_fee_transaction = self.sign_transaction(empty_fee_transaction, [private_key])
+            empty_fee_transaction.estimate_size()
             fee = empty_fee_transaction.calculate_fee()
 
         transaction: Transaction = await self.create_transaction(destinations, utxo_list, from_address, fee)
-        signed_tx = await self.sign_transaction(transaction, [private_key])
-        txid = await self.send_transaction(signed_tx)
+        signed_tx = self.sign_transaction(transaction, [private_key])
+        txid = await self.send_transaction(signed_tx.raw_hex())
         return txid
 
 
-    async def send(self, private_key: str, to_address: str, amount: int, fee: int) -> str:
-        return await self._build_and_send_transaction(private_key, {to_address: amount}, fee)
+    async def send(self, private_key: str, to_address: str, amount: int, fee: int = None, conf_target: int = 6, estimate_mode: FeeEstimate=FeeEstimate.CONSERVATIVE) -> str:
+        return await self._build_and_send_transaction(private_key, {to_address: amount}, conf_target, estimate_mode, fee)
     
-    async def send_bulk(self, private_key: str, destinations: dict[str, int], fee: int) -> str:
-        return await self._build_and_send_transaction(private_key, destinations, fee)
+    async def send_bulk(self, private_key: str, destinations: dict[str, int], fee: int = None, conf_target: int = 6, estimate_mode: FeeEstimate=FeeEstimate.CONSERVATIVE) -> str:
+        return await self._build_and_send_transaction(private_key, destinations, conf_target, estimate_mode, fee)
 
     async def create_transaction(self, destinations: dict[str, int], utxo_list: list, from_address: str, fee: int) -> Transaction:
         transaction = Transaction(network=self._network.name, witness_type="segwit")
@@ -174,11 +178,11 @@ class AioTxUTXOClient(AioTxClient):
 
         return transaction
     
-    async def sign_transaction(self, transaction: Transaction, private_keys: list[str]):
+    def sign_transaction(self, transaction: Transaction, private_keys: list[str]) -> Transaction:
         for i, private_key in enumerate(private_keys):
             key = Key(private_key)
             transaction.sign(key, i)
-        return transaction.raw_hex()  
+        return transaction
 
 
     async def send_transaction(self, raw_transaction: str) -> str:
@@ -189,14 +193,14 @@ class AioTxUTXOClient(AioTxClient):
     async def estimate_smart_fee(self, conf_target: int = 6, estimate_mode: FeeEstimate = FeeEstimate.CONSERVATIVE) -> int:
         payload = {"method": "estimatesmartfee", "params": [conf_target, estimate_mode.value]}
         result = await self._make_rpc_call(payload)
-        return result["result"]["feerate"]
+        return self.to_satoshi(result["result"]["feerate"])
 
     
     async def _make_rpc_call(self, payload) -> dict:
         payload["jsonrpc"] = "2.0"
         payload["id"] = "curltest"
         async with aiohttp.ClientSession() as session:
-            async with session.post(self.node_url, data=json.dumps(payload)) as response:
+            async with session.post(self.node_url, data=json.dumps(payload), auth=aiohttp.BasicAuth(self.node_username, self.node_password)) as response:
                 # print("response", response)
                 result = await response.json()
                 # print("result", result)

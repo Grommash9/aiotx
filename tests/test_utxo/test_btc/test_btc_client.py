@@ -5,6 +5,7 @@ import pytest
 from conftest import vcr_c
 
 from aiotx.clients import AioTxBTCClient
+from aiotx.types import FeeEstimate
 
 TEST_BTC_WALLET_PRIVATE_KEY = os.getenv("TEST_BTC_WALLET_PRIVATE_KEY")
 assert TEST_BTC_WALLET_PRIVATE_KEY is not None, "add TEST_BTC_WALLET_PRIVATE_KEY"
@@ -40,3 +41,16 @@ async def test_send_to_all_address_types(btc_client: AioTxBTCClient):
         "tb1pwgjc67568cu6vncgve60t6eaht0rwr4pwdymnrpezrpepg3q5t8sp5250h": amount, # Bech32M address
     }, fee)
     assert tx_id == "35158b7a8b6057bc67f6d904c64b5986adea8260f0bc96cbd755b530878e3cc2"
+
+
+@pytest.mark.skipif(sys.platform == "win32", reason="Skipping transaction signing tests on Windows because we are not using RFC6979 from fastecdsa by default")
+@vcr_c.use_cassette("btc/send_with_auto_fee.yaml")
+async def test_send_with_auto_fee(btc_client: AioTxBTCClient):
+
+    await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
+    await btc_client.monitor._add_new_utxo(TEST_BTC_ADDRESS,
+                                            " 35158b7a8b6057bc67f6d904c64b5986adea8260f0bc96cbd755b530878e3cc2 ", 6263, 0)
+    amount = 1000
+    tx_id = await btc_client.send_bulk(TEST_BTC_WALLET_PRIVATE_KEY, {
+        "mtkbaiLiUH3fvGJeSzuN3kUgmJzqinLejJ": amount}, conf_target=1, estimate_mode=FeeEstimate.CONSERVATIVE)
+    assert tx_id == "77cb20c4b0325242b9e5f45f4850e5387dc585d6b72bb36ba65a126534436973"
