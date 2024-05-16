@@ -7,7 +7,7 @@ from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
 from bitcoinlib.keys import HDKey, Key
 from bitcoinlib.networks import Network
 from bitcoinlib.transactions import Transaction
-from sqlalchemy import Column, Integer, String, select
+from sqlalchemy import Boolean, Column, Integer, String, select, update
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.pool import NullPool
@@ -16,6 +16,7 @@ from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     AioTxError,
     BlockNotFoundError,
+    InsufficientFunds,
     InternalJSONRPCError,
     InvalidArgumentError,
     InvalidRequestError,
@@ -46,6 +47,7 @@ def create_utxo_model(currency_name):
         output_n = Column(Integer, primary_key=True)
         address = Column(String(255))
         amount_satoshi = Column(Integer)
+        used = Column(Boolean, default=False)
 
     return UTXO
 
@@ -121,23 +123,25 @@ class AioTxUTXOClient(AioTxClient):
         destinations: dict[str, int],
         conf_target: int,
         estimate_mode: FeeEstimate,
-        fee: Optional[int] = None,
+        fee: Optional[int],
+        deduct_fee: bool
     ) -> str:
         from_wallet = self.get_address_from_private_key(private_key)
         from_address = from_wallet["address"]
         utxo_list = await self.monitor._get_utxo_data(from_address)
 
         if fee is None:
-            empty_fee_transaction: Transaction = await self.create_transaction(destinations, utxo_list, from_address, 0)
+            empty_fee_transaction, _ = await self._create_transaction(destinations, utxo_list, from_address, 0, deduct_fee)
             empty_fee_transaction.fee_per_kb = await self.estimate_smart_fee(conf_target, estimate_mode)
-            empty_fee_transaction = self.sign_transaction(empty_fee_transaction, [private_key])
+            empty_fee_transaction = self._sign_transaction(empty_fee_transaction, [private_key])
             empty_fee_transaction.estimate_size()
             fee = empty_fee_transaction.calculate_fee()
 
-        transaction: Transaction = await self.create_transaction(destinations, utxo_list, from_address, fee)
+        transaction, inputs_used = await self._create_transaction(destinations, utxo_list, from_address, fee, deduct_fee)
 
-        signed_tx = self.sign_transaction(transaction, [private_key] * len(utxo_list))
-        txid = await self.send_transaction(signed_tx.raw_hex())
+        signed_tx = self._sign_transaction(transaction, [private_key] * len(utxo_list))
+        txid = await self._send_transaction(signed_tx.raw_hex())
+        await self._mark_inputs_as_used(inputs_used)
         return txid
 
     async def send(
@@ -148,9 +152,10 @@ class AioTxUTXOClient(AioTxClient):
         fee: int = None,
         conf_target: int = 6,
         estimate_mode: FeeEstimate = FeeEstimate.CONSERVATIVE,
+        deduct_fee: bool=False
     ) -> str:
         return await self._build_and_send_transaction(
-            private_key, {to_address: amount}, conf_target, estimate_mode, fee
+            private_key, {to_address: amount}, conf_target, estimate_mode, fee, deduct_fee
         )
 
     async def send_bulk(
@@ -160,12 +165,13 @@ class AioTxUTXOClient(AioTxClient):
         fee: int = None,
         conf_target: int = 6,
         estimate_mode: FeeEstimate = FeeEstimate.CONSERVATIVE,
+        deduct_fee: bool=False
     ) -> str:
-        return await self._build_and_send_transaction(private_key, destinations, conf_target, estimate_mode, fee)
+        return await self._build_and_send_transaction(private_key, destinations, conf_target, estimate_mode, fee, deduct_fee)
 
-    async def create_transaction(
-        self, destinations: dict[str, int], utxo_list: list, from_address: str, fee: int
-    ) -> Transaction:
+    async def _create_transaction(
+        self, destinations: dict[str, int], utxo_list: list, from_address: str, fee: int,   deduct_fee: bool
+    ) -> tuple[Transaction, list]:
         transaction = Transaction(network=self._network.name, witness_type="segwit")
         inputs = []
         outputs = []
@@ -178,13 +184,22 @@ class AioTxUTXOClient(AioTxClient):
             if total_value >= total_amount + fee:
                 break
 
-        leftover = total_value - total_amount - fee
+        if total_value < total_amount:
+            raise InsufficientFunds(f"We have only {total_value} satoshi and it's {total_amount + fee} at least needed to cover that transaction!")
+
+        if deduct_fee:
+            leftover = total_value - total_amount
+        else:
+            leftover = total_value - total_amount - fee
+            
 
         if leftover > 0:
             outputs.append((from_address, leftover))
 
+        deducted_fee_amount = 0 if not deduct_fee else fee / len(destinations)
+
         for address, amount in destinations.items():
-            outputs.append((address, amount))
+            outputs.append((address, amount - deducted_fee_amount))
 
         for input_data in inputs:
             prev_tx_id, prev_out_index, value = input_data
@@ -194,15 +209,19 @@ class AioTxUTXOClient(AioTxClient):
             address, value = output_data
             transaction.add_output(value=value, address=address)
 
-        return transaction
+        return transaction, inputs
 
-    def sign_transaction(self, transaction: Transaction, private_keys: list[str]) -> Transaction:
+    def _sign_transaction(self, transaction: Transaction, private_keys: list[str]) -> Transaction:
         for i, private_key in enumerate(private_keys):
             key = Key(private_key)
             transaction.sign(key, i)
         return transaction
+    
+    async def _mark_inputs_as_used(self, inputs: list):
+        for input in inputs:
+            await self.monitor._mark_utxo_used(input[0], input[1])
 
-    async def send_transaction(self, raw_transaction: str) -> str:
+    async def _send_transaction(self, raw_transaction: str) -> str:
         payload = {"method": "sendrawtransaction", "params": [raw_transaction]}
         result = await self._make_rpc_call(payload)
         return result["result"]
@@ -353,14 +372,28 @@ class UTXOMonitor(BlockMonitor):
         if utxo:
             await self._delete_utxo(txid, vout)
 
-    async def _get_utxo_data(self, address: str):
+    async def _get_utxo_data(self, address: str, spent=False):
         async with self._session() as session:
             result = await session.execute(
-                select(self.UTXO.tx_id, self.UTXO.output_n, self.UTXO.amount_satoshi).where(
-                    self.UTXO.address == address
+                select(self.UTXO.tx_id, self.UTXO.output_n, self.UTXO.amount_satoshi, self.UTXO.used).where(
+                    (self.UTXO.address == address) & (self.UTXO.used == spent)
                 )
             )
             return result.fetchall()
+        
+    async def _mark_utxo_used(self, tx_id: str, output_n: str):
+        async with self._session() as session:
+            async with session.begin():
+                stmt = (
+                    update(self.UTXO)
+                    .where(
+                        (self.UTXO.tx_id == tx_id) &
+                        (self.UTXO.output_n == output_n)
+                    )
+                    .values(used=True)
+                )
+                await session.execute(stmt)
+                await session.commit()
 
     async def _get_utxo(self, tx_id: str, output_n: int):
         async with self._session() as session:

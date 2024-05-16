@@ -19,7 +19,7 @@ vcr_c = vcr.VCR(
     cassette_library_dir="tests/fixtures/cassettes",
     record_mode=os.environ.get("VCR_RECORD_MODE", "none"),
     match_on=["host", "path", "method", "query", "raw_body", "body"],
-    filter_headers=["Authorization", "Cookie"],
+    filter_headers=["Authorization", "Cookie", "Date"],
 )
 
 BSC_TEST_NODE_URL = "https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/"

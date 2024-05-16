@@ -78,3 +78,8 @@ class ReplacementTransactionUnderpriced(AioTxError):
 
 class WrongPrivateKey(AioTxError):
     pass
+
+
+class InsufficientFunds(AioTxError):
+    pass
+
