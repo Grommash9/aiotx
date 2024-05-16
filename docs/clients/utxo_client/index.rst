@@ -46,7 +46,7 @@ In this example, we create instances of `AioTxBTCClient` and `AioTxLTCClient` by
 
 
 Important Note
-==============
+--------------
 
 Please note that the **UTXO client functionality in AioTx heavily relies on a database** to store and manage UTXO data. Without a properly configured database, the UTXO client will not work as intended. The database is essential for monitoring addresses, tracking UTXOs, and preventing double-spending.
 SQLite Database (Default)
@@ -55,7 +55,7 @@ By default, AioTx uses SQLite as the database backend. AioTx will automatically 
 The SQLite database file will be created in the same directory as your Python script with the name aiotx_utxo.sqlite
 
 Database Storage
-================
+----------------
 
 AioTx stores transaction and UTXO data in a database for efficient monitoring and management. You can use either SQLite or MySQL as the database backend. Both options have been tested and are working well.
 
