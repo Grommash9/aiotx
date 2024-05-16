@@ -54,41 +54,38 @@ class AioTxEVMClient(AioTxClient):
         private_key = "0x" + private_key_bytes
         acct = Account.from_key(private_key)
         return private_key, acct.address
-    
+
     def get_address_from_private_key(self, private_key: str):
         try:
             from_address = Account.from_key(private_key).address
         except binascii.Error as e:
             raise WrongPrivateKey(e)
         return to_checksum_address(from_address)
-    
+
     @staticmethod
     def from_wei(number: int, unit: str) -> Union[int, decimal.Decimal]:
         return currency.from_wei(number, unit)
-    
+
     @staticmethod
     def to_wei(number: Union[int, float, str, decimal.Decimal], unit: str) -> int:
         return currency.to_wei(number, unit)
-    
+
     def _get_abi_entries(self):
         # Redefine that in you client
         return []
 
     def decode_transaction_input(self, input_data: str) -> dict:
         if input_data == "0x":
-            return {
-            'function_name': None,
-            'parameters': None
-        }
+            return {"function_name": None, "parameters": None}
         for abi_entry in self._get_abi_entries():
             function_name = abi_entry.get("name")
             if function_name is None:
                 continue
-            input_types = [inp['type'] for inp in abi_entry['inputs']]
+            input_types = [inp["type"] for inp in abi_entry["inputs"]]
             function_signature = f"{function_name}({','.join(input_types)})"
             function_selector = function_signature_to_4byte_selector(function_signature)
 
-            if input_data.startswith('0x' + function_selector.hex()):
+            if input_data.startswith("0x" + function_selector.hex()):
                 decoded_data = decode(input_types, decode_hex(input_data[10:]))
                 decoded_params = {}
                 for i, param in enumerate(decoded_data):
@@ -96,22 +93,16 @@ class AioTxEVMClient(AioTxClient):
                     param_value = param
                     decoded_params[param_name] = param_value
 
-                return {
-                    'function_name': function_name,
-                    'parameters': decoded_params
-                }
+                return {"function_name": function_name, "parameters": decoded_params}
 
-        return {
-            'function_name': None,
-            'parameters': None
-        }
+        return {"function_name": None, "parameters": None}
 
     async def get_last_block_number(self) -> int:
         payload = {"method": "eth_blockNumber", "params": []}
         result = await self._make_rpc_call(payload)
         last_block = result["result"]
         return int(last_block, 16)
-    
+
     async def get_block_by_number(self, block_number: int, transaction_detail_flag: bool = True):
         payload = {"method": "eth_getBlockByNumber", "params": [hex(block_number), transaction_detail_flag]}
         result = await self._make_rpc_call(payload)
@@ -122,8 +113,10 @@ class AioTxEVMClient(AioTxClient):
         result = await self._make_rpc_call(payload)
         balance = result["result"]
         return 0 if balance == "0x" else int(result["result"], 16)
-    
-    async def get_contract_balance(self, address, contract_address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
+
+    async def get_contract_balance(
+        self, address, contract_address, block_parameter: BlockParam = BlockParam.LATEST
+    ) -> int:
         function_signature = "balanceOf(address)".encode("UTF-8")
         hash_result = keccak(function_signature)
         method_id = hash_result.hex()[:8]
@@ -131,14 +124,14 @@ class AioTxEVMClient(AioTxClient):
         data = f"0x{method_id}{padded_address}"
 
         payload = {
-                "method": "eth_call",
-                "params": [{"to": contract_address, "data": data}, block_parameter.value],
-            }
+            "method": "eth_call",
+            "params": [{"to": contract_address, "data": data}, block_parameter.value],
+        }
 
         result = await self._make_rpc_call(payload)
         balance = result["result"]
         return 0 if balance == "0x" else int(balance, 16)
-    
+
     async def get_contract_decimals(self, contract_address) -> int:
         function_signature = "decimals()".encode("UTF-8")
         hash_result = keccak(function_signature)
@@ -156,7 +149,7 @@ class AioTxEVMClient(AioTxClient):
         result = await self._make_rpc_call(payload)
         price = result["result"]
         return 0 if price == "0x" else int(result["result"], 16)
-        
+
     async def get_transaction(self, hash) -> dict:
         payload = {"method": "eth_getTransactionByHash", "params": [hash]}
         result = await self._make_rpc_call(payload)
@@ -165,7 +158,7 @@ class AioTxEVMClient(AioTxClient):
         tx_data = result["result"]
         tx_data["aiotx_decoded_input"] = self.decode_transaction_input(tx_data["input"])
         return tx_data
-    
+
     async def get_transactions_count(self, address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
         payload = {"method": "eth_getTransactionCount", "params": [address, block_parameter.value]}
         result = await self._make_rpc_call(payload)
@@ -173,7 +166,13 @@ class AioTxEVMClient(AioTxClient):
         return 0 if tx_count == "0x" else int(tx_count, 16)
 
     async def send(
-        self, private_key: str, to_address: str, amount: int, nonce: int = None, gas_price: int = None, gas_limit: int = 21000
+        self,
+        private_key: str,
+        to_address: str,
+        amount: int,
+        nonce: int = None,
+        gas_price: int = None,
+        gas_limit: int = 21000,
     ) -> str:
         if gas_price is None:
             gas_price = await self.get_gas_price()
@@ -274,7 +273,12 @@ class AioTxEVMClient(AioTxClient):
                     elif "failed to parse request" in error_message:
                         raise InvalidRequestError(error_message)
                 elif error_code == -32602:
-                    if "invalid argument" in error_message and "cannot unmarshal hex string without 0x prefix" in error_message or "cannot unmarshal hex string of odd length into" in error_message or "hex string has length" in error_message:
+                    if (
+                        "invalid argument" in error_message
+                        and "cannot unmarshal hex string without 0x prefix" in error_message
+                        or "cannot unmarshal hex string of odd length into" in error_message
+                        or "hex string has length" in error_message
+                    ):
                         raise InvalidArgumentError(error_message)
                     elif "eth_getLogs and eth_newFilter are limited to a 10,000 blocks range" in error_message:
                         raise BlockRangeLimitExceededError(error_message)
@@ -282,9 +286,8 @@ class AioTxEVMClient(AioTxClient):
                     raise InternalJSONRPCError(error_message)
                 else:
                     raise AioTxError(f"Error {error_code}: {error_message}")
-                
 
-                
+
 class EvmMonitor(BlockMonitor):
     def __init__(self, client: AioTxEVMClient):
         self.client = client
@@ -293,7 +296,9 @@ class EvmMonitor(BlockMonitor):
         self.running = False
         self._latest_block = None
 
-    async def poll_blocks(self,):
+    async def poll_blocks(
+        self,
+    ):
         if self._latest_block is None:
             self._latest_block = await self.client.get_last_block_number()
         block = await self.client.get_block_by_number(self._latest_block)

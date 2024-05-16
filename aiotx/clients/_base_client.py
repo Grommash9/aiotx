@@ -34,7 +34,8 @@ class AioTxClient:
     async def get_last_block_number(self) -> int:
         pass
 
-class BlockMonitor:   
+
+class BlockMonitor:
     def __init__(self, client: AioTxClient):
         self.client = client
         self.block_handlers = []
@@ -49,7 +50,7 @@ class BlockMonitor:
     def on_transaction(self, func):
         self.transaction_handlers.append(func)
         return func
-    
+
     async def __aenter__(self):
         self.running = True
         return self
