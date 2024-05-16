@@ -9,6 +9,7 @@ class BlockParam(Enum):
     FINALIZED = "finalized"
 
 
-class Wallet:
-    def __init__(self) -> None:
-        pass
+class FeeEstimate(Enum):
+    UNSET = "UNSET"
+    ECONOMICAL = "ECONOMICAL"
+    CONSERVATIVE = "CONSERVATIVE"

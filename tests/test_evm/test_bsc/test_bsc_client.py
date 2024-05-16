@@ -23,6 +23,7 @@ async def test_get_last_block(bsc_client: AioTxBSCClient):
     block_id = await bsc_client.get_last_block_number()
     assert isinstance(block_id, int)
 
+
 @pytest.mark.parametrize(
     "wallet_address, expected_exception, expected_balance",
     [
@@ -58,7 +59,6 @@ async def test_get_balance(bsc_client: AioTxBSCClient, wallet_address, expected_
         ("0x6007710c9bc82da8a9cb6104e39fef7b259df0d257a0efcf46908b9451909111", TransactionNotFound),
         ("0x6007710c9bc82da8a9cb6104e39fef7b259df0d257a0efcf46908b945190911", InvalidArgumentError),
         ("41c8e2e03195c29cea37d67ad234d91c52258a514c78f9fcfd196aa5992209ae", InvalidArgumentError),
-
     ],
 )
 @vcr_c.use_cassette("bsc/get_transaction.yaml")
@@ -69,7 +69,6 @@ async def test_get_transaction(bsc_client: AioTxBSCClient, tx_id, expected_excep
     else:
         tx = await bsc_client.get_transaction(tx_id)
         assert "aiotx_decoded_input" in tx.keys()
-
 
 
 @pytest.mark.parametrize(
@@ -86,8 +85,10 @@ async def test_get_transaction(bsc_client: AioTxBSCClient, tx_id, expected_excep
     ],
 )
 @vcr_c.use_cassette("bsc/get_token_balance.yaml")
-async def test_get_token_balance(bsc_client: AioTxBSCClient, wallet_address, contract, expected_exception, expected_balance):
-    
+async def test_get_token_balance(
+    bsc_client: AioTxBSCClient, wallet_address, contract, expected_exception, expected_balance
+):
+
     if expected_exception:
         with pytest.raises(expected_exception):
             await bsc_client.get_contract_balance(wallet_address, contract)
@@ -121,7 +122,6 @@ async def test_get_transaction_count(bsc_client: AioTxBSCClient, wallet_address,
         assert expected_count == count
 
 
-
 @vcr_c.use_cassette("bsc/get_gas_price.yaml")
 async def test_send_get_gas_price(bsc_client: AioTxBSCClient):
     result = await bsc_client.get_gas_price()
@@ -132,9 +132,30 @@ async def test_send_get_gas_price(bsc_client: AioTxBSCClient):
 @pytest.mark.parametrize(
     "private_key, to_address, amount, gas_price, gas_limit, expected_exception",
     [
-        ("87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd", DESTINATION_ADDRESS, 0.00001, 5, 21000, WrongPrivateKey),
-        ("87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938ch", DESTINATION_ADDRESS, 0.00001, 5, 21000, WrongPrivateKey),
-        ("e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd", DESTINATION_ADDRESS, 0.00001, 5, 21000, WrongPrivateKey),
+        (
+            "87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd",
+            DESTINATION_ADDRESS,
+            0.00001,
+            5,
+            21000,
+            WrongPrivateKey,
+        ),
+        (
+            "87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938ch",
+            DESTINATION_ADDRESS,
+            0.00001,
+            5,
+            21000,
+            WrongPrivateKey,
+        ),
+        (
+            "e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd",
+            DESTINATION_ADDRESS,
+            0.00001,
+            5,
+            21000,
+            WrongPrivateKey,
+        ),
         (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5", 0.00001, 5, 21000, ValueError),
         (PRIVATE_KEY_TO_SEND_FROM, "f9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", 0.00001, 5, 21000, None),
         (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E84d3f6FF662Ba4c306b5a", 0.00001, 5, 21000, ValueError),
@@ -143,11 +164,13 @@ async def test_send_get_gas_price(bsc_client: AioTxBSCClient):
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0.00001, 0, 21000, AioTxError),
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0, 5, 21000, ReplacementTransactionUnderpriced),
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0.00001, 5, 0, AioTxError),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0.00001, 5, 61000, ReplacementTransactionUnderpriced)
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0.00001, 5, 61000, ReplacementTransactionUnderpriced),
     ],
 )
 @vcr_c.use_cassette("bsc/send_transaction.yaml")
-async def test_send_transaction(bsc_client: AioTxBSCClient, private_key, to_address, amount, gas_price, gas_limit, expected_exception):
+async def test_send_transaction(
+    bsc_client: AioTxBSCClient, private_key, to_address, amount, gas_price, gas_limit, expected_exception
+):
     """
     Here it's raising ReplacementTransactionUnderpriced and NonceTooLowError because we have reusing
     the same VCR data for every get nonce request, we should investigate how we can change that maybe?
@@ -166,11 +189,18 @@ async def test_send_transaction(bsc_client: AioTxBSCClient, private_key, to_addr
     "private_key, to_address, amount, expected_exception",
     [
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0.00001, None),
-        (PRIVATE_KEY_TO_SEND_FROM, "0x3ffeCb152F95f7122990ab16Eff4B0B5d533497e", 0.00001, ReplacementTransactionUnderpriced),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            "0x3ffeCb152F95f7122990ab16Eff4B0B5d533497e",
+            0.00001,
+            ReplacementTransactionUnderpriced,
+        ),
     ],
 )
 @vcr_c.use_cassette("bsc/send_transaction_with_auto_gas.yaml")
-async def test_send_transaction_with_auto_gas(bsc_client: AioTxBSCClient, private_key, to_address, amount, expected_exception):
+async def test_send_transaction_with_auto_gas(
+    bsc_client: AioTxBSCClient, private_key, to_address, amount, expected_exception
+):
     """
     Here it's raising ReplacementTransactionUnderpriced and NonceTooLowError because we have reusing
     the same VCR data for every get nonce request, we should investigate how we can change that maybe?
@@ -194,28 +224,79 @@ async def test_send_transaction_with_custom_nonce(bsc_client: AioTxBSCClient):
     second_tx = await bsc_client.send(PRIVATE_KEY_TO_SEND_FROM, sender_address, wei_amount, nonce=nonce + 1)
     assert isinstance(second_tx, str)
 
+
 @pytest.mark.parametrize(
     "private_key, to_address, contract, amount, gas_price, gas_limit, expected_exception",
     [
-        ("87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd", DESTINATION_ADDRESS, CONTRACT, 1, 5, 61000, WrongPrivateKey),
-        ("87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938ch", DESTINATION_ADDRESS,CONTRACT, 1, 5, 61000, WrongPrivateKey),
-        ("e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd", DESTINATION_ADDRESS,CONTRACT, 1, 5, 61000, WrongPrivateKey),
-        (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E984d3f6FF662Ba4c306b5a",CONTRACT, 1, 5, 61000, ValueError),
+        (
+            "87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd",
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            1,
+            5,
+            61000,
+            WrongPrivateKey,
+        ),
+        (
+            "87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938ch",
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            1,
+            5,
+            61000,
+            WrongPrivateKey,
+        ),
+        (
+            "e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd",
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            1,
+            5,
+            61000,
+            WrongPrivateKey,
+        ),
+        (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E984d3f6FF662Ba4c306b5a", CONTRACT, 1, 5, 61000, ValueError),
         (PRIVATE_KEY_TO_SEND_FROM, "f9E5E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", CONTRACT, 1, 5, 61000, ValueError),
-        (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b",CONTRACT, 1, 5, 61000, ValueError),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, "0xf9E35E4e1CbcF08E984d3f6FF662Ba4c306b5a", 0.00001, 5, 61000, TypeError),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, "f9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", 1, 5, 61000, TypeError),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b", 1, 5, 61000, TypeError),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1, 5, 61000, None),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1000, 5, 61000, ReplacementTransactionUnderpriced),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1, 0, 61000, AioTxError),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 0, 5, 61000, ReplacementTransactionUnderpriced),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1, 5, 0, AioTxError),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS,CONTRACT, 1, 5, 61000, None)
+        (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b", CONTRACT, 1, 5, 61000, ValueError),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            DESTINATION_ADDRESS,
+            "0xf9E35E4e1CbcF08E984d3f6FF662Ba4c306b5a",
+            0.00001,
+            5,
+            61000,
+            TypeError,
+        ),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            DESTINATION_ADDRESS,
+            "f9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a",
+            1,
+            5,
+            61000,
+            TypeError,
+        ),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            DESTINATION_ADDRESS,
+            "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b",
+            1,
+            5,
+            61000,
+            TypeError,
+        ),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 5, 61000, None),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1000, 5, 61000, ReplacementTransactionUnderpriced),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 0, 61000, AioTxError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 0, 5, 61000, ReplacementTransactionUnderpriced),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 5, 0, AioTxError),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 5, 61000, None),
     ],
 )
 @vcr_c.use_cassette("bsc/send_token_transaction.yaml")
-async def test_send_token_transaction(bsc_client: AioTxBSCClient, private_key, to_address, contract, amount, gas_price, gas_limit, expected_exception):
+async def test_send_token_transaction(
+    bsc_client: AioTxBSCClient, private_key, to_address, contract, amount, gas_price, gas_limit, expected_exception
+):
     """
     Here it's raising ReplacementTransactionUnderpriced and NonceTooLowError because we have reusing
     the same VCR data for every get nonce request, we should investigate how we can change that maybe?
@@ -226,12 +307,12 @@ async def test_send_token_transaction(bsc_client: AioTxBSCClient, private_key, t
     if expected_exception:
         with pytest.raises(expected_exception):
             await bsc_client.send_token(
-        private_key, to_address, contract, wei_amount, gas_price=gas_price, gas_limit=gas_limit
-    )
+                private_key, to_address, contract, wei_amount, gas_price=gas_price, gas_limit=gas_limit
+            )
     else:
         result = await bsc_client.send_token(
-        private_key, to_address, contract, wei_amount, gas_price=gas_price, gas_limit=gas_limit
-    )
+            private_key, to_address, contract, wei_amount, gas_price=gas_price, gas_limit=gas_limit
+        )
         assert isinstance(result, str)
 
 
