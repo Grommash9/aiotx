@@ -131,7 +131,8 @@ class AioTxUTXOClient(AioTxClient):
             fee = empty_fee_transaction.calculate_fee()
 
         transaction: Transaction = await self.create_transaction(destinations, utxo_list, from_address, fee)
-        signed_tx = self.sign_transaction(transaction, [private_key])
+        
+        signed_tx = self.sign_transaction(transaction, [private_key] * len(utxo_list))
         txid = await self.send_transaction(signed_tx.raw_hex())
         return txid
 
