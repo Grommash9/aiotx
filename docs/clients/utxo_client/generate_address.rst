@@ -23,14 +23,18 @@ Example usage:
 .. code-block:: python
 
     # Create a Bitcoin client instance for mainnet
-    btc_mainnet_client = AioTxBTCClient(node_url="https://bitcoin-node-url")
+    btc_mainnet_client = AioTxBTCClient(
+        node_url="https://bitcoin-node-url"
+        )
 
     # Generate a Bitcoin wallet with mainnet bech32 address
     btc_mainnet_wallet = btc_mainnet_client.create_wallet()
     print("Bitcoin mainnet wallet:", btc_mainnet_wallet)
 
     # Create a Litecoin client instance for testnet
-    ltc_testnet_client = AioTxLTCClient(node_url="https://litecoin-testnet-node-url", testnet=True)
+    ltc_testnet_client = AioTxLTCClient(
+        node_url="https://litecoin-testnet-node-url", testnet=True
+        )
 
     # Generate a Litecoin wallet with testnet bech32 address
     ltc_testnet_wallet = ltc_testnet_client.create_wallet()
@@ -40,8 +44,16 @@ Output:
 
 .. code-block:: text
 
-    Bitcoin mainnet wallet: {'private_key': '...', 'public_key': '...', 'address': 'bc1...'}
-    Litecoin testnet wallet: {'private_key': '...', 'public_key': '...', 'address': 'tltc1...'}
+    Bitcoin mainnet wallet: {
+        'private_key': '...', 
+        'public_key': '...', 
+        'address': 'bc1...'
+    }
+    Litecoin testnet wallet: {
+        'private_key': '7a8872a2cb66f8b2be886db2c43b97b0613dc6749a5de22c6afebff50e688b1c',
+        'public_key': '02741fae22d2bc4debcc51540f4c7668ff85d9758071057716b94845e09d171eca',
+        'address': 'tltc1q9g5dqfzveq9mku6zefdqfa256pteph8hs5khg2'
+    }
 
 Note:
 - The ``testnet`` parameter in the client initialization determines whether the wallet is created for the mainnet or testnet.

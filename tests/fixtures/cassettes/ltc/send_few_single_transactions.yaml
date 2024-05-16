@@ -1,0 +1,334 @@
+interactions:
+- request:
+    body: '{"method": "getblockcount", "params": [], "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+  response:
+    body:
+      string: '{"result":3262693,"error":null,"id":"curltest"}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 884ccf7559ed79c5-LHR
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '47'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 16 May 2024 16:40:35 GMT
+      Etag:
+      - W/"2f-8+0igngbeBM+pE0ju/QlXPk1hps"
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=ueGZBZqxLZXCPE3%2FIiAmvy7TYM4L0%2F49ugZ%2B8YKPd%2F4%2Bo8SgfreyKAheGan4X2wyutJEuc0iiuN62QgVIQ8UROsPxPkoWF8%2B5Zz%2FZg3zULwzp%2FcAjeyy%2BeZLfxGw8tQ%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Via:
+      - 1.1 google
+      alt-svc:
+      - h3=":443"; ma=86400
+      content-security-policy:
+      - 'default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src ''self''
+        https: data:;frame-ancestors ''self'';img-src ''self'' data:;object-src ''none'';script-src
+        ''self'';script-src-attr ''none'';style-src ''self'' https: ''unsafe-inline'';upgrade-insecure-requests'
+      expect-ct:
+      - max-age=0
+      referrer-policy:
+      - no-referrer
+      strict-transport-security:
+      - max-age=15552000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+      x-dns-prefetch-control:
+      - 'off'
+      x-download-options:
+      - noopen
+      x-frame-options:
+      - SAMEORIGIN
+      x-lgroup:
+      - v3:::4
+      x-permitted-cross-domain-policies:
+      - none
+      x-ratelimit-persec:
+      - '3'
+      x-xss-protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "estimatesmartfee", "params": [6, "CONSERVATIVE"], "jsonrpc":
+      "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+  response:
+    body:
+      string: '{"result":{"feerate":0.00013284,"blocks":6},"error":null,"id":"curltest"}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 884ccf767f789407-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 16 May 2024 16:40:35 GMT
+      Etag:
+      - W/"49-s8FpMi+Vd69mENhtMrJpUCASJQk"
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=dLw%2Bo3JNN6T7VxqiaavaTJNq1wiRPVOSFCUZHq94u3FHQFBAIJ%2Bmir6goGpaWR19OMJH%2BaUWnDfa5hbNcnVB%2FJl%2BM%2FlUBoFsKFsWVDQStJicpxwr%2BrmoEA%2FwiRjTK8k%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 google
+      alt-svc:
+      - h3=":443"; ma=86400
+      content-security-policy:
+      - 'default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src ''self''
+        https: data:;frame-ancestors ''self'';img-src ''self'' data:;object-src ''none'';script-src
+        ''self'';script-src-attr ''none'';style-src ''self'' https: ''unsafe-inline'';upgrade-insecure-requests'
+      expect-ct:
+      - max-age=0
+      referrer-policy:
+      - no-referrer
+      strict-transport-security:
+      - max-age=15552000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+      x-dns-prefetch-control:
+      - 'off'
+      x-download-options:
+      - noopen
+      x-frame-options:
+      - SAMEORIGIN
+      x-lgroup:
+      - v3:::4
+      x-permitted-cross-domain-policies:
+      - none
+      x-ratelimit-persec:
+      - '3'
+      x-xss-protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "sendrawtransaction", "params": ["01000000000102c16567ef2a8a3bf2e94d99bf7ac9c19be1a2b6ebc28ccdc3c6184162f86b59890200000000ffffffff61b8804b76e5b0e8d8045c02ecadb8039626ebed311b92fadee537956ce7f8c20200000000ffffffff0104390f000000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea02483045022100d89567e94316e8463cc437ada8913ff7e671434d98f87da3a3561e952b3bf5a9022043f95046fe0cfa7bd4e83eae885513d41c96ccbe040f022247fb806d920594b60121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a902483045022100e765e781834578870169964d0d2440a55eb780da8bd470aff2882aa504a5c5660220334e259a671b5ffdc0cb798f8ec8000568d6c17875e62b668b6012367803d0930121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a900000000"],
+      "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+  response:
+    body:
+      string: '{"result":"477ff66cdf3c97661c66d38a05cfae018d0358fec300a8b85bde65808e6cf8f9","error":null,"id":"curltest"}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 884ccf77ef903da0-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 16 May 2024 16:40:35 GMT
+      Etag:
+      - W/"6a-X2XrblXCH9mkD3/nrfjx+9kQwD8"
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=HbaBzPVX9VtKCRaquf8vONhsLcJOuUGQR2IiwFr8j2HC2zGtgd71D%2FAa5vrSfmsgmRFVuAqam6Lohp6A%2F7JiCbmDHULCxyvIVk1SDITIiGZnF5bcPtUc%2BsAJGp6xGwM%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 google
+      alt-svc:
+      - h3=":443"; ma=86400
+      content-security-policy:
+      - 'default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src ''self''
+        https: data:;frame-ancestors ''self'';img-src ''self'' data:;object-src ''none'';script-src
+        ''self'';script-src-attr ''none'';style-src ''self'' https: ''unsafe-inline'';upgrade-insecure-requests'
+      expect-ct:
+      - max-age=0
+      referrer-policy:
+      - no-referrer
+      strict-transport-security:
+      - max-age=15552000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+      x-dns-prefetch-control:
+      - 'off'
+      x-download-options:
+      - noopen
+      x-frame-options:
+      - SAMEORIGIN
+      x-lgroup:
+      - v3:::4
+      x-permitted-cross-domain-policies:
+      - none
+      x-ratelimit-persec:
+      - '3'
+      x-xss-protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "estimatesmartfee", "params": [6, "CONSERVATIVE"], "jsonrpc":
+      "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+  response:
+    body:
+      string: '{"result":{"feerate":0.00013284,"blocks":6},"error":null,"id":"curltest"}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 884ccf794817732a-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 16 May 2024 16:40:36 GMT
+      Etag:
+      - W/"49-s8FpMi+Vd69mENhtMrJpUCASJQk"
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=R3%2FLxVx%2Fe9lbv4KomYbWMAqGWVyjMra4KXobIG2HS2Z7iwZdELEsWg6TqMu%2FCorFA7kLVNT0utsAxi2xRmLYDoad7t8Dw%2FAVgcBELFGZe0Uq0r2%2Fg9fdsFBb2yMNnZE%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 google
+      alt-svc:
+      - h3=":443"; ma=86400
+      content-security-policy:
+      - 'default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src ''self''
+        https: data:;frame-ancestors ''self'';img-src ''self'' data:;object-src ''none'';script-src
+        ''self'';script-src-attr ''none'';style-src ''self'' https: ''unsafe-inline'';upgrade-insecure-requests'
+      expect-ct:
+      - max-age=0
+      referrer-policy:
+      - no-referrer
+      strict-transport-security:
+      - max-age=15552000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+      x-dns-prefetch-control:
+      - 'off'
+      x-download-options:
+      - noopen
+      x-frame-options:
+      - SAMEORIGIN
+      x-lgroup:
+      - v3:::4
+      x-permitted-cross-domain-policies:
+      - none
+      x-ratelimit-persec:
+      - '3'
+      x-xss-protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "sendrawtransaction", "params": ["01000000000103a7b32b9338f7a58d67335327e3eb2c369306d74350199eb40bab731826d717810200000000ffffffff47006adf77eaa5fd46b9e30ef6d0bd8e612511025350c6cf5956b3dedea883ad0200000000ffffffffb2cf4fa4e9a4c449152c79ba79f4575b53d4ffa4703d26bf7d53ab87a4471aa50200000000ffffffff02818504000000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea804f12000000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea02483045022100969177eef09f67f32d5cdbdf76b03716e5cffa71cd6d94a00ab8dab24c41d0d3022025f83f94a6629961cc1412638a7e9c64415a3ed9fc84b6ff56afec5acd2174520121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a90247304402200b305eb9bfa14235c45f597ed67aabdc51e3bbcf1b9f2ceb31237973be105a470220243199cb05d330f816bee9ce5e6f8891712441799ce579a13c10b58696fe1c290121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a902483045022100894acc2b79c555524db736da532ca1aab92129d8a925e7a425cb8e7393cb76b802201b17265e68ba9b6c620ad5e16e3a9c4804bbc7ec42d4608e7a75b09444a3a0ee0121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a900000000"],
+      "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+  response:
+    body:
+      string: '{"result":"09dac3c34ce8013a074890cdc34f90e264fda192b995350b7ad6d283f7d9276d","error":null,"id":"curltest"}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 884ccf7a9a63777a-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Thu, 16 May 2024 16:40:36 GMT
+      Etag:
+      - W/"6a-3ffmNqP7KR6/aGwX7i8v4IjAjTQ"
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=Ku7ErNcRANP1AJ55YaF%2FUnkxnywysYyS%2BIVEJhimkwh3x5JqcGswodNFRPCGVKNmecXjwJRzd4Ejz5N6auJxfb5xSAuo1pkCED2Kj3Nug6Bc25k3B1vs7KCdlESIKG0%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 google
+      alt-svc:
+      - h3=":443"; ma=86400
+      content-security-policy:
+      - 'default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src ''self''
+        https: data:;frame-ancestors ''self'';img-src ''self'' data:;object-src ''none'';script-src
+        ''self'';script-src-attr ''none'';style-src ''self'' https: ''unsafe-inline'';upgrade-insecure-requests'
+      expect-ct:
+      - max-age=0
+      referrer-policy:
+      - no-referrer
+      strict-transport-security:
+      - max-age=15552000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+      x-dns-prefetch-control:
+      - 'off'
+      x-download-options:
+      - noopen
+      x-frame-options:
+      - SAMEORIGIN
+      x-lgroup:
+      - v3:::4
+      x-permitted-cross-domain-policies:
+      - none
+      x-ratelimit-persec:
+      - '3'
+      x-xss-protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+version: 1
