@@ -24,10 +24,9 @@ Getting Started
 
 To start using AioTx, simply install the package using pip:
 
-.. code-block:: python
-
+```python
    pip install aiotx
-
+```
 
 Once installed, you can import the desired client and start interacting with the respective blockchain. Here's a quick example of how to use the EVM client:
 
