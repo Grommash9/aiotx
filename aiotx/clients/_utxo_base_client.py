@@ -11,7 +11,7 @@ from sqlalchemy import Column, Integer, String, select
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.pool import NullPool
-
+from aiotx.types import FeeEstimate
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     AioTxError,
@@ -116,11 +116,30 @@ class AioTxUTXOClient(AioTxClient):
             return 0
         return sum(utxo.amount_satoshi for utxo in utxo_data)
     
-    async def _build_and_send_transaction(self, private_key: str, destinations: dict[str, int], fee: float) -> str:
+    async def _build_and_send_transaction(self, private_key: str, destinations: dict[str, int], fee: int, conf_target: int = 6, estimate_mode: FeeEstimate=FeeEstimate.CONSERVATIVE) -> str:
         from_wallet = self.get_address_from_private_key(private_key)
         from_address = from_wallet["address"]
         utxo_list = await self.monitor._get_utxo_data(from_address)
 
+        if fee is None:
+            empty_fee_transaction: Transaction = await self.create_transaction(destinations, utxo_list, from_address, 0)
+            empty_fee_transaction.fee_per_kb = await self.estimate_smart_fee(conf_target, estimate_mode.value)
+            fee = empty_fee_transaction.calculate_fee()
+
+        transaction: Transaction = await self.create_transaction(destinations, utxo_list, from_address, fee)
+        signed_tx = await self.sign_transaction(transaction, [private_key])
+        txid = await self.send_transaction(signed_tx)
+        return txid
+
+
+    async def send(self, private_key: str, to_address: str, amount: int, fee: int) -> str:
+        return await self._build_and_send_transaction(private_key, {to_address: amount}, fee)
+    
+    async def send_bulk(self, private_key: str, destinations: dict[str, int], fee: int) -> str:
+        return await self._build_and_send_transaction(private_key, destinations, fee)
+
+    async def create_transaction(self, destinations: dict[str, int], utxo_list: list, from_address: str, fee: int) -> Transaction:
+        transaction = Transaction(network=self._network.name, witness_type="segwit")
         inputs = []
         outputs = []
         total_amount = sum(destinations.values())
@@ -143,20 +162,8 @@ class AioTxUTXOClient(AioTxClient):
 
         for address, amount in destinations.items():
             outputs.append((address, amount))
+
         
-        signed_tx = await self.create_and_sign_transaction(inputs, outputs, [private_key] * len(inputs))
-        txid = await self.send_transaction(signed_tx)
-        return txid
-
-
-    async def send(self, private_key: str, to_address: str, amount: int, fee: int) -> str:
-        return await self._build_and_send_transaction(private_key, {to_address: amount}, fee)
-    
-    async def send_bulk(self, private_key: str, destinations: dict[str, int], fee: int) -> str:
-        return await self._build_and_send_transaction(private_key, destinations, fee)
-
-    async def create_and_sign_transaction(self, inputs: list, outputs: list, private_keys: list) -> str:
-        transaction = Transaction(network=self._network.name, witness_type="segwit")
         for input_data in inputs:
             prev_tx_id, prev_out_index, value = input_data
             transaction.add_input(prev_txid=prev_tx_id, output_n=prev_out_index, value=value, witness_type="segwit")
@@ -165,15 +172,24 @@ class AioTxUTXOClient(AioTxClient):
             address, value = output_data
             transaction.add_output(value=value, address=address)
 
+        return transaction
+    
+    async def sign_transaction(self, transaction: Transaction, private_keys: list[str]):
         for i, private_key in enumerate(private_keys):
             key = Key(private_key)
             transaction.sign(key, i)
         return transaction.raw_hex()  
 
+
     async def send_transaction(self, raw_transaction: str) -> str:
         payload = {"method": "sendrawtransaction", "params": [raw_transaction]}
         result = await self._make_rpc_call(payload)
         return result["result"]
+    
+    async def estimate_smart_fee(self, conf_target: int = 6, estimate_mode: FeeEstimate = FeeEstimate.CONSERVATIVE) -> int:
+        payload = {"method": "estimatesmartfee", "params": [conf_target, estimate_mode.value]}
+        result = await self._make_rpc_call(payload)
+        return result["result"]["feerate"]
 
     
     async def _make_rpc_call(self, payload) -> dict:
