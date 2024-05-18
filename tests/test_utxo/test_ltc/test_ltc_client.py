@@ -260,3 +260,35 @@ async def test_send_few_single_transactions(ltc_public_client: AioTxLTCClient):
     utxo_list = await ltc_public_client.monitor._get_utxo_data(TEST_LTC_ADDRESS)
     assert len(utxo_list) == 0
     assert tx_id == "09dac3c34ce8013a074890cdc34f90e264fda192b995350b7ad6d283f7d9276d"
+
+
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="Skipping transaction signing tests on Windows because we are not using RFC6979 from fastecdsa by default",
+)
+@vcr_c.use_cassette("ltc/send_with_fee_per_byte.yaml")
+async def test_send_with_fee_per_byte(ltc_public_client: AioTxLTCClient):
+    await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
+    await ltc_public_client.monitor._add_new_utxo(
+        TEST_LTC_ADDRESS, "45d11c95718b39f52e11cddd69ce5be0585398afa299f0d7ab1e1ef7aa48ce5d", 50000, 1
+    )
+    tx_id = await ltc_public_client.send(TEST_LTC_WALLET_PRIVATE_KEY, "mq2PZs9p5ZNLbu23KLKb1tdQt1mrBJM7CX", 50000, deduct_fee=True, fee_per_byte=201)
+    utxo_list = await ltc_public_client.monitor._get_utxo_data(TEST_LTC_ADDRESS)
+    assert len(utxo_list) == 0
+    assert tx_id == "d2ed7d677005319439b4eb1a17cd66bd4cf32eea98d2b951352d627e4be9e340"
+
+
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="Skipping transaction signing tests on Windows because we are not using RFC6979 from fastecdsa by default",
+)
+@vcr_c.use_cassette("ltc/send_with_fee_per_byte2.yaml")
+async def test_send_with_fee_per_byte2(ltc_public_client: AioTxLTCClient):
+    await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
+    await ltc_public_client.monitor._add_new_utxo(
+        TEST_LTC_ADDRESS, "477ff66cdf3c97661c66d38a05cfae018d0358fec300a8b85bde65808e6cf8f9", 997636, 0
+    )
+    tx_id = await ltc_public_client.send(TEST_LTC_WALLET_PRIVATE_KEY, "mq2PZs9p5ZNLbu23KLKb1tdQt1mrBJM7CX", 997636, deduct_fee=True, fee_per_byte=505)
+    utxo_list = await ltc_public_client.monitor._get_utxo_data(TEST_LTC_ADDRESS)
+    assert len(utxo_list) == 0
+    assert tx_id == "b9d298d1af00740332d663d2902d30453781447e13ef0cc6aa07d2922df12f61"
