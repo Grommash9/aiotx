@@ -123,21 +123,26 @@ class AioTxUTXOClient(AioTxClient):
         destinations: dict[str, int],
         conf_target: int,
         estimate_mode: FeeEstimate,
-        fee: Optional[int],
+        total_fee: Optional[int],
+        fee_per_byte: Optional[int],
         deduct_fee: bool
     ) -> str:
         from_wallet = self.get_address_from_private_key(private_key)
         from_address = from_wallet["address"]
         utxo_list = await self.monitor._get_utxo_data(from_address)
 
-        if fee is None:
+        if total_fee is None:
             empty_fee_transaction, _ = await self._create_transaction(destinations, utxo_list, from_address, 0, deduct_fee)
-            empty_fee_transaction.fee_per_kb = await self.estimate_smart_fee(conf_target, estimate_mode)
+            if fee_per_byte is None:
+                fee_per_kb = await self.estimate_smart_fee(conf_target, estimate_mode)
+            else:
+                fee_per_kb = fee_per_byte * 1024
+            empty_fee_transaction.fee_per_kb = fee_per_kb
             empty_fee_transaction = self._sign_transaction(empty_fee_transaction, [private_key])
             empty_fee_transaction.estimate_size()
-            fee = empty_fee_transaction.calculate_fee()
+            total_fee = empty_fee_transaction.calculate_fee()
 
-        transaction, inputs_used = await self._create_transaction(destinations, utxo_list, from_address, fee, deduct_fee)
+        transaction, inputs_used = await self._create_transaction(destinations, utxo_list, from_address, total_fee, deduct_fee)
 
         signed_tx = self._sign_transaction(transaction, [private_key] * len(utxo_list))
         txid = await self._send_transaction(signed_tx.raw_hex())
@@ -149,25 +154,27 @@ class AioTxUTXOClient(AioTxClient):
         private_key: str,
         to_address: str,
         amount: int,
-        fee: int = None,
+        total_fee: int = None,
+        fee_per_byte: int = None,
         conf_target: int = 6,
         estimate_mode: FeeEstimate = FeeEstimate.CONSERVATIVE,
         deduct_fee: bool=False
     ) -> str:
         return await self._build_and_send_transaction(
-            private_key, {to_address: amount}, conf_target, estimate_mode, fee, deduct_fee
+            private_key, {to_address: amount}, conf_target, estimate_mode, total_fee, fee_per_byte, deduct_fee
         )
 
     async def send_bulk(
         self,
         private_key: str,
         destinations: dict[str, int],
-        fee: int = None,
+        total_fee: int = None,
+        fee_per_byte: int = None,
         conf_target: int = 6,
         estimate_mode: FeeEstimate = FeeEstimate.CONSERVATIVE,
         deduct_fee: bool=False
     ) -> str:
-        return await self._build_and_send_transaction(private_key, destinations, conf_target, estimate_mode, fee, deduct_fee)
+        return await self._build_and_send_transaction(private_key, destinations, conf_target, estimate_mode, total_fee, fee_per_byte, deduct_fee)
 
     async def _create_transaction(
         self, destinations: dict[str, int], utxo_list: list, from_address: str, fee: int,   deduct_fee: bool
