@@ -143,7 +143,7 @@ class AioTxUTXOClient(AioTxClient):
 
         transaction, inputs_used = await self._create_transaction(destinations, utxo_list, from_address, total_fee, deduct_fee)
 
-        signed_tx = self._sign_transaction(transaction, [private_key] * len(utxo_list))
+        signed_tx = self._sign_transaction(transaction, [private_key] * len(inputs_used))
         txid = await self._send_transaction(signed_tx.raw_hex())
         await self._mark_inputs_as_used(inputs_used)
         return txid
