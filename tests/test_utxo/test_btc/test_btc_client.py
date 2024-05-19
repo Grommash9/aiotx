@@ -3,7 +3,7 @@ import sys
 
 import pytest
 from conftest import vcr_c
-import asyncio
+
 from aiotx.clients import AioTxBTCClient
 from aiotx.types import FeeEstimate
 
@@ -138,65 +138,3 @@ async def test_get_balance_mysql(btc_client_mysql: AioTxBTCClient):
     balance = await btc_client_mysql.get_balance(TEST_BTC_ADDRESS)
     assert balance == 0
 
-
-
-# @pytest.mark.skipif(
-#     sys.platform == "win32",
-#     reason="Skipping transaction signing tests on Windows because we are not using RFC6979 from fastecdsa by default",
-# )
-# @pytest.mark.mysql
-# @vcr_c.use_cassette("btc/monitoring_balance_send_mark_as_used.yaml")
-# async def test_monitoring_balance_send_mark_as_used(btc_client_mysql: AioTxBTCClient):
-#     """
-#     Mega test :D It's for getting UTXO from monitoring (how it will be done by user)
-#     Checking balance, getting and checking UTXO list and sending transaction, checking what UTXO's was flagged
-#     as used
-#     """
-
-#     blocks = []
-#     transactions = []
-
-#     @btc_client_mysql.monitor.on_block
-#     async def handle_block(block):
-#         blocks.append(block)
-
-#     @btc_client_mysql.monitor.on_transaction
-#     async def handle_transaction(transaction):
-#         transactions.append(transaction)
-    
-#     await btc_client_mysql.import_address(TEST_BTC_ADDRESS, 2816168)
-#     await btc_client_mysql.start_monitoring()
-
-#     try:
-#         await asyncio.sleep(3)
-#     except KeyboardInterrupt:
-#         btc_client_mysql.stop_monitoring()
-
-#     assert len(blocks) > 0
-#     assert len(transactions) > 0
-#     assert 2816168 in blocks
-
-#     assert "4f844eb8870d1d8d8959d52f90a34eb688f2544a8c33bc35f10cdd5277b9e7c0" in [tx["txid"] for tx in transactions]
-#     assert "d952b3eb07a94498c76339ea71129e289ab2662107f0accd99ebfe911b8518cb" in [tx["txid"] for tx in transactions]
-
-#     balance = await btc_client_mysql.get_balance(TEST_BTC_ADDRESS)
-#     print("asdasdbalance", balance)
-#     utxo_list = await btc_client_mysql.monitor._get_utxo_data(TEST_BTC_ADDRESS)
-#     print("asdasd_utxo", utxo_list)
-
-    
-
-    # await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
-    # await btc_client.monitor._add_new_utxo(
-    #     TEST_BTC_ADDRESS, "25d56f693d5c4d00d3f98e58c8bd66e8db930e38c8a556bd67737b66cbf31ab9", 16263, 0
-    # )
-
-    # amount = 1000
-    # fee = btc_client.to_satoshi(0.00001)
-    # tx_id = await btc_client.send(
-    #     TEST_BTC_WALLET_PRIVATE_KEY, "tb1q4tf08gc2vf8dgfqtd3jen3s5tddz6uu0mnyf90", amount, fee
-    # )
-    
-    # assert len(utxo_list) == 0
-    # assert tx_id == "4f9a64d28ae22134379f7da50282d7ca2ead8a1f8378b20e25defcaaa5c59228"
-    # await btc_client.monitor._delete_utxo("25d56f693d5c4d00d3f98e58c8bd66e8db930e38c8a556bd67737b66cbf31ab9", 0)

@@ -1,6 +1,7 @@
+import asyncio
 import logging
 import os
-import asyncio
+
 import pytest
 import vcr
 from pytest import FixtureRequest
@@ -84,3 +85,18 @@ def btc_client_mysql(request: FixtureRequest) -> AioTxBTCClient:
 
     request.addfinalizer(teardown)
     return aiotx_btc_mysql_client
+
+@pytest.fixture
+def ltc_client_mysql(request: FixtureRequest) -> AioTxLTCClient:
+    aiotx_ltc_mysql_client = AioTxLTCClient(
+        LTC_TEST_NODE_URL,
+        testnet=True,
+        db_url=f"mysql+aiomysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}",
+    )
+
+
+    def teardown():
+        asyncio.run(aiotx_ltc_mysql_client.monitor._drop_tables())
+
+    request.addfinalizer(teardown)
+    return aiotx_ltc_mysql_client

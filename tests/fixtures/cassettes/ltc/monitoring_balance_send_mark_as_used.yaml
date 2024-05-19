@@ -1,0 +1,503 @@
+interactions:
+- request:
+    body: '{"method": "getblockcount", "params": [], "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+  response:
+    body:
+      string: '{"result":3266515,"error":null,"id":"curltest"}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88629ed84fe64170-LHR
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '47'
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 19 May 2024 08:12:10 GMT
+      Etag:
+      - W/"2f-032a2hmco1/DYaNUO1wyQuGQirU"
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=kkASNwCBsM8FmInHW9fkqFSZylm4CzoPzdu7lZT7BucMt7XaKOB6Lis%2BxqedojrDpQVVKTat7Uh2cCjJjs%2Fhh3fbAPRH625YaO%2B76Ud04JihdyP5BOlfTcEFJ7fTdCE%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Via:
+      - 1.1 google
+      alt-svc:
+      - h3=":443"; ma=86400
+      content-security-policy:
+      - 'default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src ''self''
+        https: data:;frame-ancestors ''self'';img-src ''self'' data:;object-src ''none'';script-src
+        ''self'';script-src-attr ''none'';style-src ''self'' https: ''unsafe-inline'';upgrade-insecure-requests'
+      expect-ct:
+      - max-age=0
+      referrer-policy:
+      - no-referrer
+      strict-transport-security:
+      - max-age=15552000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+      x-dns-prefetch-control:
+      - 'off'
+      x-download-options:
+      - noopen
+      x-frame-options:
+      - SAMEORIGIN
+      x-lgroup:
+      - v3:::4
+      x-permitted-cross-domain-policies:
+      - none
+      x-ratelimit-persec:
+      - '3'
+      x-xss-protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getblockhash", "params": [3262692], "jsonrpc": "2.0", "id":
+      "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+  response:
+    body:
+      string: '{"result":"6e403fa0da12fe81900f46b8bc7fb11a7dc86b557a7cafe3286f5ba80bec8d63","error":null,"id":"curltest"}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88629ed909a97705-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 19 May 2024 08:12:11 GMT
+      Etag:
+      - W/"6a-XStUqnflyISSX0+ogz1/EJPJ4Ls"
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=FfByYYJv%2B6Ihg9VsE%2BAJZtpbI5IfioMHcDSllr6%2BfOQ9lywpQTk9GA6IZMV7y1BrdsTTnwq7d6UBvDCTlxxIYL%2Bi9JAnStInSGp2zunp117SVdoZ1iLR4wij4Uiqisw%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 google
+      alt-svc:
+      - h3=":443"; ma=86400
+      content-security-policy:
+      - 'default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src ''self''
+        https: data:;frame-ancestors ''self'';img-src ''self'' data:;object-src ''none'';script-src
+        ''self'';script-src-attr ''none'';style-src ''self'' https: ''unsafe-inline'';upgrade-insecure-requests'
+      expect-ct:
+      - max-age=0
+      referrer-policy:
+      - no-referrer
+      strict-transport-security:
+      - max-age=15552000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+      x-dns-prefetch-control:
+      - 'off'
+      x-download-options:
+      - noopen
+      x-frame-options:
+      - SAMEORIGIN
+      x-lgroup:
+      - v3:::4
+      x-permitted-cross-domain-policies:
+      - none
+      x-ratelimit-persec:
+      - '3'
+      x-xss-protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getblock", "params": ["6e403fa0da12fe81900f46b8bc7fb11a7dc86b557a7cafe3286f5ba80bec8d63",
+      2], "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+  response:
+    body:
+      string: '{"result":{"hash":"6e403fa0da12fe81900f46b8bc7fb11a7dc86b557a7cafe3286f5ba80bec8d63","confirmations":3824,"strippedsize":1399,"size":2375,"weight":6398,"height":3262692,"version":536870912,"versionHex":"20000000","merkleroot":"268942c4606dbc21a644b8da993aa808cae19401b714f723af52be229ee6d227","tx":[{"txid":"f84f0d83c5b99becefa28687f12c794ee4af5fdb2e9eb4d91c29a3836e659280","hash":"d190c15ac18d1896cd8baafb755b0046dce067be82d11c147a3939f99d657ce4","version":1,"size":296,"vsize":269,"weight":1076,"locktime":0,"vin":[{"ismweb":false,"coinbase":"03e4c831040b34466608c1c1f42f00000000482f6a61616a506f6f6ce29b8fefb88f2068747470733a2f2f6a61616a2e70616765732e64657620f09f918841736b20666f72206672656520744c54432c206f72206d696e652077697468206d652f","txinwitness":["0000000000000000000000000000000000000000000000000000000000000000"],"sequence":0}],"vout":[{"ismweb":false,"value":6.24967852,"n":0,"scriptPubKey":{"asm":"0
+        94a1914d5e14ba06b02bb9d2b0b672f2fd125415","hex":"001494a1914d5e14ba06b02bb9d2b0b672f2fd125415","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1qjjsezn27zjaqdvpth8ftpdnj7t73y4q4vja4dq"]}},{"ismweb":false,"value":0.00062503,"n":1,"scriptPubKey":{"asm":"OP_DUP
+        OP_HASH160 684a4a9d1c027eddb12029e40ccd86215360790a OP_EQUALVERIFY OP_CHECKSIG","hex":"76a914684a4a9d1c027eddb12029e40ccd86215360790a88ac","reqSigs":1,"type":"pubkeyhash","addresses":["mq2PZs9p5ZNLbu23KLKb1tdQt1mrBJM7CX"]}},{"ismweb":false,"value":0,"n":2,"scriptPubKey":{"asm":"OP_RETURN
+        aa21a9ed9e908ab153d5ad2dd902b537f5370536a52d74345715bc96e0a7da5e21680afd","hex":"6a24aa21a9ed9e908ab153d5ad2dd902b537f5370536a52d74345715bc96e0a7da5e21680afd","type":"nulldata"}}],"hex":"010000000001010000000000000000000000000000000000000000000000000000000000000000ffffffff6103e4c831040b34466608c1c1f42f00000000482f6a61616a506f6f6ce29b8fefb88f2068747470733a2f2f6a61616a2e70616765732e64657620f09f918841736b20666f72206672656520744c54432c206f72206d696e652077697468206d652f0000000003ac4040250000000016001494a1914d5e14ba06b02bb9d2b0b672f2fd12541527f40000000000001976a914684a4a9d1c027eddb12029e40ccd86215360790a88ac0000000000000000266a24aa21a9ed9e908ab153d5ad2dd902b537f5370536a52d74345715bc96e0a7da5e21680afd0120000000000000000000000000000000000000000000000000000000000000000000000000"},{"txid":"f89d40747b5d415c26ccd4148568a350146af343a98f9156e8ce1d62f7ebe5c7","hash":"0a6fda3fa8a3a7a5afff9ac55143c0b02922147b4cd1d35febaf94f4675dadd4","version":1,"size":225,"vsize":144,"weight":573,"locktime":0,"vin":[{"ismweb":false,"txid":"2830a830d740fee93d6d4c33653c605e10d991bae627b7f2ecc2a11b5cb04283","vout":0,"scriptSig":{"asm":"","hex":""},"txinwitness":["304402201a8d07b8aa03005e028156a81c794e2c9a2abd179b31760236eed9493a8fed6b02200e1300317a3769895e0079b5580b053df6666a2f4c652de3c71f96c2f29875f301","034cebd3ed92c1a417714a0368d380df80138371d2af11008ae5fbd28106af26af"],"sequence":4294967295}],"vout":[{"ismweb":false,"value":1.0405841,"n":0,"scriptPubKey":{"asm":"0
+        89e4ca85bad1d282babc943af435458a44dc40e8","hex":"001489e4ca85bad1d282babc943af435458a44dc40e8","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1q38jv4pd668fg9w4ujsa0gd293fzdcs8g9ph8z4"]}},{"ismweb":false,"value":0.0001092,"n":1,"scriptPubKey":{"asm":"OP_DUP
+        OP_HASH160 5d532b6b05202558ca89585f667049f3009d2935 OP_EQUALVERIFY OP_CHECKSIG","hex":"76a9145d532b6b05202558ca89585f667049f3009d293588ac","reqSigs":1,"type":"pubkeyhash","addresses":["mp2QmctD3vxfRm4fZFBfvzL4x1tmWABw8i"]}}],"hex":"010000000001018342b05c1ba1c2ecf2b727e6ba91d9105e603c65334c6d3de9fe40d730a830280000000000ffffffff022ace33060000000016001489e4ca85bad1d282babc943af435458a44dc40e8a82a0000000000001976a9145d532b6b05202558ca89585f667049f3009d293588ac0247304402201a8d07b8aa03005e028156a81c794e2c9a2abd179b31760236eed9493a8fed6b02200e1300317a3769895e0079b5580b053df6666a2f4c652de3c71f96c2f29875f30121034cebd3ed92c1a417714a0368d380df80138371d2af11008ae5fbd28106af26af00000000"},{"txid":"89596bf8624118c6c3cd8cc2ebb6a2e19bc1c97abf994de9f23b8a2aef6765c1","hash":"b5d38e4e5b3bcec3b0c193f22c45971e38741d0d0056ef5466afb1afabe9b966","version":1,"size":257,"vsize":175,"weight":698,"locktime":0,"vin":[{"ismweb":false,"txid":"e328d42e61f6b022c1534cd2e7e184180574172c988bea359f0b8e8734f178c6","vout":0,"scriptSig":{"asm":"","hex":""},"txinwitness":["3045022100f7a3905a11087fb3e288d57c3238f5888d0f0e04d8d78c10e762da37bf71ac98022021ddc5d27684efb81aa277133521de8741ae87ba9e21029e9aa828f49b7c3a6701","032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a9"],"sequence":4294967295}],"vout":[{"ismweb":false,"value":0.41395438,"n":0,"scriptPubKey":{"asm":"0
+        83a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","hex":"001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7"]}},{"ismweb":false,"value":0.005,"n":1,"scriptPubKey":{"asm":"OP_DUP
+        OP_HASH160 684a4a9d1c027eddb12029e40ccd86215360790a OP_EQUALVERIFY OP_CHECKSIG","hex":"76a914684a4a9d1c027eddb12029e40ccd86215360790a88ac","reqSigs":1,"type":"pubkeyhash","addresses":["mq2PZs9p5ZNLbu23KLKb1tdQt1mrBJM7CX"]}},{"ismweb":false,"value":0.005,"n":2,"scriptPubKey":{"asm":"0
+        83a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","hex":"001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7"]}}],"hex":"01000000000101c678f134878e0b9f35ea8b982c1774051884e1e7d24c53c122b0f6612ed428e30000000000ffffffff03eea477020000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea20a10700000000001976a914684a4a9d1c027eddb12029e40ccd86215360790a88ac20a107000000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea02483045022100f7a3905a11087fb3e288d57c3238f5888d0f0e04d8d78c10e762da37bf71ac98022021ddc5d27684efb81aa277133521de8741ae87ba9e21029e9aa828f49b7c3a670121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a900000000"},{"txid":"c2f8e76c9537e5defa921b31edeb269603b8adec025c04d8e8b0e5764b80b861","hash":"f0116ab7feed39a1d3658eb37b97534d7583250ed59e7ec347d100201c875bb2","version":1,"size":256,"vsize":175,"weight":697,"locktime":0,"vin":[{"ismweb":false,"txid":"89596bf8624118c6c3cd8cc2ebb6a2e19bc1c97abf994de9f23b8a2aef6765c1","vout":0,"scriptSig":{"asm":"","hex":""},"txinwitness":["30440220600e932e092e727bc7b6854fc4b052107e72f7452a755feef4e37afd77d7e3fa02207da0b262ccb077220c17c57b8f85c753effded1cb8124d18c549685987e9dec901","032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a9"],"sequence":4294967295}],"vout":[{"ismweb":false,"value":0.40393423,"n":0,"scriptPubKey":{"asm":"0
+        83a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","hex":"001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7"]}},{"ismweb":false,"value":0.005,"n":1,"scriptPubKey":{"asm":"OP_DUP
+        OP_HASH160 684a4a9d1c027eddb12029e40ccd86215360790a OP_EQUALVERIFY OP_CHECKSIG","hex":"76a914684a4a9d1c027eddb12029e40ccd86215360790a88ac","reqSigs":1,"type":"pubkeyhash","addresses":["mq2PZs9p5ZNLbu23KLKb1tdQt1mrBJM7CX"]}},{"ismweb":false,"value":0.005,"n":2,"scriptPubKey":{"asm":"0
+        83a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","hex":"001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7"]}}],"hex":"01000000000101c16567ef2a8a3bf2e94d99bf7ac9c19be1a2b6ebc28ccdc3c6184162f86b59890000000000ffffffff03cf5a68020000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea20a10700000000001976a914684a4a9d1c027eddb12029e40ccd86215360790a88ac20a107000000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea024730440220600e932e092e727bc7b6854fc4b052107e72f7452a755feef4e37afd77d7e3fa02207da0b262ccb077220c17c57b8f85c753effded1cb8124d18c549685987e9dec90121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a900000000"},{"txid":"8117d7261873ab0bb49e195043d70693362cebe3275333678da5f738932bb3a7","hash":"70b5af23f16808d36e364307264daf5b52aa44b9a3465a71f6b0dff750947fbb","version":1,"size":256,"vsize":175,"weight":697,"locktime":0,"vin":[{"ismweb":false,"txid":"c2f8e76c9537e5defa921b31edeb269603b8adec025c04d8e8b0e5764b80b861","vout":0,"scriptSig":{"asm":"","hex":""},"txinwitness":["3044022038b1aaa20cefede57b1041ee103e66301ed3e340302c988226fcc54c2b59df7902202c5f1fe42d40f8272691d263b62a0a330f69e58636b6ef633a28f7981fd442c901","032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a9"],"sequence":4294967295}],"vout":[{"ismweb":false,"value":0.39391408,"n":0,"scriptPubKey":{"asm":"0
+        83a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","hex":"001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7"]}},{"ismweb":false,"value":0.005,"n":1,"scriptPubKey":{"asm":"OP_DUP
+        OP_HASH160 684a4a9d1c027eddb12029e40ccd86215360790a OP_EQUALVERIFY OP_CHECKSIG","hex":"76a914684a4a9d1c027eddb12029e40ccd86215360790a88ac","reqSigs":1,"type":"pubkeyhash","addresses":["mq2PZs9p5ZNLbu23KLKb1tdQt1mrBJM7CX"]}},{"ismweb":false,"value":0.005,"n":2,"scriptPubKey":{"asm":"0
+        83a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","hex":"001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7"]}}],"hex":"0100000000010161b8804b76e5b0e8d8045c02ecadb8039626ebed311b92fadee537956ce7f8c20000000000ffffffff03b01059020000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea20a10700000000001976a914684a4a9d1c027eddb12029e40ccd86215360790a88ac20a107000000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea02473044022038b1aaa20cefede57b1041ee103e66301ed3e340302c988226fcc54c2b59df7902202c5f1fe42d40f8272691d263b62a0a330f69e58636b6ef633a28f7981fd442c90121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a900000000"},{"txid":"ad83a8dedeb35659cfc65053021125618ebdd0f60ee3b946fda5ea77df6a0047","hash":"015aada859288793fcbf508bf5e48398beea1eeff970afab3834b5d65fd3d23a","version":1,"size":257,"vsize":175,"weight":698,"locktime":0,"vin":[{"ismweb":false,"txid":"8117d7261873ab0bb49e195043d70693362cebe3275333678da5f738932bb3a7","vout":0,"scriptSig":{"asm":"","hex":""},"txinwitness":["3045022100c0e2a4c4938d58a117e05eaf09a9bdf47195af5d376d29913be3091f0d96759b022074def0ebdf309c0aed23d82b1d193119769afd125fa9a05ef71829dc85c6257101","032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a9"],"sequence":4294967295}],"vout":[{"ismweb":false,"value":0.38389393,"n":0,"scriptPubKey":{"asm":"0
+        83a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","hex":"001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7"]}},{"ismweb":false,"value":0.005,"n":1,"scriptPubKey":{"asm":"OP_DUP
+        OP_HASH160 684a4a9d1c027eddb12029e40ccd86215360790a OP_EQUALVERIFY OP_CHECKSIG","hex":"76a914684a4a9d1c027eddb12029e40ccd86215360790a88ac","reqSigs":1,"type":"pubkeyhash","addresses":["mq2PZs9p5ZNLbu23KLKb1tdQt1mrBJM7CX"]}},{"ismweb":false,"value":0.005,"n":2,"scriptPubKey":{"asm":"0
+        83a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","hex":"001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7"]}}],"hex":"01000000000101a7b32b9338f7a58d67335327e3eb2c369306d74350199eb40bab731826d717810000000000ffffffff0391c649020000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea20a10700000000001976a914684a4a9d1c027eddb12029e40ccd86215360790a88ac20a107000000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea02483045022100c0e2a4c4938d58a117e05eaf09a9bdf47195af5d376d29913be3091f0d96759b022074def0ebdf309c0aed23d82b1d193119769afd125fa9a05ef71829dc85c625710121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a900000000"},{"txid":"a51a47a487ab537dbf263d70a4ffd4535b57f479ba792c1549c4a4e9a44fcfb2","hash":"28f357b12e2559c41f2fb72be6a246413bca868f9071ffaef023cdebeae86338","version":1,"size":256,"vsize":175,"weight":697,"locktime":0,"vin":[{"ismweb":false,"txid":"ad83a8dedeb35659cfc65053021125618ebdd0f60ee3b946fda5ea77df6a0047","vout":0,"scriptSig":{"asm":"","hex":""},"txinwitness":["304402203bd0b592c71a104b1947f29729625c1f2507a639ab26caeafc7c96cbf7c5bfea02205112833ec07029e4c9a79d95b66da568d7a25cbfffdbeed67d36592c38cc185601","032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a9"],"sequence":4294967295}],"vout":[{"ismweb":false,"value":0.37387378,"n":0,"scriptPubKey":{"asm":"0
+        83a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","hex":"001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7"]}},{"ismweb":false,"value":0.005,"n":1,"scriptPubKey":{"asm":"OP_DUP
+        OP_HASH160 684a4a9d1c027eddb12029e40ccd86215360790a OP_EQUALVERIFY OP_CHECKSIG","hex":"76a914684a4a9d1c027eddb12029e40ccd86215360790a88ac","reqSigs":1,"type":"pubkeyhash","addresses":["mq2PZs9p5ZNLbu23KLKb1tdQt1mrBJM7CX"]}},{"ismweb":false,"value":0.005,"n":2,"scriptPubKey":{"asm":"0
+        83a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","hex":"001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7"]}}],"hex":"0100000000010147006adf77eaa5fd46b9e30ef6d0bd8e612511025350c6cf5956b3dedea883ad0000000000ffffffff03727c3a020000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea20a10700000000001976a914684a4a9d1c027eddb12029e40ccd86215360790a88ac20a107000000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea0247304402203bd0b592c71a104b1947f29729625c1f2507a639ab26caeafc7c96cbf7c5bfea02205112833ec07029e4c9a79d95b66da568d7a25cbfffdbeed67d36592c38cc18560121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a900000000"},{"txid":"6af895eaa743b06e064e273513892e66548a7222558e15d33ee697f18b3cec29","hash":"961017417510714fc4954f26661c5ccde8804a04c130e043ad6c5437d50ba444","version":1,"size":223,"vsize":141,"weight":562,"locktime":0,"vin":[{"ismweb":false,"txid":"0b0bb48c46c56139dfb016b8e88b8a52c00b4839801ced8dfa781ad3eaf892ca","vout":1,"scriptSig":{"asm":"","hex":""},"txinwitness":["304502210080a3d05f9890c0557cd7f321534c35d5076b67e167d40d1beb7c9b24780245bf02206b1dce6a09ffe138e0b63f5084cc18feb30eb6ed3c3b63b1dbccee764628bf8c01","02742dc6ea17a05cde545de47047c3cb6de41874aa38c79b405e656cbebd3d2779"],"sequence":4294967295}],"vout":[{"ismweb":false,"value":0.00001,"n":0,"scriptPubKey":{"asm":"0
+        85c8f96732dd42e8e435c65b8a33fb31051a9f21","hex":"001485c8f96732dd42e8e435c65b8a33fb31051a9f21","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1qshy0jeejm4pw3ep4cedc5vlmxyz348epnk7etf"]}},{"ismweb":false,"value":0.22190767,"n":1,"scriptPubKey":{"asm":"0
+        d649304863eb9629dcdbb47db8c8a5c043d09689","hex":"0014d649304863eb9629dcdbb47db8c8a5c043d09689","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1q6eynqjrrawtznhxmk37m3j99cppap95f9ar0ex"]}}],"hex":"01000000000101ca92f8ead31a78fa8ded1c8039480bc0528a8be8b816b0df3961c5468cb40b0b0100000000ffffffff02e80300000000000016001485c8f96732dd42e8e435c65b8a33fb31051a9f21af9a520100000000160014d649304863eb9629dcdbb47db8c8a5c043d096890248304502210080a3d05f9890c0557cd7f321534c35d5076b67e167d40d1beb7c9b24780245bf02206b1dce6a09ffe138e0b63f5084cc18feb30eb6ed3c3b63b1dbccee764628bf8c012102742dc6ea17a05cde545de47047c3cb6de41874aa38c79b405e656cbebd3d277900000000"},{"txid":"c99480cbb5939032ddd93936e09361abec83644f4cdc2620adc735dd76746341","hash":"c99480cbb5939032ddd93936e09361abec83644f4cdc2620adc735dd76746341","version":2,"size":97,"vsize":94,"weight":376,"locktime":0,"vin":[{"ismweb":false,"txid":"98be32dda953d2f3b5cf5ae7efbb3d2d23c45695fed5624eb9c55c7d7348f9a9","vout":0,"scriptSig":{"asm":"","hex":""},"sequence":4294967295}],"vout":[{"ismweb":false,"value":1792617.89726909,"n":0,"scriptPubKey":{"asm":"8
+        1bccea32ee37e40bacf7024b0e8ae8066c91be16391606da2b731038554e4d2c","hex":"58201bccea32ee37e40bacf7024b0e8ae8066c91be16391606da2b731038554e4d2c","type":"witness_mweb_hogaddr"}}],"hex":"02000000000801a9f948737d5cc5b94e62d5fe9556c4232d3dbbefe75acfb5f3d253a9dd32be980000000000ffffffff01bd684ca309a300002258201bccea32ee37e40bacf7024b0e8ae8066c91be16391606da2b731038554e4d2c0000000000"}],"time":1715876875,"mediantime":1715875294,"nonce":2498036480,"bits":"1e0fffff","difficulty":0.0002441371325370145,"chainwork":"00000000000000000000000000000000000000000000000000c3adcd345b1f41","nTx":9,"mweb":{"hash":"1bccea32ee37e40bacf7024b0e8ae8066c91be16391606da2b731038554e4d2c","height":3262692,"kernel_offset":"c6033d49cf937b7e81adb6ceae7149c79df58a9f8e9a0bda85cc5793fb4fdef5","stealth_offset":"0000000000000000000000000000000000000000000000000000000000000000","num_kernels":0,"num_txos":4724,"kernel_root":"0000000000000000000000000000000000000000000000000000000000000000","output_root":"5ab12277d8bc4bcab8e5a9b06cada7379cd95e37f074a5605820aba5a2ade2ff","leaf_root":"c9586b01fd7b5bf9f5b798f5efb7ba7104d22e3a21538561f5e625faf70f3a61","inputs":[],"outputs":[],"kernels":[]},"previousblockhash":"1833bcb827f2a4e12dbbb78926bc7e3c23071a9cff02b43df82f0a8a6bb3c111","nextblockhash":"883e3b6dda89a126c1930d6df3b3f070eee7b1de4f960eddd76738e4d6023c34"},"error":null,"id":"curltest"}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88629edc9b009492-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 19 May 2024 08:12:11 GMT
+      Etag:
+      - W/"427f-fQHFIJwk0a5Xayhjgbs5JUvsQb4"
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=4X57Hm0uPN3onTmcXUoyGlcOlMju42jH91ZDveaw2Qqv7xeZ9V0R7Ui%2BUnQJ87l131VUnjKZzlZ1%2BL3IWr%2Ftvymrlv%2BoQ5X0la%2FY6HTzgyeMGJyO1pK%2FUZK7B5dVgYM%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 google
+      alt-svc:
+      - h3=":443"; ma=86400
+      content-security-policy:
+      - 'default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src ''self''
+        https: data:;frame-ancestors ''self'';img-src ''self'' data:;object-src ''none'';script-src
+        ''self'';script-src-attr ''none'';style-src ''self'' https: ''unsafe-inline'';upgrade-insecure-requests'
+      expect-ct:
+      - max-age=0
+      referrer-policy:
+      - no-referrer
+      strict-transport-security:
+      - max-age=15552000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+      x-dns-prefetch-control:
+      - 'off'
+      x-download-options:
+      - noopen
+      x-frame-options:
+      - SAMEORIGIN
+      x-lgroup:
+      - v3:::4
+      x-permitted-cross-domain-policies:
+      - none
+      x-ratelimit-persec:
+      - '3'
+      x-xss-protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "estimatesmartfee", "params": [6, "CONSERVATIVE"], "jsonrpc":
+      "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+  response:
+    body:
+      string: '{"result":{"feerate":0.00001986,"blocks":6},"error":null,"id":"curltest"}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88629edf597063fc-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 19 May 2024 08:12:12 GMT
+      Etag:
+      - W/"49-D84IREHQJrLz/rRkvStkwy49QUY"
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=QJwzCKTnZm9E7MoL%2Fcsf02y0L5qgSAQ9yeVE4x%2F15bqozmWSr4vL1HOmFdpUlLj7LD11spomDTLzc5djIE4FS6db38lolzkb4N19%2FHJVnoN65sC2TSDRC8TUzeNTPv8%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 google
+      alt-svc:
+      - h3=":443"; ma=86400
+      content-security-policy:
+      - 'default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src ''self''
+        https: data:;frame-ancestors ''self'';img-src ''self'' data:;object-src ''none'';script-src
+        ''self'';script-src-attr ''none'';style-src ''self'' https: ''unsafe-inline'';upgrade-insecure-requests'
+      expect-ct:
+      - max-age=0
+      referrer-policy:
+      - no-referrer
+      strict-transport-security:
+      - max-age=15552000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+      x-dns-prefetch-control:
+      - 'off'
+      x-download-options:
+      - noopen
+      x-frame-options:
+      - SAMEORIGIN
+      x-lgroup:
+      - v3:::4
+      x-permitted-cross-domain-policies:
+      - none
+      x-ratelimit-persec:
+      - '3'
+      x-xss-protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getblockhash", "params": [3262693], "jsonrpc": "2.0", "id":
+      "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+  response:
+    body:
+      string: '{"result":"883e3b6dda89a126c1930d6df3b3f070eee7b1de4f960eddd76738e4d6023c34","error":null,"id":"curltest"}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 8862a262ac568924-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 19 May 2024 08:14:36 GMT
+      Etag:
+      - W/"6a-FsfVPG04CutCSuFsY8DCxfPw58k"
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=wpVMy%2BPSafIoGB5vnlV6GZQ8%2FxI82Gajc%2B%2Fli5G3HTDUSPborTY38X%2FlE9YgoVQmYyskwxeRNZhBFsG4k9EO0sLf8PHq5xoJINRM8qeaFvnH5z6VwMRP1WGD%2BFcmkJw%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 google
+      alt-svc:
+      - h3=":443"; ma=86400
+      content-security-policy:
+      - 'default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src ''self''
+        https: data:;frame-ancestors ''self'';img-src ''self'' data:;object-src ''none'';script-src
+        ''self'';script-src-attr ''none'';style-src ''self'' https: ''unsafe-inline'';upgrade-insecure-requests'
+      expect-ct:
+      - max-age=0
+      referrer-policy:
+      - no-referrer
+      strict-transport-security:
+      - max-age=15552000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+      x-dns-prefetch-control:
+      - 'off'
+      x-download-options:
+      - noopen
+      x-frame-options:
+      - SAMEORIGIN
+      x-lgroup:
+      - v3:::4
+      x-permitted-cross-domain-policies:
+      - none
+      x-ratelimit-persec:
+      - '3'
+      x-xss-protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getblock", "params": ["883e3b6dda89a126c1930d6df3b3f070eee7b1de4f960eddd76738e4d6023c34",
+      2], "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+  response:
+    body:
+      string: '{"result":{"hash":"883e3b6dda89a126c1930d6df3b3f070eee7b1de4f960eddd76738e4d6023c34","confirmations":3823,"strippedsize":763,"size":1298,"weight":3413,"height":3262693,"version":536870912,"versionHex":"20000000","merkleroot":"2c74a4821c70fb85e743354c7b28e19759130fff7048d73b1f5d31c685869ea9","tx":[{"txid":"d4017ba4f041f3606d149ca26854b1cd7a9ae95f178108a98aab01682b077faa","hash":"c9263c53786272b35fe755765927569b98889e8a2127c18a64d3260d339f586c","version":1,"size":296,"vsize":269,"weight":1076,"locktime":0,"vin":[{"ismweb":false,"coinbase":"03e5c831049a35466608c1c1f42f00000000482f6a61616a506f6f6ce29b8fefb88f2068747470733a2f2f6a61616a2e70616765732e64657620f09f918841736b20666f72206672656520744c54432c206f72206d696e652077697468206d652f","txinwitness":["0000000000000000000000000000000000000000000000000000000000000000"],"sequence":0}],"vout":[{"ismweb":false,"value":6.24944812,"n":0,"scriptPubKey":{"asm":"0
+        94a1914d5e14ba06b02bb9d2b0b672f2fd125415","hex":"001494a1914d5e14ba06b02bb9d2b0b672f2fd125415","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1qjjsezn27zjaqdvpth8ftpdnj7t73y4q4vja4dq"]}},{"ismweb":false,"value":0.000625,"n":1,"scriptPubKey":{"asm":"OP_DUP
+        OP_HASH160 684a4a9d1c027eddb12029e40ccd86215360790a OP_EQUALVERIFY OP_CHECKSIG","hex":"76a914684a4a9d1c027eddb12029e40ccd86215360790a88ac","reqSigs":1,"type":"pubkeyhash","addresses":["mq2PZs9p5ZNLbu23KLKb1tdQt1mrBJM7CX"]}},{"ismweb":false,"value":0,"n":2,"scriptPubKey":{"asm":"OP_RETURN
+        aa21a9ed770a6fb88930a12c3fac7314b9484f71168f6bc368863adec747f8fad4e18434","hex":"6a24aa21a9ed770a6fb88930a12c3fac7314b9484f71168f6bc368863adec747f8fad4e18434","type":"nulldata"}}],"hex":"010000000001010000000000000000000000000000000000000000000000000000000000000000ffffffff6103e5c831049a35466608c1c1f42f00000000482f6a61616a506f6f6ce29b8fefb88f2068747470733a2f2f6a61616a2e70616765732e64657620f09f918841736b20666f72206672656520744c54432c206f72206d696e652077697468206d652f0000000003ace63f250000000016001494a1914d5e14ba06b02bb9d2b0b672f2fd12541524f40000000000001976a914684a4a9d1c027eddb12029e40ccd86215360790a88ac0000000000000000266a24aa21a9ed770a6fb88930a12c3fac7314b9484f71168f6bc368863adec747f8fad4e184340120000000000000000000000000000000000000000000000000000000000000000000000000"},{"txid":"2cfd67b4fb16dcd5584a02b1b3e55a1aa8b0220deb3d8fbaae85b75007dab153","hash":"025983266e271b1a6283bfcd1bac6d5c7c29afafea07c139a9f5d1280cf8b4a9","version":1,"size":370,"vsize":208,"weight":832,"locktime":0,"vin":[{"ismweb":false,"txid":"e447ff783683b625b1eb759b9ef890fe1f97c0dd9215da5a342fcbce425e11e2","vout":0,"scriptSig":{"asm":"","hex":""},"txinwitness":["30440220708894184dc44ad2f99d55ee4b7d8b29bff280eb427587d27a170747b0b3d69f02207e86e61df419c67cd02137f4fbf911bb0897ba8f1ca7156276d485003256c34001","035bc96345ad6257836f8c0267a067ac6bd3c9f7dd413f23330cc4f64248977e34"],"sequence":4294967295},{"ismweb":false,"txid":"e447ff783683b625b1eb759b9ef890fe1f97c0dd9215da5a342fcbce425e11e2","vout":1,"scriptSig":{"asm":"","hex":""},"txinwitness":["304402203e8e56d01b0ccf86d4a6c0c304cab12a92949ac5a9f3e3cd13e03017534629270220767c66db1794d38fa8aec6c23fe0d1cbdc9c33c5ba78d24428f5dcfc621c63fe01","02a1559f3b65652e92b529a5acc64cd9000a6eaa24531f61a7f928028fa3a87ac6"],"sequence":4294967295}],"vout":[{"ismweb":false,"value":6.69027031,"n":0,"scriptPubKey":{"asm":"0
+        3efcd669a05d842fb1b05ec45b3b946b8f55774d","hex":"00143efcd669a05d842fb1b05ec45b3b946b8f55774d","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1q8m7dv6dqtkzzlvdstmz9kwu5dw842a6d7hd5fr"]}},{"ismweb":false,"value":0.00405371,"n":1,"scriptPubKey":{"asm":"0
+        abd50c308b9563c615aeb0eb00752925ab2ff279","hex":"0014abd50c308b9563c615aeb0eb00752925ab2ff279","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1q402scvytj43uv9dwkr4sqaffyk4jlunet2cwyg"]}}],"hex":"01000000000102e2115e42cecb2f345ada1592ddc0971ffe90f89e9b75ebb125b6833678ff47e40000000000ffffffffe2115e42cecb2f345ada1592ddc0971ffe90f89e9b75ebb125b6833678ff47e40100000000ffffffff02d78ae027000000001600143efcd669a05d842fb1b05ec45b3b946b8f55774d7b2f060000000000160014abd50c308b9563c615aeb0eb00752925ab2ff279024730440220708894184dc44ad2f99d55ee4b7d8b29bff280eb427587d27a170747b0b3d69f02207e86e61df419c67cd02137f4fbf911bb0897ba8f1ca7156276d485003256c3400121035bc96345ad6257836f8c0267a067ac6bd3c9f7dd413f23330cc4f64248977e340247304402203e8e56d01b0ccf86d4a6c0c304cab12a92949ac5a9f3e3cd13e03017534629270220767c66db1794d38fa8aec6c23fe0d1cbdc9c33c5ba78d24428f5dcfc621c63fe012102a1559f3b65652e92b529a5acc64cd9000a6eaa24531f61a7f928028fa3a87ac600000000"},{"txid":"18d7e62ce5afb9bb7f83a3322f223e37b88f72b85655eeb0dcfbfa3d0f354b46","hash":"ba9a595876c505e9d236e6d3c37d08650e7eecb0d1f8fea16b6674678d395fca","version":2,"size":283,"vsize":202,"weight":805,"locktime":0,"vin":[{"ismweb":false,"txid":"5b44ed56f4c54cd41561faa364644b93978fef8129571547b8a567b31b591fcb","vout":0,"scriptSig":{"asm":"","hex":""},"txinwitness":["3044022010b6cfb0c2423824b8b81063ae88910ed9fb5c5ea81293e66a40e82c2f2df5730220496081dd6bb4fc401c546fd3f6e993022020f18ade8939a8966d6566ca95c64a01","0250b2fc8b8d48c3ee82621d9809e7c4fe376ebbb9827eba900577241e9e25c987"],"sequence":4294967295}],"vout":[{"ismweb":false,"value":1.48640545,"n":0,"scriptPubKey":{"asm":"0
+        e0d6e54804484a9e907dff19c92bae24eb6b289c","hex":"0014e0d6e54804484a9e907dff19c92bae24eb6b289c","reqSigs":1,"type":"witness_v0_keyhash","addresses":["tltc1qurtw2jqyfp9fayraluvuj2awyn4kk2yunhhhtr"]}},{"ismweb":false,"value":0,"n":1,"scriptPubKey":{"asm":"OP_RETURN
+        d1092a7a3a174003bdda055fb84c3181483f8dcf05c7e5c5597bbdc3f6f699bc3adcfc073cd4fd3d57fc1121ad0888415c32ea203613f68bb9ae37162f7e2063fbe07ef7bba4d9ea913c9c3282260333","hex":"6a4c50d1092a7a3a174003bdda055fb84c3181483f8dcf05c7e5c5597bbdc3f6f699bc3adcfc073cd4fd3d57fc1121ad0888415c32ea203613f68bb9ae37162f7e2063fbe07ef7bba4d9ea913c9c3282260333","type":"nulldata"}}],"hex":"02000000000101cb1f591bb367a5b84715572981ef8f97934b6464a3fa6115d44cc5f456ed445b0000000000ffffffff022113dc0800000000160014e0d6e54804484a9e907dff19c92bae24eb6b289c0000000000000000536a4c50d1092a7a3a174003bdda055fb84c3181483f8dcf05c7e5c5597bbdc3f6f699bc3adcfc073cd4fd3d57fc1121ad0888415c32ea203613f68bb9ae37162f7e2063fbe07ef7bba4d9ea913c9c328226033302473044022010b6cfb0c2423824b8b81063ae88910ed9fb5c5ea81293e66a40e82c2f2df5730220496081dd6bb4fc401c546fd3f6e993022020f18ade8939a8966d6566ca95c64a01210250b2fc8b8d48c3ee82621d9809e7c4fe376ebbb9827eba900577241e9e25c98700000000"},{"txid":"1348cb0ab064557d2c97aa3e816fa809e4f4b80e02ef0300a9e6a1b5d961ed9d","hash":"1348cb0ab064557d2c97aa3e816fa809e4f4b80e02ef0300a9e6a1b5d961ed9d","version":2,"size":97,"vsize":94,"weight":376,"locktime":0,"vin":[{"ismweb":false,"txid":"c99480cbb5939032ddd93936e09361abec83644f4cdc2620adc735dd76746341","vout":0,"scriptSig":{"asm":"","hex":""},"sequence":4294967295}],"vout":[{"ismweb":false,"value":1792617.89726909,"n":0,"scriptPubKey":{"asm":"8
+        e4da4679073926162e16bd2102a6c5b68a2717d37c95aba6c35ea44870a2a441","hex":"5820e4da4679073926162e16bd2102a6c5b68a2717d37c95aba6c35ea44870a2a441","type":"witness_mweb_hogaddr"}}],"hex":"0200000000080141637476dd35c7ad2026dc4c4f6483ecab6193e03639d9dd329093b5cb8094c90000000000ffffffff01bd684ca309a30000225820e4da4679073926162e16bd2102a6c5b68a2717d37c95aba6c35ea44870a2a4410000000000"}],"time":1715877274,"mediantime":1715875683,"nonce":2926314496,"bits":"1e0fffff","difficulty":0.0002441371325370145,"chainwork":"00000000000000000000000000000000000000000000000000c3adcd346b1f42","nTx":4,"mweb":{"hash":"e4da4679073926162e16bd2102a6c5b68a2717d37c95aba6c35ea44870a2a441","height":3262693,"kernel_offset":"c6033d49cf937b7e81adb6ceae7149c79df58a9f8e9a0bda85cc5793fb4fdef5","stealth_offset":"0000000000000000000000000000000000000000000000000000000000000000","num_kernels":0,"num_txos":4724,"kernel_root":"0000000000000000000000000000000000000000000000000000000000000000","output_root":"5ab12277d8bc4bcab8e5a9b06cada7379cd95e37f074a5605820aba5a2ade2ff","leaf_root":"c9586b01fd7b5bf9f5b798f5efb7ba7104d22e3a21538561f5e625faf70f3a61","inputs":[],"outputs":[],"kernels":[]},"previousblockhash":"6e403fa0da12fe81900f46b8bc7fb11a7dc86b557a7cafe3286f5ba80bec8d63","nextblockhash":"7f85496032ab8010f24361e0c4e406a18fd3070dd3b4c7a25385a1fefb2a0739"},"error":null,"id":"curltest"}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 8862a2636a91d188-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 19 May 2024 08:14:36 GMT
+      Etag:
+      - W/"200e-MTL8Fp5asStPY35Wb6eSA9Mnjhc"
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=mKEL3RJUd4mp8W0BhYGyDLpnEAjC2AifgxpiP1kPLR1f1mNtMmTyuYrH9kF6Ufb2hn8Pn%2FMupTHjT%2BRo76Uw%2BZ7fo0G6Y7VoaTpjus%2FML4srcdH7e%2F8Q7lNw96IGCwQ%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 google
+      alt-svc:
+      - h3=":443"; ma=86400
+      content-security-policy:
+      - 'default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src ''self''
+        https: data:;frame-ancestors ''self'';img-src ''self'' data:;object-src ''none'';script-src
+        ''self'';script-src-attr ''none'';style-src ''self'' https: ''unsafe-inline'';upgrade-insecure-requests'
+      expect-ct:
+      - max-age=0
+      referrer-policy:
+      - no-referrer
+      strict-transport-security:
+      - max-age=15552000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+      x-dns-prefetch-control:
+      - 'off'
+      x-download-options:
+      - noopen
+      x-frame-options:
+      - SAMEORIGIN
+      x-lgroup:
+      - v3:::4
+      x-permitted-cross-domain-policies:
+      - none
+      x-ratelimit-persec:
+      - '3'
+      x-xss-protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "sendrawtransaction", "params": ["01000000000101b2cf4fa4e9a4c449152c79ba79f4575b53d4ffa4703d26bf7d53ab87a4471aa50000000000ffffffff0262553a020000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eeaf3250000000000001976a914684a4a9d1c027eddb12029e40ccd86215360790a88ac02483045022100c318b13a4ab09df517122fd93894d5ac3f395d407362086c4ffe64b8c8a672c2022069b20ce901ffce47ba0910abd7e9765cd4d8891868e6cf30a740784a1bc303c20121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a900000000"],
+      "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+  response:
+    body:
+      string: '{"result":"e9830d6d57c3a77a8d64c0df1a44eccdb0eeed6ef8fda66fb82d113c45dff6a1","error":null,"id":"curltest"}'
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 8862a268380d79b9-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Sun, 19 May 2024 08:14:36 GMT
+      Etag:
+      - W/"6a-PoOOCCgVF+cL9IuJMbJAzAz4KrY"
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=CYNxRkFk06d38SSzSAbpkmV7q6yRr4x%2BMniQckDf%2Fsr%2FFCk6kObidtUCzjiSJpz4R1%2BAgNrVVPpQb3tFX8WubfiroCoRhGb5SYGING2l0HwCN6zT9nhhtzOtpaHSR9w%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Via:
+      - 1.1 google
+      alt-svc:
+      - h3=":443"; ma=86400
+      content-security-policy:
+      - 'default-src ''self'';base-uri ''self'';block-all-mixed-content;font-src ''self''
+        https: data:;frame-ancestors ''self'';img-src ''self'' data:;object-src ''none'';script-src
+        ''self'';script-src-attr ''none'';style-src ''self'' https: ''unsafe-inline'';upgrade-insecure-requests'
+      expect-ct:
+      - max-age=0
+      referrer-policy:
+      - no-referrer
+      strict-transport-security:
+      - max-age=15552000; includeSubDomains
+      x-content-type-options:
+      - nosniff
+      x-dns-prefetch-control:
+      - 'off'
+      x-download-options:
+      - noopen
+      x-frame-options:
+      - SAMEORIGIN
+      x-lgroup:
+      - v3:::4
+      x-permitted-cross-domain-policies:
+      - none
+      x-ratelimit-persec:
+      - '3'
+      x-xss-protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+version: 1

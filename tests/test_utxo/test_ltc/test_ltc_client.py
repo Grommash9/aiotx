@@ -1,3 +1,4 @@
+import asyncio
 import os
 import sys
 
@@ -292,3 +293,55 @@ async def test_send_with_fee_per_byte2(ltc_public_client: AioTxLTCClient):
     utxo_list = await ltc_public_client.monitor._get_utxo_data(TEST_LTC_ADDRESS)
     assert len(utxo_list) == 0
     assert tx_id == "b9d298d1af00740332d663d2902d30453781447e13ef0cc6aa07d2922df12f61"
+
+
+
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="Skipping transaction signing tests on Windows because we are not using RFC6979 from fastecdsa by default",
+)
+@pytest.mark.mysql
+@vcr_c.use_cassette("ltc/monitoring_balance_send_mark_as_used.yaml")
+async def test_monitoring_balance_send_mark_as_used(ltc_client_mysql: AioTxLTCClient):
+    """
+    Mega test :D It's for getting UTXO from monitoring (how it will be done by user)
+    Checking balance, getting and checking UTXO list and sending transaction, checking what UTXO's was flagged
+    as used
+    """
+
+    blocks = []
+    transactions = []
+
+    @ltc_client_mysql.monitor.on_block
+    async def handle_block(block):
+        blocks.append(block)
+
+    @ltc_client_mysql.monitor.on_transaction
+    async def handle_transaction(transaction):
+        transactions.append(transaction)
+    
+    await ltc_client_mysql.import_address(TEST_LTC_ADDRESS, 3262692)
+    await ltc_client_mysql.start_monitoring()
+
+    try:
+        await asyncio.sleep(2)
+    except KeyboardInterrupt:
+        ltc_client_mysql.stop_monitoring()
+
+    assert len(blocks) > 0
+    assert len(transactions) > 0
+    assert 3262692 in blocks
+
+    assert "a51a47a487ab537dbf263d70a4ffd4535b57f479ba792c1549c4a4e9a44fcfb2" in [tx["txid"] for tx in transactions]
+
+    # Removing some transaction from block 3262692 because we know they was used, but not monitoring in that test case
+    await ltc_client_mysql.monitor._mark_utxo_used("8117d7261873ab0bb49e195043d70693362cebe3275333678da5f738932bb3a7", 2)
+    await ltc_client_mysql.monitor._mark_utxo_used("89596bf8624118c6c3cd8cc2ebb6a2e19bc1c97abf994de9f23b8a2aef6765c1", 2)
+    await ltc_client_mysql.monitor._mark_utxo_used("a51a47a487ab537dbf263d70a4ffd4535b57f479ba792c1549c4a4e9a44fcfb2", 2)
+    await ltc_client_mysql.monitor._mark_utxo_used("ad83a8dedeb35659cfc65053021125618ebdd0f60ee3b946fda5ea77df6a0047", 2)
+    await ltc_client_mysql.monitor._mark_utxo_used("c2f8e76c9537e5defa921b31edeb269603b8adec025c04d8e8b0e5764b80b861", 2)
+
+    tx_id = await ltc_client_mysql.send(TEST_LTC_WALLET_PRIVATE_KEY, "mq2PZs9p5ZNLbu23KLKb1tdQt1mrBJM7CX", 10000, deduct_fee=True)
+    assert tx_id == "e9830d6d57c3a77a8d64c0df1a44eccdb0eeed6ef8fda66fb82d113c45dff6a1"
+
+    

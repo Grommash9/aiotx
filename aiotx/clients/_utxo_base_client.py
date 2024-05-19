@@ -1,6 +1,7 @@
 import asyncio
 import json
 from typing import Optional, Union
+
 import aiohttp
 from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
 from bitcoinlib.keys import HDKey, Key
@@ -188,8 +189,8 @@ class AioTxUTXOClient(AioTxClient):
             total_value += utxo.amount_satoshi
             if total_value >= total_amount + fee:
                 break
-
-        if total_value < total_amount:
+        total_spend = total_amount + fee if not deduct_fee else total_amount
+        if total_value < total_spend:
             raise InsufficientFunds(f"We have only {total_value} satoshi and it's {total_amount + fee} at least needed to cover that transaction!")
 
         if deduct_fee:
