@@ -1,7 +1,6 @@
 import asyncio
 import json
 from typing import Optional, Union
-
 import aiohttp
 from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
 from bitcoinlib.keys import HDKey, Key
@@ -93,7 +92,6 @@ class AioTxUTXOClient(AioTxClient):
     def get_address_from_private_key(self, private_key):
         key = Key(private_key)
         address = pubkeyhash_to_addr_bech32(key.hash160, prefix=self._network.prefix_bech32, witver=0, separator="1")
-
         return {"private_key": private_key, "public_key": key.public_hex, "address": address}
 
     async def import_address(self, address: str, block_number: int = None):
@@ -247,9 +245,7 @@ class AioTxUTXOClient(AioTxClient):
             async with session.post(
                 self.node_url, data=json.dumps(payload), auth=aiohttp.BasicAuth(self.node_username, self.node_password)
             ) as response:
-                # print("response", response)
                 result = await response.json()
-                # print("result", result)
                 error = result.get("error")
 
                 if error is None:
@@ -297,14 +293,6 @@ class UTXOMonitor(BlockMonitor):
 
         addresses = await self._get_addresses()
         for transaction in block_data["tx"]:
-
-            for input_utxo in transaction["vin"]:
-                txid = input_utxo.get("txid")
-                vout = input_utxo.get("vout")
-                if txid is None or vout is None:
-                    continue
-                await self._process_input_utxo(txid, vout)
-
             for output in transaction["vout"]:
                 outputs_scriptPubKey = output.get("scriptPubKey")
                 if outputs_scriptPubKey is None:
@@ -328,6 +316,17 @@ class UTXOMonitor(BlockMonitor):
                 output_n = output["n"]
                 await self._add_new_utxo(to_address, transaction["txid"], value, output_n)
 
+        all_utxo_tx_ids = await self._get_all_utxo_tx_ids()
+        for transaction in block_data["tx"]:
+            for input_utxo in transaction["vin"]:
+                txid = input_utxo.get("txid")
+                vout = input_utxo.get("vout")
+                if txid is None or vout is None:
+                    continue
+                if txid in all_utxo_tx_ids:
+                    await self._process_input_utxo(txid, vout)
+
+        for transaction in block_data["tx"]:
             for handler in self.transaction_handlers:
                 await handler(transaction)
 
@@ -337,6 +336,10 @@ class UTXOMonitor(BlockMonitor):
             last_known_block = await self.client.get_last_block_number()
             await self._init_last_block(last_known_block)
 
+    async def _drop_tables(self):
+        async with self._engine.begin() as conn:
+            await conn.run_sync(Base.metadata.drop_all)
+
     async def _add_new_address(self, address: str, block_number: int = None):
         last_known_block = await self.client.get_last_block_number()
         if block_number is None:
@@ -344,9 +347,14 @@ class UTXOMonitor(BlockMonitor):
 
         async with self._session() as session:
             async with session.begin():
-                session.add(self.Address(address=address, block_number=block_number))
+                existing_address = await session.scalar(
+                    select(self.Address).filter_by(address=address)
+                )
+                if existing_address:
+                    existing_address.block_number = block_number
+                else:
+                    session.add(self.Address(address=address, block_number=block_number))
                 await session.commit()
-
         last_known_block = await self._get_last_block()
         if last_known_block > block_number:
             await self._update_last_block(block_number)
@@ -354,7 +362,13 @@ class UTXOMonitor(BlockMonitor):
     async def _add_new_utxo(self, address: str, tx_id: str, amount: int, output_n: int) -> None:
         async with self._session() as session:
             async with session.begin():
-                session.add(self.UTXO(address=address, tx_id=tx_id, amount_satoshi=amount, output_n=output_n))
+                existing_utxo = await session.scalar(
+                    select(self.UTXO).filter_by(address=address, tx_id=tx_id, output_n=output_n)
+                )
+                if existing_utxo:
+                    existing_utxo.used = False
+                else:
+                    session.add(self.UTXO(address=address, tx_id=tx_id, amount_satoshi=amount, output_n=output_n))
                 await session.commit()
 
     async def _update_last_block(self, block_number: int) -> None:
@@ -374,7 +388,7 @@ class UTXOMonitor(BlockMonitor):
                     session.add(self.LastBlock(block_number=block_number))
                 await session.commit()
 
-    async def _process_input_utxo(self, txid: str, vout: int):
+    async def _process_input_utxo(self, txid: str, vout: int) -> None:
         utxo = await self._get_utxo(txid, vout)
         if utxo:
             await self._delete_utxo(txid, vout)
@@ -388,7 +402,7 @@ class UTXOMonitor(BlockMonitor):
             )
             return result.fetchall()
         
-    async def _mark_utxo_used(self, tx_id: str, output_n: str):
+    async def _mark_utxo_used(self, tx_id: str, output_n: str) -> None:
         async with self._session() as session:
             async with session.begin():
                 stmt = (
@@ -408,8 +422,16 @@ class UTXOMonitor(BlockMonitor):
                 select(self.UTXO).where(self.UTXO.tx_id == tx_id, self.UTXO.output_n == output_n)
             )
             return result.scalar()
+        
+    async def _get_all_utxo_tx_ids(self):
+        """
+        Function to optimize UTXO checking on new block to not make a SELECT for each input in the block
+        """
+        async with self._session() as session:
+            result = await session.execute(select(self.UTXO.tx_id))
+            return {row[0] for row in result.fetchall()}
 
-    async def _delete_utxo(self, tx_id: str, output_n: int):
+    async def _delete_utxo(self, tx_id: str, output_n: int) -> None:
         async with self._session() as session:
             async with session.begin():
                 await session.delete(await session.get(self.UTXO, (tx_id, output_n)))
@@ -420,7 +442,7 @@ class UTXOMonitor(BlockMonitor):
             result = await session.execute(select(self.LastBlock.block_number))
             return result.scalar()
 
-    async def _get_addresses(self) -> Optional[int]:
+    async def _get_addresses(self) -> list[str]:
         async with self._session() as session:
             result = await session.execute(select(self.Address.address))
             return {row[0] for row in result.fetchall()}
