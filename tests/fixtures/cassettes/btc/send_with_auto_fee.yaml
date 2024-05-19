@@ -41,7 +41,7 @@ interactions:
     uri: https://dry-compatible-cloud.btc-testnet.quiknode.pro/268755801856724a0c520053c0bc3b0a7b1a2d3e/
   response:
     body:
-      string: '{"result":{"feerate":0.01078218,"blocks":2},"error":null,"id":"curltest"}
+      string: '{"result":{"feerate":0.000365500,"blocks":2},"error":null,"id":"curltest"}
 
         '
     headers:
