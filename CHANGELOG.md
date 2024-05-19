@@ -6,16 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 ## [1.0.0]
-- UTXO logic for saving transactions into SQLite, 
-- send function ready to be covered by tests
-- username + pass auth removed for UTXO
-- LTC/BTC wallet generators added
-- monitoring handlers now only async
-- get_balance function added for UTXO
-- UTXO database BTC covered by tests
-- import address block number params is now optional
-- LTC/BTC transactions tests coverage
-- auto fee logic estimation added
+- LTC/BTC logic and tests added
 
 ## [0.6.0]
 - UTXO client block monitoring logic added and tested for LTC and BTC (both covered by tests)
