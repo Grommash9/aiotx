@@ -111,3 +111,30 @@ async def test_get_balance(btc_client: AioTxBTCClient):
     assert balance == 0
         
 
+
+@pytest.mark.mysql
+async def test_get_balance_mysql(btc_client_mysql: AioTxBTCClient):
+    await btc_client_mysql.monitor._add_new_address(TEST_BTC_ADDRESS)
+    await btc_client_mysql.monitor._add_new_utxo(
+        TEST_BTC_ADDRESS, "35158b7a8b6057bc67f6d904c64b5986adea8260f0bc96cbd755b530878e3cc2 ", 6263, 0
+    )
+
+    balance = await btc_client_mysql.get_balance(TEST_BTC_ADDRESS)
+    assert balance == 6263
+
+    await btc_client_mysql.monitor._delete_utxo("35158b7a8b6057bc67f6d904c64b5986adea8260f0bc96cbd755b530878e3cc2 ", 0)
+
+    balance = await btc_client_mysql.get_balance(TEST_BTC_ADDRESS)
+    assert balance == 0
+
+    await btc_client_mysql.monitor._add_new_utxo(
+        TEST_BTC_ADDRESS, "35158b7a8b6057bc67f6d904c64b5986adea8260f0bc96cbd755b530878e3cc2 ", 6263, 0
+    )
+    balance = await btc_client_mysql.get_balance(TEST_BTC_ADDRESS)
+    assert balance == 6263
+
+    await btc_client_mysql.monitor._mark_utxo_used("35158b7a8b6057bc67f6d904c64b5986adea8260f0bc96cbd755b530878e3cc2 ", 0)
+
+    balance = await btc_client_mysql.get_balance(TEST_BTC_ADDRESS)
+    assert balance == 0
+
