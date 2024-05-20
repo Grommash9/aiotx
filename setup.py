@@ -53,7 +53,8 @@ setup(
         "cryptography",
         "ecdsa",
         "bitcoinlib",
-        "greenlet"
+        "greenlet",
+        "setuptools"
     ],
     extras_require={
         "test": extras_test,
