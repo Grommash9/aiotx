@@ -279,7 +279,9 @@ async def test_send_few_single_transactions(ltc_public_client: AioTxLTCClient):
     second_tx_amount = ltc_public_client.to_satoshi(0.012)
     tx_id = await ltc_public_client.send(TEST_LTC_WALLET_PRIVATE_KEY, TEST_LTC_ADDRESS, second_tx_amount)
     utxo_list = await ltc_public_client.monitor._get_utxo_data(TEST_LTC_ADDRESS)
-    assert len(utxo_list) == 0
+    assert len(utxo_list) == 2
+    balance = await ltc_public_client.get_balance(TEST_LTC_ADDRESS)
+    assert balance == 296321 + 1200000
     assert tx_id == "09dac3c34ce8013a074890cdc34f90e264fda192b995350b7ad6d283f7d9276d"
 
 
