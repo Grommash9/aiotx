@@ -115,7 +115,7 @@ class AioTxUTXOClient(AioTxClient):
         if len(utxo_data) == 0:
             return 0
         return sum(utxo.amount_satoshi for utxo in utxo_data)
-
+    
     async def _build_and_send_transaction(
         self,
         private_key: str,
@@ -131,7 +131,7 @@ class AioTxUTXOClient(AioTxClient):
         utxo_list = await self.monitor._get_utxo_data(from_address)
 
         if total_fee is None:
-            empty_fee_transaction, _ = await self._create_transaction(destinations, utxo_list, from_address, 0, deduct_fee)
+            empty_fee_transaction, _, _ = await self._create_transaction(destinations, utxo_list, from_address, 0, deduct_fee)
             if fee_per_byte is None:
                 fee_per_kb = await self.estimate_smart_fee(conf_target, estimate_mode)
             else:
@@ -141,12 +141,22 @@ class AioTxUTXOClient(AioTxClient):
             empty_fee_transaction.estimate_size()
             total_fee = empty_fee_transaction.calculate_fee()
 
-        transaction, inputs_used = await self._create_transaction(destinations, utxo_list, from_address, total_fee, deduct_fee)
+        transaction, inputs_used, outputs_used = await self._create_transaction(destinations, utxo_list, from_address, total_fee, deduct_fee)
 
         signed_tx = self._sign_transaction(transaction, [private_key] * len(inputs_used))
         txid = await self._send_transaction(signed_tx.raw_hex())
         await self._mark_inputs_as_used(inputs_used)
+        await self._save_pending_outputs(outputs_used, from_address, txid)
         return txid
+    
+
+    async def _save_pending_outputs(self, outputs_used, from_address: str, tx_id: str):
+        for i, output in enumerate(outputs_used):
+            destination_address = output[0]
+            if from_address != destination_address:
+                continue
+            amount = output[1]
+            await self.monitor._add_new_utxo(from_address, tx_id, amount, i)
 
     async def send(
         self,
@@ -215,7 +225,7 @@ class AioTxUTXOClient(AioTxClient):
             address, value = output_data
             transaction.add_output(value=value, address=address)
 
-        return transaction, inputs
+        return transaction, inputs, outputs
 
     def _sign_transaction(self, transaction: Transaction, private_keys: list[str]) -> Transaction:
         for i, private_key in enumerate(private_keys):
