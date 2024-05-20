@@ -36,7 +36,7 @@ setup(
     long_description_content_type="text/markdown",
     packages=find_packages(exclude=("tests", "scripts", "examples", "docs")),
     package_data={
-        "aiotx": ["py.typed"],
+        "aiotx": ["py.typed", "*.json"],
     },
     setup_requires=[
         "setuptools_scm",
