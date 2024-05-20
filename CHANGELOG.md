@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.2.0]
+- UTXO client - adding UTXOs after send, so we will able to send few transactions in same block
+    without waiting for new one to get our UTXOs
+
 ## [1.1.0]
 - UTXO client hotfix - we should have keys for all used inputs and not just for all inputs
 
