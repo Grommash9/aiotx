@@ -22,6 +22,8 @@ Key Features
 Getting Started
 ---------------
 
+For testing you can use public node but for production will be better to get private ot least shared one, you can get it for free on [Get Block](https://account.getblock.io/sign-in?ref=NWUzNjUzNjktY2EzMy01YzI3LWFlZDUtZjYzYmM1OWU0NmFk) or [Quick Node](https://www.quicknode.com/?via=aiotx)
+
 To start using AioTx, simply install the package using pip:
 
 ```python
