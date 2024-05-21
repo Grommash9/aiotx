@@ -19,10 +19,16 @@ Key Features
 
 6. **Testing:** To ensure the reliability and stability of AioTx, the package is extensively covered by tests. The test suite includes comprehensive test cases for various scenarios, networks, and operations. AioTx utilizes the VCR (Video Cassette Recorder) library to record and replay network interactions, making the tests deterministic and independent of external services.
 
+Getting Node Url
+----------------
+
+For testing purposes, you can use public nodes, but for production, it's better to get a private or at least a shared node. You can obtain one for free on platforms like [Get Block](https://account.getblock.io/sign-in?ref=NWUzNjUzNjktY2EzMy01YzI3LWFlZDUtZjYzYmM1OWU0NmFk) or [Quick Node](https://www.quicknode.com/?via=aiotx)
+
+By using these referral URLs, you'll be supporting the project, and I would greatly appreciate your contribution.
+
+
 Getting Started
 ---------------
-
-For testing you can use public node but for production will be better to get private ot least shared one, you can get it for free on [Get Block](https://account.getblock.io/sign-in?ref=NWUzNjUzNjktY2EzMy01YzI3LWFlZDUtZjYzYmM1OWU0NmFk) or [Quick Node](https://www.quicknode.com/?via=aiotx)
 
 To start using AioTx, simply install the package using pip:
 

@@ -190,7 +190,7 @@ class AioTxEVMClient(AioTxClient):
             "chainId": self.chain_id,
         }
         signed_transaction = Account.sign_transaction(transaction, private_key)
-        raw_tx = to_hex(signed_transaction.rawTransaction)
+        raw_tx = to_hex(signed_transaction.raw_transaction)
         payload = {"method": "eth_sendRawTransaction", "params": [raw_tx]}
         result = await self._make_rpc_call(payload)
         return result["result"]
@@ -226,7 +226,7 @@ class AioTxEVMClient(AioTxClient):
         }
 
         signed_transaction = Account.sign_transaction(transaction, private_key)
-        raw_tx = to_hex(signed_transaction.rawTransaction)
+        raw_tx = to_hex(signed_transaction.raw_transaction)
 
         payload = {"method": "eth_sendRawTransaction", "params": [raw_tx]}
         result = await self._make_rpc_call(payload)
