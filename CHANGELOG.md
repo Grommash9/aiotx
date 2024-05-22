@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [1.3.0]
+- Pulling block only if they are in network to stop printing a lot of errors
+
 ## [1.2.5]
 - Pin the version of main packages and code changes for new eth_account 
 
