@@ -292,10 +292,14 @@ class UTXOMonitor(BlockMonitor):
         self.LastBlock = create_last_block_model(self.client._network.name)
 
     async def poll_blocks(self):
-        latest_block = await self._get_last_block()
-        block_data = await self.client.get_block_by_number(latest_block)
-        await self.process_block(latest_block, block_data)
-        await self._update_last_block(latest_block + 1)
+        network_last_block = await self.client.get_last_block_number()
+        local_latest_block = await self._get_last_block()
+        if network_last_block < local_latest_block:
+            return
+        block_data = await self.client.get_block_by_number(local_latest_block)
+        await self.process_block(local_latest_block, block_data)
+        next_block = local_latest_block + 1
+        await self._update_last_block(next_block)
 
     async def process_block(self, block_number, block_data):
         await self._update_last_block(block_number)

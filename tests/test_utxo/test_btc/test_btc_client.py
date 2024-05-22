@@ -88,7 +88,6 @@ async def test_send_with_auto_fee(btc_client: AioTxBTCClient):
     assert tx_id == "77cb20c4b0325242b9e5f45f4850e5387dc585d6b72bb36ba65a126534436973"
 
     utxo_list = await btc_client.monitor._get_utxo_data(TEST_BTC_ADDRESS)
-    print("utxo_list", utxo_list)
     assert len(utxo_list) == 0
 
 

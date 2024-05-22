@@ -299,11 +299,13 @@ class EvmMonitor(BlockMonitor):
     async def poll_blocks(
         self,
     ):
-        if self._latest_block is None:
-            self._latest_block = await self.client.get_last_block_number()
-        block = await self.client.get_block_by_number(self._latest_block)
+        network_latest_block = await self.client.get_last_block_number()
+        target_block = network_latest_block if self._latest_block is None else self._latest_block
+        if target_block > network_latest_block:
+            return
+        block = await self.client.get_block_by_number(target_block)
         await self.process_block(block["result"])
-        self._latest_block = self._latest_block + 1
+        self._latest_block = target_block + 1
 
     async def process_block(self, block):
         for handler in self.block_handlers:
