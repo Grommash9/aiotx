@@ -1,61 +1,41 @@
 interactions:
 - request:
-    body: '{"method": "eth_blockNumber", "params": [], "id": 1, "jsonrpc": "2.0"}'
-    headers: {}
-    method: POST
-    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
-  response:
-    body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x261b51d"}'
-    headers:
-      Access-Control-Allow-Credentials:
-      - 'true'
-      Access-Control-Allow-Headers:
-      - Content-Type,Authorization,User-Agent
-      Access-Control-Allow-Methods:
-      - GET, POST, OPTIONS
-      Access-Control-Allow-Origin:
-      - ''
-      Content-Length:
-      - '45'
-      Content-Type:
-      - application/json
-      Date:
-      - Wed, 01 May 2024 18:07:30 GMT
-      Vary:
-      - Accept-Encoding
-      X-Node-Id:
-      - bnb-smart-chain_bsc-testnet_iad
-    status:
-      code: 200
-      message: OK
-- request:
     body: '{"method": "eth_blockNumber", "params": [], "jsonrpc": "2.0", "id": 1}'
     headers: {}
     method: POST
-    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+    uri: https://bsc-testnet-rpc.publicnode.com
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x261bd7a"}'
+      string: '{"jsonrpc":"2.0","result":"0x26b1c7a","id":1}
+
+        '
     headers:
-      Access-Control-Allow-Credentials:
-      - 'true'
-      Access-Control-Allow-Headers:
-      - Content-Type,Authorization,User-Agent
-      Access-Control-Allow-Methods:
-      - GET, POST, OPTIONS
-      Access-Control-Allow-Origin:
-      - ''
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 888270085d26dd7e-LHR
+      Connection:
+      - keep-alive
       Content-Length:
-      - '45'
+      - '46'
       Content-Type:
       - application/json
       Date:
-      - Wed, 01 May 2024 19:54:32 GMT
+      - Thu, 23 May 2024 04:52:37 GMT
+      Server:
+      - cloudflare
       Vary:
-      - Accept-Encoding
-      X-Node-Id:
-      - bnb-smart-chain_bsc-testnet_iad
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '2'
     status:
       code: 200
       message: OK

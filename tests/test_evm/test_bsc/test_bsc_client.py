@@ -24,12 +24,19 @@ async def test_get_last_block(bsc_client: AioTxBSCClient):
     assert isinstance(block_id, int)
 
 
+@vcr_c.use_cassette("bsc/get_chain_id.yaml")
+async def test_get_chain_id(bsc_client: AioTxBSCClient):
+    chain_id = await bsc_client.get_chain_id()
+    assert isinstance(chain_id, int)
+    assert chain_id == 97
+
+
 @pytest.mark.parametrize(
     "wallet_address, expected_exception, expected_balance",
     [
-        ("0x1284214b9b9c85549aB3D2b972df0dEEf66aC2c9", None, 10561622435613231665),
-        ("0x3a82a5a2b77d33a12621e860d1d19cdfb8bf63b4", None, 99724094999968300),
-        ("0x0e28BD8B2D4efb8A3128f7fB310f4e227E25DB6F", None, 691239109999999988),
+        ("0x1284214b9b9c85549aB3D2b972df0dEEf66aC2c9", None, 10891723659733231665),
+        ("0x3a82a5a2b77d33a12621e860d1d19cdfb8bf63b4", None, 102029280699956200),
+        ("0x0e28BD8B2D4efb8A3128f7fB310f4e227E25DB6F", None, 690442684999999988),
         ("0xfb2bdebad0cb9486e714b053a2dbfaf7c05151c9", None, 271930000000000),
         ("0x040bA056435A7675847F4D577d3Cb8Fc2646A946", None, 421930000000000),
         ("0x040bA056435A7675847F4D577d3Cb8Fc2646A948", None, 0),
@@ -74,12 +81,12 @@ async def test_get_transaction(bsc_client: AioTxBSCClient, tx_id, expected_excep
 @pytest.mark.parametrize(
     "wallet_address, contract, expected_exception, expected_balance",
     [
-        ("0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", CONTRACT, None, 1000000001000000000),
+        ("0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", CONTRACT, None, 8000000001000000000),
         ("0x896c54023265f2c821f241BC694d8A0E1FA7DF2E", CONTRACT, None, 3570000000000000000),
-        ("0x3ffeCb152F95f7122990ab16Eff4B0B5d533497e", CONTRACT, None, 15469999999000000000),
-        ("0x98265f1Dd3224aBA2148C6cF2Ef873b05A3476C1", CONTRACT, None, 629546202581319287241),
+        ("0x3ffeCb152F95f7122990ab16Eff4B0B5d533497e", CONTRACT, None, 8469999999000000000),
+        ("0x98265f1Dd3224aBA2148C6cF2Ef873b05A3476C1", CONTRACT, None, 659546202581319287241),
         ("0xf6626A900e4Cc958D2cD0Eb2186Fd6B29EDB63ce", CONTRACT, None, 950000000000000000),
-        ("0x2dbB5a4c235164B9f772179A43faca2c71a8abDB", CONTRACT, None, 32963423288412440122),
+        ("0x2dbB5a4c235164B9f772179A43faca2c71a8abDB", CONTRACT, None, 41624579772130211939),
         ("0xDA31b5ac94C559478Eeaa7E347ee4557f9a6F71C", CONTRACT, None, 0),
         ("0xDA31b5ac94C559478Eeaa7E347ee4557f9a6F71C", "Eeaa7E347ee4557f9a6F71C", InvalidArgumentError, 0),
     ],
@@ -103,8 +110,8 @@ async def test_get_token_balance(
     [
         ("0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", None, 0),
         ("0x896c54023265f2c821f241BC694d8A0E1FA7DF2E", None, 0),
-        ("0x3ffeCb152F95f7122990ab16Eff4B0B5d533497e", None, 102),
-        ("0x98265f1Dd3224aBA2148C6cF2Ef873b05A3476C1", None, 1751),
+        ("0x3ffeCb152F95f7122990ab16Eff4B0B5d533497e", None, 132),
+        ("0x98265f1Dd3224aBA2148C6cF2Ef873b05A3476C1", None, 1788),
         ("0xf6626A900e4Cc958D2cD0Eb2186Fd6B29EDB63ce", None, 17),
         ("0x2dbB5a4c235164B9f772179A43faca2c71a8abDB", None, 1),
         ("2dbB5a4c235164B9f772179A43faca2c71a8abDB", InvalidArgumentError, 0),
@@ -126,7 +133,7 @@ async def test_get_transaction_count(bsc_client: AioTxBSCClient, wallet_address,
 async def test_send_get_gas_price(bsc_client: AioTxBSCClient):
     result = await bsc_client.get_gas_price()
     assert isinstance(result, int)
-    assert result == 5000000000
+    assert result == 5050000000
 
 
 @pytest.mark.parametrize(
@@ -216,7 +223,7 @@ async def test_send_transaction_with_auto_gas(
 
 @vcr_c.use_cassette("bsc/send_transaction_with_custom_nonce.yaml")
 async def test_send_transaction_with_custom_nonce(bsc_client: AioTxBSCClient):
-    wei_amount = bsc_client.to_wei(0.00001, "ether")
+    wei_amount = bsc_client.to_wei(0.00002, "ether")
     sender_address = bsc_client.get_address_from_private_key(PRIVATE_KEY_TO_SEND_FROM)
     nonce = await bsc_client.get_transactions_count(sender_address)
     first_tx = await bsc_client.send(PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, wei_amount, nonce=nonce)
@@ -285,12 +292,12 @@ async def test_send_transaction_with_custom_nonce(bsc_client: AioTxBSCClient):
             61000,
             TypeError,
         ),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 5, 61000, None),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 0.5, 5, 61000, None),
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1000, 5, 61000, ReplacementTransactionUnderpriced),
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 0, 61000, AioTxError),
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 0, 5, 61000, ReplacementTransactionUnderpriced),
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 5, 0, AioTxError),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 5, 61000, None),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 0.5, 5, 61000, None),
     ],
 )
 @vcr_c.use_cassette("bsc/send_token_transaction.yaml")

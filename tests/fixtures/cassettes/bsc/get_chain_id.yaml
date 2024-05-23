@@ -1,12 +1,12 @@
 interactions:
 - request:
-    body: '{"method": "eth_gasPrice", "params": [], "jsonrpc": "2.0", "id": 1}'
+    body: '{"method": "eth_chainId", "params": [], "jsonrpc": "2.0", "id": 1}'
     headers: {}
     method: POST
     uri: https://bsc-testnet-rpc.publicnode.com
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x12d00e280"}
+      string: '{"jsonrpc":"2.0","result":"0x61","id":1}
 
         '
     headers:
@@ -15,19 +15,17 @@ interactions:
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 888270279bd752ba-LHR
+      - 88827d5c48b99421-LHR
       Connection:
       - keep-alive
-      Content-Encoding:
-      - gzip
+      Content-Length:
+      - '41'
       Content-Type:
       - application/json
       Date:
-      - Thu, 23 May 2024 04:52:42 GMT
+      - Thu, 23 May 2024 05:01:43 GMT
       Server:
       - cloudflare
-      Transfer-Encoding:
-      - chunked
       Vary:
       - Origin, accept-encoding
       X-Content-Type-Options:
@@ -37,7 +35,7 @@ interactions:
       strict-transport-security:
       - max-age=31536000; includeSubDomains; preload
       x-envoy-upstream-service-time:
-      - '6'
+      - '1'
     status:
       code: 200
       message: OK

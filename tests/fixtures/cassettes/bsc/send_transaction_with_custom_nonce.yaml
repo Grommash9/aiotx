@@ -4,33 +4,39 @@ interactions:
       "latest"], "jsonrpc": "2.0", "id": 1}'
     headers: {}
     method: POST
-    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+    uri: https://bsc-testnet-rpc.publicnode.com
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x82"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x86"}
 
         '
     headers:
-      Access-Control-Allow-Credentials:
-      - 'true'
-      Access-Control-Allow-Headers:
-      - Content-Type,Authorization,User-Agent
-      Access-Control-Allow-Methods:
-      - GET, POST, OPTIONS
-      Access-Control-Allow-Origin:
-      - ''
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 888276560dfc79c6-LHR
+      Connection:
+      - keep-alive
       Content-Length:
       - '41'
       Content-Type:
       - application/json
       Date:
-      - Sat, 04 May 2024 08:29:18 GMT
+      - Thu, 23 May 2024 04:56:56 GMT
+      Server:
+      - cloudflare
       Vary:
-      - Accept-Encoding
-      X-Host-Id:
-      - f1b546936d23e3b5-4291c05108b63f99
-      X-Node-Id:
-      - bnb-smart-chain_bsc-testnet_iad
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '6'
     status:
       code: 200
       message: OK
@@ -38,68 +44,84 @@ interactions:
     body: '{"method": "eth_gasPrice", "params": [], "jsonrpc": "2.0", "id": 1}'
     headers: {}
     method: POST
-    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+    uri: https://bsc-testnet-rpc.publicnode.com
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x123f92da0"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x12d00e280"}
 
         '
     headers:
-      Access-Control-Allow-Credentials:
-      - 'true'
-      Access-Control-Allow-Headers:
-      - Content-Type,Authorization,User-Agent
-      Access-Control-Allow-Methods:
-      - GET, POST, OPTIONS
-      Access-Control-Allow-Origin:
-      - ''
-      Content-Length:
-      - '48'
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88827656fb9035db-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 04 May 2024 08:29:19 GMT
+      - Thu, 23 May 2024 04:56:56 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
       Vary:
-      - Accept-Encoding
-      X-Host-Id:
-      - f1b546936d23e3b5-4291c05108b63f99
-      X-Node-Id:
-      - bnb-smart-chain_bsc-testnet_iad
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '6'
     status:
       code: 200
       message: OK
 - request:
-    body: '{"method": "eth_sendRawTransaction", "params": ["0xf86c8182850123f92da082520894f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a8609184e72a0008081e6a0b04081f4c041911a511f34e23352c05ee7e46b88dafc9cd7d7f3c168322f3deda00ced47f99dc12d686ea384873f8d37d38ffb5dc0fcb2a5d18c25214a7f7e5245"],
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf86c818685012d00e28082520894f9e35e4e1cbcf08e99b84d3f6ff662ba4c306b5a8612309ce540008081e6a09801488d86eb92b8e4e1b48f7f8823be9414633cbcd76fad0e59bf67139b1b84a04178d33488f3a739b1b3e42cfce584ee8f2860353dae5b6991147e532e100b67"],
       "jsonrpc": "2.0", "id": 1}'
     headers: {}
     method: POST
-    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+    uri: https://bsc-testnet-rpc.publicnode.com
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x0f47bdb42e18137f1e166e2fee68877fca081e6e6f639c0ce629a363db5a5e1e"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x18a35f45bc7bc8ed90542aa6536362fb8e4128af1e0ed6e321c9d1fdae6d5ad4"}
 
         '
     headers:
-      Access-Control-Allow-Credentials:
-      - 'true'
-      Access-Control-Allow-Headers:
-      - Content-Type,Authorization,User-Agent
-      Access-Control-Allow-Methods:
-      - GET, POST, OPTIONS
-      Access-Control-Allow-Origin:
-      - ''
-      Content-Length:
-      - '103'
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88827657dc3b4886-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 04 May 2024 08:29:19 GMT
+      - Thu, 23 May 2024 04:56:56 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
       Vary:
-      - Accept-Encoding
-      X-Host-Id:
-      - f1b546936d23e3b5-ecf10b7bc104d983
-      X-Node-Id:
-      - bnb-smart-chain_bsc-testnet_iad
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '10'
     status:
       code: 200
       message: OK
@@ -107,68 +129,124 @@ interactions:
     body: '{"method": "eth_gasPrice", "params": [], "jsonrpc": "2.0", "id": 1}'
     headers: {}
     method: POST
-    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+    uri: https://bsc-testnet-rpc.publicnode.com
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x123f92da0"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x12d00e280"}
 
         '
     headers:
-      Access-Control-Allow-Credentials:
-      - 'true'
-      Access-Control-Allow-Headers:
-      - Content-Type,Authorization,User-Agent
-      Access-Control-Allow-Methods:
-      - GET, POST, OPTIONS
-      Access-Control-Allow-Origin:
-      - ''
-      Content-Length:
-      - '48'
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88827658deb2527c-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 04 May 2024 08:29:19 GMT
+      - Thu, 23 May 2024 04:56:56 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
       Vary:
-      - Accept-Encoding
-      X-Host-Id:
-      - f1b546936d23e3b5-84b84c7a90242c73
-      X-Node-Id:
-      - bnb-smart-chain_bsc-testnet_iad
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '6'
     status:
       code: 200
       message: OK
 - request:
-    body: '{"method": "eth_sendRawTransaction", "params": ["0xf86c8183850123f92da0825208943ffecb152f95f7122990ab16eff4b0b5d533497e8609184e72a0008081e6a0fc492839015f1e9bc8381ebea382c72af6ac48c797050584d344bcc20a15437ba05ffcbd6ff4d80f15b143f4cc2b6f6e12f4c7b576f91c20804c4db72f421c01af"],
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf86c818785012d00e280825208943ffecb152f95f7122990ab16eff4b0b5d533497e8612309ce540008081e5a00dcdfc0946d229892fa3e3b904348c8107d318396a869897e4e5f8bcee54fdb2a07d0e417e1d4232337a0f5f5259c6d02efd41110d2b8a0d8b06aab27fef4e10ce"],
       "jsonrpc": "2.0", "id": 1}'
     headers: {}
     method: POST
-    uri: https://nameless-flashy-snow.bsc-testnet.quiknode.pro/c54e248a38fb9b7a8b31d84d57c1e41b203ed019/
+    uri: https://bsc-testnet-rpc.publicnode.com
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x1b03c2e3590ed2193130dbbd25596877adc22e746f705b353d6f6b5f7ce0d192"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x5ec52d0649c164958a1e91b2bca8371d34e16a28b34704ec4cd902baa0b71a92"}
 
         '
     headers:
-      Access-Control-Allow-Credentials:
-      - 'true'
-      Access-Control-Allow-Headers:
-      - Content-Type,Authorization,User-Agent
-      Access-Control-Allow-Methods:
-      - GET, POST, OPTIONS
-      Access-Control-Allow-Origin:
-      - ''
-      Content-Length:
-      - '103'
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88827659bafd459c-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
       Content-Type:
       - application/json
       Date:
-      - Sat, 04 May 2024 08:29:19 GMT
+      - Thu, 23 May 2024 04:56:56 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
       Vary:
-      - Accept-Encoding
-      X-Host-Id:
-      - f1b546936d23e3b5-84b84c7a90242c73
-      X-Node-Id:
-      - bnb-smart-chain_bsc-testnet_iad
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '7'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_chainId", "params": [], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://bsc-testnet-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","result":"0x61","id":1}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 8882788fd85b940d-LHR
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '41'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 23 May 2024 04:58:27 GMT
+      Server:
+      - cloudflare
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '3'
     status:
       code: 200
       message: OK

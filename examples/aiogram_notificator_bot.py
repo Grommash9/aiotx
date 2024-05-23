@@ -9,7 +9,7 @@ bot = Bot(token="BOT TOKEN")
 dispatcher = Dispatcher()
 
 # Create an instance of the AioTxBSCClient
-bsc_client = AioTxBSCClient("NODE URL", 97)
+bsc_client = AioTxBSCClient("https://bsc-testnet-rpc.publicnode.com")
 
 
 # Define the block handler

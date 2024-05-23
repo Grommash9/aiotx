@@ -43,9 +43,9 @@ from aiotx.types import BlockParam
 
 
 class AioTxEVMClient(AioTxClient):
-    def __init__(self, node_url, chain_id):
+    def __init__(self, node_url):
         super().__init__(node_url)
-        self.chain_id = chain_id
+        self.chain_id = None
         self.monitor = EvmMonitor(self)
         self._monitoring_task = None
 
@@ -180,6 +180,8 @@ class AioTxEVMClient(AioTxClient):
         from_address = self.get_address_from_private_key(private_key)
         if nonce is None:
             nonce = await self.get_transactions_count(from_address, BlockParam.PENDING)
+        if self.chain_id is None:
+            self.chain_id = await self.get_chain_id()
         transaction = {
             "nonce": nonce,
             "gasPrice": gas_price,
@@ -210,6 +212,8 @@ class AioTxEVMClient(AioTxClient):
             nonce = await self.get_transactions_count(from_address, BlockParam.PENDING)
         if gas_price is None:
             gas_price = await self.get_gas_price()
+        if self.chain_id is None:
+            self.chain_id = await self.get_chain_id()
         function_signature = "transfer(address,uint256)"
         function_selector = keccak(function_signature.encode("utf-8"))[:4].hex()
         transfer_data = encode(["address", "uint256"], [to_checksum_address(to_address), amount])
@@ -231,6 +235,12 @@ class AioTxEVMClient(AioTxClient):
         payload = {"method": "eth_sendRawTransaction", "params": [raw_tx]}
         result = await self._make_rpc_call(payload)
         return result["result"]
+    
+    async def get_chain_id(self) -> int:
+        payload = {"method": "eth_chainId", "params": []}
+        result = await self._make_rpc_call(payload)
+        tx_count = result["result"]
+        return 0 if tx_count == "0x" else int(tx_count, 16)
 
     async def _make_rpc_call(self, payload) -> dict:
         payload["jsonrpc"] = "2.0"

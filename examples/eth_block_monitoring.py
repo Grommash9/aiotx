@@ -2,8 +2,7 @@ from aiotx.clients import AioTxETHClient
 import asyncio
 
 eth_client = AioTxETHClient(
-    node_url="https://ethereum-sepolia-rpc.publicnode.com", 
-    chain_id=11155111)
+    node_url="https://ethereum-sepolia-rpc.publicnode.com")
 
 
 @eth_client.monitor.on_block

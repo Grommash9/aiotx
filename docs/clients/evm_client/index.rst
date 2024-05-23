@@ -23,7 +23,7 @@ To create an instance of AioTxETHClient, you need to provide the ETH node URL an
 
 
    async def main():
-      eth_client = AioTxETHClient("NODE_URL", "ETH_CHAIN_ID")
+      eth_client = AioTxETHClient("NODE_URL")
 
       last_block = await eth_client.get_last_block_number()
       print("last_block", last_block)
