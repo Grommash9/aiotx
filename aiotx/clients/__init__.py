@@ -26,6 +26,16 @@ class AioTxETHClient(AioTxEVMClient):
         return [entry for entry in self._erc20_abi]
 
 
+class AioTxPolygonClient(AioTxEVMClient):
+    def __init__(self, node_url):
+        super().__init__(node_url)
+        erc20_abi_json = pkg_resources.resource_string('aiotx.utils', 'erc20_abi.json')
+        self._erc20_abi = json.loads(erc20_abi_json)
+
+    def _get_abi_entries(self):
+        return [entry for entry in self._erc20_abi]
+
+
 class AioTxBTCClient(AioTxUTXOClient):
 
     def __init__(
