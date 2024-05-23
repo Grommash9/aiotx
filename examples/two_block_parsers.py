@@ -1,8 +1,11 @@
 from aiotx.clients import AioTxBSCClient, AioTxETHClient
 import asyncio
 
-bsc_client = AioTxBSCClient("NODE_URL", 97)
-eth_client = AioTxETHClient("NODE_URL", 1151511)
+BSC_TEST_NODE_URL = "https://bsc-testnet-rpc.publicnode.com"
+ETH_TEST_NODE_URL = "https://ethereum-sepolia-rpc.publicnode.com"
+
+bsc_client = AioTxBSCClient(BSC_TEST_NODE_URL)
+eth_client = AioTxETHClient(ETH_TEST_NODE_URL)
 
 @bsc_client.monitor.on_block
 async def handle_block(block):

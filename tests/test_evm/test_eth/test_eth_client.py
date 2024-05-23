@@ -24,6 +24,13 @@ async def test_get_last_block(eth_client: AioTxETHClient):
     assert isinstance(block_id, int)
 
 
+@vcr_c.use_cassette("eth/get_chain_id.yaml")
+async def test_get_chain_id(eth_client: AioTxETHClient):
+    chain_id = await eth_client.get_chain_id()
+    assert isinstance(chain_id, int)
+    assert chain_id == 11155111
+
+
 @pytest.mark.parametrize(
     "wallet_address, expected_exception, expected_balance",
     [
