@@ -289,7 +289,7 @@ async def test_get_contract_decimals(eth_client: AioTxETHClient, contract, expec
             0.00001,
             5,
             61000,
-            TypeError,
+            ValueError,
         ),
         (
             PRIVATE_KEY_TO_SEND_FROM,
@@ -298,7 +298,7 @@ async def test_get_contract_decimals(eth_client: AioTxETHClient, contract, expec
             1,
             5,
             61000,
-            TypeError,
+            None,
         ),
         (
             PRIVATE_KEY_TO_SEND_FROM,
@@ -307,14 +307,14 @@ async def test_get_contract_decimals(eth_client: AioTxETHClient, contract, expec
             1,
             5,
             61000,
-            TypeError,
+            ValueError,
         ),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 5, 61000, None),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 5, 61000, ReplacementTransactionUnderpriced),
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1000, 5, 61000, ReplacementTransactionUnderpriced),
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 0, 61000, AioTxError),
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 0, 5, 61000, ReplacementTransactionUnderpriced),
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 5, 0, AioTxError),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 5, 61000, None),
+        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 5, 61000, ReplacementTransactionUnderpriced),
     ],
 )
 @vcr_c.use_cassette("eth/send_token_transaction.yaml")
@@ -341,7 +341,7 @@ async def test_send_token_transaction(
 
 
 @vcr_c.use_cassette("eth/send_token_transaction_with_custom_nonce.yaml")
-async def send_token_transaction_with_custom_nonce(eth_client: AioTxETHClient):
+async def test_send_token_transaction_with_custom_nonce(eth_client: AioTxETHClient):
     wei_amount = eth_client.to_wei(0.00001, "mwei")
     sender_address = eth_client.get_address_from_private_key(PRIVATE_KEY_TO_SEND_FROM)
     nonce = await eth_client.get_transactions_count(sender_address)

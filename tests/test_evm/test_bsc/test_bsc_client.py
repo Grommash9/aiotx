@@ -7,6 +7,7 @@ from aiotx.clients import AioTxBSCClient
 from aiotx.exceptions import (
     AioTxError,
     InvalidArgumentError,
+    NonceTooLowError,
     ReplacementTransactionUnderpriced,
     TransactionNotFound,
     WrongPrivateKey,
@@ -272,7 +273,7 @@ async def test_send_transaction_with_custom_nonce(bsc_client: AioTxBSCClient):
             0.00001,
             5,
             61000,
-            TypeError,
+            ValueError,
         ),
         (
             PRIVATE_KEY_TO_SEND_FROM,
@@ -281,7 +282,7 @@ async def test_send_transaction_with_custom_nonce(bsc_client: AioTxBSCClient):
             1,
             5,
             61000,
-            TypeError,
+            NonceTooLowError,
         ),
         (
             PRIVATE_KEY_TO_SEND_FROM,
@@ -290,7 +291,7 @@ async def test_send_transaction_with_custom_nonce(bsc_client: AioTxBSCClient):
             1,
             5,
             61000,
-            TypeError,
+            ValueError,
         ),
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 0.5, 5, 61000, None),
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1000, 5, 61000, ReplacementTransactionUnderpriced),

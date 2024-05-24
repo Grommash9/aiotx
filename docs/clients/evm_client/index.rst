@@ -8,7 +8,7 @@ The Ethereum Virtual Machine (EVM) Client is a parent client for networks based 
 
 All of these cryptocurrencies use similar logic in many places, so they will be merged into the same parent client.
 
-Currently, AioTxBSCClient and AioTxETHClient are tested and ready to be used. Please keep in mind that when reading this documentation, the methods can be used for any EVM-based blockchain.
+Currently, AioTxBSCClient, AioTxPolygonClient and AioTxETHClient are tested and ready to be used. Please keep in mind that when reading this documentation, the methods can be used for any EVM-based blockchain.
 
 QuickStart (**Logic is the same for all EVM clients; just import AioTxBSCClient or AioTxETHClient**)
 

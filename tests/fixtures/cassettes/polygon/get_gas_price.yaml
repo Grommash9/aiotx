@@ -1,0 +1,42 @@
+interactions:
+- request:
+    body: '{"method": "eth_gasPrice", "params": [], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://polygon-amoy-bor-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x4190ab0f"}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 8882f84e08ee4141-LHR
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '47'
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 23 May 2024 06:25:39 GMT
+      Server:
+      - cloudflare
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '5'
+    status:
+      code: 200
+      message: OK
+version: 1

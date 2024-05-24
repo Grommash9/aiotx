@@ -1,0 +1,166 @@
+interactions:
+- request:
+    body: '{"method": "eth_getTransactionCount", "params": ["0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a",
+      "pending"], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://polygon-amoy-bor-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x4"}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 888a0d7fbcc571b6-LHR
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '40'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 24 May 2024 03:03:28 GMT
+      Server:
+      - cloudflare
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_gasPrice", "params": [], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://polygon-amoy-bor-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x4190ab10"}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 888a0d807f656391-LHR
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '47'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 24 May 2024 03:03:28 GMT
+      Server:
+      - cloudflare
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_chainId", "params": [], "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://polygon-amoy-bor-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","result":"0x13882","id":1}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 888a0d813a88940b-LHR
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '44'
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 24 May 2024 03:03:28 GMT
+      Server:
+      - cloudflare
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '3'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_sendRawTransaction", "params": ["0xf8ac04844190ab10830186a0940fd9e8d3af1aaee056eb9e802c3a762a667b190480b844a9059cbb0000000000000000000000003ffecb152f95f7122990ab16eff4b0b5d533497e000000000000000000000000000000000000000000000000016345785d8a000083027128a07af06a921a7f56e4f7497c085b977cf431596bd397c165640f2edcc8fe2bc909a0049518c13c140960310193f14cc61d67838716a9edfcefe1c625e8cf687fe89f"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers: {}
+    method: POST
+    uri: https://polygon-amoy-bor-rpc.publicnode.com
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x9de8bb9aff7eba29675c71b6c7b79b2bb894dc5fe06786fa2e76594ecf736747"}
+
+        '
+    headers:
+      Access-Control-Max-Age:
+      - '1728000'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 888a0d82098679b4-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 24 May 2024 03:03:28 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin, accept-encoding
+      X-Content-Type-Options:
+      - nosniff
+      alt-svc:
+      - h3=":443"; ma=86400
+      strict-transport-security:
+      - max-age=31536000; includeSubDomains; preload
+      x-envoy-upstream-service-time:
+      - '4'
+    status:
+      code: 200
+      message: OK
+version: 1

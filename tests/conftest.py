@@ -6,7 +6,13 @@ import pytest
 import vcr
 from pytest import FixtureRequest
 
-from aiotx.clients import AioTxBSCClient, AioTxBTCClient, AioTxETHClient, AioTxLTCClient
+from aiotx.clients import (
+    AioTxBSCClient,
+    AioTxBTCClient,
+    AioTxETHClient,
+    AioTxLTCClient,
+    AioTxPolygonClient,
+)
 
 # ALL = "all"
 # ANY = "any"
@@ -18,7 +24,7 @@ BSC_TEST_NODE_URL = "https://bsc-testnet-rpc.publicnode.com"
 ETH_TEST_NODE_URL = "https://ethereum-sepolia-rpc.publicnode.com"
 LTC_TEST_NODE_URL = "https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet"
 BTC_TEST_NODE_URL = "https://dry-compatible-cloud.btc-testnet.quiknode.pro/268755801856724a0c520053c0bc3b0a7b1a2d3e/"
-
+POLYGON_TEST_NODE_URL = "https://polygon-amoy-bor-rpc.publicnode.com"
 
 pytest.mark.mysql = pytest.mark.mysql
 logging.getLogger("vcr").setLevel(logging.WARNING)
@@ -34,6 +40,9 @@ vcr_c = vcr.VCR(
 def bsc_client() -> AioTxBSCClient:
     return AioTxBSCClient(BSC_TEST_NODE_URL)
 
+@pytest.fixture
+def polygon_client() -> AioTxPolygonClient:
+    return AioTxPolygonClient(POLYGON_TEST_NODE_URL)
 
 @pytest.fixture
 def eth_client() -> AioTxETHClient:
