@@ -223,7 +223,7 @@ class AioTxEVMClient(AioTxClient):
             "nonce": nonce,
             "gasPrice": gas_price,
             "gas": gas_limit,
-            "to": contract_address,
+            "to": to_checksum_address(contract_address),
             "value": 0,
             "data": data,
             "chainId": self.chain_id,

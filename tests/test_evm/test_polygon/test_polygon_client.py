@@ -254,3 +254,109 @@ async def test_send_transaction_with_auto_params(polygon_client: AioTxETHClient)
     wei_amount = polygon_client.to_wei(0.1, "ether")
     tx_id = await polygon_client.send_token(POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, wei_amount)
     assert isinstance(tx_id, str)
+
+
+@pytest.mark.parametrize(
+    "private_key, to_address, contract, amount, gas_price, gas_limit, expected_exception",
+    [
+        (
+            "87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd",
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            1,
+            5,
+            61000,
+            WrongPrivateKey,
+        ),
+        (
+            "87e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938ch",
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            1,
+            5,
+            61000,
+            WrongPrivateKey,
+        ),
+        (
+            "e6dah15aa076a932cd9f0663da72f8cfb6d3e23c00ef1269104bd904938chd",
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            1,
+            5,
+            61000,
+            WrongPrivateKey,
+        ),
+        (POLYGON_WALLET_PRIVATE_KEY, "0xf9E35E4e1CbcF08E984d3f6FF662Ba4c306b5a", CONTRACT, 1, 5, 61000, ValueError),
+        (POLYGON_WALLET_PRIVATE_KEY, "f9E5E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", CONTRACT, 1, 5, 61000, ValueError),
+        (POLYGON_WALLET_PRIVATE_KEY, "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b", CONTRACT, 1, 5, 61000, ValueError),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            DESTINATION_ADDRESS,
+            "0xf9E35E4e1CbcF08E984d3f6FF662Ba4c306b5a",
+            0.00001,
+            5,
+            61000,
+            ValueError,
+        ),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            DESTINATION_ADDRESS,
+            "f9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a",
+            1,
+            5,
+            61000,
+            None,
+        ),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            DESTINATION_ADDRESS,
+            "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b",
+            1,
+            5,
+            61000,
+            ValueError,
+        ),
+        (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, 0.3, 5, 61000, ReplacementTransactionUnderpriced),
+        (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, 1000, 5, 61000, ReplacementTransactionUnderpriced),
+        (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, 1, 0, 61000, AioTxError),
+        (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, 0, 5, 61000, ReplacementTransactionUnderpriced),
+        (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, 1, 5, 0, AioTxError),
+        (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, 0.4, 5, 61000, ReplacementTransactionUnderpriced),
+    ],
+)
+@vcr_c.use_cassette("polygon/send_token_transaction.yaml")
+async def test_send_token_transaction(
+    polygon_client: AioTxETHClient, private_key, to_address, contract, amount, gas_price, gas_limit, expected_exception
+):
+    """
+    Here it's raising ReplacementTransactionUnderpriced and NonceTooLowError because we have reusing
+    the same VCR data for every get nonce request, we should investigate how we can change that maybe?
+    """
+    gas_price = polygon_client.to_wei(gas_price, "gwei")
+    wei_amount = polygon_client.to_wei(amount, "gwei")
+
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await polygon_client.send_token(
+                private_key, to_address, contract, wei_amount, gas_price=gas_price, gas_limit=gas_limit
+            )
+    else:
+        result = await polygon_client.send_token(
+            private_key, to_address, contract, wei_amount, gas_price=gas_price, gas_limit=gas_limit
+        )
+        assert isinstance(result, str)
+
+
+@vcr_c.use_cassette("polygon/send_token_transaction_with_custom_nonce.yaml")
+async def test_send_token_transaction_with_custom_nonce(polygon_client: AioTxETHClient):
+    wei_amount = polygon_client.to_wei(0.1, "gwei")
+    sender_address = polygon_client.get_address_from_private_key(POLYGON_WALLET_PRIVATE_KEY)
+    nonce = await polygon_client.get_transactions_count(sender_address)
+    first_tx = await polygon_client.send_token(
+        POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, wei_amount, nonce=nonce
+    )
+    assert isinstance(first_tx, str)
+    second_tx = await polygon_client.send_token(
+        POLYGON_WALLET_PRIVATE_KEY, sender_address, CONTRACT, wei_amount, nonce=nonce + 1
+    )
+    assert isinstance(second_tx, str)
