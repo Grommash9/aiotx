@@ -53,7 +53,8 @@ setup(
         "cryptography",
         "bitcoinlib==0.6.*",
         "greenlet",
-        "setuptools"
+        "setuptools",
+        "tonsdk==1.0.13"
     ],
     extras_require={
         "test": extras_test,

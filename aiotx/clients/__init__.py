@@ -3,6 +3,7 @@ import json
 import pkg_resources
 
 from ._evm_base_client import AioTxEVMClient
+from ._ton_base_client import AioTxTONClient
 from ._utxo_base_client import AioTxUTXOClient
 
 
