@@ -4,6 +4,9 @@ AioTx is a comprehensive Python package designed to simplify and streamline your
 
 I created AioTx because I wanted to consolidate all the crypto operations that I frequently use into one convenient package. The goal was to have a collection of crypto clients that I regularly work with, all in one place, with a consistent and intuitive API.
 
+Join telegram channel and chat for updates and help
+https://t.me/aiotx_python
+
 Key Features
 ------------
 
