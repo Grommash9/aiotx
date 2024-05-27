@@ -111,26 +111,35 @@ class AioTxTONClient(AioTxClient):
     def from_nano(self, number: int, unit: str = "ton")-> int:
         return tonsdk_from_nano(number, unit)
 
-    async def send(self, mnemonic: str, to_address: str, amount: int, seqno: int = None):
+    async def send(self, mnemonic: str, to_address: str, amount: int, seqno: int = None) -> str:
         assert isinstance(amount, int), "Amount should be integer! Please use to_nano for convert it!"
         if self.workchain is None:
             await self._get_network_params()
 
         from_address, _ = await self.get_address_from_mnemonics(mnemonic)
-        mnemonic_list = self._unpack_mnemonic(mnemonic)
-        _, _, _, wallet = Wallets.from_mnemonics(mnemonic_list, self.wallet_version, self.workchain)
         if seqno is None:
             seqno = await self.get_transaction_count(from_address)
+
+        mnemonic_list = self._unpack_mnemonic(mnemonic)
+        boc = self._create_transfer_boc(mnemonic_list, to_address, amount, seqno)
+        boc_answer_data = await self.send_boc_return_hash(boc)
+        return boc_answer_data["hash"]
+    
+    # async def estimate_fee(self, boc: str, address: str):
+    #     payload = {"method": "estimateFee", "params": {"address": address,"body": boc}}
+    #     information = await self._make_rpc_call(payload)
+    #     return information
+
+    def _create_transfer_boc(self, mnemonic_list: list[str], to_address, amount, seqno):
+        _, _, _, wallet = Wallets.from_mnemonics(mnemonic_list, self.wallet_version, self.workchain)
         query = wallet.create_transfer_message(
             to_addr=to_address, amount=amount, payload="", seqno=seqno
         )
         boc = bytes_to_b64str(query["message"].to_boc(False))
-        boc_answer_data = await self.send_boc_return_hash(boc)
-        return boc_answer_data["hash"]
+        return boc
 
     async def send_boc_return_hash(self, boc):
         payload = {"method": "sendBocReturnHash", "params": {"boc": boc}}
-
         information = await self._make_rpc_call(payload)
         return information
 
