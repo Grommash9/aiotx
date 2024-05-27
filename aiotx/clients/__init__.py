@@ -6,6 +6,14 @@ from ._evm_base_client import AioTxEVMClient
 from ._ton_base_client import AioTxTONClient
 from ._utxo_base_client import AioTxUTXOClient
 
+__all__ = [
+    "AioTxTONClient",
+    "AioTxBSCClient",
+    "AioTxETHClient",
+    "AioTxPolygonClient",
+    "AioTxBTCClient",
+    "AioTxLTCClient",
+]
 
 class AioTxBSCClient(AioTxEVMClient):
     def __init__(self, node_url):

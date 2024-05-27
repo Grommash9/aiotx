@@ -4,7 +4,7 @@ import pytest
 from conftest import vcr_c  # noqa
 
 from aiotx.clients import AioTxTONClient
-from aiotx.exceptions import BlockNotFoundError, InvalidArgumentError, AioTxError
+from aiotx.exceptions import AioTxError, BlockNotFoundError, InvalidArgumentError
 
 TON_TEST_WALLET_MEMO = os.environ.get("TON_TEST_WALLET_MEMO")
 assert TON_TEST_WALLET_MEMO is not None, "Please provide TON_TEST_WALLET_MEMO"
