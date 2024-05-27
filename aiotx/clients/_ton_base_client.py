@@ -2,11 +2,12 @@ import json
 from typing import Optional
 
 import aiohttp
+from typing import Union
+import decimal
 from tonsdk.contract.wallet import Wallets, WalletVersionEnum
 from tonsdk.crypto import mnemonic_new
 from tonsdk.crypto._mnemonic import mnemonic_is_valid
-from tonsdk.utils import bytes_to_b64str, to_nano
-
+from tonsdk.utils import bytes_to_b64str, to_nano as tonsdk_to_nano, from_nano as tonsdk_from_nano
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     AioTxError,
@@ -52,7 +53,7 @@ class AioTxTONClient(AioTxClient):
         return wallet.address.to_string(is_user_friendly=True, is_url_safe=True), wallet.address.to_string(
             False, False, False
         )
-
+    
     async def get_last_master_block(self) -> int:
         payload = {"method": "getMasterchainInfo", "params": {}}
         result = await self._make_rpc_call(payload)
@@ -103,16 +104,29 @@ class AioTxTONClient(AioTxClient):
         payload = {"method": "detectAddress", "params": {"address": address}}
         information = await self._make_rpc_call(payload)
         return information
+    
+    def to_nano(self, number: Union[int, float, str, decimal.Decimal], unit: str = "ton")-> int:
+        return tonsdk_to_nano(number, unit)
+    
+    def from_nano(self, number: int, unit: str = "ton")-> int:
+        return tonsdk_from_nano(number, unit)
 
-    async def send(self, mnemonic, to_address, seqno):
+    async def send(self, mnemonic: str, to_address: str, amount: int, seqno: int = None):
+        assert isinstance(amount, int), "Amount should be integer! Please use to_nano for convert it!"
         if self.workchain is None:
             await self._get_network_params()
-        _, _, _, wallet = Wallets.from_mnemonics(mnemonic, self.wallet_version, self.workchain)
+
+        from_address, _ = await self.get_address_from_mnemonics(mnemonic)
+        mnemonic_list = self._unpack_mnemonic(mnemonic)
+        _, _, _, wallet = Wallets.from_mnemonics(mnemonic_list, self.wallet_version, self.workchain)
+        if seqno is None:
+            seqno = await self.get_transaction_count(from_address)
         query = wallet.create_transfer_message(
-            to_addr=to_address, amount=to_nano(float(0.01), "ton"), payload="", seqno=seqno
+            to_addr=to_address, amount=amount, payload="", seqno=seqno
         )
         boc = bytes_to_b64str(query["message"].to_boc(False))
-        return await self.send_boc_return_hash(boc)
+        boc_answer_data = await self.send_boc_return_hash(boc)
+        return boc_answer_data["hash"]
 
     async def send_boc_return_hash(self, boc):
         payload = {"method": "sendBocReturnHash", "params": {"boc": boc}}
