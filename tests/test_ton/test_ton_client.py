@@ -65,51 +65,56 @@ async def test_get_master_block_shards(ton_client: AioTxTONClient, seqno, expect
         assert shard_numbers.symmetric_difference(shards_result) == set()
 
 
-# @pytest.mark.parametrize(
-#     "seqno, shard, expected_exception, tx_data_result",
-#     [
-#         (
-#             2305843009213693952,
-#             21020822,
-#             None,
-#             {"2305843009213693952", "6917529027641081856", "-6917529027641081856", "-2305843009213693952"},
-#         ),
-#         (
-#             6917529027641081856,
-#             21020817,
-#             None,
-#             {"2305843009213693952", "6917529027641081856", "-6917529027641081856", "-2305843009213693952"},
-#         ),
-#         (
-#             2305843009213693952,
-#             21020824,
-#             None,
-#             {"2305843009213693952", "6917529027641081856", "-6917529027641081856", "-2305843009213693952"},
-#         ),
-#         (
-#             2305843009213693952,
-#             21023867,
-#             None,
-#             {"2305843009213693952", "6917529027641081856", "-6917529027641081856", "-2305843009213693952"},
-#         ),
-#         (
-#             -6917529027641081856,
-#             21021183,
-#             None,
-#             {"2305843009213693952", "6917529027641081856", "-6917529027641081856", "-2305843009213693952"},
-#         ),
-#     ],
-# )
-# @vcr_c.use_cassette("ton/get_block_transactions.yaml")
-# async def test_get_block_transactions(ton_client: AioTxTONClient, seqno, shard, expected_exception, tx_data_result):
-
-#     if expected_exception:
-#         with pytest.raises(expected_exception):
-#             await ton_client.get_block_transactions(seqno=seqno, shard=shard, count=2)
-#     else:
-#         tx_data = await ton_client.get_block_transactions(seqno=seqno, shard=shard, count=2)
-#         tx_ids = set([shard["hash"] for shard in tx_data])
-#         assert tx_ids.symmetric_difference(tx_data_result) == set()
+@pytest.mark.parametrize(
+    "shard, seqno, expected_exception, tx_data_result",
+    [
+        (
+            2305843009213693952,
+            21020822,
+            None,
+            {"AwDwEqG+/w64ca+Xoc4JkJl+Iwkrs79Sjs82L2s0Vtw=", "HrT5S8S4zMifwDVspjEKDlSsry/6Nt9IAqmRPnWHdGU="},
+        ),
+        (
+            6917529027641081856,
+            21020817,
+            None,
+            {"hSF1DmJJgbs/o6d9ZoGxoafRBuKChD9DEFNsXVkCQGA="},
+        ),
+        (
+            2305843009213693952,
+            21020824,
+            None,
+            {},
+        ),
+        (
+            2305843009213693952,
+            21023867,
+            None,
+            {"UB4KXyYA5m7cAgQD0UM50AfNhyGCQ2gAsyYyJxrlurI=", "bW6gqpLzLK+cvbiNsd9Njlsrvz7XlJXW2EpUAEV2/dU="},
+        ),
+        (
+            -6917529027641081856,
+            21021183,
+            None,
+            {},
+        ),
+        (
+            78568658568,
+            0,
+            BlockNotFoundError,
+            {},
+        ),
+    ],
+)
+@vcr_c.use_cassette("ton/get_block_transactions.yaml")
+async def test_get_block_transactions(ton_client: AioTxTONClient, shard, seqno, expected_exception, tx_data_result):
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await ton_client.get_block_transactions(seqno=seqno, shard=shard, count=2)
+    else:
+        tx_data = await ton_client.get_block_transactions(seqno=seqno, shard=shard, count=2)
+        tx_ids = set([shard["hash"] for shard in tx_data])
+        assert tx_ids.symmetric_difference(tx_data_result) == set()
 
 
 @pytest.mark.parametrize(
@@ -159,9 +164,6 @@ async def test_get_master_block_shards(ton_client: AioTxTONClient, seqno, expect
 )
 @vcr_c.use_cassette("ton/get_balance.yaml")
 async def test_get_balance(ton_client: AioTxTONClient, address, expected_balance, expected_exception):
-    import time
-
-    time.sleep(1)
     if expected_exception:
         with pytest.raises(expected_exception):
             await ton_client.get_balance(address)

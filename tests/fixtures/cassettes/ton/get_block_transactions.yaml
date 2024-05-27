@@ -1,0 +1,252 @@
+interactions:
+- request:
+    body: '{"method": "getBlockTransactions", "params": {"workchain": 0, "shard":
+      2305843009213693952, "seqno": 21020822, "count": 2}, "jsonrpc": "2.0", "id":
+      1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"@type":"blocks.transactions","id":{"@type":"ton.blockIdExt","workchain":0,"shard":"2305843009213693952","seqno":21020822,"root_hash":"VbdPr9TpvaD3pUt0gW5h2av7cpUJUZBfHf3vQmAqFB0=","file_hash":"MY+MLsvrLLAAxEZtyCGXAjHrTr5ZaAqV9xCleoka5yM="},"req_count":2,"incomplete":true,"transactions":[{"@type":"blocks.shortTxId","mode":135,"account":"0:1b16673cd10e9cdb8d1a2adb52667c85235f1348cd01c9417c8aed16beda36a2","lt":"22013299000001","hash":"HrT5S8S4zMifwDVspjEKDlSsry/6Nt9IAqmRPnWHdGU="},{"@type":"blocks.shortTxId","mode":135,"account":"0:1b16673cd10e9cdb8d1a2adb52667c85235f1348cd01c9417c8aed16beda36a2","lt":"22013299000005","hash":"AwDwEqG+/w64ca+Xoc4JkJl+Iwkrs79Sjs82L2s0Vtw="}],"@extra":"1716792604.020164:11:0.4250716216742415"},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a4150fab74386a-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 06:52:27 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=cqYgPTusTpusjfB5oe%2FuArQZiNBLckhpGINh%2BN2hVs%2FEdivpflZQPvXAFCQjB5g9Uos3qHdF49xKKuzYh2%2BRgnOa0XJNRimvwWwM8qFbF8st42sGz7oEkh4ZB4oc3a79hhkftgMAqQ%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getBlockTransactions", "params": {"workchain": 0, "shard":
+      6917529027641081856, "seqno": 21020817, "count": 2}, "jsonrpc": "2.0", "id":
+      1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"@type":"blocks.transactions","id":{"@type":"ton.blockIdExt","workchain":0,"shard":"6917529027641081856","seqno":21020817,"root_hash":"CGuGzEAN1ZqOC+Bf1zoCdKJsoAlCvA6YoRAVeQ3gj9E=","file_hash":"0z21UFXj79OUszx63rwtfw371Ysf2H5aUNvsT9j4aFY="},"req_count":2,"incomplete":false,"transactions":[{"@type":"blocks.shortTxId","mode":135,"account":"0:7dc2bc0741ef29bdd58d659237056e505313fefb3e4912534e3b8cfe3bcb0b9c","lt":"22013299000001","hash":"hSF1DmJJgbs/o6d9ZoGxoafRBuKChD9DEFNsXVkCQGA="}],"@extra":"1716792758.7528093:2:0.9638042178230389"},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a415173bdb6358-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 06:52:28 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=uvtghYQHP52TdZcEio2DhiimHpEDUwh0V2X1U5OQd20aRJG9DRA%2B5DR%2FHjJ1d2F1tCJF6pWCKXduk7%2B1aGepatNwoFrTb%2FZDJahD%2FQ%2FkIR0jH0x9CFOJx1zO6hIwICqiAzDu%2FsYobQ%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getBlockTransactions", "params": {"workchain": 0, "shard":
+      2305843009213693952, "seqno": 21020824, "count": 2}, "jsonrpc": "2.0", "id":
+      1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"@type":"blocks.transactions","id":{"@type":"ton.blockIdExt","workchain":0,"shard":"2305843009213693952","seqno":21020824,"root_hash":"WjBgCTtd4zU7otEnVl40A2PB/YrGhlkarfyacgAquU4=","file_hash":"wh9acO6h9sysn2gJQKC+1jLosouHmYlqnh4aI4IiYrg="},"req_count":2,"incomplete":false,"transactions":[],"@extra":"1716792243.2312782:11:0.7425234562920958"},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a4151e6cd363b1-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 06:52:29 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=FPgpNrFRaBd446TijGybhaE5Mq355uTnOoSkn0D97NJ0A8NDrMdC1ekSpdqyHMQz08HE01hhiVjD2nH7sD6xnFNUtrCA5BOhQ3%2FcmewWz6IWEzeX9L8uU6CgNWHAjsdlV1DfvbAwDA%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getBlockTransactions", "params": {"workchain": 0, "shard":
+      2305843009213693952, "seqno": 21023867, "count": 2}, "jsonrpc": "2.0", "id":
+      1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"@type":"blocks.transactions","id":{"@type":"ton.blockIdExt","workchain":0,"shard":"2305843009213693952","seqno":21023867,"root_hash":"8CyZmfjTvOhbS/9FtFAddPzQAh5qFmoW3CWPVKxd3wI=","file_hash":"j1hCVNelqtRrHaK2bFggjFE29yXJ7IEt9sUJRHvp+BY="},"req_count":2,"incomplete":true,"transactions":[{"@type":"blocks.shortTxId","mode":135,"account":"0:1b16673cd10e9cdb8d1a2adb52667c85235f1348cd01c9417c8aed16beda36a2","lt":"22016431000001","hash":"UB4KXyYA5m7cAgQD0UM50AfNhyGCQ2gAsyYyJxrlurI="},{"@type":"blocks.shortTxId","mode":135,"account":"0:2101d9e7b01e5f61417becc603dc0fc7bc9b4f90ebc5f6f9164be45cc8f82826","lt":"22016431000001","hash":"bW6gqpLzLK+cvbiNsd9Njlsrvz7XlJXW2EpUAEV2/dU="}],"@extra":"1716792302.6250281:2:0.6317235070815802"},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a4155828d471de-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 06:52:39 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=7AlP%2FNjlu%2Fv3Duo3EszlQO4xARNiQVpng3PPRu%2F2Yg2aghCpcM4Hw%2FaXzbTR7H6wwbU5oAOPfsNU5%2FOEGRIRNzHMb7%2BcXeHeu1x74IOcbDguLI%2BQ%2BauHGRP5yPrpeGa2vAS7zUyKCA%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getBlockTransactions", "params": {"workchain": 0, "shard":
+      -6917529027641081856, "seqno": 21021183, "count": 2}, "jsonrpc": "2.0", "id":
+      1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"@type":"blocks.transactions","id":{"@type":"ton.blockIdExt","workchain":0,"shard":"-6917529027641081856","seqno":21021183,"root_hash":"nGR9BvX4VwL4ekr02WuMGjXtmXGvU8fZQQ1rnYw1Eh0=","file_hash":"tRZ/BBkq3ERsDg/Vc3Uij7YBSDZMYo+bxwjTPfk0/Gg="},"req_count":2,"incomplete":false,"transactions":[],"@extra":"1716792770.2953258:2:0.17448842063268144"},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a4155f6a269443-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 06:52:40 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=ykzQpDDGSgqwpzGvd7z%2Bi4hQV6nujHCHm0zN3HqQKpELnEu6C7Pl4qnGWejfklsHJ8TqWT9gQRqqy%2FHShds9v%2BicIDxtl0%2FyuKsb86FdhP26V96NY3x3lE6xLHEu%2Bo5kTECq%2BInM%2Bw%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getBlockTransactions", "params": {"workchain": 0, "shard":
+      78568658568, "seqno": 0, "count": 2}, "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":false,"error":"LITE_SERVER_NOTREADY: cannot find block (0,000000124b0e9688)
+        seqno=0: ltdb: block not found","code":500}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a415668db50656-LHR
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '125'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 06:52:41 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=c3xl99XjPgeiIwv52L%2F88WDwTlronNaS87tkC54j3XLMCzvuq0U6o9snIISPR4RHbP8Ij3%2BPzFWiIJXL8k43hLcvMtpq25yJedHuXeiQuwsxpQmlNYWXg4VOuTTh%2FdWh55dsa5Tflg%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+    status:
+      code: 500
+      message: Internal Server Error
+version: 1
