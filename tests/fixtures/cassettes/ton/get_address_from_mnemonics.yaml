@@ -1,0 +1,43 @@
+interactions:
+- request:
+    body: '{"method": "getMasterchainInfo", "params": {}, "jsonrpc": "2.0", "id":
+      1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"@type":"blocks.masterchainInfo","last":{"@type":"ton.blockIdExt","workchain":-1,"shard":"-9223372036854775808","seqno":19626124,"root_hash":"BYXA8qZcpyXZoJqtFzYBj8iFKtMIlxIOHlsGxYFZJog=","file_hash":"/lmcTa8vDG7I+Q2ye9ow5aXcb0x/m20C5g70bLvQMSs="},"state_root_hash":"7Jm81mHSuUt6Zkv/YExXqyJ4q5erPagqgMKPRvcItPA=","init":{"@type":"ton.blockIdExt","workchain":-1,"shard":"0","seqno":0,"root_hash":"gj+B8wb/AmlPk1z1AhVI484rhrUpgSr2oSFIh56VoSg=","file_hash":"Z+IKwYS54DmmJmesw/nAD5DzWadnOCMzee+kdgSYDOg="},"@extra":"1716802276.1572652:4:0.9983584674396017"},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a4fd7898b479ac-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 09:31:07 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=qXQOOybdKDwZPOGLe2SEojaL%2BkY5LTeKaKnWaMOW6qDA2gFr5xDNfvTUXUYN9v5y9lUsH5BxuYpB97T7OVWZGqU2Wi0UsVg9AAaPxfW8SPjyIiHQPbptg94RxDiMepGstoSO%2B%2FUiRw%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+version: 1

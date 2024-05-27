@@ -28,12 +28,6 @@ class AioTxClient:
         except asyncio.CancelledError:
             pass
 
-    async def get_block_by_number(self, block_number: int):
-        pass
-
-    async def get_last_block_number(self) -> int:
-        pass
-
 
 class BlockMonitor:
     def __init__(self, client: AioTxClient):

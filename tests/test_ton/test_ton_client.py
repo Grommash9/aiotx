@@ -4,7 +4,7 @@ import pytest
 from conftest import vcr_c  # noqa
 
 from aiotx.clients import AioTxTONClient
-from aiotx.exceptions import AioTxError, BlockNotFoundError, InvalidArgumentError
+from aiotx.exceptions import AioTxError, BlockNotFoundError, InvalidArgumentError, WrongPrivateKey
 
 TON_TEST_WALLET_MEMO = os.environ.get("TON_TEST_WALLET_MEMO")
 assert TON_TEST_WALLET_MEMO is not None, "Please provide TON_TEST_WALLET_MEMO"
@@ -226,6 +226,8 @@ async def test_get_balance(ton_client: AioTxTONClient, address, expected_balance
 async def test_get_transactions(
     ton_client: AioTxTONClient, address, limit, lt, hash, to_lt, archival, expected_exception, tx_data_result
 ):
+    import time
+    time.sleep(1)
     if expected_exception:
         with pytest.raises(expected_exception):
             await ton_client.get_transactions(address, limit, lt, hash, to_lt, archival)
@@ -273,3 +275,89 @@ async def test_get_transaction_count(ton_client: AioTxTONClient, address, expect
     else:
         transaction_count = await ton_client.get_transaction_count(address)
         assert transaction_count == expected_segno
+
+
+@pytest.mark.parametrize(
+    "address, expected_exception, expected_packed_address",
+    [
+        (
+            "0:95cc5a9ec1eebbbe1265a20dc63cf015d1143f5871b0ae21eeecd0d60cafc74d",
+            None,
+            "EQCVzFqewe67vhJlog3GPPAV0RQ/WHGwriHu7NDWDK/HTec6",
+        ),
+        (
+            "0:2e80e2e306b9aefaef7e0a00092a31fd6c8d1abc28d9bf4c5a477e65ef817e30",
+            None,
+            "EQAugOLjBrmu+u9+CgAJKjH9bI0avCjZv0xaR35l74F+MH/3",
+        ),
+        (
+            "0:6c58bb4a37582e27dc44c7e95cae61c8ef40fbac7783a11bc54840510b1b380",
+            None,
+            "EQAGxYu0o3WC4n3ETH6VyuYcjvQPusd4OhG8VIQFELGzgG2y",
+        ),
+        (
+            "0:6c58bb4a37582e1bc54840510b1b380",
+            None,
+            "EQAAAAAAAAAAAAAAAAAAAAAABsWLtKN1guG8VIQFELGzgOMO",
+        ),
+        (
+            "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf+ATpkbpT",
+            None,
+            "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf+ATpkbpT",
+        ),
+    ],
+)
+@vcr_c.use_cassette("ton/pack_address.yaml")
+async def test_pack_address(ton_client: AioTxTONClient, address, expected_exception, expected_packed_address):
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await ton_client.pack_address(address)
+    else:
+        packed_address = await ton_client.pack_address(address)
+        assert packed_address == expected_packed_address
+
+
+@pytest.mark.parametrize(
+    "mnemonics_str, expected_address, expected_raw_address, expected_exception",
+    [
+        (
+            "current worth mimic divert pigeon minor scale abstract bicycle usage talent basic zoo merit melt provide old burger lazy actual amazing drop deposit wink",
+            "UQCb5_yLK5GNJwbrsogdnxdcZmk390u8vBQz2GM_hjHQkgpR",
+            "0:9be7fc8b2b918d2706ebb2881d9f175c666937f74bbcbc1433d8633f8631d092",
+            None
+        ),
+        (
+            "motion churn become nest fault bag clog double please soap damage hen steak nerve letter captain purpose flight aerobic fossil butter asthma hole humble",
+            "UQDPR6JfCVktdpZGzNH8nU2JZWHp9owzfpe9IGcYt150H0RL",
+            "0:cf47a25f09592d769646ccd1fc9d4d896561e9f68c337e97bd206718b75e741f",
+            None
+        ),
+        (
+            "collect maze rough ahead viable upgrade resemble music predict flag movie vocal razor multiply cactus describe host admit battle doctor soldier hungry defy decorate",
+            "UQBLwVMaz6_xWshST6SKav0CLonx0jMNtQy2c3r4droJUDXl",
+            "0:4bc1531acfaff15ac8524fa48a6afd022e89f1d2330db50cb6737af876ba0950",
+            None
+        ),
+        (
+            "elevator shoulder movie quick rural crime portion pumpkin cattle twenty sound force split example cabbage pen moment curious bitter help attend ocean connect",
+            "None",
+            "EQAAAAAAAAAAAAAAAAAAAAAABsWLtKN1guG8VIQFELGzgOMO",
+            WrongPrivateKey
+        ),
+        (
+            ["elevator", "wot"],
+            "None",
+            "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf+ATpkbpT",
+            AssertionError
+        ),
+    ],
+)
+@vcr_c.use_cassette("ton/get_address_from_mnemonics.yaml")
+async def test_get_address_from_mnemonics(ton_client, mnemonics_str, expected_address, expected_raw_address, expected_exception):
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await ton_client.get_address_from_mnemonics(mnemonics_str)
+    else:
+        urlsafe_address, raw_address = await ton_client.get_address_from_mnemonics(mnemonics_str)
+        assert urlsafe_address == expected_address
+        assert raw_address == expected_raw_address

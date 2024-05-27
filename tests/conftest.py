@@ -40,7 +40,9 @@ vcr_c = vcr.VCR(
 
 @pytest.fixture
 def ton_client() -> AioTxTONClient:
-    return AioTxTONClient(TON_TEST_NODE_URL)
+    # current test rpc connection returning -1 as workchain but it should be 0, 
+    # so we are setting that param by ourself
+    return AioTxTONClient(TON_TEST_NODE_URL, workchain=0)
 
 @pytest.fixture
 def bsc_client() -> AioTxBSCClient:

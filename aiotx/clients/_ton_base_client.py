@@ -1,12 +1,12 @@
 import json
-
+import asyncio
 import aiohttp
 from tonsdk.contract.wallet import Wallets, WalletVersionEnum
 from tonsdk.crypto import mnemonic_new
 from tonsdk.crypto._mnemonic import mnemonic_is_valid
 from tonsdk.utils import bytes_to_b64str, to_nano
-
-from aiotx.clients._base_client import AioTxClient
+from typing import Optional
+from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     AioTxError,
     BlockNotFoundError,
@@ -16,14 +16,16 @@ from aiotx.exceptions import (
 
 
 class AioTxTONClient(AioTxClient):
-    def __init__(self, node_url):
+    def __init__(self, node_url, wallet_version: WalletVersionEnum = WalletVersionEnum.v3r2, workchain: Optional[int] = None):
         super().__init__(node_url)
         # self.monitor = EvmMonitor(self)
         # self._monitoring_task = None
-        self.workchain = 0
-        self.wallet_version = WalletVersionEnum.v3r2
+        self.workchain = workchain
+        self.wallet_version = wallet_version
 
-    def generate_address(self) -> tuple[str, str, str]:
+    async def generate_address(self) -> tuple[str, str, str]:
+        if self.workchain is None:
+            await self._get_network_params()
         wallet_mnemonics = mnemonic_new()
         _mnemonics, _, _, wallet = Wallets.from_mnemonics(wallet_mnemonics, self.wallet_version, self.workchain)
         return (
@@ -33,20 +35,15 @@ class AioTxTONClient(AioTxClient):
         )
 
     def _unpack_mnemonic(self, mnemonic_str: str):
+        assert isinstance(mnemonic_str, str), "Mnemonic should be represented as string!"
         mnemonic_list = mnemonic_str.split(" ")
         if not mnemonic_is_valid(mnemonic_list):
             raise WrongPrivateKey("mnemonic phrase not valid!")
         return mnemonic_list
 
-    # async def activate_wallet(self, payer_mnemonic: str, target_wallet_mnemonic: str):
-    #     target_wallet_mnemonic_list = self._unpack_mnemonic(target_wallet_mnemonic)
-    #     _, _, _, wallet = Wallets.from_mnemonics(
-    #         target_wallet_mnemonic_list, self.wallet_version, self.workchain)
-    #     query = wallet.create_init_external_message()
-    #     base64_boc = bytes_to_b64str(query["message"].to_boc(False))
-    #     await self.send_boc_return_hash(base64_boc)
-
-    def get_address_from_mnemonics(self, wallet_mnemonic: str) -> tuple[str, str]:
+    async def get_address_from_mnemonics(self, wallet_mnemonic: str) -> tuple[str, str]:
+        if self.workchain is None:
+            await self._get_network_params()
         wallet_mnemonic_list = self._unpack_mnemonic(wallet_mnemonic)
         _, _, _, wallet = Wallets.from_mnemonics(wallet_mnemonic_list, self.wallet_version, self.workchain)
         return wallet.address.to_string(is_user_friendly=True, is_url_safe=True), wallet.address.to_string(
@@ -84,12 +81,14 @@ class AioTxTONClient(AioTxClient):
         address_information = await self.get_wallet_information(address)
         return address_information.get("seqno", 0)
 
-    async def pack_address(self, address):
+    async def pack_address(self, address) -> str:
         payload = {"method": "packAddress", "params": {"address": address}}
-        information = await self._make_rpc_call(payload)
-        return information
+        packed_address = await self._make_rpc_call(payload)
+        return packed_address
 
     async def get_block_transactions(self, shard, seqno, count=40):
+        if self.workchain is None:
+            await self._get_network_params()
         payload = {
             "method": "getBlockTransactions",
             "params": {"workchain": self.workchain, "shard": shard, "seqno": seqno, "count": count},
@@ -103,6 +102,8 @@ class AioTxTONClient(AioTxClient):
         return information
 
     async def send(self, mnemonic, to_address, seqno):
+        if self.workchain is None:
+            await self._get_network_params()
         _, _, _, wallet = Wallets.from_mnemonics(mnemonic, self.wallet_version, self.workchain)
         query = wallet.create_transfer_message(
             to_addr=to_address, amount=to_nano(float(0.01), "ton"), payload="", seqno=seqno
@@ -115,6 +116,14 @@ class AioTxTONClient(AioTxClient):
 
         information = await self._make_rpc_call(payload)
         return information
+
+    async def _get_network_params(self):
+        master_block_data = await self.get_last_master_block()
+        workchain = master_block_data["workchain"]
+        shard = master_block_data["shard"]
+        seqno = master_block_data["seqno"]
+        self.workchain = workchain
+        return workchain, shard, seqno
 
     async def get_transactions(
         self, address, limit: int = None, lt: int = None, hash: str = None, to_lt: int = None, archival: bool = None
@@ -165,39 +174,32 @@ class AioTxTONClient(AioTxClient):
                 return result["result"]
 
 
-# class EvmMonitor(BlockMonitor):
-#     def __init__(self, client: AioTxTONClient):
-#         self.client = client
-#         self.block_handlers = []
-#         self.transaction_handlers = []
-#         self.running = False
-#         self._latest_block = None
+class TonMonitor(BlockMonitor):
+    def __init__(self, client: AioTxTONClient, last_master_block: Optional[int] = None):
+        self.client = client
+        self.block_handlers = []
+        self.transaction_handlers = []
+        self.running = False
+        self._last_master_block = last_master_block
 
-#     async def poll_blocks(
-#         self,
-#     ):
-#         network_latest_block = await self.client.get_last_block_number()
-#         target_block = network_latest_block if self._latest_block is None else self._latest_block
-#         if target_block > network_latest_block:
-#             return
-#         block = await self.client.get_block_by_number(target_block)
-#         await self.process_block(block["result"])
-#         self._latest_block = target_block + 1
+    async def poll_blocks(
+        self,
+    ):
+        workchain, shard, seqno = await self.client._ge
+        target_block = network_latest_block if self._latest_block is None else self._latest_block
+        if target_block > network_latest_block:
+            return
+        block = await self.client.get_block_by_number(target_block)
+        await self.process_block(block["result"])
+        self._latest_block = target_block + 1
 
-#     async def process_block(self, block):
-#         for handler in self.block_handlers:
-#             if asyncio.iscoroutinefunction(handler):
-#                 await handler(int(block["number"], 16))
-#             else:
-#                 handler(int(block["number"], 16))
+    async def process_block(self, block):
+        for handler in self.block_handlers:
+            await handler(int(block["number"], 16))
 
-#         for transaction in block["transactions"]:
-#             for handler in self.transaction_handlers:
-#                 transaction["aiotx_decoded_input"] = self.client.decode_transaction_input(transaction["input"])
-#                 if asyncio.iscoroutinefunction(handler):
-#                     await handler(transaction)
-#                 else:
-#                     handler(transaction)
+        for transaction in block["transactions"]:
+            for handler in self.transaction_handlers:
+                await handler(transaction)
 
 
 # "https://go.getblock.io/3ea060ad138b45b788f72902e3cf9b38"
