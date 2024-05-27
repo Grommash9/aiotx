@@ -2,7 +2,6 @@ import os
 
 import pytest
 from conftest import vcr_c  # noqa
-
 from aiotx.clients import AioTxTONClient
 from aiotx.exceptions import (
     AioTxError,
@@ -327,36 +326,33 @@ async def test_pack_address(ton_client: AioTxTONClient, address, expected_except
             "current worth mimic divert pigeon minor scale abstract bicycle usage talent basic zoo merit melt provide old burger lazy actual amazing drop deposit wink",
             "UQCb5_yLK5GNJwbrsogdnxdcZmk390u8vBQz2GM_hjHQkgpR",
             "0:9be7fc8b2b918d2706ebb2881d9f175c666937f74bbcbc1433d8633f8631d092",
-            None
+            None,
         ),
         (
             "motion churn become nest fault bag clog double please soap damage hen steak nerve letter captain purpose flight aerobic fossil butter asthma hole humble",
             "UQDPR6JfCVktdpZGzNH8nU2JZWHp9owzfpe9IGcYt150H0RL",
             "0:cf47a25f09592d769646ccd1fc9d4d896561e9f68c337e97bd206718b75e741f",
-            None
+            None,
         ),
         (
             "collect maze rough ahead viable upgrade resemble music predict flag movie vocal razor multiply cactus describe host admit battle doctor soldier hungry defy decorate",
             "UQBLwVMaz6_xWshST6SKav0CLonx0jMNtQy2c3r4droJUDXl",
             "0:4bc1531acfaff15ac8524fa48a6afd022e89f1d2330db50cb6737af876ba0950",
-            None
+            None,
         ),
         (
             "elevator shoulder movie quick rural crime portion pumpkin cattle twenty sound force split example cabbage pen moment curious bitter help attend ocean connect",
             "None",
             "EQAAAAAAAAAAAAAAAAAAAAAABsWLtKN1guG8VIQFELGzgOMO",
-            WrongPrivateKey
+            WrongPrivateKey,
         ),
-        (
-            ["elevator", "wot"],
-            "None",
-            "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf+ATpkbpT",
-            AssertionError
-        ),
+        (["elevator", "wot"], "None", "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf+ATpkbpT", AssertionError),
     ],
 )
 @vcr_c.use_cassette("ton/get_address_from_mnemonics.yaml")
-async def test_get_address_from_mnemonics(ton_client, mnemonics_str, expected_address, expected_raw_address, expected_exception):
+async def test_get_address_from_mnemonics(
+    ton_client: AioTxTONClient, mnemonics_str, expected_address, expected_raw_address, expected_exception
+):
     if expected_exception:
         with pytest.raises(expected_exception):
             await ton_client.get_address_from_mnemonics(mnemonics_str)
