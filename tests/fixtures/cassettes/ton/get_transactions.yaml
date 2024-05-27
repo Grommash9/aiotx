@@ -1,0 +1,165 @@
+interactions:
+- request:
+    body: '{"method": "getTransactions", "params": {"address": "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":[{"@type":"raw.transaction","address":{"@type":"accountAddress","account_address":"EQAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkVwc"},"utime":1716616993,"data":"te6cckECBwEAAZAAA7VwSEDUK6kynu4w5R8ceiHuyoAw27XFA7J1/x9B/4BOmRAAAUBZB1UsGO1rJItyAg/DWyJVXuPiH1gWw77ed7Hxxb7fCsnp0a/AAAFAWFXzBBZlF/IQABRgl25IAQIDAQGgBACCcsfd3TYagtTLKufAA7GWLaUgWMvh0qZ4ZTidVcReE8JR30B4CM//1G7HfcqFl0Aam+u3Ena0F0H7schSYiRPbo0CFQxgiOYloBhgl14RBQYAr0gA2AsXaUbrBcT7iJj9K5XMOR3oH3WO8HQjeKkICiFjZwEAASEDUK6kynu4w5R8ceiHuyoAw27XFA7J1/x9B/4BOmROYloABggjWgAAKAsgcJOEzKL+MkAAnEBg6YagAAAAAAAAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABbwAAAAAAAAAAAAAAAAS1FLaRJ5QuM990nhh8UYSKv4bVGu4tw/IIW8MYUE5+OBMh8Zwk=","transaction_id":{"@type":"internal.transactionId","lt":"22014131000001","hash":"htFdXopqxYctcjLwfOhXMeRRIaAaoSZ9aRnexbfOKg8="},"fee":"310130","storage_fee":"130","other_fee":"310000","in_msg":{"@type":"raw.message","source":"EQBsBYu0o3WC4n3ETH6VyuYcjvQPusd4OhG8VIQFELGzgD1y","destination":"EQAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkVwc","value":"10000000","fwd_fee":"266669","ihr_fee":"0","created_lt":"22014127000002","body_hash":"lqKW0iTyhcZ77pPDD4owkVfw2qNdxbh+QQt4YwoJz8c=","msg_data":{"@type":"msg.dataRaw","body":"te6cckEBAQEAAgAAAEysuc0=","init_state":""},"message":""},"out_msgs":[]},{"@type":"raw.transaction","address":{"@type":"accountAddress","account_address":"EQAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkVwc"},"utime":1716616484,"data":"te6cckECCgEAAlIAA7VwSEDUK6kynu4w5R8ceiHuyoAw27XFA7J1/x9B/4BOmRAAAUBYVfMEHVSr+V4m4FSkwiq8mLOIidYvA0rAbpKLiVqIrpEGlQoQAAFAV5zvvBZlF9JAADRj9ytIAQIDAgHgBAUAgnJX/zB41aGg0p619VVDImizoOO0H4L2YxjvOhtnW46q5sfd3TYagtTLKufAA7GWLaUgWMvh0qZ4ZTidVcReE8JRAg8MYcYYoYYEQAgJAeGIAAkIGoV1JlPdxhyj449EPdlQBht2uKB2Tr/j6D/wCdMiBbGNB0b12sI00aJk5himNTUGHrClG8rdJ9J35oNN1cC323RkntEDEcuNoIkG0Ze+/5shM2dSlTLWSLTd0ToRCCFNTRi7MovyMAAAAAgAHAYBAd8HAHJCADYCxdpRusFxPuImP0rlcw5HegfdY7wdCN4qQgKIWNnAIC+vCAAAAAAAAAAAAAAAAAAAAAAAAFYAu0gACQgahXUmU93GHKPjj0Q92VAGG3a4oHZOv+PoP/AJ0yMAGwFi7SjdYLifcRMfpXK5hyO9A+6x3g6EbxUhAUQsbOAQF9eEAAYII1oAACgLCr5ghMyi+kgAAAAAK0AAnUGdgxOIAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAb8mDDUBMCCNMAAAAAAACAAAAAAACV6PwJFbtvGSECgvyB4Oc1Lw+vFIe13emEIOA5GlMIK5AUBdMWcRO5A==","transaction_id":{"@type":"internal.transactionId","lt":"22013945000001","hash":"jtaySLcgIPw1siVV7j4h9YFsO+3nex8cW+3wrJ6dGvw="},"fee":"2345735","storage_fee":"135","other_fee":"2345600","in_msg":{"@type":"raw.message","source":"","destination":"EQAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkVwc","value":"0","fwd_fee":"0","ihr_fee":"0","created_lt":"0","body_hash":"UWUWkhf6DshYazDCCYPNfUiuu5o0A+UpZvwWDAbmJTQ=","msg_data":{"@type":"msg.dataRaw","body":"te6cckEBAgEAjAABnLYxoOjeu1hGmjRMnMMUxqagw9YUo3lbpPpO/NBpurgW+26Mk9ogYjlxtBEg2jL33/NkJmzqUqZayRabuidCIQQpqaMXZlF+RgAAAAEAAwEAckIANgLF2lG6wXE+4iY/SuVzDkd6B91jvB0I3ipCAohY2cAgL68IAAAAAAAAAAAAAAAAAAAAAAAAVlDoZRk=","init_state":""},"message":"tjGg6N67WEaaNEycwxTGpqDD1hSjeVuk+k780Gm6uBb7boyT2iBiOXG0ESDaMvff82QmbOpSplrJ\nFpu6J0IhBCmpoxdmUX5GAAAAAQAD\n"},"out_msgs":[{"@type":"raw.message","source":"EQAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkVwc","destination":"EQBsBYu0o3WC4n3ETH6VyuYcjvQPusd4OhG8VIQFELGzgD1y","value":"100000000","fwd_fee":"266669","ihr_fee":"0","created_lt":"22013945000002","body_hash":"4853wWzfMG6sEm06gtrT9nySyV0HIoKSby+TIVDpaqM=","msg_data":{"@type":"msg.dataText","text":"Vg=="},"message":"V"}]},{"@type":"raw.transaction","address":{"@type":"accountAddress","account_address":"EQAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkVwc"},"utime":1716615955,"data":"te6cckECHwEABVUAA7VwSEDUK6kynu4w5R8ceiHuyoAw27XFA7J1/x9B/4BOmRAAAUBXnO+8FPXry3VE/qwCLyNdiqqKvXcSshx+Qg84jIsnYrdgZf0AAAFALmC3KBZlF7EwACRp06MIAQIDAgHgBAUAgnLLD6fmgLNVeujWmIBCRgCVm7W3Ng1J05OEUJ5GwQ3S7Vf/MHjVoaDSnrX1VUMiaLOg47QfgvZjGO86G2dbjqrmAhEMgElGGKGGBEAdHgPjiAAJCBqFdSZT3cYco+OPRD3ZUAYbdrigdk6/4+g/8AnTIhGMS+vgd5DDGWOPQ0FLtv/7H+tClwDmTaN3xZPKoKoAyklkrSJZ7g01W22Plb5KjpV0Ah9YwSKJcrFpIuFi5BFBhTU0Yv/////gAAAAAABwBgcIAQHfHAEU/wD0pBP0vPLICwkAUQAAAAApqaMXXJ/G5j+SgGNUgde3ooiHCFPm85tPwc3YuCn//SNM8CdAAHJCADrMuPgFMko/ggGXM7Yz2xexxrF4745LZCrzsNGX/fo5GHoSAAAAAAAAAAAAAAAAAAAAAAAARGECASAKCwIBSAwNBPjygwjXGCDTH9Mf0x8C+CO78mTtRNDTH9Mf0//0BNFRQ7ryoVFRuvKiBfkBVBBk+RDyo/gAJKTIyx9SQMsfUjDL/1IQ9ADJ7VT4DwHTByHAAJ9sUZMg10qW0wfUAvsA6DDgIcAB4wAhwALjAAHAA5Ew4w0DpMjLHxLLH8v/GBkaGwLm0AHQ0wMhcbCSXwTgItdJwSCSXwTgAtMfIYIQcGx1Z70ighBkc3RyvbCSXwXgA/pAMCD6RAHIygfL/8nQ7UTQgQFA1yH0BDBcgQEI9ApvoTGzkl8H4AXTP8glghBwbHVnupI4MOMNA4IQZHN0crqSXwbjDQ4PAgEgEBEAeAH6APQEMPgnbyIwUAqhIb7y4FCCEHBsdWeDHrFwgBhQBMsFJs8WWPoCGfQAy2kXyx9SYMs/IMmAQPsABgCKUASBAQj0WTDtRNCBAUDXIMgBzxb0AMntVAFysI4jghBkc3Rygx6xcIAYUAXLBVADzxYj+gITy2rLH8s/yYBA+wCSXwPiAgEgEhMAWb0kK29qJoQICga5D6AhhHDUCAhHpJN9KZEM5pA+n/mDeBKAG3gQFImHFZ8xhAIBWBQVABG4yX7UTQ1wsfgAPbKd+1E0IEBQNch9AQwAsjKB8v/ydABgQEI9ApvoTGACASAWFwAZrc52omhAIGuQ64X/wAAZrx32omhAEGuQ64WPwABu0gf6ANTUIvkABcjKBxXL/8nQd3SAGMjLBcsCIs8WUAX6AhTLaxLMzMlz+wDIQBSBAQj0UfKnAgBwgQEI1xj6ANM/yFQgR4EBCPRR8qeCEG5vdGVwdIAYyMsFywJQBs8WUAT6AhTLahLLH8s/yXP7AAIAbIEBCNcY+gDTPzBSJIEBCPRZ8qeCEGRzdHJwdIAYyMsFywJQBc8WUAP6AhPLassfEss/yXP7AAAK9ADJ7VQAu0gACQgahXUmU93GHKPjj0Q92VAGG3a4oHZOv+PoP/AJ0yMAHWZcfAKZJR/BAMuZ2xnti9jjWLx3xyWyFXnYaMv+/RyMPQkABggjWgAAKArznfeEzKL2JgAAAAAiMMAAnUGdgxOIAAAAAAAAAAARAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAb8mDDUBMCCNMAAAAAAACAAAAAAACLlHC2XqD2d2M5EBRZ//dAgM/QhgODnEK1CvcIetFvEpAUBdMvJRnGA==","transaction_id":{"@type":"internal.transactionId","lt":"22013751000001","hash":"1Uq/leJuBUpMIqvJiziInWLwNKwG6Si4laiK6RBpUKE="},"fee":"5418693","storage_fee":"293","other_fee":"5418400","in_msg":{"@type":"raw.message","source":"","destination":"EQAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkVwc","value":"0","fwd_fee":"0","ihr_fee":"0","created_lt":"0","body_hash":"ZRlG7WKYZGsl9qOnFHngUl3ypwRkr2qHqCsvtpMAlEk=","msg_data":{"@type":"msg.dataRaw","body":"te6cckEBAgEAjAABnGJfXwO8hhjLHHoaCl23/9j/WhS4BzJtG74snlUFUAZSSyVpEs9waarbbHyt8lR0q6AQ+sYJFEuVi0kXCxcgigwpqaMX/////wAAAAAAAwEAckIAOsy4+AUySj+CAZcztjPbF7HGsXjvjktkKvOw0Zf9+jkYehIAAAAAAAAAAAAAAAAAAAAAAABEYfbijeE=","init_state":"te6cckECFgEAAwQAAgE0AQIBFP8A9KQT9LzyyAsDAFEAAAAAKamjF1yfxuY/koBjVIHXt6KIhwhT5vObT8HN2Lgp//0jTPAnQAIBIAQFAgFIBgcE+PKDCNcYINMf0x/THwL4I7vyZO1E0NMf0x/T//QE0VFDuvKhUVG68qIF+QFUEGT5EPKj+AAkpMjLH1JAyx9SMMv/UhD0AMntVPgPAdMHIcAAn2xRkyDXSpbTB9QC+wDoMOAhwAHjACHAAuMAAcADkTDjDQOkyMsfEssfy/8SExQVAubQAdDTAyFxsJJfBOAi10nBIJJfBOAC0x8hghBwbHVnvSKCEGRzdHK9sJJfBeAD+kAwIPpEAcjKB8v/ydDtRNCBAUDXIfQEMFyBAQj0Cm+hMbOSXwfgBdM/yCWCEHBsdWe6kjgw4w0DghBkc3RyupJfBuMNCAkCASAKCwB4AfoA9AQw+CdvIjBQCqEhvvLgUIIQcGx1Z4MesXCAGFAEywUmzxZY+gIZ9ADLaRfLH1Jgyz8gyYBA+wAGAIpQBIEBCPRZMO1E0IEBQNcgyAHPFvQAye1UAXKwjiOCEGRzdHKDHrFwgBhQBcsFUAPPFiP6AhPLassfyz/JgED7AJJfA+ICASAMDQBZvSQrb2omhAgKBrkPoCGEcNQICEekk30pkQzmkD6f+YN4EoAbeBAUiYcVnzGEAgFYDg8AEbjJftRNDXCx+AA9sp37UTQgQFA1yH0BDACyMoHy//J0AGBAQj0Cm+hMYAIBIBARABmtznaiaEAga5Drhf/AABmvHfaiaEAQa5DrhY/AAG7SB/oA1NQi+QAFyMoHFcv/ydB3dIAYyMsFywIizxZQBfoCFMtrEszMyXP7AMhAFIEBCPRR8qcCAHCBAQjXGPoA0z/IVCBHgQEI9FHyp4IQbm90ZXB0gBjIywXLAlAGzxZQBPoCFMtqEssfyz/Jc/sAAgBsgQEI1xj6ANM/MFIkgQEI9Fnyp4IQZHN0cnB0gBjIywXLAlAFzxZQA/oCE8tqyx8Syz/Jc/sAAAr0AMntVK8fRcM="},"message":"Yl9fA7yGGMscehoKXbf/2P9aFLgHMm0bviyeVQVQBlJLJWkSz3BpqttsfK3yVHSroBD6xgkUS5WL\nSRcLFyCKDCmpoxf/////AAAAAAAD\n"},"out_msgs":[{"@type":"raw.message","source":"EQAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkVwc","destination":"EQB1mXHwCmSUfwQDLmdsZ7YvY41i8d8clshV52GjL_v0chUj","value":"1000000","fwd_fee":"266669","ihr_fee":"0","created_lt":"22013751000002","body_hash":"1pTuxe159GNdj0WW7YC2hMFswOmEcbaQUNs6Xx5BMj0=","msg_data":{"@type":"msg.dataText","text":"RGE="},"message":"Da"}]},{"@type":"raw.transaction","address":{"@type":"accountAddress","account_address":"EQAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkVwc"},"utime":1716584576,"data":"te6cckECBQEAAS0AA69wSEDUK6kynu4w5R8ceiHuyoAw27XFA7J1/x9B/4BOmRAAAUAuYLcoEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAZlEAgAABgIAQIDAQGgBACCcpCuyJZa+rsW68PLm0COuucbYY14eIvIDQmENZPKyY2kyw+n5oCzVXro1piAQkYAlZu1tzYNSdOThFCeRsEN0u0AEQwJQEqBfIABIAD3SAEkIlomyxU4rJBRBdCQ35EYJRw5e0JhMRWpzU2hBOb4/QABIQNQrqTKe7jDlHxx6Ie7KgDDbtcUDsnX/H0H/gE6ZFQEqBfIAAYII1oAACgFy7tXisyiAO4AAAAANDo6ODmdF5e6Fzayl7oyuboztLsyuS+6N7cvsTe6QBYiquI=","transaction_id":{"@type":"internal.transactionId","lt":"22002682000001","hash":"T168t1RP6sAi8jXYqqir13ErIcfkIPOIyLJ2K3YGX9A="},"fee":"0","storage_fee":"0","other_fee":"0","in_msg":{"@type":"raw.message","source":"EQCSES0TZYqcVkgoguhIb8iMEo4cvaEwmIrU5qbQgnN8fmvP","destination":"EQAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkVwc","value":"5000000000","fwd_fee":"266669","ihr_fee":"0","created_lt":"22002679000005","body_hash":"CMMIRQMWLHXJjH1x5SzZUOdTkBKcBkGwThU2UacDJt4=","msg_data":{"@type":"msg.dataText","text":"aHR0cHM6Ly90Lm1lL3Rlc3RnaXZlcl90b25fYm90"},"message":"https://t.me/testgiver_ton_bot"},"out_msgs":[]}],"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a44663ee5bdd37-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 07:26:08 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=iv8heqf7hInBv4v7XSPUG3b8ZqsDyC2Y2jI3dbc7dVbRWoiFE%2FX2JHB2j6qip6s3LchcSpBXwBhsgcoUUhdnJm3LR4Aiyupdgwuw86TzFeFFysbtgZOjtni1b0fSnqOoHTSkttbr%2FA%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getTransactions", "params": {"address": "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
+      "limit": 1}, "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":[{"@type":"raw.transaction","address":{"@type":"accountAddress","account_address":"EQAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkVwc"},"utime":1716616993,"data":"te6cckECBwEAAZAAA7VwSEDUK6kynu4w5R8ceiHuyoAw27XFA7J1/x9B/4BOmRAAAUBZB1UsGO1rJItyAg/DWyJVXuPiH1gWw77ed7Hxxb7fCsnp0a/AAAFAWFXzBBZlF/IQABRgl25IAQIDAQGgBACCcsfd3TYagtTLKufAA7GWLaUgWMvh0qZ4ZTidVcReE8JR30B4CM//1G7HfcqFl0Aam+u3Ena0F0H7schSYiRPbo0CFQxgiOYloBhgl14RBQYAr0gA2AsXaUbrBcT7iJj9K5XMOR3oH3WO8HQjeKkICiFjZwEAASEDUK6kynu4w5R8ceiHuyoAw27XFA7J1/x9B/4BOmROYloABggjWgAAKAsgcJOEzKL+MkAAnEBg6YagAAAAAAAAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABbwAAAAAAAAAAAAAAAAS1FLaRJ5QuM990nhh8UYSKv4bVGu4tw/IIW8MYUE5+OBMh8Zwk=","transaction_id":{"@type":"internal.transactionId","lt":"22014131000001","hash":"htFdXopqxYctcjLwfOhXMeRRIaAaoSZ9aRnexbfOKg8="},"fee":"310130","storage_fee":"130","other_fee":"310000","in_msg":{"@type":"raw.message","source":"EQBsBYu0o3WC4n3ETH6VyuYcjvQPusd4OhG8VIQFELGzgD1y","destination":"EQAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkVwc","value":"10000000","fwd_fee":"266669","ihr_fee":"0","created_lt":"22014127000002","body_hash":"lqKW0iTyhcZ77pPDD4owkVfw2qNdxbh+QQt4YwoJz8c=","msg_data":{"@type":"msg.dataRaw","body":"te6cckEBAQEAAgAAAEysuc0=","init_state":""},"message":""},"out_msgs":[]}],"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a4466ba9da7720-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 07:26:09 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=CVn8p3bhoYUoxrW9CxH%2BKqisf4c2kWIgPeyyPX2iX57iKZ%2BQ6DXOSqrmSWCHMi0mmzpTtlZDW51ePOCrHdENnGbXVho5CY54R6rhsXXXgXGxX6e1Bibx67P2qkbhB1vS04zNIP5iZQ%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getTransactions", "params": {"address": "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
+      "lt": 22014131000001, "hash": "htFdXopqxYctcjLwfOhXMeRRIaAaoSZ9aRnexbfOKg8=",
+      "limit": 1}, "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":[{"@type":"raw.transaction","address":{"@type":"accountAddress","account_address":"EQAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkVwc"},"utime":1716616993,"data":"te6cckECBwEAAZAAA7VwSEDUK6kynu4w5R8ceiHuyoAw27XFA7J1/x9B/4BOmRAAAUBZB1UsGO1rJItyAg/DWyJVXuPiH1gWw77ed7Hxxb7fCsnp0a/AAAFAWFXzBBZlF/IQABRgl25IAQIDAQGgBACCcsfd3TYagtTLKufAA7GWLaUgWMvh0qZ4ZTidVcReE8JR30B4CM//1G7HfcqFl0Aam+u3Ena0F0H7schSYiRPbo0CFQxgiOYloBhgl14RBQYAr0gA2AsXaUbrBcT7iJj9K5XMOR3oH3WO8HQjeKkICiFjZwEAASEDUK6kynu4w5R8ceiHuyoAw27XFA7J1/x9B/4BOmROYloABggjWgAAKAsgcJOEzKL+MkAAnEBg6YagAAAAAAAAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABbwAAAAAAAAAAAAAAAAS1FLaRJ5QuM990nhh8UYSKv4bVGu4tw/IIW8MYUE5+OBMh8Zwk=","transaction_id":{"@type":"internal.transactionId","lt":"22014131000001","hash":"htFdXopqxYctcjLwfOhXMeRRIaAaoSZ9aRnexbfOKg8="},"fee":"310130","storage_fee":"130","other_fee":"310000","in_msg":{"@type":"raw.message","source":"EQBsBYu0o3WC4n3ETH6VyuYcjvQPusd4OhG8VIQFELGzgD1y","destination":"EQAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkVwc","value":"10000000","fwd_fee":"266669","ihr_fee":"0","created_lt":"22014127000002","body_hash":"lqKW0iTyhcZ77pPDD4owkVfw2qNdxbh+QQt4YwoJz8c=","msg_data":{"@type":"msg.dataRaw","body":"te6cckEBAQEAAgAAAEysuc0=","init_state":""},"message":""},"out_msgs":[]}],"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a44672dec88926-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 07:26:10 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=%2FlMkKRzRLpcUI03FKT1BWXOk284uwtzn1jHj0hV9Z9WG9i7f6VIx%2F1z%2Bic7JcgUtnkTluogt4aV2okHo%2FggrfLUxXmiDu6Cymh1vDqkNvmNTfSMGOHLOKpnmF1ZaYL6LO3GdaNvpZg%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getTransactions", "params": {"address": "Ef9fwskZLEuGDfYTRAtvt9k-mEDkaIskkUOsEwPw1wzXk7zR"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":false,"error":"Incorrect address","code":416}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a4467a3c6363d8-LHR
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '51'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 07:26:11 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=aUb%2FVb54CJUlVglxnucEyM0uP2sd3GY07OahW8CoAHLprOwaLfNxJqE42b%2Bf%2Bu0r0x5XsbEIKarFKgOtM1EFsLEyNBapm26YyzTVJyzc6U7md9pgFFnKKuv673Zj%2FsOkLCPEsuf%2Fsg%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+    status:
+      code: 416
+      message: Range Not Satisfiable
+version: 1

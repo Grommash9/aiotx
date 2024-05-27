@@ -170,3 +170,66 @@ async def test_get_balance(ton_client: AioTxTONClient, address, expected_balance
     else:
         balance = await ton_client.get_balance(address)
         assert expected_balance == balance
+
+
+@pytest.mark.parametrize(
+    "address, limit, lt, hash, to_lt, archival, expected_exception, tx_data_result",
+    [
+        (
+            "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            {
+                "1Uq/leJuBUpMIqvJiziInWLwNKwG6Si4laiK6RBpUKE=",
+                "htFdXopqxYctcjLwfOhXMeRRIaAaoSZ9aRnexbfOKg8=",
+                "jtaySLcgIPw1siVV7j4h9YFsO+3nex8cW+3wrJ6dGvw=",
+                "T168t1RP6sAi8jXYqqir13ErIcfkIPOIyLJ2K3YGX9A=",
+            },
+        ),
+        (
+            "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
+            1,
+            None,
+            None,
+            None,
+            None,
+            None,
+            {"htFdXopqxYctcjLwfOhXMeRRIaAaoSZ9aRnexbfOKg8="},
+        ),
+        (
+            "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
+            1,
+            22014131000001,
+            "htFdXopqxYctcjLwfOhXMeRRIaAaoSZ9aRnexbfOKg8=",
+            None,
+            None,
+            None,
+            {"htFdXopqxYctcjLwfOhXMeRRIaAaoSZ9aRnexbfOKg8="},
+        ),
+        (
+            "Ef9fwskZLEuGDfYTRAtvt9k-mEDkaIskkUOsEwPw1wzXk7zR",
+            None,
+            None,
+            None,
+            None,
+            None,
+            InvalidArgumentError,
+            {},
+        ),
+    ],
+)
+@vcr_c.use_cassette("ton/get_transactions.yaml")
+async def test_get_transactions(
+    ton_client: AioTxTONClient, address, limit, lt, hash, to_lt, archival, expected_exception, tx_data_result
+):
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await ton_client.get_transactions(address, limit, lt, hash, to_lt, archival)
+    else:
+        tx_data = await ton_client.get_transactions(address, limit, lt, hash, to_lt, archival)
+        tx_ids = set([shard["transaction_id"]["hash"] for shard in tx_data])
+        assert tx_ids.symmetric_difference(tx_data_result) == set()

@@ -127,8 +127,19 @@ class AioTxTONClient(AioTxClient):
             archival (bool, optional): By default, the `getTransaction` request is processed by any available liteserver.
                 If `archival=True`, only liteservers with full history are used.
         """
-        payload = {"method": "getTransactions", "params": {"address": address}}
+        params = {"address": address}
+        if lt is not None:
+            params["lt"] = lt
+        if hash is not None:
+            params["hash"] = hash
+        if to_lt is not None:
+            params["to_lt"] = to_lt
+        if archival is not None:
+            params["archival"] = archival
+        if limit is not None:
+            params["limit"] = limit
 
+        payload = {"method": "getTransactions", "params": params}
         information = await self._make_rpc_call(payload)
         return information
 
