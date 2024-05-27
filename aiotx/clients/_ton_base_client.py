@@ -3,9 +3,11 @@ import json
 import aiohttp
 from tonsdk.contract.wallet import Wallets, WalletVersionEnum
 from tonsdk.crypto import mnemonic_new
+from tonsdk.crypto._mnemonic import mnemonic_is_valid
 from tonsdk.utils import bytes_to_b64str, to_nano
 
 from aiotx.clients._base_client import AioTxClient
+from aiotx.exceptions import BlockNotFoundError, WrongPrivateKey, AioTxError, InvalidArgumentError
 
 
 class AioTxTONClient(AioTxClient):
@@ -13,93 +15,101 @@ class AioTxTONClient(AioTxClient):
         super().__init__(node_url)
         # self.monitor = EvmMonitor(self)
         # self._monitoring_task = None
-        self.wallet_workchain = 0
+        self.workchain = 0
         self.wallet_version = WalletVersionEnum.v3r2
 
-    def generate_address(self):
+    def generate_address(self) -> tuple[str, str, str]:
         wallet_mnemonics = mnemonic_new()
-        _mnemonics, _pub_k, _priv_k, wallet = Wallets.from_mnemonics(
-            wallet_mnemonics, self.wallet_version, self.wallet_workchain)
-        query = wallet.create_init_external_message()
-        base64_boc = bytes_to_b64str(query["message"].to_boc(False))
-        return _mnemonics, wallet.address.to_string()
+        _mnemonics, _, _, wallet = Wallets.from_mnemonics(wallet_mnemonics, self.wallet_version, self.workchain)
+        return (
+            " ".join(_mnemonics),
+            wallet.address.to_string(is_user_friendly=True, is_url_safe=True),
+            wallet.address.to_string(False, False, False),
+        )
 
-    def get_address_from_mnemonics(self, private_key: str):
-        pass
+    def _unpack_mnemonic(self, mnemonic_str: str):
+        mnemonic_list = mnemonic_str.split(" ")
+        if not mnemonic_is_valid(mnemonic_list):
+            raise WrongPrivateKey("mnemonic phrase not valid!")
+        return mnemonic_list
 
-    def _get_abi_entries(self):
-        # Redefine that in you client
-        return []
+    # async def activate_wallet(self, payer_mnemonic: str, target_wallet_mnemonic: str):
+    #     target_wallet_mnemonic_list = self._unpack_mnemonic(target_wallet_mnemonic)
+    #     _, _, _, wallet = Wallets.from_mnemonics(
+    #         target_wallet_mnemonic_list, self.wallet_version, self.workchain)
+    #     query = wallet.create_init_external_message()
+    #     base64_boc = bytes_to_b64str(query["message"].to_boc(False))
+    #     await self.send_boc_return_hash(base64_boc)
 
-    def decode_transaction_input(self, input_data: str) -> dict:
-        return {"function_name": None, "parameters": None}
+    def get_address_from_mnemonics(self, wallet_mnemonic: str) -> tuple[str, str]:
+        wallet_mnemonic_list = self._unpack_mnemonic(wallet_mnemonic)
+        _, _, _, wallet = Wallets.from_mnemonics(wallet_mnemonic_list, self.wallet_version, self.workchain)
+        return wallet.address.to_string(is_user_friendly=True, is_url_safe=True), wallet.address.to_string(
+            False, False, False
+        )
 
     async def get_last_master_block(self) -> int:
         payload = {"method": "getMasterchainInfo", "params": {}}
         result = await self._make_rpc_call(payload)
-        last_block = result["result"]
+        last_block = result["last"]
         return last_block
-    
-    async def get_master_block_shards(self, seqno: int):
+
+    async def get_master_block_shards(self, seqno: int) -> list[dict]:
         payload = {"method": "shards", "params": {"seqno": seqno}}
         result = await self._make_rpc_call(payload)
-        return result
-    
+        print("rasdaesult", result)
+        return result["shards"]
+
     async def get_balance(self, address) -> int:
         payload = {"method": "getAddressBalance", "params": {"address": address}}
-        result = await self._make_rpc_call(payload)
-        balance = result["result"]
-        return balance
-    
+        balance_info = await self._make_rpc_call(payload)
+        return int(balance_info)
+
     async def get_address_information(self, address):
         payload = {"method": "getAddressInformation", "params": {"address": address}}
-        result = await self._make_rpc_call(payload)
-        information = result["result"]
+        information = await self._make_rpc_call(payload)
         return information
-    
+
     async def get_wallet_information(self, address):
         payload = {"method": "getWalletInformation", "params": {"address": address}}
-        result = await self._make_rpc_call(payload)
-        information = result["result"]
+        information = await self._make_rpc_call(payload)
         return information
-    
+
     async def pack_address(self, address):
         payload = {"method": "packAddress", "params": {"address": address}}
-        result = await self._make_rpc_call(payload)
-        information = result["result"]
+        information = await self._make_rpc_call(payload)
         return information
-    
-    async def get_block_transactions(self, workchain, shard, seqno):
-        payload = {"method": "getBlockTransactions", "params": {"workchain": workchain, "shard": shard, "seqno": seqno}}
-        result = await self._make_rpc_call(payload)
-        information = result["result"]
-        return information
-        
-    
+
+    async def get_block_transactions(self, shard, seqno, count=40):
+        payload = {
+            "method": "getBlockTransactions",
+            "params": {"workchain": self.workchain, "shard": shard, "seqno": seqno, "count": count},
+        }
+        information = await self._make_rpc_call(payload)
+        return information["transactions"]
+
     async def detect_address(self, address):
         payload = {"method": "detectAddress", "params": {"address": address}}
-        result = await self._make_rpc_call(payload)
-        information = result["result"]
+        information = await self._make_rpc_call(payload)
         return information
-    
+
     async def send(self, mnemonic, to_address, seqno):
-        _, _, _, wallet = Wallets.from_mnemonics(
-            mnemonic, self.wallet_version, self.wallet_workchain)
-        query = wallet.create_transfer_message(to_addr=to_address,
-                                        amount=to_nano(float(0.01), 'ton'),
-                                        payload='',
-                                        seqno=seqno)
+        _, _, _, wallet = Wallets.from_mnemonics(mnemonic, self.wallet_version, self.workchain)
+        query = wallet.create_transfer_message(
+            to_addr=to_address, amount=to_nano(float(0.01), "ton"), payload="", seqno=seqno
+        )
         boc = bytes_to_b64str(query["message"].to_boc(False))
         return await self.send_boc_return_hash(boc)
 
     async def send_boc_return_hash(self, boc):
         payload = {"method": "sendBocReturnHash", "params": {"boc": boc}}
-        
-        result = await self._make_rpc_call(payload)
-        information = result["result"]
+
+        information = await self._make_rpc_call(payload)
         return information
-    
-    async def get_transactions(self, address, limit: int = None, lt: int= None, hash: str= None, to_lt:int= None, archival: bool= None):
+
+    async def get_transactions(
+        self, address, limit: int = None, lt: int = None, hash: str = None, to_lt: int = None, archival: bool = None
+    ):
         """
         Retrieves transactions for a given TON account.
 
@@ -113,11 +123,9 @@ class AioTxTONClient(AioTxClient):
                 If `archival=True`, only liteservers with full history are used.
         """
         payload = {"method": "getTransactions", "params": {"address": address}}
-        
-        result = await self._make_rpc_call(payload)
-        information = result["result"]
-        return information
 
+        information = await self._make_rpc_call(payload)
+        return information
 
     async def _make_rpc_call(self, payload) -> dict:
         payload["jsonrpc"] = "2.0"
@@ -126,9 +134,15 @@ class AioTxTONClient(AioTxClient):
         headers = {"Content-Type": "application/json"}
         async with aiohttp.ClientSession() as session:
             async with session.post(self.node_url, data=payload_json, headers=headers) as response:
+                response_text = await response.text()
+                if response.status != 200:
+                    if "cannot find block" in response_text:
+                        raise BlockNotFoundError(response_text)
+                    if "Incorrect address" in response_text:
+                        raise InvalidArgumentError(response_text)
+                    raise AioTxError(f"Node response status code: {response.status} response test: {response_text}")
                 result = await response.json()
-                print("result", result)
-                return result
+                return result["result"]
 
 
 # class EvmMonitor(BlockMonitor):
@@ -176,13 +190,13 @@ class AioTxTONClient(AioTxClient):
 # # {"ok":true,"result":{"@type":"blocks.masterchainInfo","last":{"@type":"ton.blockIdExt","workchain":-1,"shard":"-9223372036854775808","seqno":38016643,"root_hash":"qe2QTVuhQDOYLNPK2yFxl9nGAsrQ4EY6VVSZn89m6dQ=","file_hash":"p8q63ShU6mOoMR7WX4TB4kXlKlefazFQknWFoMJDiTE="},"state_root_hash":"sRL+rhk/qXpzDweLFEC41+XseK7AScl82e93uLRgpOo=","init":{"@type":"ton.blockIdExt","workchain":-1,"shard":"0","seqno":0,"root_hash":"F6OpKZKqvqeFp6CQmFomXNMfMj2EnaUSOXN+Mh+wVWk=","file_hash":"XplPz01CXAps5qeSWUtxcyBfdAo5zVb1N979KLSKD24="},"@extra":"1716355541.08875:0:0.024924086702997283"}}
 
 # # Getting master block shard blocks
-# curl --location --request GET 'https://go.getblock.io/3ea060ad138b45b788f72902e3cf9b38/shards?seqno=38016929' 
+# curl --location --request GET 'https://go.getblock.io/3ea060ad138b45b788f72902e3cf9b38/shards?seqno=38016929'
 
 # # Getting shard transactions
-# curl --location --request GET 'https://go.getblock.io/3ea060ad138b45b788f72902e3cf9b38/getBlockTransactions?workchain=0&shard=2305843009213693952&seqno=43657559&root_hash=NwhUKuaOJjGeej2DpfKjVTbpL87ED7tlaTafV1eMq2o=&count=5' 
+# curl --location --request GET 'https://go.getblock.io/3ea060ad138b45b788f72902e3cf9b38/getBlockTransactions?workchain=0&shard=2305843009213693952&seqno=43657559&root_hash=NwhUKuaOJjGeej2DpfKjVTbpL87ED7tlaTafV1eMq2o=&count=5'
 
 # # Get transactions for address (should include block data to get it for that block only? new ones?)
-# curl --location --request GET 'https://go.getblock.io/3ea060ad138b45b788f72902e3cf9b38/getTransactions?address=0:272d1e92e231b278f46b89839c6b22fc0bd8e387b35617f298c1d3ae2eb11d5b&limit=2&hash=40ZmLlSKi/WI0xO8TkXpn7RNscnvKSWPQSwt2HE1poQ=' 
+# curl --location --request GET 'https://go.getblock.io/3ea060ad138b45b788f72902e3cf9b38/getTransactions?address=0:272d1e92e231b278f46b89839c6b22fc0bd8e387b35617f298c1d3ae2eb11d5b&limit=2&hash=40ZmLlSKi/WI0xO8TkXpn7RNscnvKSWPQSwt2HE1poQ='
 
 
 # from tonsdk.contract.wallet import WalletVersionEnum, Wallets
@@ -214,7 +228,7 @@ class AioTxTONClient(AioTxClient):
 
 
 # # # Get transactions for address (should include block data to get it for that block only? new ones?)
-# curl --location --request GET 'https://go.getblock.io/3ea060ad138b45b788f72902e3cf9b38/getTransactions?address=0:272d1e92e231b278f46b89839c6b22fc0bd8e387b35617f298c1d3ae2eb11d5b&limit=2&hash=40ZmLlSKi/WI0xO8TkXpn7RNscnvKSWPQSwt2HE1poQ=' 
+# curl --location --request GET 'https://go.getblock.io/3ea060ad138b45b788f72902e3cf9b38/getTransactions?address=0:272d1e92e231b278f46b89839c6b22fc0bd8e387b35617f298c1d3ae2eb11d5b&limit=2&hash=40ZmLlSKi/WI0xO8TkXpn7RNscnvKSWPQSwt2HE1poQ='
 
 # curl --location --request POST 'https://go.getblock.io/3ea060ad138b45b788f72902e3cf9b38/rest/sendBoc' --header 'Content-Type: application/json' --data-raw '{te6cckECAwEAAQ8AAt+IAJ9vK4gUqMCLXKsssfAigLozwwqp2s5GmDp+L8IV9hqSEYCU4fhOUIzrySDjgJo2xfUQUb2iGmUG5UZmecQphuYEjpEV6wKfEX9vX6/SkVaiIQ5Id+QTma2VfiE+eG4L74AlNTRi/////+AAAAAQAQIA3v8AIN0gggFMl7ohggEznLqxn3Gw7UTQ0x/THzHXC//jBOCk8mCDCNcYINMf0x/TH/gjE7vyY+1E0NMf0x/T/9FRMrryoVFEuvKiBPkBVBBV+RDyo/gAkyDXSpbTB9QC+wDo0QGkyMsfyx/L/8ntVABQAAAAACmpoxc9NEcRRhiEkbrH0HlAcR/tey8wfzgh5UEU+wWBpfLpOODwubg=}'
 
@@ -222,7 +236,6 @@ class AioTxTONClient(AioTxClient):
 
 
 # curl --location --request POST 'https://go.getblock.io/3ea060ad138b45b788f72902e3cf9b38/jsonRPC' --header 'Content-Type: application/json' --data-raw '{"jsonrpc": "2.0", "method": "sendBoc", "id": "getblock.io", "boc": "asdasd"}'
-
 
 
 # curl --location --request POST 'https://go.getblock.io/3ea060ad138b45b788f72902e3cf9b38/rest//sendBocReturnHash?' --header 'Content-Type: application/json' --data-raw {}

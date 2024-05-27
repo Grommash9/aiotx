@@ -12,6 +12,7 @@ from aiotx.clients import (
     AioTxETHClient,
     AioTxLTCClient,
     AioTxPolygonClient,
+    AioTxTONClient,
 )
 
 # ALL = "all"
@@ -25,6 +26,8 @@ ETH_TEST_NODE_URL = "https://ethereum-sepolia-rpc.publicnode.com"
 LTC_TEST_NODE_URL = "https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet"
 BTC_TEST_NODE_URL = "https://dry-compatible-cloud.btc-testnet.quiknode.pro/268755801856724a0c520053c0bc3b0a7b1a2d3e/"
 POLYGON_TEST_NODE_URL = "https://polygon-amoy-bor-rpc.publicnode.com"
+TON_TEST_NODE_URL = "https://testnet.toncenter.com/api/v2/jsonRPC"
+
 
 pytest.mark.mysql = pytest.mark.mysql
 logging.getLogger("vcr").setLevel(logging.WARNING)
@@ -35,6 +38,9 @@ vcr_c = vcr.VCR(
     filter_headers=["Authorization", "Cookie", "Date"],
 )
 
+@pytest.fixture
+def ton_client() -> AioTxTONClient:
+    return AioTxTONClient(TON_TEST_NODE_URL)
 
 @pytest.fixture
 def bsc_client() -> AioTxBSCClient:
