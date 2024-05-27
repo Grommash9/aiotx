@@ -79,6 +79,10 @@ class AioTxTONClient(AioTxClient):
         payload = {"method": "getWalletInformation", "params": {"address": address}}
         information = await self._make_rpc_call(payload)
         return information
+    
+    async def get_transaction_count(self, address) -> int:
+        address_information = await self.get_wallet_information(address)
+        return address_information.get("seqno", 0)
 
     async def pack_address(self, address):
         payload = {"method": "packAddress", "params": {"address": address}}

@@ -233,3 +233,43 @@ async def test_get_transactions(
         tx_data = await ton_client.get_transactions(address, limit, lt, hash, to_lt, archival)
         tx_ids = set([shard["transaction_id"]["hash"] for shard in tx_data])
         assert tx_ids.symmetric_difference(tx_data_result) == set()
+
+
+@pytest.mark.parametrize(
+    "address, expected_exception, expected_segno",
+    [
+        (
+            "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
+            None,
+            2,
+        ),
+        (
+            "EQBsBYu0o3WC4n3ETH6VyuYcjvQPusd4OhG8VIQFELGzgD1y",
+            None,
+            1,
+        ),
+        (
+            "EQB1mXHwCmSUfwQDLmdsZ7YvY41i8d8clshV52GjL_v0chUj",
+            None,
+            0,
+        ),
+        (
+            "Ef9fwskZLEuGDfYTRAtvt9k-mEDkaIskkUOsEwPw1wzXk7zR",
+            InvalidArgumentError,
+            0,
+        ),
+        (
+            "0:6c058bb4a37582e27dc44c7e95cae61c8ef40fbac7783a11bc54840510b1b380",
+            None,
+            1,
+        ),
+    ],
+)
+@vcr_c.use_cassette("ton/get_transaction_count.yaml")
+async def test_get_transaction_count(ton_client: AioTxTONClient, address, expected_exception, expected_segno):
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await ton_client.get_transaction_count(address)
+    else:
+        transaction_count = await ton_client.get_transaction_count(address)
+        assert transaction_count == expected_segno

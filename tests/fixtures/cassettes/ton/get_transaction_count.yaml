@@ -1,0 +1,208 @@
+interactions:
+- request:
+    body: '{"method": "getWalletInformation", "params": {"address": "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"wallet":true,"balance":"4900925442","account_state":"active","wallet_type":"wallet
+        v4 r2","seqno":2,"last_transaction_id":{"@type":"internal.transactionId","lt":"22014131000001","hash":"htFdXopqxYctcjLwfOhXMeRRIaAaoSZ9aRnexbfOKg8="},"wallet_id":698983191},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a44eabcfe194f7-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 07:31:47 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=LMPb%2FKcrskHxxEE48qgd4PWg8p%2B%2FDssDKpC2Adc3%2Bv5E76Wd3tqCIWj9Z12AUHXM6ZgYksdxX1bkIvaA07WU%2BhU3tG%2Fw87bHdscfS22%2Bd8alnQmM2XkBbBk8%2BbeFCJjx9RD3cI15sA%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getWalletInformation", "params": {"address": "EQBsBYu0o3WC4n3ETH6VyuYcjvQPusd4OhG8VIQFELGzgD1y"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"wallet":true,"balance":"87235995","account_state":"active","wallet_type":"wallet
+        v3 r2","seqno":1,"last_transaction_id":{"@type":"internal.transactionId","lt":"22014127000001","hash":"5InW1tmQ3j8ZgpOh+xTa48fxPyYUXkktK1QdYEPT+sY="},"wallet_id":698983191},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a44eb37b139407-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 07:31:48 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=Ng3encnrQ6trRu5h%2BSBT0e66QXHKNbmFYCvqY8BzH7oSg%2FGLyh4W2s4cns2wU%2BdVjSMNRAP%2F7aTjGIkN4bzxZkQUfg5EndJTSrCzltf1hElA6sa2H9GyiyLzW%2BAkwbwgSobsmsJKGw%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getWalletInformation", "params": {"address": "EQB1mXHwCmSUfwQDLmdsZ7YvY41i8d8clshV52GjL_v0chUj"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"wallet":false,"balance":"1000000","account_state":"uninitialized","last_transaction_id":{"@type":"internal.transactionId","lt":"22013755000001","hash":"Trr6cNSbXLQ6DFF6DXvfODdk3xSxxiSLiEkA3gickc0="}},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a44eba6d2a6373-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 07:31:49 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=bHGbUeR2H6tkwPP2kOiAAoSVb0lpJ6sHsXVuyaV%2FYJwi5kFXiWYbGJJIJOtkZU8AdheVsDsfXH%2FhQAB73XAZ5DGxPVbptC7G8BNXwC2P8DX%2BKWsjdeY1jJc5fnmerHQDIeQy0YwqRQ%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getWalletInformation", "params": {"address": "Ef9fwskZLEuGDfYTRAtvt9k-mEDkaIskkUOsEwPw1wzXk7zR"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":false,"error":"Incorrect address","code":416}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a44ec20e8724ed-LHR
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '51'
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 07:31:50 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=Ae2bWtlfVrc6%2FYE47LCC5Slq5gaQiJtwrpbfkfPfyARtMNs7ECM1hNYRG%2FQBM8ekZCO%2BkPXkuNM%2Bal5Xatz%2FKm4CZq2B0rutWs%2FSCpSoajb9iIAh8CTlWhSL%2FivrqkCUhMV0DgZAPQ%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+    status:
+      code: 416
+      message: Range Not Satisfiable
+- request:
+    body: '{"method": "getWalletInformation", "params": {"address": "0:6c058bb4a37582e27dc44c7e95cae61c8ef40fbac7783a11bc54840510b1b380"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"wallet":true,"balance":"87235995","account_state":"active","wallet_type":"wallet
+        v3 r2","seqno":1,"last_transaction_id":{"@type":"internal.transactionId","lt":"22014127000001","hash":"5InW1tmQ3j8ZgpOh+xTa48fxPyYUXkktK1QdYEPT+sY="},"wallet_id":698983191},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a4510d484b48b5-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 07:33:24 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=2WikUNRUeOx6BzNl128DHVhuPyLIPdpAStroBWhXTtXDZn25yvN9rd3RpFXjal3n3k%2BfyQnQg6PS2ucK%2B8%2Fi5uEljRiYNHY0hDRUkEvo4Kj%2BjfYpfHg%2Bi6RbbQcnmh3tyBrfP%2BkKqg%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+version: 1
