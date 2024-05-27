@@ -4,7 +4,12 @@ import pytest
 from conftest import vcr_c  # noqa
 
 from aiotx.clients import AioTxTONClient
-from aiotx.exceptions import AioTxError, BlockNotFoundError, InvalidArgumentError, WrongPrivateKey
+from aiotx.exceptions import (
+    AioTxError,
+    BlockNotFoundError,
+    InvalidArgumentError,
+    WrongPrivateKey,
+)
 
 TON_TEST_WALLET_MEMO = os.environ.get("TON_TEST_WALLET_MEMO")
 assert TON_TEST_WALLET_MEMO is not None, "Please provide TON_TEST_WALLET_MEMO"
@@ -110,9 +115,9 @@ async def test_get_master_block_shards(ton_client: AioTxTONClient, seqno, expect
 async def test_get_block_transactions(ton_client: AioTxTONClient, shard, seqno, expected_exception, tx_data_result):
     if expected_exception:
         with pytest.raises(expected_exception):
-            await ton_client.get_block_transactions(seqno=seqno, shard=shard, count=2)
+            await ton_client.get_block_transactions(workchain=0, seqno=seqno, shard=shard, count=2)
     else:
-        tx_data = await ton_client.get_block_transactions(seqno=seqno, shard=shard, count=2)
+        tx_data = await ton_client.get_block_transactions(workchain=0, seqno=seqno, shard=shard, count=2)
         tx_ids = set([shard["hash"] for shard in tx_data])
         assert tx_ids.symmetric_difference(tx_data_result) == set()
 
@@ -226,8 +231,6 @@ async def test_get_balance(ton_client: AioTxTONClient, address, expected_balance
 async def test_get_transactions(
     ton_client: AioTxTONClient, address, limit, lt, hash, to_lt, archival, expected_exception, tx_data_result
 ):
-    import time
-    time.sleep(1)
     if expected_exception:
         with pytest.raises(expected_exception):
             await ton_client.get_transactions(address, limit, lt, hash, to_lt, archival)

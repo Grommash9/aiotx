@@ -1,11 +1,12 @@
 import json
-import asyncio
+from typing import Optional
+
 import aiohttp
 from tonsdk.contract.wallet import Wallets, WalletVersionEnum
 from tonsdk.crypto import mnemonic_new
 from tonsdk.crypto._mnemonic import mnemonic_is_valid
 from tonsdk.utils import bytes_to_b64str, to_nano
-from typing import Optional
+
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     AioTxError,
@@ -18,8 +19,8 @@ from aiotx.exceptions import (
 class AioTxTONClient(AioTxClient):
     def __init__(self, node_url, wallet_version: WalletVersionEnum = WalletVersionEnum.v3r2, workchain: Optional[int] = None):
         super().__init__(node_url)
-        # self.monitor = EvmMonitor(self)
-        # self._monitoring_task = None
+        self.monitor = TonMonitor(self)
+        self._monitoring_task = None
         self.workchain = workchain
         self.wallet_version = wallet_version
 
@@ -59,7 +60,6 @@ class AioTxTONClient(AioTxClient):
     async def get_master_block_shards(self, seqno: int) -> list[dict]:
         payload = {"method": "shards", "params": {"seqno": seqno}}
         result = await self._make_rpc_call(payload)
-        print("rasdaesult", result)
         return result["shards"]
 
     async def get_balance(self, address) -> int:
@@ -86,12 +86,13 @@ class AioTxTONClient(AioTxClient):
         packed_address = await self._make_rpc_call(payload)
         return packed_address
 
-    async def get_block_transactions(self, shard, seqno, count=40):
-        if self.workchain is None:
-            await self._get_network_params()
+    async def get_block_transactions(self, workchain, shard, seqno, count=40):
+        # Here we don't have workchain by default, because in mainnet 
+        # for example master block workchain is -1 and shard is 0
+        # So we should use workchain here
         payload = {
             "method": "getBlockTransactions",
-            "params": {"workchain": self.workchain, "shard": shard, "seqno": seqno, "count": count},
+            "params": {"workchain": workchain, "shard": shard, "seqno": seqno, "count": count},
         }
         information = await self._make_rpc_call(payload)
         return information["transactions"]
@@ -185,19 +186,25 @@ class TonMonitor(BlockMonitor):
     async def poll_blocks(
         self,
     ):
-        workchain, shard, seqno = await self.client._ge
-        target_block = network_latest_block if self._latest_block is None else self._latest_block
-        if target_block > network_latest_block:
+        workchain, shard, seqno = await self.client._get_network_params()
+        if self.client.workchain is None:
+            self.client.workchain = workchain
+        target_block = seqno if self._latest_block is None else self._latest_block
+        if target_block > seqno:
             return
-        block = await self.client.get_block_by_number(target_block)
-        await self.process_block(block["result"])
+        shards = await self.client.get_master_block_shards(target_block)
+        for shard in shards:
+            shard_transactions = await self.client.get_block_transactions(shard["workchain"], shard["shard"], shard["seqno"], 1000)
+            await self.process_shard_transactions(shard_transactions)
+        await self.process_master_block(target_block)
         self._latest_block = target_block + 1
 
-    async def process_block(self, block):
+    async def process_master_block(self, block):
         for handler in self.block_handlers:
-            await handler(int(block["number"], 16))
+            await handler(block)
 
-        for transaction in block["transactions"]:
+    async def process_shard_transactions(self, shard_transactions):
+        for transaction in shard_transactions:
             for handler in self.transaction_handlers:
                 await handler(transaction)
 

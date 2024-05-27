@@ -25,6 +25,7 @@ BSC_TEST_NODE_URL = "https://bsc-testnet-rpc.publicnode.com"
 ETH_TEST_NODE_URL = "https://ethereum-sepolia-rpc.publicnode.com"
 LTC_TEST_NODE_URL = "https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet"
 BTC_TEST_NODE_URL = "https://dry-compatible-cloud.btc-testnet.quiknode.pro/268755801856724a0c520053c0bc3b0a7b1a2d3e/"
+TON_MAINNET_NODE_URL = "https://go.getblock.io/875fb0dee2544bb0bc59dd08c6f39330/jsonRPC"
 POLYGON_TEST_NODE_URL = "https://polygon-amoy-bor-rpc.publicnode.com"
 TON_TEST_NODE_URL = "https://testnet.toncenter.com/api/v2/jsonRPC"
 
@@ -43,6 +44,12 @@ def ton_client() -> AioTxTONClient:
     # current test rpc connection returning -1 as workchain but it should be 0, 
     # so we are setting that param by ourself
     return AioTxTONClient(TON_TEST_NODE_URL, workchain=0)
+
+@pytest.fixture
+def ton_mainnet_client() -> AioTxTONClient:
+    # testnet block monitoring is not working as 
+    # expected, and we using mainnet to test monitoring
+    return AioTxTONClient(TON_MAINNET_NODE_URL)
 
 @pytest.fixture
 def bsc_client() -> AioTxBSCClient:
