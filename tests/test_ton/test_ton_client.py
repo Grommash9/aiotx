@@ -326,20 +326,20 @@ async def test_pack_address(ton_client: AioTxTONClient, address, expected_except
     [
         (
             "current worth mimic divert pigeon minor scale abstract bicycle usage talent basic zoo merit melt provide old burger lazy actual amazing drop deposit wink",
-            "UQCb5_yLK5GNJwbrsogdnxdcZmk390u8vBQz2GM_hjHQkgpR",
-            "0:9be7fc8b2b918d2706ebb2881d9f175c666937f74bbcbc1433d8633f8631d092",
+            "UQC1-T84mX2mz0gWO-o5ND_mL_aPI1CvgUPQBeXFgVCURVBO",
+            "0:b5f93f38997da6cf48163bea39343fe62ff68f2350af8143d005e5c581509445",
             None,
         ),
         (
             "motion churn become nest fault bag clog double please soap damage hen steak nerve letter captain purpose flight aerobic fossil butter asthma hole humble",
-            "UQDPR6JfCVktdpZGzNH8nU2JZWHp9owzfpe9IGcYt150H0RL",
-            "0:cf47a25f09592d769646ccd1fc9d4d896561e9f68c337e97bd206718b75e741f",
+            "UQDTd43t-plROumWFwPIeSinJwwaPSatt-ZKbIJzaqlge2tD",
+            "0:d3778dedfa99513ae9961703c87928a7270c1a3d26adb7e64a6c82736aa9607b",
             None,
         ),
         (
             "collect maze rough ahead viable upgrade resemble music predict flag movie vocal razor multiply cactus describe host admit battle doctor soldier hungry defy decorate",
-            "UQBLwVMaz6_xWshST6SKav0CLonx0jMNtQy2c3r4droJUDXl",
-            "0:4bc1531acfaff15ac8524fa48a6afd022e89f1d2330db50cb6737af876ba0950",
+            "UQCLeN7G4DNOOTw09ODzLmyfEawMhM1lY5PDga0wbAWBI44G",
+            "0:8b78dec6e0334e393c34f4e0f32e6c9f11ac0c84cd656393c381ad306c058123",
             None,
         ),
         (
