@@ -21,7 +21,7 @@ from aiotx.exceptions import (
 
 class AioTxTONClient(AioTxClient):
     def __init__(
-        self, node_url, wallet_version: WalletVersionEnum = WalletVersionEnum.v3r2, workchain: Optional[int] = None
+        self, node_url, wallet_version: WalletVersionEnum = WalletVersionEnum.v4r2, workchain: Optional[int] = None
     ):
         super().__init__(node_url)
         self.monitor = TonMonitor(self)
