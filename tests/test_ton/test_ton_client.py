@@ -2,6 +2,8 @@ import os
 
 import pytest
 from conftest import vcr_c  # noqa
+from vcr.errors import CannotOverwriteExistingCassetteException
+
 from aiotx.clients import AioTxTONClient
 from aiotx.exceptions import (
     AioTxError,
@@ -9,7 +11,6 @@ from aiotx.exceptions import (
     InvalidArgumentError,
     WrongPrivateKey,
 )
-from vcr.errors import CannotOverwriteExistingCassetteException
 
 TON_TEST_WALLET_MEMO = os.environ.get("TON_TEST_WALLET_MEMO")
 assert TON_TEST_WALLET_MEMO is not None, "Please provide TON_TEST_WALLET_MEMO"
@@ -376,7 +377,6 @@ async def test_send_ton(ton_client: AioTxTONClient):
 @pytest.mark.xfail(raises=CannotOverwriteExistingCassetteException, reason="boc is always new, we can't test it by VCR")
 @vcr_c.use_cassette("ton/send_ton_with_auto_seqno.yaml")
 async def test_send_ton_with_auto_seqno(ton_client: AioTxTONClient):
-    _, address = await ton_client.get_address_from_mnemonics(TON_TEST_WALLET_MEMO)
     amount_in_nano = ton_client.to_nano(0.00001)
     result_tx_id = await ton_client.send(TON_TEST_WALLET_MEMO, "UQDU1hdX6SeHmrvzvyjIrLEWUAdJUJar2sw8haIuT_5n-FLh", amount_in_nano)
     assert result_tx_id == "aJWE/d/toIz8a3vKut952phyEySylxrKFlqg49qDlQA="

@@ -1,13 +1,15 @@
+import decimal
 import json
-from typing import Optional
+from typing import Optional, Union
 
 import aiohttp
-from typing import Union
-import decimal
 from tonsdk.contract.wallet import Wallets, WalletVersionEnum
 from tonsdk.crypto import mnemonic_new
 from tonsdk.crypto._mnemonic import mnemonic_is_valid
-from tonsdk.utils import bytes_to_b64str, to_nano as tonsdk_to_nano, from_nano as tonsdk_from_nano
+from tonsdk.utils import bytes_to_b64str
+from tonsdk.utils import from_nano as tonsdk_from_nano
+from tonsdk.utils import to_nano as tonsdk_to_nano
+
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     AioTxError,
@@ -89,7 +91,7 @@ class AioTxTONClient(AioTxClient):
         packed_address = await self._make_rpc_call(payload)
         return packed_address
 
-    async def get_block_transactions(self, workchain, shard, seqno, count=40):
+    async def get_block_transactions(self, workchain, shard, seqno, count=40) -> list[dict]:
         # Here we don't have workchain by default, because in mainnet
         # for example master block workchain is -1 and shard is 0
         # So we should use workchain here
@@ -100,7 +102,7 @@ class AioTxTONClient(AioTxClient):
         information = await self._make_rpc_call(payload)
         return information["transactions"]
 
-    async def detect_address(self, address):
+    async def detect_address(self, address) -> dict:
         payload = {"method": "detectAddress", "params": {"address": address}}
         information = await self._make_rpc_call(payload)
         return information
@@ -119,9 +121,8 @@ class AioTxTONClient(AioTxClient):
         from_address, _ = await self.get_address_from_mnemonics(mnemonic)
         if seqno is None:
             seqno = await self.get_transaction_count(from_address)
-
-        mnemonic_list = self._unpack_mnemonic(mnemonic)
-        boc = self._create_transfer_boc(mnemonic_list, to_address, amount, seqno)
+        
+        boc = self._create_transfer_boc(mnemonic, to_address, amount, seqno)
         boc_answer_data = await self.send_boc_return_hash(boc)
         return boc_answer_data["hash"]
     
@@ -130,7 +131,8 @@ class AioTxTONClient(AioTxClient):
     #     information = await self._make_rpc_call(payload)
     #     return information
 
-    def _create_transfer_boc(self, mnemonic_list: list[str], to_address, amount, seqno):
+    def _create_transfer_boc(self, mnemonic_str: str, to_address, amount, seqno) -> str:
+        mnemonic_list = self._unpack_mnemonic(mnemonic_str)
         _, _, _, wallet = Wallets.from_mnemonics(mnemonic_list, self.wallet_version, self.workchain)
         query = wallet.create_transfer_message(
             to_addr=to_address, amount=amount, payload="", seqno=seqno
@@ -138,12 +140,12 @@ class AioTxTONClient(AioTxClient):
         boc = bytes_to_b64str(query["message"].to_boc(False))
         return boc
 
-    async def send_boc_return_hash(self, boc):
+    async def send_boc_return_hash(self, boc) -> dict:
         payload = {"method": "sendBocReturnHash", "params": {"boc": boc}}
         information = await self._make_rpc_call(payload)
         return information
 
-    async def _get_network_params(self):
+    async def _get_network_params(self) -> tuple[int, int, int]:
         master_block_data = await self.get_last_master_block()
         workchain = master_block_data["workchain"]
         shard = master_block_data["shard"]
@@ -153,7 +155,7 @@ class AioTxTONClient(AioTxClient):
 
     async def get_transactions(
         self, address, limit: int = None, lt: int = None, hash: str = None, to_lt: int = None, archival: bool = None
-    ):
+    ) -> list[dict]:
         """
         Retrieves transactions for a given TON account.
 
