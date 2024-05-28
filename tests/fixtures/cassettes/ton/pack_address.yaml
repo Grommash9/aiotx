@@ -1,0 +1,207 @@
+interactions:
+- request:
+    body: '{"method": "packAddress", "params": {"address": "0:95cc5a9ec1eebbbe1265a20dc63cf015d1143f5871b0ae21eeecd0d60cafc74d"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":"EQCVzFqewe67vhJlog3GPPAV0RQ/WHGwriHu7NDWDK/HTec6","id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a4fd54cdfc640c-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 09:31:01 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=hXmPuNXGA1tkolbY6Czzixv6qoerjGt0n6pCMzzTmsFj2zV3IO4xjt%2FsYXHxUgT4k%2Bu%2Fm84EZ7Q0aQF0mO3SxM5VmFcEdMrC27NXDNYYBSW8b1Plo9aW4Z8pESHLaVuTtBkdfvxPMA%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "packAddress", "params": {"address": "0:2e80e2e306b9aefaef7e0a00092a31fd6c8d1abc28d9bf4c5a477e65ef817e30"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":"EQAugOLjBrmu+u9+CgAJKjH9bI0avCjZv0xaR35l74F+MH/3","id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a4fd5be9b077b4-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 09:31:02 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=Ca2rdgA5%2BnL5M83sDN17jkuyT2MRtTInlKCRNyYS0Znzcr40l3fu%2BTmo%2Fa2BGPcylBlvQ0yeq7EtZXq43TS%2FRKsInAFR2ykRN80tvRrdDYb7qQAIcWlBsSBxroPG2MDOiFcwHpDOfQ%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "packAddress", "params": {"address": "0:6c58bb4a37582e27dc44c7e95cae61c8ef40fbac7783a11bc54840510b1b380"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":"EQAGxYu0o3WC4n3ETH6VyuYcjvQPusd4OhG8VIQFELGzgG2y","id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a4fd62ffb971bc-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 09:31:03 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=6pU7QsLpBl1MWTUgiq7g5gHmJau8nbr3hgUG4YjgHxkBZy9WKy3v6cP%2Bni%2FzM2ZuRMTSgZW7vjCMa2RrGeY5jB30sgLnb1mID4OT9E1WKg8DQnyOHeMv32Yb56np%2B%2BP9W2QWETdVog%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "packAddress", "params": {"address": "0:6c58bb4a37582e1bc54840510b1b380"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":"EQAAAAAAAAAAAAAAAAAAAAAABsWLtKN1guG8VIQFELGzgOMO","id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a4fd6a2cd994c3-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 09:31:04 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=cw1h0Mpe%2ByWSF5uDMB7NU5z9chCkbuKlrqxqCCuZYiyYdhH45VleEy9DWol43vzEE1B8LL5Srx0jyUMbgO76WrO43GkvcxN7xqijVVmJ8vL%2FPhwgOO%2FzIL35XUS2kf84Hi0oQ%2BRMKA%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "packAddress", "params": {"address": "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf+ATpkbpT"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":"0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf+ATpkbpT","id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 88a4fd7169b3770d-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Mon, 27 May 2024 09:31:05 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=%2BWLsFrSNtTrYD0aaNzK441h834WasqAoiS5TbnRO%2BxjbTqgy84E8cdLNX4lLTvFCc81UnovttlSYQsXXIHIg8AlSGccfdOTbOnipm4vHX9t8Dj05Ofv5nJ9xpxg5qAuedfQ%2FG3gMeg%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+version: 1

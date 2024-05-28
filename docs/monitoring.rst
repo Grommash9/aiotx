@@ -122,3 +122,64 @@ You can integrate the monitoring functionality with the Aiogram library to send 
 In this example, the `handle_block` function is called whenever a new block is received. It sends a message to the specified chat ID using the Aiogram bot.
 
 These examples demonstrate different ways to utilize the monitoring functionality provided by AioTxBSCClient. You can customize the handlers and integrate monitoring into your application based on your specific requirements.
+
+Here's the documentation for the `TonMonitor` class and the associated blockchain monitoring functionality:
+
+Monitoring TON Blockchain
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To monitor the TON blockchain, you need to create an instance of `AioTxTONClient` and use the `TonMonitor` class to start monitoring.
+
+.. code-block:: python
+
+    from aiotx.clients import AioTxTONClient
+    import asyncio
+
+    ton_client = AioTxTONClient("https://go.getblock.io/<token>/jsonRPC")
+
+    @ton_client.monitor.on_block
+    async def handle_block(block):
+        # Process the master block
+        print("ton_client: block", block)
+
+    @ton_client.monitor.on_transaction
+    async def handle_transaction(transaction):
+        # Process the transaction
+        print("ton_client: transaction", transaction)
+
+    async def main():
+        await ton_client.start_monitoring()
+        while True:
+            await asyncio.sleep(1)
+
+    if __name__ == "__main__":
+        asyncio.run(main())
+
+Output:
+
+.. code-block:: text
+
+    ton_client: transaction {'@type': 'blocks.shortTxId', 'mode': 135, 'account': '0:ffbd85ffba92089f5263a510ae89b7a8b0bc8bbea7c76102fb7154a4e84de04b', 'lt': '46762307000001', 'hash': 'uXqQz3LEJjor09cIcZ4IoRQX+IGuVnjBR1zQzut1tKY='}
+    ton_client: block 38104588ton_client: block 38104588
+
+In this example, we create an instance of `AioTxTONClient` with the appropriate API endpoint. We then register handlers for blocks and transactions using the `on_block` and `on_transaction` decorators, respectively.
+
+Inside the `handle_block` handler, you can process the master block as needed. The `block` parameter contains the block data.
+
+Inside the `handle_transaction` handler, you can process each transaction encountered. The `transaction` parameter contains basic transaction information such as the account address, logical time, and transaction hash.
+
+By default, the transaction details are not fetched for every transaction to avoid consuming a large number of API calls. If you want to retrieve more details about a specific transaction, you can use the `get_transactions` method of `AioTxTONClient`, as shown in the example:
+
+.. code-block:: python
+
+    tx_details = await ton_client.get_transactions(
+        "0:ffbd85ffba92089f5263a510ae89b7a8b0bc8bbea7c76102fb7154a4e84de04b",
+        1, 46762307000001, "uXqQz3LEJjor09cIcZ4IoRQX+IGuVnjBR1zQzut1tKY=")
+
+This allows you to selectively fetch transaction details for the transactions you are interested in.
+
+Finally, the `main` function starts the monitoring process by calling `start_monitoring` on the `ton_client` instance. It then enters a loop to keep the script running and allow the monitoring to continue.
+
+Note: Make sure to replace `<token>` in the API endpoint with your actual API token.
+
+With this setup, you can monitor the TON blockchain, handle blocks and transactions, and selectively fetch transaction details as needed.

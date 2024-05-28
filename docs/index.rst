@@ -6,7 +6,7 @@
 Welcome to AioTx's documentation!
 ==================================
 
-AioTx is a comprehensive Python package designed to simplify and streamline your cryptocurrency operations. Whether you're working with Ethereum Virtual Machine (EVM) based networks, UTXO-based networks like Bitcoin and Litecoin, or TRON, AioTx provides a unified and user-friendly interface for interacting with these blockchains.
+AioTx is a comprehensive Python package designed to simplify and streamline your cryptocurrency operations. Whether you're working with Ethereum Virtual Machine (EVM) based networks, UTXO-based networks like Bitcoin and Litecoin, or TON, AioTx provides a unified and user-friendly interface for interacting with these blockchains.
 
 I created AioTx because I wanted to consolidate all the crypto operations that I frequently use into one convenient package. The goal was to have a collection of crypto clients that I regularly work with, all in one place, with a consistent and intuitive API.
 
@@ -17,7 +17,7 @@ Key Features
 
 2. **UTXO Client:** For UTXO-based networks like Bitcoin and Litecoin, AioTx provides a UTXO client. This client allows you to generate addresses, import addresses for monitoring, retrieve balances, estimate fees, and send transactions effortlessly. The UTXO client also includes support for bulk transactions, enabling you to send multiple transactions in a single operation.
 
-3. **TRON Client:** NOT YET IMPLEMENTED
+3. **TON Client:** Client for Telegram Open Network - now we have monitoring and token sending for it
 
 4. **Blockchain Monitoring:** One of the standout features of AioTx is its blockchain monitoring capabilities. You can easily monitor new blocks and transactions on the supported blockchains by registering custom handlers. AioTx provides a simple and intuitive way to start and stop monitoring, and it even allows you to monitor multiple clients simultaneously. Integration with the Aiogram library is also supported, enabling you to send notifications or perform actions based on the received blocks and transactions.
 
@@ -145,17 +145,13 @@ Satoshi Conversions:
    asyncio.run(main())
 
 
-For more detailed usage instructions and examples, please refer to the documentation for each client and feature.
-
-I hope you find AioTx helpful and enjoy using it for your crypto operations. If you have any questions, feedback, or suggestions, please don't hesitate to reach out. Happy coding!
-
 .. toctree::
    :maxdepth: 100
    :caption: Available Clients:
 
    clients/evm_client/index
    clients/utxo_client/index
-   clients/tron_client/index
+   clients/ton_client/index
 
 .. toctree::
    :maxdepth: 100

@@ -1,6 +1,6 @@
 ## AioTx
 
-AioTx is a comprehensive Python package designed to simplify and streamline your cryptocurrency operations. Whether you're working with Ethereum Virtual Machine (EVM) based networks, UTXO-based networks like Bitcoin and Litecoin, or TRON, AioTx provides a unified and user-friendly interface for interacting with these blockchains.
+AioTx is a comprehensive Python package designed to simplify and streamline your cryptocurrency operations. Whether you're working with Ethereum Virtual Machine (EVM) based networks, UTXO-based networks like Bitcoin and Litecoin, or TON, AioTx provides a unified and user-friendly interface for interacting with these blockchains.
 
 I created AioTx because I wanted to consolidate all the crypto operations that I frequently use into one convenient package. The goal was to have a collection of crypto clients that I regularly work with, all in one place, with a consistent and intuitive API.
 
@@ -14,7 +14,7 @@ Key Features
 
 2. **UTXO Client:** For UTXO-based networks like Bitcoin and Litecoin, AioTx provides a UTXO client. This client allows you to generate addresses, import addresses for monitoring, retrieve balances, estimate fees, and send transactions effortlessly. The UTXO client also includes support for bulk transactions, enabling you to send multiple transactions in a single operation.
 
-3. **TRON Client:** NOT YET IMPLEMENTED
+3. **TON Client:** Client for Telegram Open Network - now we have monitoring and token sending for it
 
 4. **Blockchain Monitoring:** One of the standout features of AioTx is its blockchain monitoring capabilities. You can easily monitor new blocks and transactions on the supported blockchains by registering custom handlers. AioTx provides a simple and intuitive way to start and stop monitoring, and it even allows you to monitor multiple clients simultaneously. Integration with the Aiogram library is also supported, enabling you to send notifications or perform actions based on the received blocks and transactions.
 
@@ -76,6 +76,24 @@ async def main():
     print(f"Transaction Hash: {tx_hash}")
 
 asyncio.run(main())
+```
+
+Sending TON:
+```python
+    from aiotx.clients import AioTxTONClient
+    import asyncio
+
+    ton_client = AioTxTONClient("https://testnet.toncenter.com/api/v2/jsonRPC", workchain=0)
+    # We are adding workchain here because testnet.toncenter working bad and identify itself as -1 but it should be 0
+    # If you are using any other provider it should work fine without workchain param
+
+    amount = ton_client.to_nano(0.0001)
+    mnemonic_str = "post web slim candy example glimpse other reduce layer way ordinary hidden dwarf marble fancy gym client soul speed enforce drift huge upset oblige"
+
+    balance = asyncio.run(ton_client.get_balance("UQDU1hdX6SeHmrvzvyjIrLEWUAdJUJar2sw8haIuT_5n-FLh"))
+
+    tx_id = asyncio.run(ton_client.send(mnemonic_str, "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT", amount))
+    print(tx_id)
 ```
 
 Sending Native Currency (Ethereum):
