@@ -6,6 +6,7 @@ I created AioTx because I wanted to consolidate all the crypto operations that I
 
 Join telegram channel and chat for updates and help
 https://t.me/aiotx_python
+https://t.me/aiotx_python_chat
 
 Key Features
 ------------
