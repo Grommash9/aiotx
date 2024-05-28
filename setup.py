@@ -54,6 +54,7 @@ setup(
         "bitcoinlib==0.6.*",
         "greenlet",
         "setuptools",
+        "pynacl>=1.4.0",
     ],
     extras_require={
         "test": extras_test,
