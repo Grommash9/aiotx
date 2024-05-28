@@ -3,12 +3,6 @@ import json
 from typing import Optional, Union
 
 import aiohttp
-from tonsdk.contract.wallet import Wallets, WalletVersionEnum
-from tonsdk.crypto import mnemonic_new
-from tonsdk.crypto._mnemonic import mnemonic_is_valid
-from tonsdk.utils import bytes_to_b64str
-from tonsdk.utils import from_nano as tonsdk_from_nano
-from tonsdk.utils import to_nano as tonsdk_to_nano
 
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
@@ -17,6 +11,12 @@ from aiotx.exceptions import (
     InvalidArgumentError,
     WrongPrivateKey,
 )
+from aiotx.utils.tonsdk.contract.wallet import Wallets, WalletVersionEnum
+from aiotx.utils.tonsdk.crypto import mnemonic_new
+from aiotx.utils.tonsdk.crypto._mnemonic import mnemonic_is_valid
+from aiotx.utils.tonsdk.utils import bytes_to_b64str
+from aiotx.utils.tonsdk.utils import from_nano as tonsdk_from_nano
+from aiotx.utils.tonsdk.utils import to_nano as tonsdk_to_nano
 
 
 class AioTxTONClient(AioTxClient):
