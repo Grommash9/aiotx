@@ -11,7 +11,7 @@ Convert a value from the specified unit to wei.
 Parameters:
 
     - **number** (Union[int, float, str, decimal.Decimal]): The value to convert.
-    - **unit** (str): The unit of the value (e.g., "ether", "gwei").
+    - **unit** (str, optional): The unit of the value (e.g., "ether", "gwei"). Default value - "ether".
 
 Returns:
 

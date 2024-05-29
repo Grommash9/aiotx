@@ -63,12 +63,13 @@ class AioTxEVMClient(AioTxClient):
         return to_checksum_address(from_address)
 
     @staticmethod
-    def from_wei(number: int, unit: str) -> Union[int, decimal.Decimal]:
+    def from_wei(number: int, unit: str = "ether") -> Union[int, decimal.Decimal]:
         return currency.from_wei(number, unit)
 
     @staticmethod
-    def to_wei(number: Union[int, float, str, decimal.Decimal], unit: str) -> int:
+    def to_wei(number: Union[int, float, str, decimal.Decimal], unit: str = "ether") -> int:
         return currency.to_wei(number, unit)
+
 
     def _get_abi_entries(self):
         # Redefine that in you client

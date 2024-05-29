@@ -9,7 +9,7 @@ Convert a value in wei to its equivalent in the specified unit.
 
 Parameters:
     - **number** (int): The value in wei.
-    - **unit** (str): The unit to convert to (e.g., "ether", "gwei").
+    - **unit** (str, optional): The unit to convert to (e.g., "ether", "gwei"). Default value - "ether".
 
 Returns:
     - Union[int, decimal.Decimal]: The converted value.
