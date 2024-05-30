@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [2.6.0]
+- to_wei from_wei added hex numbers logic support / docs updated
+
 ## [2.5.0]
 - RpcConnectionError error added to be raised if there is any issues with connection to node
 

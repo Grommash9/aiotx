@@ -63,12 +63,24 @@ class AioTxEVMClient(AioTxClient):
             raise WrongPrivateKey(e)
         return to_checksum_address(from_address)
 
-    @staticmethod
-    def from_wei(number: int, unit: str = "ether") -> Union[int, decimal.Decimal]:
+    def is_hex(self, value):
+        try:
+            int(value, 16)
+            return True
+        except ValueError:
+            return False
+        
+    def from_wei(self, number: Union[int, str], unit: str = "ether") -> Union[int, decimal.Decimal]:
+        if isinstance(number, str):
+            if self.is_hex(number):
+                number = int(number, 16)
         return currency.from_wei(number, unit)
 
-    @staticmethod
-    def to_wei(number: Union[int, float, str, decimal.Decimal], unit: str = "ether") -> int:
+
+    def to_wei(self, number: Union[int, float, str, decimal.Decimal], unit: str = "ether") -> int:
+        if isinstance(number, str):
+            if self.is_hex(number):
+                number = int(number, 16)
         return currency.to_wei(number, unit)
 
 
