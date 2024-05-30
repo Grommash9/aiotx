@@ -1,4 +1,5 @@
 import os
+from decimal import Decimal
 
 import pytest
 from conftest import vcr_c  # noqa
@@ -17,6 +18,36 @@ PRIVATE_KEY_TO_SEND_FROM = os.environ.get("TEST_BSC_WALLET_PRIVATE_KEY")
 assert PRIVATE_KEY_TO_SEND_FROM is not None, "Please provide TEST_BSC_WALLET_PRIVATE_KEY"
 CONTRACT = "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd"
 DESTINATION_ADDRESS = "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a"
+
+
+@pytest.mark.parametrize(
+    "number, expected_result",
+    [
+        (5, 5000000000000000000),
+        ("0xAB", 171000000000000000000),
+        ("0x1E", 30000000000000000000),
+        ("0xDEADBEEF", 3735928559000000000000000000),
+        (19, 19000000000000000000),
+    ],
+)
+async def test_to_wei(bsc_client: AioTxBSCClient, number, expected_result):
+    amount_in_wei = bsc_client.to_wei(number)
+    assert expected_result == amount_in_wei
+
+
+@pytest.mark.parametrize(
+    "number, expected_result",
+    [
+        (5000000000000000000, 5),
+        ("0x1234567890ABCDEF12", Decimal('335.812727627494321938')),
+        ("0x7236567880ABCDEF12", Decimal('2106.84427382296765621')),
+        ("0xDEADBEEF", Decimal('3.735928559E-9')),
+        (19000000000000000000, 19),
+    ],
+)
+async def test_from_wei(bsc_client: AioTxBSCClient, number, expected_result):
+    amount_in_wei = bsc_client.from_wei(number)
+    assert expected_result == amount_in_wei
 
 
 @vcr_c.use_cassette("bsc/get_last_block.yaml")
