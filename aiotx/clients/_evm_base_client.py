@@ -32,6 +32,7 @@ from aiotx.exceptions import (
     NetworkError,
     NonceTooLowError,
     ReplacementTransactionUnderpriced,
+    RpcConnectionError,
     StackLimitReachedError,
     TraceRequestLimitExceededError,
     TransactionCostExceedsGasLimitError,
@@ -248,6 +249,8 @@ class AioTxEVMClient(AioTxClient):
         payload["id"] = 1
         async with aiohttp.ClientSession() as session:
             async with session.post(self.node_url, data=json.dumps(payload)) as response:
+                if response.status != 200:
+                    raise RpcConnectionError(await response.text())
                 result = await response.json()
                 if "error" not in result.keys():
                     return result

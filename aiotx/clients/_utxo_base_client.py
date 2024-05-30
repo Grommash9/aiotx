@@ -21,6 +21,7 @@ from aiotx.exceptions import (
     InvalidArgumentError,
     InvalidRequestError,
     MethodNotFoundError,
+    RpcConnectionError,
 )
 from aiotx.types import FeeEstimate
 
@@ -256,6 +257,8 @@ class AioTxUTXOClient(AioTxClient):
             async with session.post(
                 self.node_url, data=json.dumps(payload), auth=aiohttp.BasicAuth(self.node_username, self.node_password)
             ) as response:
+                if response.status != 200:
+                    raise RpcConnectionError(await response.text())
                 result = await response.json()
                 error = result.get("error")
 
