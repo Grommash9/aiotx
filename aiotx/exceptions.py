@@ -83,3 +83,5 @@ class WrongPrivateKey(AioTxError):
 class InsufficientFunds(AioTxError):
     pass
 
+class RpcConnectionError(AioTxError):
+    pass

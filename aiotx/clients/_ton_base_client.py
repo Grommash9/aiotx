@@ -6,9 +6,9 @@ import aiohttp
 
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
-    AioTxError,
     BlockNotFoundError,
     InvalidArgumentError,
+    RpcConnectionError,
     WrongPrivateKey,
 )
 from aiotx.utils.tonsdk.contract.wallet import Wallets, WalletVersionEnum
@@ -197,7 +197,7 @@ class AioTxTONClient(AioTxClient):
                         raise BlockNotFoundError(response_text)
                     if "Incorrect address" in response_text:
                         raise InvalidArgumentError(response_text)
-                    raise AioTxError(f"Node response status code: {response.status} response test: {response_text}")
+                    raise RpcConnectionError(f"Node response status code: {response.status} response test: {response_text}")
                 result = await response.json()
                 return result["result"]
 
