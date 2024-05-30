@@ -1,8 +1,9 @@
 import os
+from decimal import Decimal
 
 import pytest
 from conftest import vcr_c  # noqa
-from decimal import Decimal
+
 from aiotx.clients import AioTxBSCClient
 from aiotx.exceptions import (
     AioTxError,
