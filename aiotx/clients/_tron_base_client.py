@@ -5,10 +5,12 @@ import aiohttp
 import pkg_resources
 from tronpy import Tron
 from tronpy.keys import PrivateKey
-from aiotx.types import BlockParam
+
 from aiotx.clients._base_client import BlockMonitor
-from aiotx.exceptions import RpcConnectionError
 from aiotx.clients._evm_base_client import AioTxEVMBaseClient
+from aiotx.exceptions import RpcConnectionError
+from aiotx.types import BlockParam
+
 
 class AioTxTRONClient(AioTxEVMBaseClient):
     def __init__(
