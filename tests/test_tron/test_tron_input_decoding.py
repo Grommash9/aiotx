@@ -12,13 +12,13 @@ import pytest
                 "parameters": {"_to": "0x6c793170e99d7b0eb1d3622a8629c5964df96ee7", "_value": 100},
             },
         ),
-        # (
-        #     "a9059cbb000000000000000000000041a99c7a242576a0bc812185bb2a9d1674def1612e0000000000000000000000000000000000000000000000000000000019bfcc00",
-        #     {
-        #         "function_name": "approve",
-        #         "parameters": {"spender": "0x0987654321098765432109876543210987654321", "amount": 1000},
-        #     },
-        # ),
+        (
+            "a9059cbb000000000000000000000000f71fd0050238a4d9a6ea8e1ce82c9f2c029a645900000000000000000000000000000000000000000000000000000000004c5ec8",
+            {
+                "function_name": "transfer",
+                "parameters": {"_to": "0xf71fd0050238a4d9a6ea8e1ce82c9f2c029a6459", "_value": 5005000},
+            },
+        ),
         ("0x12345678", {"function_name": None, "parameters": None}),
     ],
 )

@@ -63,9 +63,6 @@ class AioTxTRONClient(AioTxClient):
     def decode_transaction_input(self, input_data: str) -> dict:
         if input_data == "0x":
             return {"function_name": None, "parameters": None}
-        # TODO tron input don't starts from 0x so for now we will add that
-        if not input_data.startswith("0x"):
-            input_data = "0x" + input_data
         for abi_entry in self._get_abi_entries():
             function_name = abi_entry.get("name")
             if function_name is None:
@@ -73,10 +70,10 @@ class AioTxTRONClient(AioTxClient):
             input_types = [inp["type"] for inp in abi_entry["inputs"]]
             function_signature = f"{function_name}({','.join(input_types)})"
             function_selector = function_signature_to_4byte_selector(function_signature)
-
-            if input_data.startswith("0x" + function_selector.hex()):
+            if input_data.startswith(function_selector.hex()):
                 try:
-                    decoded_data = decode(input_types, decode_hex(input_data[10:]))
+                    decoded_hex = decode_hex(input_data[8:])
+                    decoded_data = decode(input_types, decoded_hex)
                 except NonEmptyPaddingBytes:
                     logger.warning(
                         f"Input does not match the expected format for the method '{function_name}' "
