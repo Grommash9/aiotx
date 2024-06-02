@@ -44,25 +44,13 @@ from aiotx.log import logger
 from aiotx.types import BlockParam
 
 
-class AioTxEVMClient(AioTxClient):
+class AioTxEVMBaseClient(AioTxClient):
+
     def __init__(self, node_url):
         super().__init__(node_url)
         self.chain_id = None
         self.monitor = EvmMonitor(self)
         self._monitoring_task = None
-
-    def generate_address(self):
-        private_key_bytes = secrets.token_hex(32)
-        private_key = "0x" + private_key_bytes
-        acct = Account.from_key(private_key)
-        return private_key, acct.address
-
-    def get_address_from_private_key(self, private_key: str):
-        try:
-            from_address = Account.from_key(private_key).address
-        except binascii.Error as e:
-            raise WrongPrivateKey(e)
-        return to_checksum_address(from_address)
 
     def is_hex(self, value):
         try:
@@ -71,20 +59,6 @@ class AioTxEVMClient(AioTxClient):
         except ValueError:
             return False
         
-    def from_wei(self, number: Union[int, str], unit: str = "ether") -> Union[int, decimal.Decimal]:
-        if isinstance(number, str):
-            if self.is_hex(number):
-                number = int(number, 16)
-        return currency.from_wei(number, unit)
-
-
-    def to_wei(self, number: Union[int, float, str, decimal.Decimal], unit: str = "ether") -> int:
-        if isinstance(number, str):
-            if self.is_hex(number):
-                number = int(number, 16)
-        return currency.to_wei(number, unit)
-
-
     def _get_abi_entries(self):
         # Redefine that in you client
         return []
@@ -162,12 +136,7 @@ class AioTxEVMClient(AioTxClient):
         }
         decimals = await self._make_rpc_call(payload)
         return 0 if decimals == "0x" else int(decimals, 16)
-
-    async def get_gas_price(self) -> int:
-        payload = {"method": "eth_gasPrice", "params": []}
-        price = await self._make_rpc_call(payload)
-        return 0 if price == "0x" else int(price, 16)
-
+    
     async def get_transaction(self, hash) -> dict:
         payload = {"method": "eth_getTransactionByHash", "params": [hash]}
         tx_data = await self._make_rpc_call(payload)
@@ -175,6 +144,49 @@ class AioTxEVMClient(AioTxClient):
             raise TransactionNotFound(f"Transaction {hash} not found!")
         tx_data["aiotx_decoded_input"] = self.decode_transaction_input(tx_data["input"])
         return tx_data
+    
+    async def get_chain_id(self) -> int:
+        payload = {"method": "eth_chainId", "params": []}
+        tx_count = await self._make_rpc_call(payload)
+        return 0 if tx_count == "0x" else int(tx_count, 16)
+    
+class AioTxEVMClient(AioTxEVMBaseClient):
+    def __init__(self, node_url):
+        super().__init__(node_url)
+        self.chain_id = None
+        self.monitor = EvmMonitor(self)
+        self._monitoring_task = None
+
+    def generate_address(self):
+        private_key_bytes = secrets.token_hex(32)
+        private_key = "0x" + private_key_bytes
+        acct = Account.from_key(private_key)
+        return private_key, acct.address
+
+    def get_address_from_private_key(self, private_key: str):
+        try:
+            from_address = Account.from_key(private_key).address
+        except binascii.Error as e:
+            raise WrongPrivateKey(e)
+        return to_checksum_address(from_address)
+
+    def from_wei(self, number: Union[int, str], unit: str = "ether") -> Union[int, decimal.Decimal]:
+        if isinstance(number, str):
+            if self.is_hex(number):
+                number = int(number, 16)
+        return currency.from_wei(number, unit)
+
+    def to_wei(self, number: Union[int, float, str, decimal.Decimal], unit: str = "ether") -> int:
+        if isinstance(number, str):
+            if self.is_hex(number):
+                number = int(number, 16)
+        return currency.to_wei(number, unit)
+
+    async def get_gas_price(self) -> int:
+        payload = {"method": "eth_gasPrice", "params": []}
+        price = await self._make_rpc_call(payload)
+        return 0 if price == "0x" else int(price, 16)
+    
 
     async def get_transactions_count(self, address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
         payload = {"method": "eth_getTransactionCount", "params": [address, block_parameter.value]}

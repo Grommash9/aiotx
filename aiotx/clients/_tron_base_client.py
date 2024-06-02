@@ -3,21 +3,14 @@ from typing import Optional
 
 import aiohttp
 import pkg_resources
-from eth_abi import decode
-from eth_abi.exceptions import NonEmptyPaddingBytes
-from eth_utils import (
-    decode_hex,
-    function_signature_to_4byte_selector,
-)
 from tronpy import Tron
 from tronpy.keys import PrivateKey
-
-from aiotx.clients._base_client import AioTxClient, BlockMonitor
+from aiotx.types import BlockParam
+from aiotx.clients._base_client import BlockMonitor
 from aiotx.exceptions import RpcConnectionError
-from aiotx.log import logger
+from aiotx.clients._evm_base_client import AioTxEVMBaseClient
 
-
-class AioTxTRONClient(AioTxClient):
+class AioTxTRONClient(AioTxEVMBaseClient):
     def __init__(
         self, node_url, 
     ):
@@ -48,48 +41,35 @@ class AioTxTRONClient(AioTxClient):
         if not client.is_hex_address(hex_address):
             raise TypeError("Please provide hex address")
         return client.to_base58check_address(hex_address)
-
-
-    async def get_last_block_number(self) -> int:
-        payload = {"method": "eth_blockNumber", "params": {}}
-        last_block = await self._make_rpc_call(payload)
-        return int(last_block, 16)
-
-    async def get_block_by_number(self, block_number: int, transaction_detail_flag: bool = True):
-        payload = {"method": "eth_getBlockByNumber", "params": [hex(block_number), transaction_detail_flag]}
-        result = await self._make_rpc_call(payload)
-        return result
     
-    def decode_transaction_input(self, input_data: str) -> dict:
-        if input_data == "0x":
-            return {"function_name": None, "parameters": None}
-        for abi_entry in self._get_abi_entries():
-            function_name = abi_entry.get("name")
-            if function_name is None:
-                continue
-            input_types = [inp["type"] for inp in abi_entry["inputs"]]
-            function_signature = f"{function_name}({','.join(input_types)})"
-            function_selector = function_signature_to_4byte_selector(function_signature)
-            if input_data.startswith(function_selector.hex()):
-                try:
-                    decoded_hex = decode_hex(input_data[8:])
-                    decoded_data = decode(input_types, decoded_hex)
-                except NonEmptyPaddingBytes:
-                    logger.warning(
-                        f"Input does not match the expected format for the method '{function_name}' "
-                        f"to decode the transaction with input '{input_data}'. "
-                        "It seems to have its own implementation.")
-                    return {"function_name": None, "parameters": None}
-                decoded_params = {}
-                for i, param in enumerate(decoded_data):
-                    param_name = abi_entry["inputs"][i]["name"]
-                    param_value = param
-                    decoded_params[param_name] = param_value
+    def base58_to_hex_address(self, address) -> str:
+        client = Tron()
+        if not client.is_base58check_address(address):
+            raise TypeError("Please provide base58 address")
+        return client.to_hex_address(address)
 
-                return {"function_name": function_name, "parameters": decoded_params}
+    async def get_balance(self, address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
+        client = Tron()
+        if client.is_base58check_address(address):
+            address = self.base58_to_hex_address(address)
+        return await super().get_balance(address, block_parameter)
 
-        return {"function_name": None, "parameters": None}
-
+    async def get_contract_balance(
+        self, address, contract_address, block_parameter: BlockParam = BlockParam.LATEST
+    ) -> int:
+        client = Tron()
+        if client.is_base58check_address(address):
+            address = self.base58_to_hex_address(address)
+        if client.is_base58check_address(contract_address):
+            contract_address = self.base58_to_hex_address(contract_address)
+        return await super().get_contract_balance(address, contract_address, block_parameter)
+    
+    async def get_contract_decimals(self, address: str):
+        client = Tron()
+        if client.is_base58check_address(address):
+            address = self.base58_to_hex_address(address)
+        return await super().get_contract_decimals(address)
+    
     async def _make_rpc_call(self, payload) -> dict:
         payload["jsonrpc"] = "2.0"
         payload["id"] = 1
