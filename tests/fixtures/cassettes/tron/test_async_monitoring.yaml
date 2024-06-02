@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: '{"method": "eth_blockNumber", "params": {}, "jsonrpc": "2.0", "id": 1}'
+    body: '{"method": "eth_blockNumber", "params": [], "jsonrpc": "2.0", "id": 1}'
     headers:
       Content-Type:
       - application/json
@@ -8,7 +8,7 @@ interactions:
     uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x2d2c023"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x2d2da1c"}
 
         '
     headers:
@@ -17,7 +17,7 @@ interactions:
       Content-Type:
       - application/json-rpc
       Date:
-      - Sun, 02 Jun 2024 05:37:47 GMT
+      - Sun, 02 Jun 2024 11:24:11 GMT
       Server:
       - envoy
     status:
@@ -42,14 +42,14 @@ interactions:
       Content-Type:
       - application/json-rpc
       Date:
-      - Sun, 02 Jun 2024 05:37:47 GMT
+      - Sun, 02 Jun 2024 11:24:11 GMT
       Server:
       - envoy
     status:
       code: 200
       message: OK
 - request:
-    body: '{"method": "eth_blockNumber", "params": {}, "jsonrpc": "2.0", "id": 1}'
+    body: '{"method": "eth_blockNumber", "params": [], "jsonrpc": "2.0", "id": 1}'
     headers:
       Content-Type:
       - application/json
@@ -57,7 +57,7 @@ interactions:
     uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x2d2c024"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x2d2da1d"}
 
         '
     headers:
@@ -66,7 +66,7 @@ interactions:
       Content-Type:
       - application/json-rpc
       Date:
-      - Sun, 02 Jun 2024 05:37:48 GMT
+      - Sun, 02 Jun 2024 11:24:12 GMT
       Server:
       - envoy
     status:
@@ -91,14 +91,14 @@ interactions:
       Content-Type:
       - application/json-rpc
       Date:
-      - Sun, 02 Jun 2024 05:37:48 GMT
+      - Sun, 02 Jun 2024 11:24:13 GMT
       Server:
       - envoy
     status:
       code: 200
       message: OK
 - request:
-    body: '{"method": "eth_blockNumber", "params": {}, "jsonrpc": "2.0", "id": 1}'
+    body: '{"method": "eth_blockNumber", "params": [], "jsonrpc": "2.0", "id": 1}'
     headers:
       Content-Type:
       - application/json
@@ -106,7 +106,7 @@ interactions:
     uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x2d2c024"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x2d2da1d"}
 
         '
     headers:
@@ -115,7 +115,7 @@ interactions:
       Content-Type:
       - application/json-rpc
       Date:
-      - Sun, 02 Jun 2024 05:37:49 GMT
+      - Sun, 02 Jun 2024 11:24:14 GMT
       Server:
       - envoy
     status:
@@ -140,55 +140,7 @@ interactions:
       Content-Type:
       - application/json-rpc
       Date:
-      - Sun, 02 Jun 2024 05:37:55 GMT
-      Server:
-      - envoy
-    status:
-      code: 200
-      message: OK
-- request:
-    body: '{"method": "eth_blockNumber", "params": [], "jsonrpc": "2.0", "id": 1}'
-    headers:
-      Content-Type:
-      - application/json
-    method: POST
-    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
-  response:
-    body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x2d2d975"}
-
-        '
-    headers:
-      Content-Length:
-      - '46'
-      Content-Type:
-      - application/json-rpc
-      Date:
-      - Sun, 02 Jun 2024 11:15:24 GMT
-      Server:
-      - envoy
-    status:
-      code: 200
-      message: OK
-- request:
-    body: '{"method": "eth_blockNumber", "params": [], "jsonrpc": "2.0", "id": 1}'
-    headers:
-      Content-Type:
-      - application/json
-    method: POST
-    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
-  response:
-    body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x2d2d975"}
-
-        '
-    headers:
-      Content-Length:
-      - '46'
-      Content-Type:
-      - application/json-rpc
-      Date:
-      - Sun, 02 Jun 2024 11:15:26 GMT
+      - Sun, 02 Jun 2024 11:24:19 GMT
       Server:
       - envoy
     status:
