@@ -9,6 +9,8 @@ from eth_utils import (
     decode_hex,
     function_signature_to_4byte_selector,
 )
+from tronpy import Tron
+from tronpy.keys import PrivateKey
 
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import RpcConnectionError
@@ -28,6 +30,26 @@ class AioTxTRONClient(AioTxClient):
     def _get_abi_entries(self):
         return [entry for entry in self._trc20_abi]
     
+    def generate_address(self):
+        client = Tron()
+        return client.generate_address()
+    
+    def get_address_from_private_key(self, private_key: str):
+        client = Tron()
+        priv_key = PrivateKey(bytes.fromhex(private_key))
+        return client.generate_address(priv_key)
+    
+    def hex_address_to_base58(self, hex_address: str) -> str:
+        # HACK sometimes we have address with 0x prefix? 
+        # Should we handle it somehow?
+        if hex_address.startswith("0x"):
+            hex_address = hex_address[2:]
+        client = Tron()
+        if not client.is_hex_address(hex_address):
+            raise TypeError("Please provide hex address")
+        return client.to_base58check_address(hex_address)
+
+
     async def get_last_block_number(self) -> int:
         payload = {"method": "eth_blockNumber", "params": {}}
         last_block = await self._make_rpc_call(payload)
