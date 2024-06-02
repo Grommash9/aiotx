@@ -102,9 +102,9 @@ class AioTxEVMClient(AioTxClient):
 
             if input_data.startswith("0x" + function_selector.hex()):
                 try:
-                     decoded_data = decode(input_types, decode_hex(input_data[10:]))
+                    decoded_data = decode(input_types, decode_hex(input_data[10:]))
                 except NonEmptyPaddingBytes:
-                    logger.warning(f"Unable to decode transaction with input {input_data}.")
+                    logger.warning(f"Input does not match the expected format for the method '{function_name}' to decode the transaction with input '{input_data}'. It seems to have its own implementation.")
                     return {"function_name": None, "parameters": None}
                
                 decoded_params = {}
