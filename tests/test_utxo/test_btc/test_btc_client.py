@@ -92,7 +92,7 @@ async def test_send_with_auto_fee(btc_client: AioTxBTCClient):
 
 
 
-
+@vcr_c.use_cassette("btc/test_get_balance.yaml")
 async def test_get_balance(btc_client: AioTxBTCClient):
     await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
     await btc_client.monitor._add_new_utxo(
@@ -121,6 +121,7 @@ async def test_get_balance(btc_client: AioTxBTCClient):
 
 
 @pytest.mark.mysql
+@vcr_c.use_cassette("btc/test_get_balance_mysql.yaml")
 async def test_get_balance_mysql(btc_client_mysql: AioTxBTCClient):
     await btc_client_mysql.monitor._add_new_address(TEST_BTC_ADDRESS)
     await btc_client_mysql.monitor._add_new_utxo(

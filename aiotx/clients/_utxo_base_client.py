@@ -1,7 +1,7 @@
 import asyncio
 import json
 from typing import Optional, Union
-
+from aiohttp.client_exceptions import ClientError, ClientOSError
 import aiohttp
 from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
 from bitcoinlib.keys import HDKey, Key
@@ -11,7 +11,7 @@ from sqlalchemy import Boolean, Column, Integer, String, select, update
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.pool import NullPool
-
+from aiotx.log import logger
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     AioTxError,
@@ -351,8 +351,12 @@ class UTXOMonitor(BlockMonitor):
     async def _init_db(self):
         async with self._engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
-            last_known_block = await self.client.get_last_block_number()
-            await self._init_last_block(last_known_block)
+            try:
+                last_known_block = await self.client.get_last_block_number()
+            except (ClientError, ClientOSError) as e:
+                logger.warning(f"Can't get the last known block number during database initialization for the UTXO client. Please check your connection. {e}")
+            else:
+                await self._init_last_block(last_known_block)
 
     async def _drop_tables(self):
         async with self._engine.begin() as conn:
@@ -374,7 +378,7 @@ class UTXOMonitor(BlockMonitor):
                     session.add(self.Address(address=address, block_number=block_number))
                 await session.commit()
         last_known_block = await self._get_last_block()
-        if last_known_block > block_number:
+        if last_known_block is None or last_known_block > block_number:
             await self._update_last_block(block_number)
 
     async def _add_new_utxo(self, address: str, tx_id: str, amount: int, output_n: int) -> None:
@@ -394,8 +398,11 @@ class UTXOMonitor(BlockMonitor):
             async with session.begin():
                 data = await session.execute(select(self.LastBlock))
                 last_block = data.scalar()
-                last_block.block_number = block_number
-                await session.commit()
+                if last_block is None:
+                    self._init_last_block(block_number)
+                else:
+                    last_block.block_number = block_number
+                    await session.commit()
 
     async def _init_last_block(self, block_number: int) -> None:
         async with self._session() as session:

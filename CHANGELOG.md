@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [2.7.0]
 - TRON client monitoring/wallet generation/get balance added
+- Node connection error is now RpcConnectionError
+- BTC init with failed get last block will do warning but not crash all code
 
 ## [2.6.0]
 - to_wei from_wei added hex numbers logic support / docs updated
