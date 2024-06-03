@@ -5,7 +5,7 @@ import os
 import pytest
 import vcr
 from pytest import FixtureRequest
-
+from aiotx.log import set_logger_level
 from aiotx.clients import (
     AioTxBSCClient,
     AioTxBTCClient,
@@ -15,6 +15,8 @@ from aiotx.clients import (
     AioTxTONClient,
     AioTxTRONClient,
 )
+
+set_logger_level("INFO")
 
 # ALL = "all"
 # ANY = "any"

@@ -253,6 +253,7 @@ class AioTxUTXOClient(AioTxClient):
     async def _make_rpc_call(self, payload) -> dict:
         payload["jsonrpc"] = "2.0"
         payload["id"] = "curltest"
+        logger.info(f"rpc call payload: {payload}")
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 self.node_url, data=json.dumps(payload), auth=aiohttp.BasicAuth(self.node_username, self.node_password)
@@ -261,7 +262,7 @@ class AioTxUTXOClient(AioTxClient):
                     raise RpcConnectionError(await response.text())
                 result = await response.json()
                 error = result.get("error")
-
+                logger.info(f"rpc call result: {result}")
                 if error is None:
                     return result
 
@@ -297,6 +298,8 @@ class UTXOMonitor(BlockMonitor):
     async def poll_blocks(self):
         network_last_block = await self.client.get_last_block_number()
         local_latest_block = await self._get_last_block()
+        if local_latest_block is None:
+            local_latest_block = network_last_block
         if network_last_block < local_latest_block:
             return
         block_data = await self.client.get_block_by_number(local_latest_block)
@@ -399,7 +402,7 @@ class UTXOMonitor(BlockMonitor):
                 data = await session.execute(select(self.LastBlock))
                 last_block = data.scalar()
                 if last_block is None:
-                    self._init_last_block(block_number)
+                    await self._init_last_block(block_number)
                 else:
                     last_block.block_number = block_number
                     await session.commit()
