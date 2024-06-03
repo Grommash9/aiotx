@@ -8,7 +8,7 @@ from tronpy.keys import PrivateKey
 
 from aiotx.clients._base_client import BlockMonitor
 from aiotx.clients._evm_base_client import AioTxEVMBaseClient
-from aiotx.exceptions import RpcConnectionError, InvalidArgumentError
+from aiotx.exceptions import InvalidArgumentError, RpcConnectionError
 from aiotx.types import BlockParam
 
 
