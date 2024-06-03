@@ -1,5 +1,7 @@
+import decimal
 import json
-from typing import Optional
+from decimal import localcontext
+from typing import Optional, Union
 
 import aiohttp
 import pkg_resources
@@ -10,6 +12,14 @@ from aiotx.clients._base_client import BlockMonitor
 from aiotx.clients._evm_base_client import AioTxEVMBaseClient
 from aiotx.exceptions import InvalidArgumentError, RpcConnectionError
 from aiotx.types import BlockParam
+
+units = {
+    "sun": 1,
+    "trx": 10 ** 6,
+}
+
+MIN_SUN = 1
+MAX_SUN = 10 ** 18
 
 
 class AioTxTRONClient(AioTxEVMBaseClient):
@@ -49,6 +59,64 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         if not client.is_base58check_address(address):
             raise TypeError("Please provide base58 address")
         return client.to_hex_address(address)
+    
+    def to_sun(self, number: Union[int, float, str, decimal.Decimal], unit: str = "trx") -> int:
+        """
+        Takes a number of a unit and converts it to Sun (the smallest unit of TRX).
+        """
+        unit = unit.lower()
+        if unit not in units:
+            raise ValueError(f"Unknown unit. Must be one of {'/'.join(units.keys())}")
+
+        if isinstance(number, int) or isinstance(number, str):
+            d_number = decimal.Decimal(value=number)
+        elif isinstance(number, float):
+            d_number = decimal.Decimal(value=str(number))
+        elif isinstance(number, decimal.Decimal):
+            d_number = number
+        else:
+            raise TypeError("Unsupported type. Must be one of integer, float, or string")
+
+        s_number = str(number)
+        unit_value = units[unit]
+
+        if d_number == decimal.Decimal(0):
+            return 0
+
+        if d_number < 1 and "." in s_number:
+            with localcontext() as ctx:
+                multiplier = len(s_number) - s_number.index(".") - 1
+                ctx.prec = multiplier
+                d_number = decimal.Decimal(value=number, context=ctx) * 10 ** multiplier
+                unit_value /= 10 ** multiplier
+
+        with localcontext() as ctx:
+            ctx.prec = 999
+            result_value = decimal.Decimal(value=d_number, context=ctx) * unit_value
+
+        if result_value < MIN_SUN or result_value > MAX_SUN:
+            raise ValueError("Resulting Sun value must be between 1 and 10^18")
+
+        return int(result_value)
+
+    def from_sun(self, number: Union[int, str], unit: str = "trx") -> decimal.Decimal:
+        """
+        Converts a value in Sun (the smallest unit of TRX) to the specified unit.
+        """
+        if isinstance(number, str):
+            if number.startswith("0x"):
+                number = int(number, 16)
+            else:
+                number = int(number)
+
+        unit = unit.lower()
+        if unit not in units:
+            raise ValueError(f"Unknown unit. Must be one of {'/'.join(units.keys())}")
+
+        unit_value = units[unit]
+        result_value = decimal.Decimal(number) / unit_value
+
+        return result_value
 
     async def get_balance(self, address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
         client = Tron()
