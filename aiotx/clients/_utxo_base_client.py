@@ -1,8 +1,9 @@
 import asyncio
 import json
 from typing import Optional, Union
-from aiohttp.client_exceptions import ClientError, ClientOSError
+
 import aiohttp
+from aiohttp.client_exceptions import ClientError, ClientOSError
 from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
 from bitcoinlib.keys import HDKey, Key
 from bitcoinlib.networks import Network
@@ -11,7 +12,7 @@ from sqlalchemy import Boolean, Column, Integer, String, select, update
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.pool import NullPool
-from aiotx.log import logger
+
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     AioTxError,
@@ -23,6 +24,7 @@ from aiotx.exceptions import (
     MethodNotFoundError,
     RpcConnectionError,
 )
+from aiotx.log import logger
 from aiotx.types import FeeEstimate
 
 Base = declarative_base()
