@@ -3,7 +3,7 @@ interactions:
     body: '{"method": "getblockcount", "params": [], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://floral-alien-fog.btc-testnet.quiknode.pro/9e62c4acb9a28363a0363078752ce48905c11523/
+    uri: https://bitter-warmhearted-film.btc-testnet.quiknode.pro/ddf238a16e9d7342e403d000a6134a2d750765f8/
   response:
     body:
       string: '{"result":2814768,"error":null,"id":"curltest"}
@@ -38,7 +38,7 @@ interactions:
       "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://floral-alien-fog.btc-testnet.quiknode.pro/9e62c4acb9a28363a0363078752ce48905c11523/
+    uri: https://bitter-warmhearted-film.btc-testnet.quiknode.pro/ddf238a16e9d7342e403d000a6134a2d750765f8/
   response:
     body:
       string: '{"result":"4f9a64d28ae22134379f7da50282d7ca2ead8a1f8378b20e25defcaaa5c59228","error":null,"id":"curltest"}

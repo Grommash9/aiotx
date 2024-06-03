@@ -25,7 +25,7 @@ from aiotx.clients import (
 BSC_TEST_NODE_URL = "https://bsc-testnet-rpc.publicnode.com"
 ETH_TEST_NODE_URL = "https://ethereum-sepolia-rpc.publicnode.com"
 LTC_TEST_NODE_URL = "https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet"
-BTC_TEST_NODE_URL = "https://floral-alien-fog.btc-testnet.quiknode.pro/9e62c4acb9a28363a0363078752ce48905c11523/"
+BTC_TEST_NODE_URL = "https://bitter-warmhearted-film.btc-testnet.quiknode.pro/ddf238a16e9d7342e403d000a6134a2d750765f8/"
 TON_MAINNET_NODE_URL = "https://go.getblock.io/875fb0dee2544bb0bc59dd08c6f39330/jsonRPC"
 POLYGON_TEST_NODE_URL = "https://polygon-amoy-bor-rpc.publicnode.com"
 TON_TEST_NODE_URL = "https://testnet.toncenter.com/api/v2/jsonRPC"
