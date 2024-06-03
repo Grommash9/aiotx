@@ -324,7 +324,7 @@ class AioTxEVMClient(AioTxEVMBaseClient):
                 elif error_code == -32603:
                     raise InternalJSONRPCError(error_message)
                 else:
-                    raise AioTxError(f"Error {error_code}: {error_message}")
+                    raise RpcConnectionError(f"Error {error_code}: {error_message}")
 
 
 class EvmMonitor(BlockMonitor):

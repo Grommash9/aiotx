@@ -8,7 +8,7 @@ from tronpy.keys import PrivateKey
 
 from aiotx.clients._base_client import BlockMonitor
 from aiotx.clients._evm_base_client import AioTxEVMBaseClient
-from aiotx.exceptions import RpcConnectionError
+from aiotx.exceptions import RpcConnectionError, InvalidArgumentError
 from aiotx.types import BlockParam
 
 
@@ -72,18 +72,29 @@ class AioTxTRONClient(AioTxEVMBaseClient):
             address = self.base58_to_hex_address(address)
         return await super().get_contract_decimals(address)
     
-    async def _make_rpc_call(self, payload) -> dict:
+    async def _make_rpc_call(self, payload, path="/jsonrpc") -> dict:
         payload["jsonrpc"] = "2.0"
         payload["id"] = 1
         payload_json = json.dumps(payload)
         headers = {"Content-Type": "application/json"}
         async with aiohttp.ClientSession() as session:
-            async with session.post(self.node_url, data=payload_json, headers=headers) as response:
+            async with session.post(self.node_url + path, data=payload_json, headers=headers) as response:
                 response_text = await response.text()
                 if response.status != 200:
                     raise RpcConnectionError(f"Node response status code: {response.status} response test: {response_text}")
                 result = await response.json()
-                return result["result"]
+                if "error" not in result.keys():
+                    return result["result"]
+                error_code = result["error"]["code"]
+                error_message = result["error"]["message"]
+                if (
+                        "invalid characters encountered in Hex string" in error_message or
+                        "invalid hash value" in error_message or
+                        "invalid address hash value" in error_message
+                    ):
+                        raise InvalidArgumentError(error_message)
+                else:
+                    raise RpcConnectionError(f"Error {error_code}: {error_message}")
 
 
 class TronMonitor(BlockMonitor):

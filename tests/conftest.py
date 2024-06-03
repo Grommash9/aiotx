@@ -29,7 +29,7 @@ BTC_TEST_NODE_URL = "https://dry-compatible-cloud.btc-testnet.quiknode.pro/26875
 TON_MAINNET_NODE_URL = "https://go.getblock.io/875fb0dee2544bb0bc59dd08c6f39330/jsonRPC"
 POLYGON_TEST_NODE_URL = "https://polygon-amoy-bor-rpc.publicnode.com"
 TON_TEST_NODE_URL = "https://testnet.toncenter.com/api/v2/jsonRPC"
-TRON_TEST_NODE_URL = "https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc"
+TRON_TEST_NODE_URL = "https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839"
 
 pytest.mark.mysql = pytest.mark.mysql
 logging.getLogger("vcr").setLevel(logging.WARNING)
