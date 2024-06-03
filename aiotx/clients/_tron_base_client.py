@@ -48,7 +48,7 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         # HACK sometimes we have address with 0x prefix? 
         # Should we handle it somehow?
         if hex_address.startswith("0x"):
-            hex_address = hex_address[2:]
+            hex_address = hex_address.replace("0x", "41")
         client = Tron()
         if not client.is_hex_address(hex_address):
             raise TypeError("Please provide hex address")
