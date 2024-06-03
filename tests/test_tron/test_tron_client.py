@@ -10,6 +10,20 @@ from aiotx.exceptions import (
 
 CONTRACT = "TXLAQ63Xg1NAzckPwKHvzw7CSEmLMEqcdj"
 
+async def test_wallet_generator_convertor(tron_client: AioTxTRONClient):
+    wallet = tron_client.generate_address()
+    print("wallet", wallet)
+
+    base_58_from_hex = tron_client.hex_address_to_base58(wallet["hex_address"])
+    hex_from_base58 = tron_client.base58_to_hex_address(wallet["base58check_address"])
+
+    wallet_from_key = tron_client.get_address_from_private_key(wallet["private_key"])
+
+    assert wallet == wallet_from_key
+    assert base_58_from_hex == wallet["base58check_address"]
+    assert hex_from_base58 == wallet["hex_address"]
+
+
 @vcr_c.use_cassette("tron/get_last_block.yaml")
 async def test_get_last_block(tron_client: AioTxTRONClient):
     block_id = await tron_client.get_last_block_number()
