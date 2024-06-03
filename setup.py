@@ -55,6 +55,7 @@ setup(
         "greenlet",
         "setuptools",
         "pynacl>=1.4.0",
+        "tronpy",
     ],
     extras_require={
         "test": extras_test,

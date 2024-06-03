@@ -13,7 +13,11 @@ from aiotx.clients import (
     AioTxLTCClient,
     AioTxPolygonClient,
     AioTxTONClient,
+    AioTxTRONClient,
 )
+from aiotx.log import set_logger_level
+
+set_logger_level("INFO")
 
 # ALL = "all"
 # ANY = "any"
@@ -24,11 +28,11 @@ from aiotx.clients import (
 BSC_TEST_NODE_URL = "https://bsc-testnet-rpc.publicnode.com"
 ETH_TEST_NODE_URL = "https://ethereum-sepolia-rpc.publicnode.com"
 LTC_TEST_NODE_URL = "https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet"
-BTC_TEST_NODE_URL = "https://dry-compatible-cloud.btc-testnet.quiknode.pro/268755801856724a0c520053c0bc3b0a7b1a2d3e/"
+BTC_TEST_NODE_URL = "https://bitter-warmhearted-film.btc-testnet.quiknode.pro/ddf238a16e9d7342e403d000a6134a2d750765f8/"
 TON_MAINNET_NODE_URL = "https://go.getblock.io/875fb0dee2544bb0bc59dd08c6f39330/jsonRPC"
 POLYGON_TEST_NODE_URL = "https://polygon-amoy-bor-rpc.publicnode.com"
 TON_TEST_NODE_URL = "https://testnet.toncenter.com/api/v2/jsonRPC"
-
+TRON_TEST_NODE_URL = "https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839"
 
 pytest.mark.mysql = pytest.mark.mysql
 logging.getLogger("vcr").setLevel(logging.WARNING)
@@ -50,6 +54,10 @@ def ton_mainnet_client() -> AioTxTONClient:
     # testnet block monitoring is not working as 
     # expected, and we using mainnet to test monitoring
     return AioTxTONClient(TON_MAINNET_NODE_URL)
+
+@pytest.fixture
+def tron_client() -> AioTxTRONClient:
+    return AioTxTRONClient(TRON_TEST_NODE_URL)
 
 @pytest.fixture
 def bsc_client() -> AioTxBSCClient:

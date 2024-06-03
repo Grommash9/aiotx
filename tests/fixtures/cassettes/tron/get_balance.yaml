@@ -1,0 +1,177 @@
+interactions:
+- request:
+    body: '{"method": "eth_getBalance", "params": ["41325828ce56c69e0e6be7c3da62ba0c60992b547e",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0xee7a6a40"}
+
+        '
+    headers:
+      Content-Length:
+      - '47'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:25 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["411ef6c76907b07aa42bf89fa75e3f22729c1f8d2c",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0xac6bdee0"}
+
+        '
+    headers:
+      Content-Length:
+      - '47'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:25 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["41e852bf042465b45a7a4ffebf5ed9b566e22cb4a2",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x17484b50"}
+
+        '
+    headers:
+      Content-Length:
+      - '47'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:25 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["41ea6fa1fd5729072b0400a4d8ddd440a9af0887ee",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x3aa127c"}
+
+        '
+    headers:
+      Content-Length:
+      - '46'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:26 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["414833b7e7d199642e76087829128c734b9555dd3d",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x5be0"}
+
+        '
+    headers:
+      Content-Length:
+      - '43'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:26 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["41e3f92886bc83eda3859938eb3f3110884f637ab6",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x4e932594"}
+
+        '
+    headers:
+      Content-Length:
+      - '47'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:26 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getBalance", "params": ["4107f860ef30e23d4c694cdbee09f5ff8a3443b4e1",
+      "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x0"}
+
+        '
+    headers:
+      Content-Length:
+      - '40'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:08:29 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+version: 1

@@ -3,7 +3,7 @@ interactions:
     body: '{"method": "getblockcount", "params": [], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://dry-compatible-cloud.btc-testnet.quiknode.pro/268755801856724a0c520053c0bc3b0a7b1a2d3e/
+    uri: https://bitter-warmhearted-film.btc-testnet.quiknode.pro/ddf238a16e9d7342e403d000a6134a2d750765f8/
   response:
     body:
       string: '{"result":2815689,"error":null,"id":"curltest"}
@@ -38,7 +38,7 @@ interactions:
       "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://dry-compatible-cloud.btc-testnet.quiknode.pro/268755801856724a0c520053c0bc3b0a7b1a2d3e/
+    uri: https://bitter-warmhearted-film.btc-testnet.quiknode.pro/ddf238a16e9d7342e403d000a6134a2d750765f8/
   response:
     body:
       string: '{"result":{"feerate":0.000365500,"blocks":2},"error":null,"id":"curltest"}
@@ -73,7 +73,7 @@ interactions:
       "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://dry-compatible-cloud.btc-testnet.quiknode.pro/268755801856724a0c520053c0bc3b0a7b1a2d3e/
+    uri: https://bitter-warmhearted-film.btc-testnet.quiknode.pro/ddf238a16e9d7342e403d000a6134a2d750765f8/
   response:
     body:
       string: '{"result":"77cb20c4b0325242b9e5f45f4850e5387dc585d6b72bb36ba65a126534436973","error":null,"id":"curltest"}

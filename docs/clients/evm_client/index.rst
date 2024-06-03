@@ -14,7 +14,7 @@ QuickStart (**Logic is the same for all EVM clients; just import AioTxBSCClient 
 
 --------------------
 
-To create an instance of AioTxETHClient, you need to provide the ETH node URL and the chain ID. Here's an example:
+To create an instance of AioTxETHClient, you need to provide the ETH node URL. Here's an example:
 
 .. code-block:: python
 

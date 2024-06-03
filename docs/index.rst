@@ -19,11 +19,13 @@ Key Features
 
 3. **TON Client:** Client for Telegram Open Network - now we have monitoring and token sending for it
 
-4. **Blockchain Monitoring:** One of the standout features of AioTx is its blockchain monitoring capabilities. You can easily monitor new blocks and transactions on the supported blockchains by registering custom handlers. AioTx provides a simple and intuitive way to start and stop monitoring, and it even allows you to monitor multiple clients simultaneously. Integration with the Aiogram library is also supported, enabling you to send notifications or perform actions based on the received blocks and transactions.
+4. **TRON Client:** Client for TRON (trx) blockchain - now we have only read operations
 
-5. **Database Storage:** AioTx includes built-in support for database storage, allowing you to store transaction and UTXO data for efficient monitoring and management. You have the flexibility to choose between SQLite and MySQL as the database backend, both of which have been thoroughly tested and are known to work seamlessly with AioTx.
+5. **Blockchain Monitoring:** One of the standout features of AioTx is its blockchain monitoring capabilities. You can easily monitor new blocks and transactions on the supported blockchains by registering custom handlers. AioTx provides a simple and intuitive way to start and stop monitoring, and it even allows you to monitor multiple clients simultaneously. Integration with the Aiogram library is also supported, enabling you to send notifications or perform actions based on the received blocks and transactions.
 
-6. **Testing:** To ensure the reliability and stability of AioTx, the package is extensively covered by tests. The test suite includes comprehensive test cases for various scenarios, networks, and operations. AioTx utilizes the VCR (Video Cassette Recorder) library to record and replay network interactions, making the tests deterministic and independent of external services.
+6. **Database Storage:** AioTx includes built-in support for database storage, allowing you to store transaction and UTXO data for efficient monitoring and management. You have the flexibility to choose between SQLite and MySQL as the database backend, both of which have been thoroughly tested and are known to work seamlessly with AioTx.
+
+7. **Testing:** To ensure the reliability and stability of AioTx, the package is extensively covered by tests. The test suite includes comprehensive test cases for various scenarios, networks, and operations. AioTx utilizes the VCR (Video Cassette Recorder) library to record and replay network interactions, making the tests deterministic and independent of external services.
 
 Getting Node Url
 ----------------
@@ -152,6 +154,7 @@ Satoshi Conversions:
    clients/evm_client/index
    clients/utxo_client/index
    clients/ton_client/index
+   clients/tron_client/index
 
 .. toctree::
    :maxdepth: 100

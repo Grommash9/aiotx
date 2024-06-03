@@ -3,6 +3,7 @@ import json
 from typing import Optional, Union
 
 import aiohttp
+from aiohttp.client_exceptions import ClientError, ClientOSError
 from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
 from bitcoinlib.keys import HDKey, Key
 from bitcoinlib.networks import Network
@@ -23,6 +24,7 @@ from aiotx.exceptions import (
     MethodNotFoundError,
     RpcConnectionError,
 )
+from aiotx.log import logger
 from aiotx.types import FeeEstimate
 
 Base = declarative_base()
@@ -253,6 +255,7 @@ class AioTxUTXOClient(AioTxClient):
     async def _make_rpc_call(self, payload) -> dict:
         payload["jsonrpc"] = "2.0"
         payload["id"] = "curltest"
+        logger.info(f"rpc call payload: {payload}")
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 self.node_url, data=json.dumps(payload), auth=aiohttp.BasicAuth(self.node_username, self.node_password)
@@ -261,7 +264,7 @@ class AioTxUTXOClient(AioTxClient):
                     raise RpcConnectionError(await response.text())
                 result = await response.json()
                 error = result.get("error")
-
+                logger.info(f"rpc call result: {result}")
                 if error is None:
                     return result
 
@@ -297,6 +300,8 @@ class UTXOMonitor(BlockMonitor):
     async def poll_blocks(self):
         network_last_block = await self.client.get_last_block_number()
         local_latest_block = await self._get_last_block()
+        if local_latest_block is None:
+            local_latest_block = network_last_block
         if network_last_block < local_latest_block:
             return
         block_data = await self.client.get_block_by_number(local_latest_block)
@@ -351,8 +356,12 @@ class UTXOMonitor(BlockMonitor):
     async def _init_db(self):
         async with self._engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
-            last_known_block = await self.client.get_last_block_number()
-            await self._init_last_block(last_known_block)
+            try:
+                last_known_block = await self.client.get_last_block_number()
+            except (ClientError, ClientOSError) as e:
+                logger.warning(f"Can't get the last known block number during database initialization for the UTXO client. Please check your connection. {e}")
+            else:
+                await self._init_last_block(last_known_block)
 
     async def _drop_tables(self):
         async with self._engine.begin() as conn:
@@ -374,7 +383,7 @@ class UTXOMonitor(BlockMonitor):
                     session.add(self.Address(address=address, block_number=block_number))
                 await session.commit()
         last_known_block = await self._get_last_block()
-        if last_known_block > block_number:
+        if last_known_block is None or last_known_block > block_number:
             await self._update_last_block(block_number)
 
     async def _add_new_utxo(self, address: str, tx_id: str, amount: int, output_n: int) -> None:
@@ -394,8 +403,11 @@ class UTXOMonitor(BlockMonitor):
             async with session.begin():
                 data = await session.execute(select(self.LastBlock))
                 last_block = data.scalar()
-                last_block.block_number = block_number
-                await session.commit()
+                if last_block is None:
+                    await self._init_last_block(block_number)
+                else:
+                    last_block.block_number = block_number
+                    await session.commit()
 
     async def _init_last_block(self, block_number: int) -> None:
         async with self._session() as session:

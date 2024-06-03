@@ -1,0 +1,104 @@
+interactions:
+- request:
+    body: '{"method": "eth_call", "params": [{"to": "41ea51342dabbb928ae1e576bd39eff8aaf070a8c6",
+      "data": "0x313ce567"}, "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x0000000000000000000000000000000000000000000000000000000000000006"}
+
+        '
+    headers:
+      Content-Length:
+      - '103'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:29 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_call", "params": [{"to": "41d5a8752a5fc64a1ce09df7b195df6b669d09271f",
+      "data": "0x313ce567"}, "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x0000000000000000000000000000000000000000000000000000000000000012"}
+
+        '
+    headers:
+      Content-Length:
+      - '103'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:29 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_call", "params": [{"to": "41b8b5b66a31e1415171aced5dcac3bcc04dbcf8ce",
+      "data": "0x313ce567"}, "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32000,"message":"REVERT opcode
+        executed","data":"{}"}}
+
+        '
+    headers:
+      Content-Length:
+      - '96'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:30 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_call", "params": [{"to": "DSos1xxjqMrGKBxycVmtgrnFvv9M6FDFUX",
+      "data": "0x313ce567"}, "latest"], "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32602,"message":"exception
+        decoding Hex string: invalid characters encountered in Hex string","data":"{}"}}
+
+        '
+    headers:
+      Content-Length:
+      - '149'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:30 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+version: 1

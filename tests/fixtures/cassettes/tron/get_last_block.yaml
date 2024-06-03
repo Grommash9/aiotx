@@ -1,0 +1,26 @@
+interactions:
+- request:
+    body: '{"method": "eth_blockNumber", "params": [], "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x2d3250b"}
+
+        '
+    headers:
+      Content-Length:
+      - '46'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:24 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+version: 1

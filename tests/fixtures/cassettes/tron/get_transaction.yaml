@@ -1,0 +1,229 @@
+interactions:
+- request:
+    body: '{"method": "eth_getTransactionByHash", "params": ["a7969308be486dcbd5bc16f9a9e750249f1ce4ff5ad36693cd56a8aa81159df8"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":{"blockHash":"0x0000000002d32374b63b02de1dc154a1053c8a25b76e809a61a70cb1af445f29","blockNumber":"0x2d32374","from":"0xe3f92886bc83eda3859938eb3f3110884f637ab6","gas":"0x3476","gasPrice":"0x1a4","hash":"0xa7969308be486dcbd5bc16f9a9e750249f1ce4ff5ad36693cd56a8aa81159df8","input":"0xa9059cbb0000000000000000000000004187e9889c66a6cd5f36a8c5271dd9d3e4b288dd0000000000000000000000000000000000000000000000000000000000989680","nonce":"0x0000000000000000","r":"0xcdf209616cac920c5200d6815bb24ba33685614da6d89bbbeb00989cb9cc7e4a","s":"0x78cd5ea54bba5184d7307040eeca78b7558dd5486214d8644ef811f22914006c","to":"0xea51342dabbb928ae1e576bd39eff8aaf070a8c6","transactionIndex":"0x0","type":"0x0","v":"0x1b","value":"0x0"}}
+
+        '
+    headers:
+      Content-Length:
+      - '742'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:26 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getTransactionByHash", "params": ["83033077a7a5ea6e07fa1e36069886daf3abe8bae4e12168391db9c0b28002a7"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":{"blockHash":"0x0000000002d323756e1ec99201904db3f1a9225219604f09f0d9bfcec2739a95","blockNumber":"0x2d32375","from":"0x4833b7e7d199642e76087829128c734b9555dd3d","gas":"0x3476","gasPrice":"0x1a4","hash":"0x83033077a7a5ea6e07fa1e36069886daf3abe8bae4e12168391db9c0b28002a7","input":"0xa9059cbb0000000000000000000000001697bb7f2eafc85571423577c956fb70003d06630000000000000000000000000000000000000000000000000000000011e1a300","nonce":"0x0000000000000000","r":"0x2d386c10d4f0dd79ee4b1dae647ae618acbe9dad48398e8f6781719b71b60d83","s":"0x7de329f8a2a19de8b7dcfb969640c3b75a8d29110573d431499f2de9973472d7","to":"0xea51342dabbb928ae1e576bd39eff8aaf070a8c6","transactionIndex":"0x0","type":"0x0","v":"0x1b","value":"0x0"}}
+
+        '
+    headers:
+      Content-Length:
+      - '742'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:26 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getTransactionByHash", "params": ["28777a1b17916030c99a3da3b88e399c11abe3cbbc9e1319e2d2edd83d2810c8"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":{"blockHash":"0x0000000002d3238909c48577fbb9df42910d161c98ae57249bdf40e750598b5e","blockNumber":"0x2d32389","from":"0xea6fa1fd5729072b0400a4d8ddd440a9af0887ee","gas":"0x3476","gasPrice":"0x1a4","hash":"0x28777a1b17916030c99a3da3b88e399c11abe3cbbc9e1319e2d2edd83d2810c8","input":"0xa9059cbb000000000000000000000000fe1d460e6a7f5ce4c0bc51e8f711fc07fcbce15700000000000000000000000000000000000000000000000000000000001e8480","nonce":"0x0000000000000000","r":"0x3f0e6c07a7d653b8db378cd89e65800322d3287ec201e2b17519546dd03b7757","s":"0x4be450882bed4ba42c33553a7ac26c6a80e373673a696e54dedda590675a5207","to":"0xea51342dabbb928ae1e576bd39eff8aaf070a8c6","transactionIndex":"0x1","type":"0x0","v":"0x1c","value":"0x0"}}
+
+        '
+    headers:
+      Content-Length:
+      - '742'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:27 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getTransactionByHash", "params": ["301684ded91391888927f4c3761af0ad76659ede03033fd12c20754e6bc69821"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":{"blockHash":"0x0000000002d3239a8c8ee6184092d4393c2fe8270f148c9ead7c0a38ededc38c","blockNumber":"0x2d3239a","from":"0xea6fa1fd5729072b0400a4d8ddd440a9af0887ee","gas":"0x3476","gasPrice":"0x1a4","hash":"0x301684ded91391888927f4c3761af0ad76659ede03033fd12c20754e6bc69821","input":"0xa9059cbb000000000000000000000000fe1d460e6a7f5ce4c0bc51e8f711fc07fcbce15700000000000000000000000000000000000000000000000000000000001e8480","nonce":"0x0000000000000000","r":"0x814bc84958d5850b0cbbb9ca3a44e389810418a3c5662a44215172a2edda26a9","s":"0x727f01e9801d52b579ff87c225f164ef648823af967a3d5fdec5778a7d776b70","to":"0xea51342dabbb928ae1e576bd39eff8aaf070a8c6","transactionIndex":"0x0","type":"0x0","v":"0x1c","value":"0x0"}}
+
+        '
+    headers:
+      Content-Length:
+      - '742'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:27 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getTransactionByHash", "params": ["603d90143f388737fa0c57976650301fb493ef19c513c9076099335d0038f2ee"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":{"blockHash":"0x0000000002d323b0b9eaa9fa970010a35fd17d2a787d31a70da3c305b9a41ee7","blockNumber":"0x2d323b0","from":"0xe852bf042465b45a7a4ffebf5ed9b566e22cb4a2","gas":"0x3476","gasPrice":"0x1a4","hash":"0x603d90143f388737fa0c57976650301fb493ef19c513c9076099335d0038f2ee","input":"0xa9059cbb000000000000000000000000e7ef19f6cc980402e0511aec593531532ef9fa0f000000000000000000000000000000000000000000000000000000003b9b1439","nonce":"0x0000000000000000","r":"0x51153dd6ac1e83bd4e6d47074fc80261d0e0f2b0624d50428a94cf726688e18e","s":"0x050f457787660df0ba3e7103a95539171cbb68011f69b4e6fdc62d003899e592","to":"0xea51342dabbb928ae1e576bd39eff8aaf070a8c6","transactionIndex":"0x0","type":"0x0","v":"0x1c","value":"0x0"}}
+
+        '
+    headers:
+      Content-Length:
+      - '742'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:27 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getTransactionByHash", "params": ["0820f27e5a67ee3443d0b4a60a1f6c6625328b074dedc2f17c0ea8c44ea440e5"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":{"blockHash":"0x0000000002d323ba7a1daedb2cd99a5c81c826b9012fdbbbcd50745c82b77f71","blockNumber":"0x2d323ba","from":"0x1ef6c76907b07aa42bf89fa75e3f22729c1f8d2c","gas":"0x3476","gasPrice":"0x1a4","hash":"0x0820f27e5a67ee3443d0b4a60a1f6c6625328b074dedc2f17c0ea8c44ea440e5","input":"0xa9059cbb000000000000000000000000da6da5993e5297f62b1b6f2cecc4a6bdacfa862800000000000000000000000000000000000000000000000000000000004c4b40","nonce":"0x0000000000000000","r":"0xe135630f42ac23b79a7051998b4227e130d2bdb6b9bdc9b8cf7ec7f45ff4afb0","s":"0x665af7813eca74accd447d8d83502f560fa5f4081263cfc464fd3b1bcdff7110","to":"0xea51342dabbb928ae1e576bd39eff8aaf070a8c6","transactionIndex":"0x0","type":"0x0","v":"0x1b","value":"0x0"}}
+
+        '
+    headers:
+      Content-Length:
+      - '742'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:27 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getTransactionByHash", "params": ["0820f27e5a67ee3443d0b4a60a1f6c6625328b074dedc2f17c0ea8c44ea440e6"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"result":null}
+
+        '
+    headers:
+      Content-Length:
+      - '39'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:27 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getTransactionByHash", "params": ["0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf2701b2"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32602,"message":"invalid hash
+        value","data":"{}"}}
+
+        '
+    headers:
+      Content-Length:
+      - '92'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:28 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "eth_getTransactionByHash", "params": ["0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf701b72"],
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+  response:
+    body:
+      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32602,"message":"invalid hash
+        value","data":"{}"}}
+
+        '
+    headers:
+      Content-Length:
+      - '92'
+      Content-Type:
+      - application/json-rpc
+      Date:
+      - Mon, 03 Jun 2024 04:03:28 GMT
+      Server:
+      - envoy
+    status:
+      code: 200
+      message: OK
+version: 1
