@@ -4,9 +4,7 @@ from decimal import localcontext
 from typing import Optional, Union
 from aiohttp import ClientResponse
 import aiohttp
-from tronpy.contract import Contract, ContractMethod, ShieldedTRC20
 import pkg_resources
-from tronpy.tron import TransactionBuilder, Transaction
 from tronpy import Tron
 from tronpy.keys import PrivateKey
 from tronpy.providers.http import HTTPProvider
@@ -14,8 +12,7 @@ from aiotx.clients._base_client import BlockMonitor
 from aiotx.clients._evm_base_client import AioTxEVMBaseClient
 from aiotx.exceptions import InvalidArgumentError, RpcConnectionError
 from aiotx.types import BlockParam
-import hashlib
-from tronpy.keys import keccak256
+from eth_abi import decode, encode
 
 units = {
     "sun": 1,
@@ -26,30 +23,6 @@ MIN_SUN = 1
 MAX_SUN = 10 ** 18
 
 
-
-class CustomTransactionBuilder(TransactionBuilder):
-
-    def __init__(self, builder: TransactionBuilder, client: "Tron", method: ContractMethod = None):
-        super().__init__(builder._raw_data, client, method)
-        self._builder = builder
-
-    def build(self, options=None, ref_block_bytes=None, ref_block_hash=None, **kwargs) -> "Transaction":
-        """Build the transaction with custom ref_block_bytes and ref_block_hash."""
-        if ref_block_bytes is not None and ref_block_hash is not None:
-            # Use the provided ref_block_bytes and ref_block_hash
-            self._raw_data["ref_block_bytes"] = ref_block_bytes
-            self._raw_data["ref_block_hash"] = ref_block_hash
-        else:
-            # Retrieve the latest solid block ID
-            ref_block_id = self._client.get_latest_solid_block_id()
-            # last 2 byte of block number part
-            self._raw_data["ref_block_bytes"] = ref_block_id[12:16]
-            # last half part of block hash
-            self._raw_data["ref_block_hash"] = ref_block_id[16:32]
-
-        if self._method:
-            return Transaction(self._raw_data, client=self._client, method=self._method)
-        return Transaction(self._raw_data, client=self._client)
 
 class AioTxTRONClient(AioTxEVMBaseClient):
     def __init__(
@@ -98,10 +71,28 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         priv_key = PrivateKey(bytes.fromhex(private_key))
         sender_address_data = self.get_address_from_private_key(private_key)
         sender_address = sender_address_data["base58check_address"]
-        created_txd = await self.create_transaction(sender_address, to_address, amount)
+        created_txd = await self._create_transaction(sender_address, to_address, amount)
         sig = priv_key.sign_msg_hash(bytes.fromhex(created_txd["txID"]))
         result = await self.broadcast_transaction([sig.hex()], created_txd["raw_data_hex"], created_txd["raw_data"], tx_id=created_txd["txID"])
         return result["txid"]
+    
+    async def send_token(
+        self,
+        private_key: str,
+        to_address: str,
+        contract: str,
+        amount: int
+    ):
+        priv_key = PrivateKey(bytes.fromhex(private_key))
+        sender_address_data = self.get_address_from_private_key(private_key)
+        sender_address = sender_address_data["base58check_address"]
+        created_txd = await self._create_trc20_transfer_transaction(sender_address, to_address, amount, contract)
+        print("created_txd", created_txd)
+        tx_id = created_txd["transaction"]["txID"]
+        sig = priv_key.sign_msg_hash(bytes.fromhex(tx_id))
+        result = await self.broadcast_transaction([sig.hex()], created_txd["transaction"]["raw_data_hex"], created_txd["transaction"]["raw_data"], tx_id)
+        return result["txid"]
+
     
     async def broadcast_transaction(self, signature: list[str], raw_data_hex: str, raw_data: dict, tx_id: str, visible: bool = True):
         result = await self._make_api_call({"signature": signature, "raw_data_hex": raw_data_hex, "raw_data": raw_data, "visible": visible, "txID": tx_id}, "POST", path="/wallet/broadcasttransaction")
@@ -109,10 +100,9 @@ class AioTxTRONClient(AioTxEVMBaseClient):
 
     async def get_latest_solidity_block(self):
         transaction = await self._make_api_call({}, "GET", "/walletsolidity/getnowblock")
-
         return transaction
     
-    async def create_transaction(self, from_address, to_address, amount):
+    async def _create_transaction(self, from_address, to_address, amount):
         payload = {
         "owner_address": from_address,
         "to_address": to_address,
@@ -121,6 +111,40 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         }
         transaction = await self._make_api_call(payload, "POST", "/wallet/createtransaction")
         return transaction
+    
+    async def _create_trc20_transfer_transaction(
+        self,
+        sender_address: str,
+        to_address: str,
+        amount: int,
+        contract_address: str,
+        fee_limit: int = 15000000000,
+        call_value: int = 0,
+        visible: bool = True
+    ) -> dict:
+        # Construct the TRC20 token transfer transaction
+        hex_eth_like_address = self.base58_to_hex_address(to_address).replace("41", "0x")
+
+        transfer_data = encode(["address", "uint256"], [hex_eth_like_address, amount])
+        parameter = transfer_data.hex()
+
+        transaction = {
+            "owner_address": sender_address,
+            "contract_address": contract_address,
+            "function_selector": "transfer(address,uint256)",
+            "parameter": parameter,
+            "fee_limit": fee_limit,
+            "call_value": call_value,
+            "visible": visible
+        }
+
+        # Make the API call to create the transaction
+        result = await self._make_api_call(
+            transaction,
+            "POST",
+            path="/wallet/triggersmartcontract"
+        )
+        return result
     
 
     
