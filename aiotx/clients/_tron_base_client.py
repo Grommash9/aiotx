@@ -2,17 +2,16 @@ import decimal
 import json
 from decimal import localcontext
 from typing import Optional, Union
-from aiohttp import ClientResponse
-import aiohttp
 import pkg_resources
 from tronpy import Tron
 from tronpy.keys import PrivateKey
-from tronpy.providers.http import HTTPProvider
 from aiotx.clients._base_client import BlockMonitor
 from aiotx.clients._evm_base_client import AioTxEVMBaseClient
 from aiotx.exceptions import InvalidArgumentError, RpcConnectionError
 from aiotx.types import BlockParam
-from eth_abi import decode, encode
+from eth_abi import encode
+from coincurve import PrivateKey as CoincurvePrivateKey
+
 
 units = {
     "sun": 1,
@@ -68,11 +67,10 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         to_address: str,
         amount: int
     ) -> str:
-        priv_key = PrivateKey(bytes.fromhex(private_key))
         sender_address_data = self.get_address_from_private_key(private_key)
         sender_address = sender_address_data["base58check_address"]
         created_txd = await self._create_transaction(sender_address, to_address, amount)
-        sig = priv_key.sign_msg_hash(bytes.fromhex(created_txd["txID"]))
+        sig = self.sign_msg_hash(private_key, bytes.fromhex(created_txd["txID"]))
         result = await self.broadcast_transaction([sig.hex()], created_txd["raw_data_hex"], created_txd["raw_data"], tx_id=created_txd["txID"])
         return result["txid"]
     
@@ -83,15 +81,23 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         contract: str,
         amount: int
     ):
-        priv_key = PrivateKey(bytes.fromhex(private_key))
         sender_address_data = self.get_address_from_private_key(private_key)
         sender_address = sender_address_data["base58check_address"]
         created_txd = await self._create_trc20_transfer_transaction(sender_address, to_address, amount, contract)
         print("created_txd", created_txd)
         tx_id = created_txd["transaction"]["txID"]
-        sig = priv_key.sign_msg_hash(bytes.fromhex(tx_id))
-        result = await self.broadcast_transaction([sig.hex()], created_txd["transaction"]["raw_data_hex"], created_txd["transaction"]["raw_data"], tx_id)
+        sig = self.sign_msg_hash(private_key, bytes.fromhex(tx_id))
+        result = await self.broadcast_transaction([sig], created_txd["transaction"]["raw_data_hex"], created_txd["transaction"]["raw_data"], tx_id)
         return result["txid"]
+    
+    def sign_msg_hash(self, priv_key: str, message_hash: bytes) -> str:
+        """Sign a message hash(sha256)."""
+        private_key_bytes = bytes.fromhex(priv_key)
+        signature_bytes = CoincurvePrivateKey(private_key_bytes).sign_recoverable(
+            message_hash,
+            hasher=None,
+        )
+        return signature_bytes.hex()
 
     
     async def broadcast_transaction(self, signature: list[str], raw_data_hex: str, raw_data: dict, tx_id: str, visible: bool = True):
