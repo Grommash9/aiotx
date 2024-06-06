@@ -2,16 +2,20 @@ import decimal
 import json
 from decimal import localcontext
 from typing import Optional, Union
-
+from aiohttp import ClientResponse
 import aiohttp
+from tronpy.contract import Contract, ContractMethod, ShieldedTRC20
 import pkg_resources
+from tronpy.tron import TransactionBuilder, Transaction
 from tronpy import Tron
 from tronpy.keys import PrivateKey
-
+from tronpy.providers.http import HTTPProvider
 from aiotx.clients._base_client import BlockMonitor
 from aiotx.clients._evm_base_client import AioTxEVMBaseClient
 from aiotx.exceptions import InvalidArgumentError, RpcConnectionError
 from aiotx.types import BlockParam
+import hashlib
+from tronpy.keys import keccak256
 
 units = {
     "sun": 1,
@@ -21,6 +25,31 @@ units = {
 MIN_SUN = 1
 MAX_SUN = 10 ** 18
 
+
+
+class CustomTransactionBuilder(TransactionBuilder):
+
+    def __init__(self, builder: TransactionBuilder, client: "Tron", method: ContractMethod = None):
+        super().__init__(builder._raw_data, client, method)
+        self._builder = builder
+
+    def build(self, options=None, ref_block_bytes=None, ref_block_hash=None, **kwargs) -> "Transaction":
+        """Build the transaction with custom ref_block_bytes and ref_block_hash."""
+        if ref_block_bytes is not None and ref_block_hash is not None:
+            # Use the provided ref_block_bytes and ref_block_hash
+            self._raw_data["ref_block_bytes"] = ref_block_bytes
+            self._raw_data["ref_block_hash"] = ref_block_hash
+        else:
+            # Retrieve the latest solid block ID
+            ref_block_id = self._client.get_latest_solid_block_id()
+            # last 2 byte of block number part
+            self._raw_data["ref_block_bytes"] = ref_block_id[12:16]
+            # last half part of block hash
+            self._raw_data["ref_block_hash"] = ref_block_id[16:32]
+
+        if self._method:
+            return Transaction(self._raw_data, client=self._client, method=self._method)
+        return Transaction(self._raw_data, client=self._client)
 
 class AioTxTRONClient(AioTxEVMBaseClient):
     def __init__(
@@ -59,6 +88,47 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         if not client.is_base58check_address(address):
             raise TypeError("Please provide base58 address")
         return client.to_hex_address(address)
+    
+    async def send(
+        self,
+        private_key: str,
+        to_address: str,
+        amount: int
+    ) -> str:
+        priv_key = PrivateKey(bytes.fromhex(private_key))
+        sender_address_data = self.get_address_from_private_key(private_key)
+        sender_address = sender_address_data["base58check_address"]
+        created_txd = await self.create_transaction(sender_address, to_address, amount)
+        sig = priv_key.sign_msg_hash(bytes.fromhex(created_txd["txID"]))
+        result = await self.broadcast_transaction([sig.hex()], created_txd["raw_data_hex"], created_txd["raw_data"], tx_id=created_txd["txID"])
+        return result["txid"]
+    
+    async def broadcast_transaction(self, signature: list[str], raw_data_hex: str, raw_data: dict, tx_id: str, visible: bool = True):
+        result = await self._make_api_call({"signature": signature, "raw_data_hex": raw_data_hex, "raw_data": raw_data, "visible": visible, "txID": tx_id}, "POST", path="/wallet/broadcasttransaction")
+        return result
+
+    async def get_latest_solidity_block(self):
+        transaction = await self._make_api_call({}, "GET", "/walletsolidity/getnowblock")
+
+        return transaction
+    
+    async def create_transaction(self, from_address, to_address, amount):
+        payload = {
+        "owner_address": from_address,
+        "to_address": to_address,
+        "amount": amount,
+        "visible": True
+        }
+        transaction = await self._make_api_call(payload, "POST", "/wallet/createtransaction")
+        return transaction
+    
+
+    
+    async def get_account(self, address):
+        payload = {"address": address, "visible": True}
+        account_data = await self._make_api_call(payload, "POST", "/wallet/getaccount")
+
+        return account_data
     
     def to_sun(self, number: Union[int, float, str, decimal.Decimal], unit: str = "trx") -> int:
         """
@@ -139,7 +209,28 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         if client.is_base58check_address(address):
             address = self.base58_to_hex_address(address)
         return await super().get_contract_decimals(address)
+
     
+    async def _make_api_call(self, payload, method, path) -> dict:
+        url = self.node_url + path
+        async with aiohttp.ClientSession() as session:
+            if method == "POST":
+                headers = {"Content-Type": "application/json"}
+                payload_json = json.dumps(payload)
+                async with session.post(url, data=payload_json, headers=headers) as response:
+                    return await self._process_api_answer(response)
+            async with session.get(url) as response:
+                return await self._process_api_answer(response)
+                
+            
+    async def _process_api_answer(self, response: ClientResponse) -> dict:
+        response_text = await response.text()
+        print("response_text", response_text)
+        if response.status != 200:
+            raise RpcConnectionError(f"Node response status code: {response.status} response test: {response_text}")
+        result = await response.json()
+        return result
+
     async def _make_rpc_call(self, payload, path="/jsonrpc") -> dict:
         payload["jsonrpc"] = "2.0"
         payload["id"] = 1
@@ -148,6 +239,7 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         async with aiohttp.ClientSession() as session:
             async with session.post(self.node_url + path, data=payload_json, headers=headers) as response:
                 response_text = await response.text()
+                print("response_text", response_text)
                 if response.status != 200:
                     raise RpcConnectionError(f"Node response status code: {response.status} response test: {response_text}")
                 result = await response.json()

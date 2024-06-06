@@ -1,7 +1,7 @@
 from aiotx.clients import AioTxTRONClient
 import asyncio
 
-tron_client = AioTxTRONClient(node_url="https://go.getblock.io/<token>/jsonrpc")
+tron_client = AioTxTRONClient(node_url="https://api.shasta.trongrid.io")
 
 
 @tron_client.monitor.on_block
