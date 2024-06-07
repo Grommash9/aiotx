@@ -101,9 +101,9 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         sender_address_data = self.get_address_from_private_key(private_key)
         sender_address = sender_address_data["base58check_address"]
         created_txd = await self._create_trc20_transfer_transaction(sender_address, to_address, amount, contract, memo=memo)
-        tx_id = created_txd["transaction"]["txID"]
+        tx_id = created_txd["txID"]
         sig = self.sign_msg_hash(private_key, bytes.fromhex(tx_id))
-        result = await self.broadcast_transaction([sig], created_txd["transaction"]["raw_data_hex"], created_txd["transaction"]["raw_data"], tx_id)
+        result = await self.broadcast_transaction([sig], created_txd["raw_data_hex"], created_txd["raw_data"], tx_id)
         return result["txid"]
     
     def sign_msg_hash(self, priv_key: str, message_hash: bytes) -> str:
@@ -174,9 +174,11 @@ class AioTxTRONClient(AioTxEVMBaseClient):
             path="/wallet/triggersmartcontract"
         )
 
-        if result.get("Error") is not None:
-            raise CreateTransactionError(transaction.get("Error"))
-        return result
+        print("resuT£Gdsfsddflt", result)
+
+        if result.get("transaction") is None:
+            raise CreateTransactionError(f"{result['result'].get('code')} {result['result'].get('message')}")
+        return result["transaction"]
     
 
     

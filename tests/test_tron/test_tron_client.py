@@ -170,3 +170,32 @@ async def test_send_trx(tron_client: AioTxTRONClient, amount, memo, send_to, pri
         tx_id = await tron_client.send(private_key, send_to,
                                    sun_amount, memo)
         assert tx_id == expected_tx_id
+
+
+@pytest.mark.parametrize(
+    "amount, memo, send_to, contract, private_key, expected_exception, expected_tx_id",
+    [
+        (1, "", DESTINATION_ADDRESS, CONTRACT, TRON_TEST_WALLET_PRIVATE_KEY, None, "99dce8bfadc68a0388d7ff28702648402d4fe3dd50e916665368c0a0b6a28273"),
+        (1, 5, DESTINATION_ADDRESS, CONTRACT, TRON_TEST_WALLET_PRIVATE_KEY, TypeError, ""),
+        (5, "orp3uhg$£(TUP42t38P(HU$h3r5g8))", DESTINATION_ADDRESS, CONTRACT, TRON_TEST_WALLET_PRIVATE_KEY, None, "f610753e84a5fe9b8fe72e1ac3175d5584887844e87f14cb08d532d0c66ff1ed"),
+        (99999999999, "test_memo", DESTINATION_ADDRESS, CONTRACT, TRON_TEST_WALLET_PRIVATE_KEY, None, "31dc98c67bdf5d21bda64f4c11c9fc3c629d3ea0dc437314615c852a27f09b8e"),
+        (1, "test_memo", "d", CONTRACT ,TRON_TEST_WALLET_PRIVATE_KEY, TypeError, ""),
+        (2, "test_memo", "Yge3Gid6vVaQvnPVRJ6SVwzC64cw2eBkN", CONTRACT, TRON_TEST_WALLET_PRIVATE_KEY, TypeError, ""),
+        (1, "test_memo", DESTINATION_ADDRESS, CONTRACT, "d", ValueError, ""),
+        (99999999999, "", DESTINATION_ADDRESS, CONTRACT, TRON_TEST_WALLET_PRIVATE_KEY, None, "ff0c8255eda1cf21d3e3f150570e1798a7c0a320490b00623601ace17a769bb2"),
+        (1, "", DESTINATION_ADDRESS, "", TRON_TEST_WALLET_PRIVATE_KEY, CreateTransactionError, "53a4f1ef3614b49c530708c109556246bc87faab6d34a428e77c0419ea940041"),
+        (1, "", DESTINATION_ADDRESS, "d", TRON_TEST_WALLET_PRIVATE_KEY, CreateTransactionError, "53a4f1ef3614b49c530708c109556246bc87faab6d34a428e77c0419ea940041"),
+    ],
+)
+@vcr_c.use_cassette("tron/test_send_trc20_token.yaml")
+async def test_send_trc20_token(tron_client: AioTxTRONClient, amount, memo, send_to, contract, private_key, expected_exception, expected_tx_id):
+    # Because token is having 6 decimals too as TRX but check you token!
+    sun_amount = tron_client.to_sun(amount)
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await tron_client.send_token(private_key, send_to, contract,
+                                   sun_amount, memo)
+    else:
+        tx_id = await tron_client.send_token(private_key, send_to, contract,
+                                   sun_amount, memo)
+        assert tx_id == expected_tx_id
