@@ -119,10 +119,6 @@ class AioTxTRONClient(AioTxEVMBaseClient):
     async def broadcast_transaction(self, signature: list[str], raw_data_hex: str, raw_data: dict, tx_id: str, visible: bool = True):
         result = await self._make_api_call({"signature": signature, "raw_data_hex": raw_data_hex, "raw_data": raw_data, "visible": visible, "txID": tx_id}, "POST", path="/wallet/broadcasttransaction")
         return result
-
-    async def get_latest_solidity_block(self):
-        transaction = await self._make_api_call({}, "GET", "/walletsolidity/getnowblock")
-        return transaction
     
     async def _create_transaction(self, from_address, to_address, amount, memo: str = None):
         payload = {
@@ -173,20 +169,9 @@ class AioTxTRONClient(AioTxEVMBaseClient):
             "POST",
             path="/wallet/triggersmartcontract"
         )
-
-        print("resuT£Gdsfsddflt", result)
-
         if result.get("transaction") is None:
             raise CreateTransactionError(f"{result['result'].get('code')} {result['result'].get('message')}")
         return result["transaction"]
-    
-
-    
-    async def get_account(self, address):
-        payload = {"address": address, "visible": True}
-        account_data = await self._make_api_call(payload, "POST", "/wallet/getaccount")
-
-        return account_data
     
     def to_sun(self, number: Union[int, float, str, decimal.Decimal], unit: str = "trx") -> int:
         """
@@ -283,7 +268,6 @@ class AioTxTRONClient(AioTxEVMBaseClient):
             
     async def _process_api_answer(self, response: ClientResponse) -> dict:
         response_text = await response.text()
-        print("response_text", response_text)
         if response.status != 200:
             raise RpcConnectionError(f"Node response status code: {response.status} response test: {response_text}")
         result = await response.json()
@@ -297,7 +281,6 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         async with aiohttp.ClientSession() as session:
             async with session.post(self.node_url + path, data=payload_json, headers=headers) as response:
                 response_text = await response.text()
-                print("response_text", response_text)
                 if response.status != 200:
                     raise RpcConnectionError(f"Node response status code: {response.status} response test: {response_text}")
                 result = await response.json()
