@@ -15,8 +15,9 @@ def mnemonic_is_valid(mnemo_words: List[str]) -> bool:
 
 def mnemonic_to_entropy(mnemo_words: List[str], password: Optional[str] = None):
     # TODO: implement password
-    sign = hmac.new((" ".join(mnemo_words)).encode(
-        'utf-8'), bytes(0), hashlib.sha512).digest()
+    sign = hmac.new(
+        (" ".join(mnemo_words)).encode("utf-8"), bytes(0), hashlib.sha512
+    ).digest()
     return sign
 
 
@@ -25,16 +26,19 @@ def mnemonic_to_seed(mnemo_words: List[str], seed: str, password: Optional[str] 
     return hashlib.pbkdf2_hmac("sha512", entropy, seed, PBKDF_ITERATIONS)
 
 
-def mnemonic_to_private_key(mnemo_words: List[str], password: Optional[str] = None) -> Tuple[bytes, bytes]:
+def mnemonic_to_private_key(
+    mnemo_words: List[str], password: Optional[str] = None
+) -> Tuple[bytes, bytes]:
     """
     :rtype: (bytes(public_key), bytes(secret_key))
     """
-    seed = mnemonic_to_seed(
-        mnemo_words, 'TON default seed'.encode('utf-8'), password)
+    seed = mnemonic_to_seed(mnemo_words, "TON default seed".encode("utf-8"), password)
     return crypto_sign_seed_keypair(seed[:32])
 
 
-def mnemonic_to_wallet_key(mnemo_words: List[str], password: Optional[str] = None) -> Tuple[bytes, bytes]:
+def mnemonic_to_wallet_key(
+    mnemo_words: List[str], password: Optional[str] = None
+) -> Tuple[bytes, bytes]:
     """
     :rtype: (bytes(public_key), bytes(secret_key))
     """

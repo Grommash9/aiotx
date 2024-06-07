@@ -9,7 +9,9 @@ class AioTxClient:
 
     async def start_monitoring(self, monitoring_start_block: int = None):
         if self._monitoring_task is None:
-            self._monitoring_task = asyncio.create_task(self._run_monitoring(monitoring_start_block))
+            self._monitoring_task = asyncio.create_task(
+                self._run_monitoring(monitoring_start_block)
+            )
         return self._monitoring_task
 
     def stop_monitoring(self):

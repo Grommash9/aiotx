@@ -17,10 +17,11 @@ __all__ = [
     "AioTxTRONClient",
 ]
 
+
 class AioTxBSCClient(AioTxEVMClient):
     def __init__(self, node_url):
         super().__init__(node_url)
-        bep20_abi_json = pkg_resources.resource_string('aiotx.utils', 'bep20_abi.json')
+        bep20_abi_json = pkg_resources.resource_string("aiotx.utils", "bep20_abi.json")
         self._bep20_abi = json.loads(bep20_abi_json)
 
     def _get_abi_entries(self):
@@ -30,7 +31,7 @@ class AioTxBSCClient(AioTxEVMClient):
 class AioTxETHClient(AioTxEVMClient):
     def __init__(self, node_url):
         super().__init__(node_url)
-        erc20_abi_json = pkg_resources.resource_string('aiotx.utils', 'erc20_abi.json')
+        erc20_abi_json = pkg_resources.resource_string("aiotx.utils", "erc20_abi.json")
         self._erc20_abi = json.loads(erc20_abi_json)
 
     def _get_abi_entries(self):
@@ -40,7 +41,7 @@ class AioTxETHClient(AioTxEVMClient):
 class AioTxPolygonClient(AioTxEVMClient):
     def __init__(self, node_url):
         super().__init__(node_url)
-        erc20_abi_json = pkg_resources.resource_string('aiotx.utils', 'erc20_abi.json')
+        erc20_abi_json = pkg_resources.resource_string("aiotx.utils", "erc20_abi.json")
         self._erc20_abi = json.loads(erc20_abi_json)
 
     def _get_abi_entries(self):
@@ -48,7 +49,6 @@ class AioTxPolygonClient(AioTxEVMClient):
 
 
 class AioTxBTCClient(AioTxUTXOClient):
-
     def __init__(
         self,
         node_url,
@@ -58,11 +58,12 @@ class AioTxBTCClient(AioTxUTXOClient):
         db_url="sqlite+aiosqlite:///aiotx_utxo.sqlite",
     ):
         network_name = "testnet" if testnet else "bitcoin"
-        super().__init__(node_url, testnet, node_username, node_password, network_name, db_url)
+        super().__init__(
+            node_url, testnet, node_username, node_password, network_name, db_url
+        )
 
 
 class AioTxLTCClient(AioTxUTXOClient):
-
     def __init__(
         self,
         node_url,
@@ -72,4 +73,6 @@ class AioTxLTCClient(AioTxUTXOClient):
         db_url="sqlite+aiosqlite:///aiotx_utxo.sqlite",
     ):
         network_name = "litecoin_testnet" if testnet else "litecoin"
-        super().__init__(node_url, testnet, node_username, node_password, network_name, db_url)
+        super().__init__(
+            node_url, testnet, node_username, node_password, network_name, db_url
+        )

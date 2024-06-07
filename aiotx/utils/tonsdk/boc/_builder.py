@@ -1,5 +1,3 @@
-
-
 from ._bit_string import BitString
 from ._cell import Cell
 

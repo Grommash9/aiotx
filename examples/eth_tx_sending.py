@@ -11,13 +11,19 @@ to_address = "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a"
 eth_in_wei = eth_client.to_wei(0.00001, "ether")
 tokens_in_mwei = eth_client.to_wei(1, "mwei")
 
+
 async def main():
     nonce = await eth_client.get_transactions_count(to_address)
     tx_id = await eth_client.send(private_key, to_address, eth_in_wei)
     print(tx_id)
-    tx_id = await eth_client.send_token(private_key, to_address, USDT_contract, tokens_in_mwei, nonce=nonce+1)
+    tx_id = await eth_client.send_token(
+        private_key, to_address, USDT_contract, tokens_in_mwei, nonce=nonce + 1
+    )
     print(tx_id)
-    tx_id = await eth_client.send_token(private_key, to_address, USDT_contract, tokens_in_mwei, nonce=nonce+2)
+    tx_id = await eth_client.send_token(
+        private_key, to_address, USDT_contract, tokens_in_mwei, nonce=nonce + 2
+    )
     print(tx_id)
+
 
 asyncio.run(main())

@@ -21,7 +21,9 @@ def move_to_end(index_hashmap, topological_order_arr, target):
     data = topological_order_arr.pop(target_index)
     topological_order_arr.append(data)
     for sub_cell in data[1].refs:
-        topological_order_arr, index_hashmap = move_to_end(index_hashmap, topological_order_arr, sub_cell.bytes_hash())
+        topological_order_arr, index_hashmap = move_to_end(
+            index_hashmap, topological_order_arr, sub_cell.bytes_hash()
+        )
     return [topological_order_arr, index_hashmap]
 
 
@@ -30,20 +32,24 @@ def tree_walk(cell, topological_order_arr, index_hashmap, parent_hash=None):
     if cell_hash in index_hashmap:
         if parent_hash:
             if index_hashmap[parent_hash] > index_hashmap[cell_hash]:
-                topological_order_arr, index_hashmap = move_to_end(index_hashmap, topological_order_arr, cell_hash)
+                topological_order_arr, index_hashmap = move_to_end(
+                    index_hashmap, topological_order_arr, cell_hash
+                )
         return [topological_order_arr, index_hashmap]
 
     index_hashmap[cell_hash] = len(topological_order_arr)
     topological_order_arr.append([cell_hash, cell])
     for sub_cell in cell.refs:
-        topological_order_arr, index_hashmap = tree_walk(sub_cell, topological_order_arr, index_hashmap, cell_hash)
+        topological_order_arr, index_hashmap = tree_walk(
+            sub_cell, topological_order_arr, index_hashmap, cell_hash
+        )
     return [topological_order_arr, index_hashmap]
 
 
 def _crc32c(crc, bytes_arr):
-    POLY = 0x82f63b78
+    POLY = 0x82F63B78
 
-    crc ^= 0xffffffff
+    crc ^= 0xFFFFFFFF
 
     for n in range(len(bytes_arr)):
         crc ^= bytes_arr[n]
@@ -56,7 +62,7 @@ def _crc32c(crc, bytes_arr):
         crc = (crc >> 1) ^ POLY if crc & 1 else crc >> 1
         crc = (crc >> 1) ^ POLY if crc & 1 else crc >> 1
 
-    return crc ^ 0xffffffff
+    return crc ^ 0xFFFFFFFF
 
 
 def crc32c(bytes_array):
@@ -64,7 +70,7 @@ def crc32c(bytes_array):
 
     # TODO: check mistakes
     arr = bytearray(4)
-    struct.pack_into('>I', arr, 0, int_crc)
+    struct.pack_into(">I", arr, 0, int_crc)
 
     return bytes(arr)[::-1]
 
@@ -81,8 +87,8 @@ def crc16(data):
             if byte & mask:
                 reg += 1
             mask >>= 1
-            if reg > 0xffff:
-                reg &= 0xffff
+            if reg > 0xFFFF:
+                reg &= 0xFFFF
                 reg ^= POLY
 
     return bytearray([math.floor(reg / 256), reg % 256])
@@ -116,9 +122,11 @@ def string_to_bytes(string, size=1):  # ?
     return bytes(buf)
 
 
-def sign_message(message: bytes,
-                 signing_key,
-                 encoder: nacl.encoding.Encoder = nacl.encoding.RawEncoder, ) -> SignedMessage:
+def sign_message(
+    message: bytes,
+    signing_key,
+    encoder: nacl.encoding.Encoder = nacl.encoding.RawEncoder,
+) -> SignedMessage:
     raw_signed = crypto_sign(message, signing_key)
 
     signature = encoder.encode(raw_signed[:crypto_sign_BYTES])
@@ -140,5 +148,4 @@ def b64str_to_hex(b64str):
 
 
 def bytes_to_b64str(bytes_arr):
-    return codecs.decode(codecs.encode(
-        bytes_arr, "base64"), 'utf-8').replace("\n", '')
+    return codecs.decode(codecs.encode(bytes_arr, "base64"), "utf-8").replace("\n", "")

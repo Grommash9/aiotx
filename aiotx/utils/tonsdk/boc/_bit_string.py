@@ -75,8 +75,7 @@ class BitString:
                     break
 
             if not found_end_bit:
-                raise Exception(
-                    f"Incorrect TopUppedArray {array}, {fullfilled_bytes}")
+                raise Exception(f"Incorrect TopUppedArray {array}, {fullfilled_bytes}")
 
     def get_top_upped_array(self) -> bytearray:
         ret = copy.deepcopy(self)
@@ -87,7 +86,7 @@ class BitString:
             while tu > 0:
                 tu -= 1
                 ret.write_bit(0)
-        ret.array = ret.array[:math.ceil(ret.cursor / 8)]
+        ret.array = ret.array[: math.ceil(ret.cursor / 8)]
         return ret.array
 
     def get_free_bits(self) -> int:
@@ -99,7 +98,7 @@ class BitString:
 
     def write_bit_array(self, ba: bytearray):
         """Writes a bytearray as a bit array one bit by one."""
-        for b in ba.decode('utf-8'):
+        for b in ba.decode("utf-8"):
             self.write_bit(b)
 
     def write_bit(self, b: Union[str, int]):
@@ -119,10 +118,11 @@ class BitString:
                 return
 
             raise Exception(
-                f"bitLength is too small for number, got number={number},bitLength={bit_length}")
+                f"bitLength is too small for number, got number={number},bitLength={bit_length}"
+            )
 
         for i in range(bit_length, 0, -1):
-            k = (2 ** (i - 1))
+            k = 2 ** (i - 1)
             if number // k == 1:
                 self.write_bit(1)
                 number -= k

@@ -21,7 +21,10 @@ from aiotx.utils.tonsdk.utils import to_nano as tonsdk_to_nano
 
 class AioTxTONClient(AioTxClient):
     def __init__(
-        self, node_url, wallet_version: WalletVersionEnum = WalletVersionEnum.v4r2, workchain: Optional[int] = None
+        self,
+        node_url,
+        wallet_version: WalletVersionEnum = WalletVersionEnum.v4r2,
+        workchain: Optional[int] = None,
     ):
         super().__init__(node_url)
         self.monitor = TonMonitor(self)
@@ -33,7 +36,9 @@ class AioTxTONClient(AioTxClient):
         if self.workchain is None:
             await self._get_network_params()
         wallet_mnemonics = mnemonic_new()
-        _mnemonics, _, _, wallet = Wallets.from_mnemonics(wallet_mnemonics, self.wallet_version, self.workchain)
+        _mnemonics, _, _, wallet = Wallets.from_mnemonics(
+            wallet_mnemonics, self.wallet_version, self.workchain
+        )
         return (
             " ".join(_mnemonics),
             wallet.address.to_string(is_user_friendly=True, is_url_safe=True),
@@ -41,7 +46,9 @@ class AioTxTONClient(AioTxClient):
         )
 
     def _unpack_mnemonic(self, mnemonic_str: str):
-        assert isinstance(mnemonic_str, str), "Mnemonic should be represented as string!"
+        assert isinstance(
+            mnemonic_str, str
+        ), "Mnemonic should be represented as string!"
         mnemonic_list = mnemonic_str.split(" ")
         if not mnemonic_is_valid(mnemonic_list):
             raise WrongPrivateKey("mnemonic phrase not valid!")
@@ -51,11 +58,13 @@ class AioTxTONClient(AioTxClient):
         if self.workchain is None:
             await self._get_network_params()
         wallet_mnemonic_list = self._unpack_mnemonic(wallet_mnemonic)
-        _, _, _, wallet = Wallets.from_mnemonics(wallet_mnemonic_list, self.wallet_version, self.workchain)
-        return wallet.address.to_string(is_user_friendly=True, is_url_safe=True), wallet.address.to_string(
-            False, False, False
+        _, _, _, wallet = Wallets.from_mnemonics(
+            wallet_mnemonic_list, self.wallet_version, self.workchain
         )
-    
+        return wallet.address.to_string(
+            is_user_friendly=True, is_url_safe=True
+        ), wallet.address.to_string(False, False, False)
+
     async def get_last_master_block(self) -> int:
         payload = {"method": "getMasterchainInfo", "params": {}}
         result = await self._make_rpc_call(payload)
@@ -91,13 +100,20 @@ class AioTxTONClient(AioTxClient):
         packed_address = await self._make_rpc_call(payload)
         return packed_address
 
-    async def get_block_transactions(self, workchain, shard, seqno, count=40) -> list[dict]:
+    async def get_block_transactions(
+        self, workchain, shard, seqno, count=40
+    ) -> list[dict]:
         # Here we don't have workchain by default, because in mainnet
         # for example master block workchain is -1 and shard is 0
         # So we should use workchain here
         payload = {
             "method": "getBlockTransactions",
-            "params": {"workchain": workchain, "shard": shard, "seqno": seqno, "count": count},
+            "params": {
+                "workchain": workchain,
+                "shard": shard,
+                "seqno": seqno,
+                "count": count,
+            },
         }
         information = await self._make_rpc_call(payload)
         return information["transactions"]
@@ -106,34 +122,49 @@ class AioTxTONClient(AioTxClient):
         payload = {"method": "detectAddress", "params": {"address": address}}
         information = await self._make_rpc_call(payload)
         return information
-    
-    def to_nano(self, number: Union[int, float, str, decimal.Decimal], unit: str = "ton")-> int:
+
+    def to_nano(
+        self, number: Union[int, float, str, decimal.Decimal], unit: str = "ton"
+    ) -> int:
         return tonsdk_to_nano(number, unit)
-    
-    def from_nano(self, number: int, unit: str = "ton")-> int:
+
+    def from_nano(self, number: int, unit: str = "ton") -> int:
         return tonsdk_from_nano(number, unit)
 
-    async def send(self, mnemonic: str, to_address: str, amount: int, seqno: int = None, memo: str = None) -> str:
-        assert isinstance(amount, int), "Amount should be integer! Please use to_nano for convert it!"
+    async def send(
+        self,
+        mnemonic: str,
+        to_address: str,
+        amount: int,
+        seqno: int = None,
+        memo: str = None,
+    ) -> str:
+        assert isinstance(
+            amount, int
+        ), "Amount should be integer! Please use to_nano for convert it!"
         if self.workchain is None:
             await self._get_network_params()
 
         from_address, _ = await self.get_address_from_mnemonics(mnemonic)
         if seqno is None:
             seqno = await self.get_transaction_count(from_address)
-        
+
         boc = self._create_transfer_boc(mnemonic, to_address, amount, seqno, memo)
         boc_answer_data = await self.send_boc_return_hash(boc)
         return boc_answer_data["hash"]
-    
+
     # async def estimate_fee(self, boc: str, address: str):
     #     payload = {"method": "estimateFee", "params": {"address": address,"body": boc}}
     #     information = await self._make_rpc_call(payload)
     #     return information
 
-    def _create_transfer_boc(self, mnemonic_str: str, to_address, amount, seqno, memo) -> str:
+    def _create_transfer_boc(
+        self, mnemonic_str: str, to_address, amount, seqno, memo
+    ) -> str:
         mnemonic_list = self._unpack_mnemonic(mnemonic_str)
-        _, _, _, wallet = Wallets.from_mnemonics(mnemonic_list, self.wallet_version, self.workchain)
+        _, _, _, wallet = Wallets.from_mnemonics(
+            mnemonic_list, self.wallet_version, self.workchain
+        )
         query = wallet.create_transfer_message(
             to_addr=to_address, amount=amount, payload=memo, seqno=seqno
         )
@@ -154,7 +185,13 @@ class AioTxTONClient(AioTxClient):
         return workchain, shard, seqno
 
     async def get_transactions(
-        self, address, limit: int = None, lt: int = None, hash: str = None, to_lt: int = None, archival: bool = None
+        self,
+        address,
+        limit: int = None,
+        lt: int = None,
+        hash: str = None,
+        to_lt: int = None,
+        archival: bool = None,
     ) -> list[dict]:
         """
         Retrieves transactions for a given TON account.
@@ -190,14 +227,18 @@ class AioTxTONClient(AioTxClient):
         payload_json = json.dumps(payload)
         headers = {"Content-Type": "application/json"}
         async with aiohttp.ClientSession() as session:
-            async with session.post(self.node_url, data=payload_json, headers=headers) as response:
+            async with session.post(
+                self.node_url, data=payload_json, headers=headers
+            ) as response:
                 response_text = await response.text()
                 if response.status != 200:
                     if "cannot find block" in response_text:
                         raise BlockNotFoundError(response_text)
                     if "Incorrect address" in response_text:
                         raise InvalidArgumentError(response_text)
-                    raise RpcConnectionError(f"Node response status code: {response.status} response test: {response_text}")
+                    raise RpcConnectionError(
+                        f"Node response status code: {response.status} response test: {response_text}"
+                    )
                 result = await response.json()
                 return result["result"]
 
@@ -236,4 +277,3 @@ class TonMonitor(BlockMonitor):
         for transaction in shard_transactions:
             for handler in self.transaction_handlers:
                 await handler(transaction)
-

@@ -9,14 +9,16 @@ from ._wallet_contract import WalletContract
 
 class HighloadWalletContractBase(WalletContract):
     def create_data_cell(self):
-        return begin_cell() \
-            .store_uint(self.options["wallet_id"], 32) \
-            .store_uint(0, 64) \
-            .store_bytes(self.options["public_key"]) \
-            .store_maybe_ref(None) \
+        return (
+            begin_cell()
+            .store_uint(self.options["wallet_id"], 32)
+            .store_uint(0, 64)
+            .store_bytes(self.options["public_key"])
+            .store_maybe_ref(None)
             .end_cell()
+        )
 
-    def create_signing_message(self, query_id: int=0):
+    def create_signing_message(self, query_id: int = 0):
         message = begin_cell().store_uint(self.options["wallet_id"], 32)
         return message.store_uint(query_id, 64)
 
@@ -30,7 +32,9 @@ class HighloadWalletV2Contract(HighloadWalletContractBase):
         if "wallet_id" not in kwargs:
             self.options["wallet_id"] = 698983191 + self.options["wc"]
 
-    def create_transfer_message(self, recipients_list: list, query_id: int, timeout=60, dummy_signature=False):
+    def create_transfer_message(
+        self, recipients_list: list, query_id: int, timeout=60, dummy_signature=False
+    ):
         if query_id < int(time.time() + timeout) << 32:
             query_id = int(time.time() + timeout) << 32 + query_id
 
@@ -38,36 +42,41 @@ class HighloadWalletV2Contract(HighloadWalletContractBase):
         recipients = begin_dict(16)
         for i, recipient in enumerate(recipients_list):
             payload_cell = Cell()
-            if recipient.get('payload'):
-                if isinstance(recipient['payload'], str):
-                    if len(recipient['payload']) > 0:
+            if recipient.get("payload"):
+                if isinstance(recipient["payload"], str):
+                    if len(recipient["payload"]) > 0:
                         payload_cell.bits.write_uint(0, 32)
-                        payload_cell.bits.write_string(recipient['payload'])
-                elif hasattr(recipient['payload'], 'refs'):
-                    payload_cell = recipient['payload']
+                        payload_cell.bits.write_string(recipient["payload"])
+                elif hasattr(recipient["payload"], "refs"):
+                    payload_cell = recipient["payload"]
                 else:
-                    payload_cell.bits.write_bytes(recipient['payload'])
+                    payload_cell.bits.write_bytes(recipient["payload"])
 
             order_header = Contract.create_internal_message_header(
-                Address(recipient['address']), decimal.Decimal(recipient['amount'])
+                Address(recipient["address"]), decimal.Decimal(recipient["amount"])
             )
             order = Contract.create_common_msg_info(
-                order_header, recipient.get('state_init'), payload_cell
+                order_header, recipient.get("state_init"), payload_cell
             )
             recipients.store_cell(
-                i, begin_cell() \
-                    .store_uint8(recipient.get('send_mode', 0)) \
-                    .store_ref(order).end_cell()
+                i,
+                begin_cell()
+                .store_uint8(recipient.get("send_mode", 0))
+                .store_ref(order)
+                .end_cell(),
             )
 
         signing_message.store_maybe_ref(recipients.end_cell())
-        return self.create_external_message(
-            signing_message.end_cell(), dummy_signature
-        )
+        return self.create_external_message(signing_message.end_cell(), dummy_signature)
 
     def create_external_message(self, signing_message, dummy_signature=False):
-        signature = bytes(64) if dummy_signature else sign_message(
-            bytes(signing_message.bytes_hash()), self.options['private_key']).signature
+        signature = (
+            bytes(64)
+            if dummy_signature
+            else sign_message(
+                bytes(signing_message.bytes_hash()), self.options["private_key"]
+            ).signature
+        )
 
         body = Cell()
         body.bits.write_bytes(signature)
@@ -76,8 +85,7 @@ class HighloadWalletV2Contract(HighloadWalletContractBase):
         state_init = code = data = None
         self_address = self.address
         header = Contract.create_external_message_header(self_address)
-        result_message = Contract.create_common_msg_info(
-            header, state_init, body)
+        result_message = Contract.create_common_msg_info(header, state_init, body)
 
         return {
             "address": self_address,
@@ -88,7 +96,7 @@ class HighloadWalletV2Contract(HighloadWalletContractBase):
             "state_init": state_init,
             "code": code,
             "data": data,
-            "query_id": int.from_bytes(signing_message.bits.array[4:12], 'big')
+            "query_id": int.from_bytes(signing_message.bits.array[4:12], "big"),
         }
 
     def create_init_external_message(self, timeout=60):
@@ -98,23 +106,25 @@ class HighloadWalletV2Contract(HighloadWalletContractBase):
         code = create_state_init["code"]
         data = create_state_init["data"]
 
-        signing_message = self.create_signing_message(int(time.time() + timeout) << 32) \
-            .store_maybe_ref(None).end_cell()
+        signing_message = (
+            self.create_signing_message(int(time.time() + timeout) << 32)
+            .store_maybe_ref(None)
+            .end_cell()
+        )
         signature = sign_message(
-            bytes(signing_message.bytes_hash()), self.options['private_key']).signature
+            bytes(signing_message.bytes_hash()), self.options["private_key"]
+        ).signature
 
         body = Cell()
         body.bits.write_bytes(signature)
         body.write_cell(signing_message)
 
         header = Contract.create_external_message_header(address)
-        external_message = Contract.create_common_msg_info(
-            header, state_init, body)
+        external_message = Contract.create_common_msg_info(header, state_init, body)
 
         return {
             "address": address,
             "message": external_message,
-
             "body": body,
             "signing_message": signing_message,
             "state_init": state_init,

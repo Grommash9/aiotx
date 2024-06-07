@@ -13,9 +13,9 @@ from ._bit_string import BitString
 
 
 class Cell:
-    REACH_BOC_MAGIC_PREFIX = bytes.fromhex('B5EE9C72')
-    LEAN_BOC_MAGIC_PREFIX = bytes.fromhex('68ff65f3')
-    LEAN_BOC_MAGIC_PREFIX_CRC = bytes.fromhex('acc3a728')
+    REACH_BOC_MAGIC_PREFIX = bytes.fromhex("B5EE9C72")
+    LEAN_BOC_MAGIC_PREFIX = bytes.fromhex("68ff65f3")
+    LEAN_BOC_MAGIC_PREFIX_CRC = bytes.fromhex("acc3a728")
 
     def __init__(self):
         self.bits = BitString(1023)
@@ -58,8 +58,7 @@ class Cell:
 
     def get_bits_descriptor(self):
         d2 = bytearray([0])
-        d2[0] = math.ceil(self.bits.cursor / 8) + \
-            math.floor(self.bits.cursor / 8)
+        d2[0] = math.ceil(self.bits.cursor / 8) + math.floor(self.bits.cursor / 8)
         return d2
 
     def get_refs_descriptor(self):
@@ -69,7 +68,9 @@ class Cell:
 
     def get_max_level(self):
         if self.is_exotic:
-            raise NotImplementedError("Calculating max level for exotic cells is not implemented")
+            raise NotImplementedError(
+                "Calculating max level for exotic cells is not implemented"
+            )
         max_level = 0
         for r in self.refs:
             r_max_level = r.get_max_level()
@@ -107,13 +108,13 @@ class Cell:
         for ref in self.refs:
             ref_hash = ref.bytes_hash()
             ref_index_int = cells_index[ref_hash]
-            ref_index_hex = format(ref_index_int, 'x')
+            ref_index_hex = format(ref_index_int, "x")
             if len(ref_index_hex) % 2:
-                ref_index_hex = '0' + ref_index_hex
+                ref_index_hex = "0" + ref_index_hex
             reference = bytes.fromhex(ref_index_hex)
             repr_arr.append(reference)
 
-        x = b''
+        x = b""
         for data in repr_arr:
             x = concat_bytes(x, data)
 
@@ -135,18 +136,19 @@ class Cell:
         s_bytes = max(math.ceil(s / 8), 1)
         full_size = 0
         cell_sizes = {}
-        for (_hash, subcell) in topological_order:
+        for _hash, subcell in topological_order:
             cell_sizes[_hash] = subcell.boc_serialization_size(cells_index, s_bytes)
             full_size += cell_sizes[_hash]
 
         offset_bits = len("{0:b}".format(full_size))
         offset_bytes = max(math.ceil(offset_bits / 8), 1)
 
-        serialization = BitString(
-            (1023 + 32 * 4 + 32 * 3) * len(topological_order))
+        serialization = BitString((1023 + 32 * 4 + 32 * 3) * len(topological_order))
         serialization.write_bytes(Cell.REACH_BOC_MAGIC_PREFIX)
-        settings = bytes(''.join(['1' if i else '0' for i in [
-                         has_idx, hash_crc32, has_cache_bits]]), 'utf-8')
+        settings = bytes(
+            "".join(["1" if i else "0" for i in [has_idx, hash_crc32, has_cache_bits]]),
+            "utf-8",
+        )
         serialization.write_bit_array(settings)
         serialization.write_uint(flags, 2)
         serialization.write_uint(s_bytes, 3)
@@ -158,7 +160,7 @@ class Cell:
         serialization.write_uint(0, s_bytes * 8)  # Root shoulh have index 0
 
         if has_idx:
-            for (_hash, subcell) in topological_order:
+            for _hash, subcell in topological_order:
                 serialization.write_uint(cell_sizes[_hash], offset_bytes * 8)
 
         for cell_info in topological_order:
@@ -200,17 +202,14 @@ def deserialize_cell_data(cell_data, reference_index_size):
         raise Exception("Not enough bytes to encode cell data")
 
     cell.bits.set_top_upped_array(
-        bytearray(cell_data[:data_bytes_size]), fullfilled_bytes)
+        bytearray(cell_data[:data_bytes_size]), fullfilled_bytes
+    )
     cell_data = cell_data[data_bytes_size:]
     for r in range(ref_num):
-        cell.refs.append(read_n_bytes_uint_from_array(
-            reference_index_size, cell_data))
+        cell.refs.append(read_n_bytes_uint_from_array(reference_index_size, cell_data))
         cell_data = cell_data[reference_index_size:]
 
-    return {
-        "cell": cell,
-        "residue": cell_data
-    }
+    return {"cell": cell, "residue": cell_data}
 
 
 def parse_boc_header(serialized_boc):
@@ -249,17 +248,13 @@ def parse_boc_header(serialized_boc):
 
     offset_bytes = serialized_boc[0]
     serialized_boc = serialized_boc[1:]
-    cells_num = read_n_bytes_uint_from_array(
-        size_bytes, serialized_boc)
+    cells_num = read_n_bytes_uint_from_array(size_bytes, serialized_boc)
     serialized_boc = serialized_boc[size_bytes:]
-    roots_num = read_n_bytes_uint_from_array(
-        size_bytes, serialized_boc)
+    roots_num = read_n_bytes_uint_from_array(size_bytes, serialized_boc)
     serialized_boc = serialized_boc[size_bytes:]
-    absent_num = read_n_bytes_uint_from_array(
-        size_bytes, serialized_boc)
+    absent_num = read_n_bytes_uint_from_array(size_bytes, serialized_boc)
     serialized_boc = serialized_boc[size_bytes:]
-    tot_cells_size = read_n_bytes_uint_from_array(
-        offset_bytes, serialized_boc)
+    tot_cells_size = read_n_bytes_uint_from_array(offset_bytes, serialized_boc)
     serialized_boc = serialized_boc[offset_bytes:]
 
     if len(serialized_boc) < roots_num * size_bytes:
@@ -267,8 +262,7 @@ def parse_boc_header(serialized_boc):
 
     root_list = []
     for c in range(roots_num):
-        root_list.append(read_n_bytes_uint_from_array(
-            size_bytes, serialized_boc))
+        root_list.append(read_n_bytes_uint_from_array(size_bytes, serialized_boc))
         serialized_boc = serialized_boc[size_bytes:]
 
     index = False
@@ -277,8 +271,7 @@ def parse_boc_header(serialized_boc):
         if len(serialized_boc) < offset_bytes * cells_num:
             raise Exception("Not enough bytes for index encoding")
         for c in range(cells_num):
-            index.append(read_n_bytes_uint_from_array(
-                offset_bytes, serialized_boc))
+            index.append(read_n_bytes_uint_from_array(offset_bytes, serialized_boc))
             serialized_boc = serialized_boc[offset_bytes:]
 
     if len(serialized_boc) < tot_cells_size:
@@ -291,7 +284,7 @@ def parse_boc_header(serialized_boc):
             raise Exception("Not enough bytes for crc32c hashsum")
 
         length = len(input_data)
-        if not compare_bytes(crc32c(input_data[:length-4]), serialized_boc[:4]):
+        if not compare_bytes(crc32c(input_data[: length - 4]), serialized_boc[:4]):
             raise Exception("Crc32c hashsum mismatch")
 
         serialized_boc = serialized_boc[4:]
@@ -300,19 +293,19 @@ def parse_boc_header(serialized_boc):
         raise Exception("Too much bytes in BoC serialization")
 
     return {
-        'has_idx': has_idx,
-        'hash_crc32': hash_crc32,
-        'has_cache_bits': has_cache_bits,
-        'flags': flags,
-        'size_bytes': size_bytes,
-        'off_bytes': offset_bytes,
-        'cells_num': cells_num,
-        'roots_num': roots_num,
-        'absent_num': absent_num,
-        'tot_cells_size': tot_cells_size,
-        'root_list': root_list,
-        'index': index,
-        'cells_data': cells_data,
+        "has_idx": has_idx,
+        "hash_crc32": hash_crc32,
+        "has_cache_bits": has_cache_bits,
+        "flags": flags,
+        "size_bytes": size_bytes,
+        "off_bytes": offset_bytes,
+        "cells_num": cells_num,
+        "roots_num": roots_num,
+        "absent_num": absent_num,
+        "tot_cells_size": tot_cells_size,
+        "root_list": root_list,
+        "index": index,
+        "cells_data": cells_data,
     }
 
 
@@ -321,7 +314,7 @@ def deserialize_boc(serialized_boc):
         serialized_boc = bytes.fromhex(serialized_boc)
 
     header = parse_boc_header(serialized_boc)
-    cells_data = header['cells_data']
+    cells_data = header["cells_data"]
     cells_array = []
 
     for ci in range(header["cells_num"]):
@@ -333,7 +326,7 @@ def deserialize_boc(serialized_boc):
         c = cells_array[ci]
         for ri in range(len(c.refs)):
             r = c.refs[ri]
-            if (r < ci):
+            if r < ci:
                 raise Exception("Topological order is broken")
             c.refs[ri] = cells_array[r]
 

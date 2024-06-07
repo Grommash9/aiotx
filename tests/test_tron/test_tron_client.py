@@ -12,9 +12,12 @@ from aiotx.exceptions import (
 )
 
 TRON_TEST_WALLET_PRIVATE_KEY = os.environ.get("TRON_TEST_WALLET_PRIVATE_KEY")
-assert TRON_TEST_WALLET_PRIVATE_KEY is not None, "Please provide TRON_TEST_WALLET_PRIVATE_KEY"
+assert (
+    TRON_TEST_WALLET_PRIVATE_KEY is not None
+), "Please provide TRON_TEST_WALLET_PRIVATE_KEY"
 CONTRACT = "TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs"
 DESTINATION_ADDRESS = "TYge3Gid6vVaQvnPVRJ6SVwzC64cw2eBkN"
+
 
 async def test_wallet_generator_convertor(tron_client: AioTxTRONClient):
     wallet = tron_client.generate_address()
@@ -56,7 +59,9 @@ async def test_get_chain_id(tron_client: AioTxTRONClient):
     ],
 )
 @vcr_c.use_cassette("tron/get_balance.yaml")
-async def test_get_balance(tron_client: AioTxTRONClient, wallet_address, expected_exception, expected_balance):
+async def test_get_balance(
+    tron_client: AioTxTRONClient, wallet_address, expected_exception, expected_balance
+):
     if expected_exception:
         with pytest.raises(expected_exception):
             await tron_client.get_balance(wallet_address)
@@ -75,9 +80,18 @@ async def test_get_balance(tron_client: AioTxTRONClient, wallet_address, expecte
         ("8a9247c3db7073298463285fabc9150041b2dc5e19e79a955211e0953e3e6bc9", None),
         ("579d94e7f8131b53aac2634426dca3a6d84950ce44512092d599cae7f331ae09", None),
         ("d695d2917e138edb0407ae77109072e43998c2dd6c68be229c62aa49f0dc43ac", None),
-        ("0820f27e5a67ee3443d0b4a60a1f6c6625328b074dedc2f17c0ea8c44ea440e6", TransactionNotFound),
-        ("0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf2701b2", InvalidArgumentError),
-        ("0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf701b72", InvalidArgumentError),
+        (
+            "0820f27e5a67ee3443d0b4a60a1f6c6625328b074dedc2f17c0ea8c44ea440e6",
+            TransactionNotFound,
+        ),
+        (
+            "0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf2701b2",
+            InvalidArgumentError,
+        ),
+        (
+            "0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf701b72",
+            InvalidArgumentError,
+        ),
     ],
 )
 @vcr_c.use_cassette("tron/get_transaction.yaml")
@@ -100,14 +114,22 @@ async def test_get_transaction(tron_client: AioTxTRONClient, tx_id, expected_exc
         ("TGYycKuwtyJ1zRt196PhaWfPuUPGr1wi2P", CONTRACT, None, 0),
         ("TGYycKuwtyJ1zRt196PhaWfPuUPGr1wi2D", CONTRACT, ValueError, 0),
         ("TAhMH42Mr61MRLkbEpT1vjbXpsKSXBtHRz", CONTRACT, None, 0),
-        ("0xDA31b5ac94C559478Eeaa7E347ee4557f9a6F71C", "Eeaa7E347ee4557f9a6F71C", InvalidArgumentError, 0),
+        (
+            "0xDA31b5ac94C559478Eeaa7E347ee4557f9a6F71C",
+            "Eeaa7E347ee4557f9a6F71C",
+            InvalidArgumentError,
+            0,
+        ),
     ],
 )
 @vcr_c.use_cassette("tron/get_token_balance.yaml")
 async def test_get_token_balance(
-    tron_client: AioTxTRONClient, wallet_address, contract, expected_exception, expected_balance
+    tron_client: AioTxTRONClient,
+    wallet_address,
+    contract,
+    expected_exception,
+    expected_balance,
 ):
-
     if expected_exception:
         with pytest.raises(expected_exception):
             await tron_client.get_contract_balance(wallet_address, contract)
@@ -126,7 +148,9 @@ async def test_get_token_balance(
     ],
 )
 @vcr_c.use_cassette("tron/get_contract_decimals.yaml")
-async def test_get_contract_decimals(tron_client: AioTxTRONClient, contract, expected_decimals, expected_exception):
+async def test_get_contract_decimals(
+    tron_client: AioTxTRONClient, contract, expected_decimals, expected_exception
+):
     if expected_exception:
         with pytest.raises(expected_exception):
             await tron_client.get_contract_decimals(contract)
@@ -140,62 +164,180 @@ async def test_get_block_by_number(tron_client: AioTxTRONClient):
     block = await tron_client.get_block_by_number(44739224)
     assert isinstance(block, dict)
 
-    assert block["hash"] == "0x0000000002aaaa98ab6a708d8c1ce596055a222059983895733031582fc5563e"
+    assert (
+        block["hash"]
+        == "0x0000000002aaaa98ab6a708d8c1ce596055a222059983895733031582fc5563e"
+    )
 
     tx_hashes = [tx["hash"] for tx in block["transactions"]]
-    assert "0x98f419efccbcfef53bafac52f85b4083c1092c72b7324156a0ce4882706065e8" in tx_hashes
-    assert "0x1e580e6a15956bdf39df75728ca658cc868b4a321399c95af81bf15e8dc47a13" in tx_hashes
+    assert (
+        "0x98f419efccbcfef53bafac52f85b4083c1092c72b7324156a0ce4882706065e8"
+        in tx_hashes
+    )
+    assert (
+        "0x1e580e6a15956bdf39df75728ca658cc868b4a321399c95af81bf15e8dc47a13"
+        in tx_hashes
+    )
 
 
 @pytest.mark.parametrize(
     "amount, memo, send_to, private_key, expected_exception, expected_tx_id",
     [
-        (1, "", DESTINATION_ADDRESS, TRON_TEST_WALLET_PRIVATE_KEY, None, "53a4f1ef3614b49c530708c109556246bc87faab6d34a428e77c0419ea940041"),
+        (
+            1,
+            "",
+            DESTINATION_ADDRESS,
+            TRON_TEST_WALLET_PRIVATE_KEY,
+            None,
+            "53a4f1ef3614b49c530708c109556246bc87faab6d34a428e77c0419ea940041",
+        ),
         (1, 5, DESTINATION_ADDRESS, TRON_TEST_WALLET_PRIVATE_KEY, TypeError, ""),
-        (5, "orp3uhg$£(TUP42t38P(HU$h3r5g8))", DESTINATION_ADDRESS, TRON_TEST_WALLET_PRIVATE_KEY, None, "06227edc693ed47962d1789fecf6bab84fe9fe8d9961a35daf79127c57256ecb"),
-        (99999999999, "test_memo", DESTINATION_ADDRESS, TRON_TEST_WALLET_PRIVATE_KEY, CreateTransactionError, ""),
+        (
+            5,
+            "orp3uhg$£(TUP42t38P(HU$h3r5g8))",
+            DESTINATION_ADDRESS,
+            TRON_TEST_WALLET_PRIVATE_KEY,
+            None,
+            "06227edc693ed47962d1789fecf6bab84fe9fe8d9961a35daf79127c57256ecb",
+        ),
+        (
+            99999999999,
+            "test_memo",
+            DESTINATION_ADDRESS,
+            TRON_TEST_WALLET_PRIVATE_KEY,
+            CreateTransactionError,
+            "",
+        ),
         (1, "test_memo", "d", TRON_TEST_WALLET_PRIVATE_KEY, CreateTransactionError, ""),
-        (2, "test_memo", "Yge3Gid6vVaQvnPVRJ6SVwzC64cw2eBkN", TRON_TEST_WALLET_PRIVATE_KEY, CreateTransactionError, ""),
+        (
+            2,
+            "test_memo",
+            "Yge3Gid6vVaQvnPVRJ6SVwzC64cw2eBkN",
+            TRON_TEST_WALLET_PRIVATE_KEY,
+            CreateTransactionError,
+            "",
+        ),
         (1, "test_memo", DESTINATION_ADDRESS, "d", ValueError, ""),
     ],
 )
 @vcr_c.use_cassette("tron/send_trx.yaml")
-async def test_send_trx(tron_client: AioTxTRONClient, amount, memo, send_to, private_key, expected_exception, expected_tx_id):
+async def test_send_trx(
+    tron_client: AioTxTRONClient,
+    amount,
+    memo,
+    send_to,
+    private_key,
+    expected_exception,
+    expected_tx_id,
+):
     sun_amount = tron_client.to_sun(amount)
     if expected_exception:
         with pytest.raises(expected_exception):
-            await tron_client.send(private_key, send_to,
-                                   sun_amount, memo)
+            await tron_client.send(private_key, send_to, sun_amount, memo)
     else:
-        tx_id = await tron_client.send(private_key, send_to,
-                                   sun_amount, memo)
+        tx_id = await tron_client.send(private_key, send_to, sun_amount, memo)
         assert tx_id == expected_tx_id
 
 
 @pytest.mark.parametrize(
     "amount, memo, send_to, contract, private_key, expected_exception, expected_tx_id",
     [
-        (1, "", DESTINATION_ADDRESS, CONTRACT, TRON_TEST_WALLET_PRIVATE_KEY, None, "99dce8bfadc68a0388d7ff28702648402d4fe3dd50e916665368c0a0b6a28273"),
-        (1, 5, DESTINATION_ADDRESS, CONTRACT, TRON_TEST_WALLET_PRIVATE_KEY, TypeError, ""),
-        (5, "orp3uhg$£(TUP42t38P(HU$h3r5g8))", DESTINATION_ADDRESS, CONTRACT, TRON_TEST_WALLET_PRIVATE_KEY, None, "f610753e84a5fe9b8fe72e1ac3175d5584887844e87f14cb08d532d0c66ff1ed"),
-        (99999999999, "test_memo", DESTINATION_ADDRESS, CONTRACT, TRON_TEST_WALLET_PRIVATE_KEY, None, "31dc98c67bdf5d21bda64f4c11c9fc3c629d3ea0dc437314615c852a27f09b8e"),
-        (1, "test_memo", "d", CONTRACT ,TRON_TEST_WALLET_PRIVATE_KEY, TypeError, ""),
-        (2, "test_memo", "Yge3Gid6vVaQvnPVRJ6SVwzC64cw2eBkN", CONTRACT, TRON_TEST_WALLET_PRIVATE_KEY, TypeError, ""),
+        (
+            1,
+            "",
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            TRON_TEST_WALLET_PRIVATE_KEY,
+            None,
+            "99dce8bfadc68a0388d7ff28702648402d4fe3dd50e916665368c0a0b6a28273",
+        ),
+        (
+            1,
+            5,
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            TRON_TEST_WALLET_PRIVATE_KEY,
+            TypeError,
+            "",
+        ),
+        (
+            5,
+            "orp3uhg$£(TUP42t38P(HU$h3r5g8))",
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            TRON_TEST_WALLET_PRIVATE_KEY,
+            None,
+            "f610753e84a5fe9b8fe72e1ac3175d5584887844e87f14cb08d532d0c66ff1ed",
+        ),
+        (
+            99999999999,
+            "test_memo",
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            TRON_TEST_WALLET_PRIVATE_KEY,
+            None,
+            "31dc98c67bdf5d21bda64f4c11c9fc3c629d3ea0dc437314615c852a27f09b8e",
+        ),
+        (1, "test_memo", "d", CONTRACT, TRON_TEST_WALLET_PRIVATE_KEY, TypeError, ""),
+        (
+            2,
+            "test_memo",
+            "Yge3Gid6vVaQvnPVRJ6SVwzC64cw2eBkN",
+            CONTRACT,
+            TRON_TEST_WALLET_PRIVATE_KEY,
+            TypeError,
+            "",
+        ),
         (1, "test_memo", DESTINATION_ADDRESS, CONTRACT, "d", ValueError, ""),
-        (99999999999, "", DESTINATION_ADDRESS, CONTRACT, TRON_TEST_WALLET_PRIVATE_KEY, None, "ff0c8255eda1cf21d3e3f150570e1798a7c0a320490b00623601ace17a769bb2"),
-        (1, "", DESTINATION_ADDRESS, "", TRON_TEST_WALLET_PRIVATE_KEY, CreateTransactionError, "53a4f1ef3614b49c530708c109556246bc87faab6d34a428e77c0419ea940041"),
-        (1, "", DESTINATION_ADDRESS, "d", TRON_TEST_WALLET_PRIVATE_KEY, CreateTransactionError, "53a4f1ef3614b49c530708c109556246bc87faab6d34a428e77c0419ea940041"),
+        (
+            99999999999,
+            "",
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            TRON_TEST_WALLET_PRIVATE_KEY,
+            None,
+            "ff0c8255eda1cf21d3e3f150570e1798a7c0a320490b00623601ace17a769bb2",
+        ),
+        (
+            1,
+            "",
+            DESTINATION_ADDRESS,
+            "",
+            TRON_TEST_WALLET_PRIVATE_KEY,
+            CreateTransactionError,
+            "53a4f1ef3614b49c530708c109556246bc87faab6d34a428e77c0419ea940041",
+        ),
+        (
+            1,
+            "",
+            DESTINATION_ADDRESS,
+            "d",
+            TRON_TEST_WALLET_PRIVATE_KEY,
+            CreateTransactionError,
+            "53a4f1ef3614b49c530708c109556246bc87faab6d34a428e77c0419ea940041",
+        ),
     ],
 )
 @vcr_c.use_cassette("tron/test_send_trc20_token.yaml")
-async def test_send_trc20_token(tron_client: AioTxTRONClient, amount, memo, send_to, contract, private_key, expected_exception, expected_tx_id):
+async def test_send_trc20_token(
+    tron_client: AioTxTRONClient,
+    amount,
+    memo,
+    send_to,
+    contract,
+    private_key,
+    expected_exception,
+    expected_tx_id,
+):
     # Because token is having 6 decimals too as TRX but check you token!
     sun_amount = tron_client.to_sun(amount)
     if expected_exception:
         with pytest.raises(expected_exception):
-            await tron_client.send_token(private_key, send_to, contract,
-                                   sun_amount, memo)
+            await tron_client.send_token(
+                private_key, send_to, contract, sun_amount, memo
+            )
     else:
-        tx_id = await tron_client.send_token(private_key, send_to, contract,
-                                   sun_amount, memo)
+        tx_id = await tron_client.send_token(
+            private_key, send_to, contract, sun_amount, memo
+        )
         assert tx_id == expected_tx_id

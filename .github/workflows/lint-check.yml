@@ -27,3 +27,4 @@ jobs:
       run: |
         ruff check --select I aiotx tests 
         ruff check  aiotx tests
+        ruff format aiotx tests examples --check

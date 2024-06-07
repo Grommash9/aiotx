@@ -13,7 +13,9 @@ from aiotx.exceptions import (
 )
 
 POLYGON_WALLET_PRIVATE_KEY = os.environ.get("TEST_POLYGON_WALLET_PRIVATE_KEY")
-assert POLYGON_WALLET_PRIVATE_KEY is not None, "Please provide TEST_POLYGON_WALLET_PRIVATE_KEY"
+assert (
+    POLYGON_WALLET_PRIVATE_KEY is not None
+), "Please provide TEST_POLYGON_WALLET_PRIVATE_KEY"
 CONTRACT = "0x0fd9e8d3af1aaee056eb9e802c3a762a667b1904"
 DESTINATION_ADDRESS = "0x3ffeCb152F95f7122990ab16Eff4B0B5d533497e"
 
@@ -44,7 +46,9 @@ async def test_get_chain_id(polygon_client: AioTxETHClient):
     ],
 )
 @vcr_c.use_cassette("polygon/get_balance.yaml")
-async def test_get_balance(polygon_client: AioTxETHClient, wallet_address, expected_exception, expected_balance):
+async def test_get_balance(
+    polygon_client: AioTxETHClient, wallet_address, expected_exception, expected_balance
+):
     if expected_exception:
         with pytest.raises(expected_exception):
             await polygon_client.get_balance(wallet_address)
@@ -63,13 +67,24 @@ async def test_get_balance(polygon_client: AioTxETHClient, wallet_address, expec
         ("0xa7c8f80df5559b87a46f881fba25d282f4bb15645211d43ec8531abe75b13cf1", None),
         ("0xea9bd00efa11d22593f3e636f00f8a1a36b836df3f7b4f1d945c1d7bc823bec5", None),
         ("0x75d284a35f58e1a847d5112e157e7bd41fab09feeac63df2f92048c863006cb2", None),
-        ("0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf2701b73", TransactionNotFound),
-        ("0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf2701b2", InvalidArgumentError),
-        ("0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf701b72", InvalidArgumentError),
+        (
+            "0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf2701b73",
+            TransactionNotFound,
+        ),
+        (
+            "0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf2701b2",
+            InvalidArgumentError,
+        ),
+        (
+            "0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf701b72",
+            InvalidArgumentError,
+        ),
     ],
 )
 @vcr_c.use_cassette("polygon/get_transaction.yaml")
-async def test_get_transaction(polygon_client: AioTxETHClient, tx_id, expected_exception):
+async def test_get_transaction(
+    polygon_client: AioTxETHClient, tx_id, expected_exception
+):
     if expected_exception:
         with pytest.raises(expected_exception):
             await polygon_client.get_transaction(tx_id)
@@ -81,21 +96,59 @@ async def test_get_transaction(polygon_client: AioTxETHClient, tx_id, expected_e
 @pytest.mark.parametrize(
     "wallet_address, contract, expected_exception, expected_balance",
     [
-        ("0x3ce3668dfccaee1a348166b2df1c88f0d6a1d2db", CONTRACT, None, 38000000000000000000),
-        ("0xe68db62564964df789e00927f86b5d6572f77634", CONTRACT, None, 25000000000000000000),
-        ("0x15331fe7e3638c6edd5833286c7fdceb3506d46c", CONTRACT, None, 182000000000000000000),
-        ("0x3ce3668dfccaee1a348166b2df1c88f0d6a1d2db", CONTRACT, None, 38000000000000000000),
-        ("0x94524d4d3b8ad325f48d637b65f83e50165c6bbb", CONTRACT, None, 25000000000000000000),
-        ("0x440eb4c94b0aaa8bb3e154fa1361adef71f606e0", CONTRACT, None, 125000000000000000000),
+        (
+            "0x3ce3668dfccaee1a348166b2df1c88f0d6a1d2db",
+            CONTRACT,
+            None,
+            38000000000000000000,
+        ),
+        (
+            "0xe68db62564964df789e00927f86b5d6572f77634",
+            CONTRACT,
+            None,
+            25000000000000000000,
+        ),
+        (
+            "0x15331fe7e3638c6edd5833286c7fdceb3506d46c",
+            CONTRACT,
+            None,
+            182000000000000000000,
+        ),
+        (
+            "0x3ce3668dfccaee1a348166b2df1c88f0d6a1d2db",
+            CONTRACT,
+            None,
+            38000000000000000000,
+        ),
+        (
+            "0x94524d4d3b8ad325f48d637b65f83e50165c6bbb",
+            CONTRACT,
+            None,
+            25000000000000000000,
+        ),
+        (
+            "0x440eb4c94b0aaa8bb3e154fa1361adef71f606e0",
+            CONTRACT,
+            None,
+            125000000000000000000,
+        ),
         ("0xDA31b5ac94C559478Eeaa7E347ee4557f9a6F71C", CONTRACT, None, 0),
-        ("0xDA31b5ac94C559478Eeaa7E347ee4557f9a6F71C", "Eeaa7E347ee4557f9a6F71C", InvalidArgumentError, 0),
+        (
+            "0xDA31b5ac94C559478Eeaa7E347ee4557f9a6F71C",
+            "Eeaa7E347ee4557f9a6F71C",
+            InvalidArgumentError,
+            0,
+        ),
     ],
 )
 @vcr_c.use_cassette("polygon/get_token_balance.yaml")
 async def test_get_token_balance(
-    polygon_client: AioTxETHClient, wallet_address, contract, expected_exception, expected_balance
+    polygon_client: AioTxETHClient,
+    wallet_address,
+    contract,
+    expected_exception,
+    expected_balance,
 ):
-
     if expected_exception:
         with pytest.raises(expected_exception):
             await polygon_client.get_contract_balance(wallet_address, contract)
@@ -119,7 +172,9 @@ async def test_get_token_balance(
     ],
 )
 @vcr_c.use_cassette("polygon/get_transaction_count.yaml")
-async def test_get_transaction_count(polygon_client: AioTxETHClient, wallet_address, expected_exception, expected_count):
+async def test_get_transaction_count(
+    polygon_client: AioTxETHClient, wallet_address, expected_exception, expected_count
+):
     if expected_exception:
         with pytest.raises(expected_exception):
             await polygon_client.get_transactions_count(wallet_address)
@@ -162,20 +217,75 @@ async def test_get_gas_price(polygon_client: AioTxETHClient):
             21000,
             WrongPrivateKey,
         ),
-        (POLYGON_WALLET_PRIVATE_KEY, "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5", 0.00001, 5, 21000, ValueError),
-        (POLYGON_WALLET_PRIVATE_KEY, "f9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", 0.00001, 5, 21000, None),
-        (POLYGON_WALLET_PRIVATE_KEY, "0xf9E35E4e1CbcF08E84d3f6FF662Ba4c306b5a", 0.00001, 5, 21000, ValueError),
-        (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, 0.00001, 5, 21000, ReplacementTransactionUnderpriced),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5",
+            0.00001,
+            5,
+            21000,
+            ValueError,
+        ),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            "f9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a",
+            0.00001,
+            5,
+            21000,
+            None,
+        ),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            "0xf9E35E4e1CbcF08E84d3f6FF662Ba4c306b5a",
+            0.00001,
+            5,
+            21000,
+            ValueError,
+        ),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            DESTINATION_ADDRESS,
+            0.00001,
+            5,
+            21000,
+            ReplacementTransactionUnderpriced,
+        ),
         (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, 5, 5, 21000, AioTxError),
-        (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, 0.00001, 0, 21000, AioTxError),
-        (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, 0, 5, 21000, ReplacementTransactionUnderpriced),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            DESTINATION_ADDRESS,
+            0.00001,
+            0,
+            21000,
+            AioTxError,
+        ),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            DESTINATION_ADDRESS,
+            0,
+            5,
+            21000,
+            ReplacementTransactionUnderpriced,
+        ),
         (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, 0.00001, 5, 0, AioTxError),
-        (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, 0.00001, 5, 61000, ReplacementTransactionUnderpriced),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            DESTINATION_ADDRESS,
+            0.00001,
+            5,
+            61000,
+            ReplacementTransactionUnderpriced,
+        ),
     ],
 )
 @vcr_c.use_cassette("polygon/send_transaction.yaml")
 async def test_send_transaction(
-    polygon_client: AioTxETHClient, private_key, to_address, amount, gas_price, gas_limit, expected_exception
+    polygon_client: AioTxETHClient,
+    private_key,
+    to_address,
+    amount,
+    gas_price,
+    gas_limit,
+    expected_exception,
 ):
     """
     Here it's raising ReplacementTransactionUnderpriced and NonceTooLowError because we have reusing
@@ -185,9 +295,21 @@ async def test_send_transaction(
     wei_amount = polygon_client.to_wei(amount, "ether")
     if expected_exception:
         with pytest.raises(expected_exception):
-            await polygon_client.send(private_key, to_address, wei_amount, gas_price=gas_price, gas_limit=gas_limit)
+            await polygon_client.send(
+                private_key,
+                to_address,
+                wei_amount,
+                gas_price=gas_price,
+                gas_limit=gas_limit,
+            )
     else:
-        result = await polygon_client.send(private_key, to_address, wei_amount, gas_price=gas_price, gas_limit=gas_limit)
+        result = await polygon_client.send(
+            private_key,
+            to_address,
+            wei_amount,
+            gas_price=gas_price,
+            gas_limit=gas_limit,
+        )
         assert isinstance(result, str)
 
 
@@ -223,11 +345,17 @@ async def test_send_transaction_with_auto_gas(
 @vcr_c.use_cassette("polygon/send_transaction_with_custom_nonce.yaml")
 async def test_send_transaction_with_custom_nonce(polygon_client: AioTxETHClient):
     wei_amount = polygon_client.to_wei(0.00001, "ether")
-    sender_address = polygon_client.get_address_from_private_key(POLYGON_WALLET_PRIVATE_KEY)
+    sender_address = polygon_client.get_address_from_private_key(
+        POLYGON_WALLET_PRIVATE_KEY
+    )
     nonce = await polygon_client.get_transactions_count(sender_address)
-    first_tx = await polygon_client.send(POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, wei_amount, nonce=nonce)
+    first_tx = await polygon_client.send(
+        POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, wei_amount, nonce=nonce
+    )
     assert isinstance(first_tx, str)
-    second_tx = await polygon_client.send(POLYGON_WALLET_PRIVATE_KEY, sender_address, wei_amount, nonce=nonce + 1)
+    second_tx = await polygon_client.send(
+        POLYGON_WALLET_PRIVATE_KEY, sender_address, wei_amount, nonce=nonce + 1
+    )
     assert isinstance(second_tx, str)
 
 
@@ -240,7 +368,9 @@ async def test_send_transaction_with_custom_nonce(polygon_client: AioTxETHClient
     ],
 )
 @vcr_c.use_cassette("polygon/get_contract_decimals.yaml")
-async def test_get_contract_decimals(polygon_client: AioTxETHClient, contract, expected_decimals, expected_exception):
+async def test_get_contract_decimals(
+    polygon_client: AioTxETHClient, contract, expected_decimals, expected_exception
+):
     if expected_exception:
         with pytest.raises(expected_exception):
             await polygon_client.get_contract_decimals(contract)
@@ -252,7 +382,9 @@ async def test_get_contract_decimals(polygon_client: AioTxETHClient, contract, e
 @vcr_c.use_cassette("polygon/send_token_transaction_with_auto_params.yaml")
 async def test_send_transaction_with_auto_params(polygon_client: AioTxETHClient):
     wei_amount = polygon_client.to_wei(0.1, "ether")
-    tx_id = await polygon_client.send_token(POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, wei_amount)
+    tx_id = await polygon_client.send_token(
+        POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, wei_amount
+    )
     assert isinstance(tx_id, str)
 
 
@@ -286,9 +418,33 @@ async def test_send_transaction_with_auto_params(polygon_client: AioTxETHClient)
             61000,
             WrongPrivateKey,
         ),
-        (POLYGON_WALLET_PRIVATE_KEY, "0xf9E35E4e1CbcF08E984d3f6FF662Ba4c306b5a", CONTRACT, 1, 5, 61000, ValueError),
-        (POLYGON_WALLET_PRIVATE_KEY, "f9E5E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", CONTRACT, 1, 5, 61000, ValueError),
-        (POLYGON_WALLET_PRIVATE_KEY, "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b", CONTRACT, 1, 5, 61000, ValueError),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            "0xf9E35E4e1CbcF08E984d3f6FF662Ba4c306b5a",
+            CONTRACT,
+            1,
+            5,
+            61000,
+            ValueError,
+        ),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            "f9E5E4e1CbcF08E99B84d3f6FF662Ba4c306b5a",
+            CONTRACT,
+            1,
+            5,
+            61000,
+            ValueError,
+        ),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b",
+            CONTRACT,
+            1,
+            5,
+            61000,
+            ValueError,
+        ),
         (
             POLYGON_WALLET_PRIVATE_KEY,
             DESTINATION_ADDRESS,
@@ -316,17 +472,72 @@ async def test_send_transaction_with_auto_params(polygon_client: AioTxETHClient)
             61000,
             ValueError,
         ),
-        (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, 0.3, 5, 61000, ReplacementTransactionUnderpriced),
-        (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, 1000, 5, 61000, ReplacementTransactionUnderpriced),
-        (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, 1, 0, 61000, AioTxError),
-        (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, 0, 5, 61000, ReplacementTransactionUnderpriced),
-        (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, 1, 5, 0, AioTxError),
-        (POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, 0.4, 5, 61000, ReplacementTransactionUnderpriced),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            0.3,
+            5,
+            61000,
+            ReplacementTransactionUnderpriced,
+        ),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            1000,
+            5,
+            61000,
+            ReplacementTransactionUnderpriced,
+        ),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            1,
+            0,
+            61000,
+            AioTxError,
+        ),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            0,
+            5,
+            61000,
+            ReplacementTransactionUnderpriced,
+        ),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            1,
+            5,
+            0,
+            AioTxError,
+        ),
+        (
+            POLYGON_WALLET_PRIVATE_KEY,
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            0.4,
+            5,
+            61000,
+            ReplacementTransactionUnderpriced,
+        ),
     ],
 )
 @vcr_c.use_cassette("polygon/send_token_transaction.yaml")
 async def test_send_token_transaction(
-    polygon_client: AioTxETHClient, private_key, to_address, contract, amount, gas_price, gas_limit, expected_exception
+    polygon_client: AioTxETHClient,
+    private_key,
+    to_address,
+    contract,
+    amount,
+    gas_price,
+    gas_limit,
+    expected_exception,
 ):
     """
     Here it's raising ReplacementTransactionUnderpriced and NonceTooLowError because we have reusing
@@ -338,11 +549,21 @@ async def test_send_token_transaction(
     if expected_exception:
         with pytest.raises(expected_exception):
             await polygon_client.send_token(
-                private_key, to_address, contract, wei_amount, gas_price=gas_price, gas_limit=gas_limit
+                private_key,
+                to_address,
+                contract,
+                wei_amount,
+                gas_price=gas_price,
+                gas_limit=gas_limit,
             )
     else:
         result = await polygon_client.send_token(
-            private_key, to_address, contract, wei_amount, gas_price=gas_price, gas_limit=gas_limit
+            private_key,
+            to_address,
+            contract,
+            wei_amount,
+            gas_price=gas_price,
+            gas_limit=gas_limit,
         )
         assert isinstance(result, str)
 
@@ -350,13 +571,23 @@ async def test_send_token_transaction(
 @vcr_c.use_cassette("polygon/send_token_transaction_with_custom_nonce.yaml")
 async def test_send_token_transaction_with_custom_nonce(polygon_client: AioTxETHClient):
     wei_amount = polygon_client.to_wei(0.1, "gwei")
-    sender_address = polygon_client.get_address_from_private_key(POLYGON_WALLET_PRIVATE_KEY)
+    sender_address = polygon_client.get_address_from_private_key(
+        POLYGON_WALLET_PRIVATE_KEY
+    )
     nonce = await polygon_client.get_transactions_count(sender_address)
     first_tx = await polygon_client.send_token(
-        POLYGON_WALLET_PRIVATE_KEY, DESTINATION_ADDRESS, CONTRACT, wei_amount, nonce=nonce
+        POLYGON_WALLET_PRIVATE_KEY,
+        DESTINATION_ADDRESS,
+        CONTRACT,
+        wei_amount,
+        nonce=nonce,
     )
     assert isinstance(first_tx, str)
     second_tx = await polygon_client.send_token(
-        POLYGON_WALLET_PRIVATE_KEY, sender_address, CONTRACT, wei_amount, nonce=nonce + 1
+        POLYGON_WALLET_PRIVATE_KEY,
+        sender_address,
+        CONTRACT,
+        wei_amount,
+        nonce=nonce + 1,
     )
     assert isinstance(second_tx, str)
