@@ -17,7 +17,7 @@ Key Features
 
 3. **TON Client:** Client for Telegram Open Network - now we have monitoring and token sending for it
 
-4. **TRON Client:** Client for TRON (trx) blockchain - now we have only read operations
+4. **TRON Client:** Client for TRON (trx) blockchain - you can monitor transaction and do TRX/TRC20 transactions
 
 5. **Blockchain Monitoring:** One of the standout features of AioTx is its blockchain monitoring capabilities. You can easily monitor new blocks and transactions on the supported blockchains by registering custom handlers. AioTx provides a simple and intuitive way to start and stop monitoring, and it even allows you to monitor multiple clients simultaneously. Integration with the Aiogram library is also supported, enabling you to send notifications or perform actions based on the received blocks and transactions.
 
