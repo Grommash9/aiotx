@@ -38,6 +38,11 @@ Getting Started
 
 To start using AioTx, simply install the package using pip:
 
+There is a high chance what on Ubuntu or other Linux OS you will need to install libgmp that before start:
+```
+sudo apt-get install libgmp-dev
+```
+
 ```python
    pip install aiotx
 ```
