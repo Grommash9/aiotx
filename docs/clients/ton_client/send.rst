@@ -8,7 +8,8 @@ send
         mnemonic: str, 
         to_address: str, 
         amount: int, 
-        seqno: int = None
+        seqno: int = None,
+        memo: str = None
         ) -> str:
 
 Send TON tokens from one address to another on the TON blockchain.
@@ -19,7 +20,8 @@ Parameters:
     - **to_address** (str): The TON blockchain address of the recipient.
     - **amount** (int): The amount of TON tokens to send, in nano grams. Use the `to_nano` method to convert from other units to nano grams.
     - **seqno** (int, optional): The sequence number of the transaction. If not provided, it will be automatically fetched using the `get_transaction_count` method.
-
+    - **memo** (str, optional): Memo for your transaction, empty string by default
+    
 Returns:
 
     - **str**: The transaction hash of the sent transaction.
