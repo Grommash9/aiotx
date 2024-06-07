@@ -68,13 +68,14 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         self,
         private_key: str,
         to_address: str,
-        amount: int
+        amount: int,
+        memo: str = None,
     ) -> str:
         sender_address_data = self.get_address_from_private_key(private_key)
         sender_address = sender_address_data["base58check_address"]
-        created_txd = await self._create_transaction(sender_address, to_address, amount)
+        created_txd = await self._create_transaction(sender_address, to_address, amount, memo)
         sig = self.sign_msg_hash(private_key, bytes.fromhex(created_txd["txID"]))
-        result = await self.broadcast_transaction([sig.hex()], created_txd["raw_data_hex"], created_txd["raw_data"], tx_id=created_txd["txID"])
+        result = await self.broadcast_transaction([sig], created_txd["raw_data_hex"], created_txd["raw_data"], tx_id=created_txd["txID"])
         return result["txid"]
     
     async def send_token(
@@ -82,12 +83,12 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         private_key: str,
         to_address: str,
         contract: str,
-        amount: int
+        amount: int,
+        memo: str = None,
     ):
         sender_address_data = self.get_address_from_private_key(private_key)
         sender_address = sender_address_data["base58check_address"]
-        created_txd = await self._create_trc20_transfer_transaction(sender_address, to_address, amount, contract)
-        print("created_txd", created_txd)
+        created_txd = await self._create_trc20_transfer_transaction(sender_address, to_address, amount, contract, memo=memo)
         tx_id = created_txd["transaction"]["txID"]
         sig = self.sign_msg_hash(private_key, bytes.fromhex(tx_id))
         result = await self.broadcast_transaction([sig], created_txd["transaction"]["raw_data_hex"], created_txd["transaction"]["raw_data"], tx_id)
@@ -111,13 +112,15 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         transaction = await self._make_api_call({}, "GET", "/walletsolidity/getnowblock")
         return transaction
     
-    async def _create_transaction(self, from_address, to_address, amount):
+    async def _create_transaction(self, from_address, to_address, amount, memo: str = None):
         payload = {
         "owner_address": from_address,
         "to_address": to_address,
         "amount": amount,
         "visible": True
         }
+        if memo is not None:
+            payload["extra_data"] = memo.encode().hex()
         transaction = await self._make_api_call(payload, "POST", "/wallet/createtransaction")
         return transaction
     
@@ -129,7 +132,8 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         contract_address: str,
         fee_limit: int = 15000000000,
         call_value: int = 0,
-        visible: bool = True
+        visible: bool = True,
+        memo: str = None,
     ) -> dict:
         # Construct the TRC20 token transfer transaction
         hex_eth_like_address = self.base58_to_hex_address(to_address).replace("41", "0x")
@@ -146,6 +150,8 @@ class AioTxTRONClient(AioTxEVMBaseClient):
             "call_value": call_value,
             "visible": visible
         }
+        if memo is not None:
+            transaction["extra_data"] = memo.encode().hex()
 
         # Make the API call to create the transaction
         result = await self._make_api_call(
