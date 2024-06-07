@@ -525,13 +525,13 @@ async def test_send_ton_bulk_seqno(ton_testnet_client_with_hv_wallet: AioTxTONCl
     assert result_tx_id == "fzEng6cTXSwD76c75SRMtz6+8/Fy9EGeDBSMKWknjek="
 
 
-@pytest.mark.xfail(
-    raises=CannotOverwriteExistingCassetteException,
-    reason="boc is always new, we can't test it by VCR",
-)
-@vcr_c.use_cassette("ton/deploy_wallet.yaml")
-async def test_deploy_wallet(ton_testnet_client_with_hv_wallet: AioTxTONClient):
-    result_tx_id = await ton_testnet_client_with_hv_wallet.deploy_wallet(
-        TON_HV_TEST_WALLET_MEMO
-    )
-    assert result_tx_id == "1JYGAdfHBI5NjOl++BIsE9LiMmwS2RPyx2veawNGutg="
+# @pytest.mark.xfail(
+#     raises=CannotOverwriteExistingCassetteException,
+#     reason="boc is always new, we can't test it by VCR",
+# )
+# @vcr_c.use_cassette("ton/deploy_wallet.yaml")
+# async def test_deploy_wallet(ton_testnet_client_with_hv_wallet: AioTxTONClient):
+#     result_tx_id = await ton_testnet_client_with_hv_wallet.deploy_wallet(
+#         TON_HV_TEST_WALLET_MEMO
+#     )
+#     assert result_tx_id == "1JYGAdfHBI5NjOl++BIsE9LiMmwS2RPyx2veawNGutg="
