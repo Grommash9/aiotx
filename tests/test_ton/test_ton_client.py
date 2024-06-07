@@ -17,6 +17,7 @@ assert TON_TEST_WALLET_MEMO is not None, "Please provide TON_TEST_WALLET_MEMO"
 TON_HV_TEST_WALLET_MEMO = os.environ.get("TON_HV_TEST_WALLET_MEMO")
 assert TON_HV_TEST_WALLET_MEMO is not None, "Please provide TON_HV_TEST_WALLET_MEMO"
 
+
 @vcr_c.use_cassette("ton/get_last_master_block.yaml")
 async def test_get_last_master_block(ton_client: AioTxTONClient):
     master_block_data = await ton_client.get_last_master_block()
@@ -466,26 +467,23 @@ async def test_send_ton(ton_client: AioTxTONClient):
 async def test_send_ton_with_auto_seqno(ton_client: AioTxTONClient):
     amount_in_nano = ton_client.to_nano(0.00001)
     recipients_list = [
-    {
-        "address": "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
-        "amount": amount_in_nano,
-        "payload": "Hello, recipient 1!",
-        "send_mode": 3,
-    },
-    {
-        "address": "UQDlTHD4T79EyT96gkYNKd3iuRd2__6gGh2PCKpU57jSWQ7j",
-        "amount": amount_in_nano,
-        "payload": "Hello, recipient 5!",
-        "send_mode": 3,
-    },
+        {
+            "address": "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
+            "amount": amount_in_nano,
+            "payload": "Hello, recipient 1!",
+            "send_mode": 3,
+        },
+        {
+            "address": "UQDlTHD4T79EyT96gkYNKd3iuRd2__6gGh2PCKpU57jSWQ7j",
+            "amount": amount_in_nano,
+            "payload": "Hello, recipient 5!",
+            "send_mode": 3,
+        },
     ]
 
     with pytest.raises(AssertionError):
-        await ton_client.send_bulk(
-        TON_HV_TEST_WALLET_MEMO, recipients_list
-    )
-        
-    
+        await ton_client.send_bulk(TON_HV_TEST_WALLET_MEMO, recipients_list)
+
     result_tx_id = await ton_client.send(
         TON_TEST_WALLET_MEMO,
         "UQDU1hdX6SeHmrvzvyjIrLEWUAdJUJar2sw8haIuT_5n-FLh",
@@ -502,29 +500,30 @@ async def test_send_ton_with_auto_seqno(ton_client: AioTxTONClient):
 async def test_send_ton_bulk_seqno(ton_testnet_client_with_hv_wallet: AioTxTONClient):
     amount_in_nano = ton_testnet_client_with_hv_wallet.to_nano(0.0001)
     with pytest.raises(AssertionError):
-        await ton_testnet_client_with_hv_wallet.send(TON_TEST_WALLET_MEMO,
-        "UQDU1hdX6SeHmrvzvyjIrLEWUAdJUJar2sw8haIuT_5n-FLh",
-        amount_in_nano,
-    )
+        await ton_testnet_client_with_hv_wallet.send(
+            TON_TEST_WALLET_MEMO,
+            "UQDU1hdX6SeHmrvzvyjIrLEWUAdJUJar2sw8haIuT_5n-FLh",
+            amount_in_nano,
+        )
     recipients_list = [
-    {
-        "address": "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
-        "amount": amount_in_nano,
-        "payload": "Hello, recipient 1!",
-        "send_mode": 3,
-    },
-    {
-        "address": "UQDlTHD4T79EyT96gkYNKd3iuRd2__6gGh2PCKpU57jSWQ7j",
-        "amount": amount_in_nano,
-        "payload": "Hello, recipient 5!",
-        "send_mode": 3,
-    },
+        {
+            "address": "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
+            "amount": amount_in_nano,
+            "payload": "Hello, recipient 1!",
+            "send_mode": 3,
+        },
+        {
+            "address": "UQDlTHD4T79EyT96gkYNKd3iuRd2__6gGh2PCKpU57jSWQ7j",
+            "amount": amount_in_nano,
+            "payload": "Hello, recipient 5!",
+            "send_mode": 3,
+        },
     ]
     result_tx_id = await ton_testnet_client_with_hv_wallet.send_bulk(
         TON_HV_TEST_WALLET_MEMO, recipients_list
     )
     assert result_tx_id == "fzEng6cTXSwD76c75SRMtz6+8/Fy9EGeDBSMKWknjek="
-    
+
 
 @pytest.mark.xfail(
     raises=CannotOverwriteExistingCassetteException,

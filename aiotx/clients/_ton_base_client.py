@@ -3,7 +3,7 @@ import json
 from typing import Optional, Union
 
 import aiohttp
-import time
+
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     BlockNotFoundError,
@@ -208,9 +208,7 @@ class AioTxTONClient(AioTxClient):
         ), "For using that method you should not use HighloadWalletV2Contract"
         mnemonic_list = self._unpack_mnemonic(mnemonic_str)
         _, _, _, wallet = Wallets.from_mnemonics(
-            mnemonic_list,
-            self.wallet_version,
-            self.workchain
+            mnemonic_list, self.wallet_version, self.workchain
         )
         query = wallet.create_transfer_message(
             to_addr=to_address, amount=amount, payload=memo, seqno=seqno
