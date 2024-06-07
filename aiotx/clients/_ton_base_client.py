@@ -154,55 +154,42 @@ class AioTxTONClient(AioTxClient):
         boc = self._create_transfer_boc(mnemonic, to_address, amount, seqno, memo)
         boc_answer_data = await self.send_boc_return_hash(boc)
         return boc_answer_data["hash"]
-    
-    async def send_bulk(self,
-                        mnemonic: str):
-        
 
-        boc = self._create_bulk_transfer_boc(mnemonic)
+    async def send_bulk(self, mnemonic: str, destinations: list[dict]):
+        boc = self._create_bulk_transfer_boc(mnemonic, destinations)
         boc_answer_data = await self.send_boc_return_hash(boc)
         return boc_answer_data["hash"]
-        
 
-    # async def estimate_fee(self, boc: str, address: str):
-    #     payload = {"method": "estimateFee", "params": {"address": address,"body": boc}}
-    #     information = await self._make_rpc_call(payload)
-    #     return information
-
-    def _create_bulk_transfer_boc(
-        self, mnemonic_str: str) -> str:
-        # assert self.wallet_version == WalletVersionEnum.hv2, "For using that method you should use HighloadWalletV2Contract"
+    async def deploy_wallet(self, mnemonic_str: str) -> str:
         mnemonic_list = self._unpack_mnemonic(mnemonic_str)
         _, _, _, wallet = Wallets.from_mnemonics(
-            mnemonic_list, self.wallet_version, self.workchain,
+            mnemonic_list,
+            self.wallet_version,
+            self.workchain,
         )
+        query = wallet.create_init_external_message()
+        base64_boc = bytes_to_b64str(query["message"].to_boc(False))
+        boc_answer_data = await self.send_boc_return_hash(base64_boc)
+        return boc_answer_data["hash"]
 
-        # query = wallet.create_init_external_message()
-        # base64_boc = bytes_to_b64str(query["message"].to_boc(False))
-        # return base64_boc
-        recipients_list = [
-            {
-                "address": "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
-                "amount": 1,
-                "payload": "Hello, recipient!",
-                "send_mode": 3
-            },
-            {
-                "address": "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
-                "amount": 1,
-                "payload": "Hello, recipient 2!",
-                "send_mode": 3
-            },
-            # Add more recipients as needed
-        ]
-                
+    def _create_bulk_transfer_boc(
+        self, mnemonic_str: str, recipients_list: dict
+    ) -> str:
+        assert (
+            self.wallet_version == WalletVersionEnum.hv2
+        ), "For using that method you should use HighloadWalletV2Contract"
+        mnemonic_list = self._unpack_mnemonic(mnemonic_str)
+        _, _, _, wallet = Wallets.from_mnemonics(
+            mnemonic_list,
+            self.wallet_version,
+            self.workchain,
+        )
         query = wallet.create_transfer_message(
             recipients_list, query_id=self.generate_query_id()
         )
-        print("query", query)
         boc = bytes_to_b64str(query["message"].to_boc(False))
         return boc
-    
+
     def generate_query_id(self):
         query_id = (self.shift << 10) | self.bit_number
         self.bit_number += 1
@@ -212,15 +199,18 @@ class AioTxTONClient(AioTxClient):
             if self.shift > 8191:
                 self.shift = 0
         return query_id
-    
 
     def _create_transfer_boc(
         self, mnemonic_str: str, to_address, amount, seqno, memo
     ) -> str:
-        # assert self.wallet_version != HighloadWalletV2Contract, "For using that method you should not use HighloadWalletV2Contract"
+        assert (
+            self.wallet_version != WalletVersionEnum.hv2
+        ), "For using that method you should not use HighloadWalletV2Contract"
         mnemonic_list = self._unpack_mnemonic(mnemonic_str)
         _, _, _, wallet = Wallets.from_mnemonics(
-            mnemonic_list, self.wallet_version, self.workchain, version=self.wallet_version
+            mnemonic_list,
+            self.wallet_version,
+            self.workchain
         )
         query = wallet.create_transfer_message(
             to_addr=to_address, amount=amount, payload=memo, seqno=seqno

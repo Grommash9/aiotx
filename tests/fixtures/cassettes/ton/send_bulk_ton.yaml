@@ -1,0 +1,76 @@
+interactions:
+- request:
+    body: '{"method": "sendBocReturnHash", "params": {"boc": "te6cckECBgEAARkAAd2IAbF1shJMiU29KqN6ib+qJlbytCTIhah/oZzLu0GE3o7sBGsnbaMlW8+tr+vM1IEdGPsho8dfKamxMPqDuLg48w3qkuDm78i3X1+1JpOVFj/x3QZXDBXj24zR9yF/DFs2WBFNTRi7MxiSYAAAAAYBAgLPAgQBAwDgAwCUQgACQgahXUmU93GHKPjj0Q92VAGG3a4oHZOv+PoP/AJ0yJgMNQAAAAAAAAAAAAAAAAAAAAAAAEhlbGxvLCByZWNpcGllbnQgMSEBAwDgBQCUQgBypjh8J9+iZJ+9QSMGlO7xXIu7f/9QDQ7HhFUqc9xpLJgMNQAAAAAAAAAAAAAAAAAAAAAAAEhlbGxvLCByZWNpcGllbnQgNSGMGLJ/"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"@type":"raw.extMessageInfo","hash":"fzEng6cTXSwD76c75SRMtz6+8/Fy9EGeDBSMKWknjek=","@extra":"1717768730.4172027:4:0.6147270128001066"},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 89012886189823ae-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 07 Jun 2024 13:58:40 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "sendBocReturnHash", "params": {"boc": "te6cckECBgEAARkAAd2IAbF1shJMiU29KqN6ib+qJlbytCTIhah/oZzLu0GE3o7sBc3tProc6KH/uWw/03GAv0X9n0tMhtFcbKZ8YrF4BTk20BvK6keZ8/xGJThmsAC6ZNsdiagQuCFAGBunCqILYHlNTRi7MxiVIAAAAAYBAgLPAgQBAwDgAwCUQgACQgahXUmU93GHKPjj0Q92VAGG3a4oHZOv+PoP/AJ0yJgMNQAAAAAAAAAAAAAAAAAAAAAAAEhlbGxvLCByZWNpcGllbnQgMSEBAwDgBQCUQgBypjh8J9+iZJ+9QSMGlO7xXIu7f/9QDQ7HhFUqc9xpLJgMNQAAAAAAAAAAAAAAAAAAAAAAAEhlbGxvLCByZWNpcGllbnQgNSGgCMjp"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"@type":"raw.extMessageInfo","hash":"1JYGAdfHBI5NjOl++BIsE9LiMmwS2RPyx2veawNGutg=","@extra":"1717768818.345113:1:0.010208868049796482"},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 89012aaba97f93d7-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Fri, 07 Jun 2024 14:00:08 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+version: 1
