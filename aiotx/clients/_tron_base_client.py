@@ -13,7 +13,11 @@ from tronpy.keys import PrivateKey
 
 from aiotx.clients._base_client import BlockMonitor
 from aiotx.clients._evm_base_client import AioTxEVMBaseClient
-from aiotx.exceptions import InvalidArgumentError, RpcConnectionError
+from aiotx.exceptions import (
+    CreateTransactionError,
+    InvalidArgumentError,
+    RpcConnectionError,
+)
 from aiotx.types import BlockParam
 
 units = {
@@ -45,7 +49,11 @@ class AioTxTRONClient(AioTxEVMBaseClient):
     
     def get_address_from_private_key(self, private_key: str):
         client = Tron()
-        priv_key = PrivateKey(bytes.fromhex(private_key))
+        try:
+            priv_key = PrivateKey(bytes.fromhex(private_key))
+        except ValueError as e:
+            raise ValueError(f"An error has been occurred during private key processing: {e}")
+        
         return client.generate_address(priv_key)
     
     def hex_address_to_base58(self, hex_address: str) -> str:
@@ -71,6 +79,8 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         amount: int,
         memo: str = None,
     ) -> str:
+        if not isinstance(memo, str):
+            raise TypeError("Memo should be represented as a string!")
         sender_address_data = self.get_address_from_private_key(private_key)
         sender_address = sender_address_data["base58check_address"]
         created_txd = await self._create_transaction(sender_address, to_address, amount, memo)
@@ -86,6 +96,8 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         amount: int,
         memo: str = None,
     ):
+        if not isinstance(memo, str):
+            raise TypeError("Memo should be represented as a string!")
         sender_address_data = self.get_address_from_private_key(private_key)
         sender_address = sender_address_data["base58check_address"]
         created_txd = await self._create_trc20_transfer_transaction(sender_address, to_address, amount, contract, memo=memo)
@@ -122,6 +134,8 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         if memo is not None:
             payload["extra_data"] = memo.encode().hex()
         transaction = await self._make_api_call(payload, "POST", "/wallet/createtransaction")
+        if transaction.get("Error") is not None:
+            raise CreateTransactionError(transaction.get("Error"))
         return transaction
     
     async def _create_trc20_transfer_transaction(
@@ -159,6 +173,9 @@ class AioTxTRONClient(AioTxEVMBaseClient):
             "POST",
             path="/wallet/triggersmartcontract"
         )
+
+        if result.get("Error") is not None:
+            raise CreateTransactionError(transaction.get("Error"))
         return result
     
 

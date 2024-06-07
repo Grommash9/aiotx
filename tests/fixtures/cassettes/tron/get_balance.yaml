@@ -1,151 +1,176 @@
 interactions:
 - request:
-    body: '{"method": "eth_getBalance", "params": ["41325828ce56c69e0e6be7c3da62ba0c60992b547e",
+    body: '{"method": "eth_getBalance", "params": ["413a86838b711ef16e4fa4b0422918d45095042971",
       "latest"], "jsonrpc": "2.0", "id": 1}'
     headers:
       Content-Type:
       - application/json
     method: POST
-    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+    uri: https://api.shasta.trongrid.io/jsonrpc
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0xee7a6a40"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x7be02923"}
 
         '
     headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
       Content-Length:
       - '47'
       Content-Type:
-      - application/json-rpc
+      - application/json; charset=utf-8
       Date:
-      - Mon, 03 Jun 2024 04:03:25 GMT
+      - Fri, 07 Jun 2024 11:22:24 GMT
       Server:
-      - envoy
+      - openresty
     status:
       code: 200
       message: OK
 - request:
-    body: '{"method": "eth_getBalance", "params": ["411ef6c76907b07aa42bf89fa75e3f22729c1f8d2c",
+    body: '{"method": "eth_getBalance", "params": ["41c21094edbfaaad9a6e0f6920155195d0d9cec65b",
       "latest"], "jsonrpc": "2.0", "id": 1}'
     headers:
       Content-Type:
       - application/json
     method: POST
-    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+    uri: https://api.shasta.trongrid.io/jsonrpc
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0xac6bdee0"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x1a4b702f0"}
 
         '
     headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
       Content-Length:
-      - '47'
+      - '48'
       Content-Type:
-      - application/json-rpc
+      - application/json; charset=utf-8
       Date:
-      - Mon, 03 Jun 2024 04:03:25 GMT
+      - Fri, 07 Jun 2024 11:22:25 GMT
       Server:
-      - envoy
+      - openresty
     status:
       code: 200
       message: OK
 - request:
-    body: '{"method": "eth_getBalance", "params": ["41e852bf042465b45a7a4ffebf5ed9b566e22cb4a2",
+    body: '{"method": "eth_getBalance", "params": ["417af9560bedb268cbe02d20dfc316392c6d2e206b",
       "latest"], "jsonrpc": "2.0", "id": 1}'
     headers:
       Content-Type:
       - application/json
     method: POST
-    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+    uri: https://api.shasta.trongrid.io/jsonrpc
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x17484b50"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x137407224"}
 
         '
     headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
       Content-Length:
-      - '47'
+      - '48'
       Content-Type:
-      - application/json-rpc
+      - application/json; charset=utf-8
       Date:
-      - Mon, 03 Jun 2024 04:03:25 GMT
+      - Fri, 07 Jun 2024 11:22:26 GMT
       Server:
-      - envoy
+      - openresty
     status:
       code: 200
       message: OK
 - request:
-    body: '{"method": "eth_getBalance", "params": ["41ea6fa1fd5729072b0400a4d8ddd440a9af0887ee",
+    body: '{"method": "eth_getBalance", "params": ["4143a3c369ba1f46d53b588c07337cca6a230595f6",
       "latest"], "jsonrpc": "2.0", "id": 1}'
     headers:
       Content-Type:
       - application/json
     method: POST
-    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+    uri: https://api.shasta.trongrid.io/jsonrpc
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x3aa127c"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0xce9e148e04"}
 
         '
     headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
       Content-Length:
-      - '46'
+      - '49'
       Content-Type:
-      - application/json-rpc
+      - application/json; charset=utf-8
       Date:
-      - Mon, 03 Jun 2024 04:03:26 GMT
+      - Fri, 07 Jun 2024 11:22:27 GMT
       Server:
-      - envoy
+      - openresty
     status:
       code: 200
       message: OK
 - request:
-    body: '{"method": "eth_getBalance", "params": ["414833b7e7d199642e76087829128c734b9555dd3d",
+    body: '{"method": "eth_getBalance", "params": ["4148c81021c789d1dc3551b3f1612b492d65539475",
       "latest"], "jsonrpc": "2.0", "id": 1}'
     headers:
       Content-Type:
       - application/json
     method: POST
-    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+    uri: https://api.shasta.trongrid.io/jsonrpc
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x5be0"}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x1747813d60"}
 
         '
     headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
       Content-Length:
-      - '43'
+      - '49'
       Content-Type:
-      - application/json-rpc
+      - application/json; charset=utf-8
       Date:
-      - Mon, 03 Jun 2024 04:03:26 GMT
+      - Fri, 07 Jun 2024 11:22:28 GMT
       Server:
-      - envoy
-    status:
-      code: 200
-      message: OK
-- request:
-    body: '{"method": "eth_getBalance", "params": ["41e3f92886bc83eda3859938eb3f3110884f637ab6",
-      "latest"], "jsonrpc": "2.0", "id": 1}'
-    headers:
-      Content-Type:
-      - application/json
-    method: POST
-    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
-  response:
-    body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x4e932594"}
-
-        '
-    headers:
-      Content-Length:
-      - '47'
-      Content-Type:
-      - application/json-rpc
-      Date:
-      - Mon, 03 Jun 2024 04:03:26 GMT
-      Server:
-      - envoy
+      - openresty
     status:
       code: 200
       message: OK
@@ -156,21 +181,31 @@ interactions:
       Content-Type:
       - application/json
     method: POST
-    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+    uri: https://api.shasta.trongrid.io/jsonrpc
   response:
     body:
       string: '{"jsonrpc":"2.0","id":1,"result":"0x0"}
 
         '
     headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
       Content-Length:
       - '40'
       Content-Type:
-      - application/json-rpc
+      - application/json; charset=utf-8
       Date:
-      - Mon, 03 Jun 2024 04:08:29 GMT
+      - Fri, 07 Jun 2024 11:22:29 GMT
       Server:
-      - envoy
+      - openresty
     status:
       code: 200
       message: OK

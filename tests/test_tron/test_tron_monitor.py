@@ -18,7 +18,7 @@ async def test_async_monitoring(tron_client: AioTxBSCClient):
     async def handle_transaction(transaction):
         transactions.append(transaction)
 
-    await tron_client.start_monitoring(47338868)
+    await tron_client.start_monitoring(44739341)
     try:
         await asyncio.sleep(3)
     except KeyboardInterrupt:
@@ -27,16 +27,19 @@ async def test_async_monitoring(tron_client: AioTxBSCClient):
     assert len(blocks) > 0
     assert len(transactions) > 0
 
-    assert 47338868 in blocks
-    assert 47338869 in blocks
-    assert 47338870 in blocks
+    assert 44739341 in blocks
+    assert 44739342 in blocks
+    assert 44739343 in blocks
 
-    # TRX transfer from block 47338868
-    assert "0x72ce7a6a1bfdaca67431e96857cb17dc1c86bbe36cfefb4bab7ed72f7e72122c" in [tx["hash"] for tx in transactions]
+    # TRX transfer from block 44739341
+    assert "0xb05b7aea5a92a03482af7b764a3c75c0c54de169abdff79d9cb4c4b545fa97a1" in [tx["hash"] for tx in transactions]
 
-    #TRC20 transaction from block 47338870
-    assert "0x2ee04f0cc089e1f1d2499c1f7ee3114a69a61dda478c39ea2d1becdd97d387fa" in [tx["hash"] for tx in transactions]
-    assert "0xc00858d686c1433369815ba366610b84064cbc4a684284887ccbf2091ed80558" in [tx["hash"] for tx in transactions]
+    #TRC20 transaction from block 44739342
+    assert "0x18ea751dac569c9143d679cd8f4c53680c94e336a1b54008b940212a54fbc491" in [tx["hash"] for tx in transactions]
+    assert "0xec4841f9675a0785c52cb8d7d2c3ca0aeedd4df4590ef4a94b4ca21b48ef11ae" in [tx["hash"] for tx in transactions]
+
+    #TRC20 transaction from block 44739343
+    assert "0x48a89e3e068379761fdf2d0e2088ffe880803ac8de9e70632fc620b1450045ca" in [tx["hash"] for tx in transactions]
     
     for tx in transactions:
         assert "aiotx_decoded_input" in tx.keys()

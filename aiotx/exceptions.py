@@ -85,3 +85,6 @@ class InsufficientFunds(AioTxError):
 
 class RpcConnectionError(AioTxError):
     pass
+
+class CreateTransactionError(AioTxError):
+    pass
