@@ -42,6 +42,22 @@ To get started with the TON Client, you need to create an instance of `AioTxTONC
       tx_hash = await ton_client.send(mnemonic, to_address, amount)
       print("Transaction sent. Hash:", tx_hash)
 
+      #Bulk send
+      # Create a TON client with HighloadWalletV2Contract
+      bulk_ton_client = AioTxTONClient(
+      "https://ton.getblock.io/<token>/jsonRPC",
+      wallet_version=WalletVersionEnum.hv2,
+      )
+
+      # Deploy the HighloadWalletV2Contract wallet (required before sending)
+      tx_id = await bulk_ton_client.deploy_wallet("your mnemonic phrase here")
+      
+      # Send TON tokens to multiple recipients using the send_bulk method
+      tx_id = await bulk_ton_client.send_bulk(
+         "your mnemonic phrase here",
+         recipients_list,
+      )
+
    asyncio.run(main())
 
 In this example, we create an instance of `AioTxTONClient` by providing the TON node URL. Make sure to replace `<token>` with your actual API token.
@@ -72,4 +88,5 @@ Methods
    to_nano
    from_nano
    send
+   send_bulk
    

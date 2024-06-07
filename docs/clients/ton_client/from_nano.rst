@@ -3,7 +3,7 @@ from_nano
 
 .. code-block:: python
 
-    def from_nano(self, number: int, unit: str = "ton") -> int:
+    def from_nano(number: int, unit: str = "ton") -> int:
 
 Convert a given amount from nano grams to a specified unit of TON cryptocurrency.
 

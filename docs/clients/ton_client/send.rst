@@ -4,7 +4,6 @@ send
 .. code-block:: python
 
     async def send(
-        self, 
         mnemonic: str, 
         to_address: str, 
         amount: int, 
@@ -13,6 +12,9 @@ send
         ) -> str:
 
 Send TON tokens from one address to another on the TON blockchain.
+
+Please note that method will not work on HighloadWalletV2Contract (wallet for bulk send), but it's work fine with any other wallet type (default one as well)
+
 
 Parameters:
 

@@ -16,6 +16,7 @@ from aiotx.clients import (
     AioTxTRONClient,
 )
 from aiotx.log import set_logger_level
+from aiotx.utils.tonsdk.contract.wallet import WalletVersionEnum
 
 set_logger_level("INFO")
 
@@ -56,6 +57,15 @@ def ton_mainnet_client() -> AioTxTONClient:
     # testnet block monitoring is not working as
     # expected, and we using mainnet to test monitoring
     return AioTxTONClient(TON_MAINNET_NODE_URL)
+
+
+@pytest.fixture
+def ton_testnet_client_with_hv_wallet() -> AioTxTONClient:
+    # testnet block monitoring is not working as
+    # expected, and we using mainnet to test monitoring
+    return AioTxTONClient(
+        TON_TEST_NODE_URL, workchain=0, wallet_version=WalletVersionEnum.hv2
+    )
 
 
 @pytest.fixture

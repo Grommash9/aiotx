@@ -31,6 +31,8 @@ class AioTxTONClient(AioTxClient):
         self._monitoring_task = None
         self.workchain = workchain
         self.wallet_version = wallet_version
+        self.shift = 0
+        self.bit_number = 0
 
     async def generate_address(self) -> tuple[str, str, str]:
         if self.workchain is None:
@@ -153,14 +155,57 @@ class AioTxTONClient(AioTxClient):
         boc_answer_data = await self.send_boc_return_hash(boc)
         return boc_answer_data["hash"]
 
-    # async def estimate_fee(self, boc: str, address: str):
-    #     payload = {"method": "estimateFee", "params": {"address": address,"body": boc}}
-    #     information = await self._make_rpc_call(payload)
-    #     return information
+    async def send_bulk(self, mnemonic: str, destinations: list[dict]):
+        boc = self._create_bulk_transfer_boc(mnemonic, destinations)
+        boc_answer_data = await self.send_boc_return_hash(boc)
+        return boc_answer_data["hash"]
+
+    async def deploy_wallet(self, mnemonic_str: str) -> str:
+        mnemonic_list = self._unpack_mnemonic(mnemonic_str)
+        _, _, _, wallet = Wallets.from_mnemonics(
+            mnemonic_list,
+            self.wallet_version,
+            self.workchain,
+        )
+        query = wallet.create_init_external_message()
+        base64_boc = bytes_to_b64str(query["message"].to_boc(False))
+        boc_answer_data = await self.send_boc_return_hash(base64_boc)
+        return boc_answer_data["hash"]
+
+    def _create_bulk_transfer_boc(
+        self, mnemonic_str: str, recipients_list: dict
+    ) -> str:
+        assert (
+            self.wallet_version == WalletVersionEnum.hv2
+        ), "For using that method you should use HighloadWalletV2Contract"
+        mnemonic_list = self._unpack_mnemonic(mnemonic_str)
+        _, _, _, wallet = Wallets.from_mnemonics(
+            mnemonic_list,
+            self.wallet_version,
+            self.workchain,
+        )
+        query = wallet.create_transfer_message(
+            recipients_list, query_id=self.generate_query_id()
+        )
+        boc = bytes_to_b64str(query["message"].to_boc(False))
+        return boc
+
+    def generate_query_id(self):
+        query_id = (self.shift << 10) | self.bit_number
+        self.bit_number += 1
+        if self.bit_number > 1022:
+            self.bit_number = 0
+            self.shift += 1
+            if self.shift > 8191:
+                self.shift = 0
+        return query_id
 
     def _create_transfer_boc(
         self, mnemonic_str: str, to_address, amount, seqno, memo
     ) -> str:
+        assert (
+            self.wallet_version != WalletVersionEnum.hv2
+        ), "For using that method you should not use HighloadWalletV2Contract"
         mnemonic_list = self._unpack_mnemonic(mnemonic_str)
         _, _, _, wallet = Wallets.from_mnemonics(
             mnemonic_list, self.wallet_version, self.workchain

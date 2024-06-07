@@ -3,7 +3,7 @@ get_balance
 
 .. code-block:: python
 
-    async def get_balance(self, address) -> int:
+    async def get_balance(address) -> int:
 
 Retrieve the balance of a given address on the TON (The Open Network) blockchain.
 
