@@ -113,7 +113,7 @@ class AioTxTONClient(AioTxClient):
     def from_nano(self, number: int, unit: str = "ton")-> int:
         return tonsdk_from_nano(number, unit)
 
-    async def send(self, mnemonic: str, to_address: str, amount: int, seqno: int = None) -> str:
+    async def send(self, mnemonic: str, to_address: str, amount: int, seqno: int = None, memo: str = None) -> str:
         assert isinstance(amount, int), "Amount should be integer! Please use to_nano for convert it!"
         if self.workchain is None:
             await self._get_network_params()
@@ -122,7 +122,7 @@ class AioTxTONClient(AioTxClient):
         if seqno is None:
             seqno = await self.get_transaction_count(from_address)
         
-        boc = self._create_transfer_boc(mnemonic, to_address, amount, seqno)
+        boc = self._create_transfer_boc(mnemonic, to_address, amount, seqno, memo)
         boc_answer_data = await self.send_boc_return_hash(boc)
         return boc_answer_data["hash"]
     
@@ -131,11 +131,11 @@ class AioTxTONClient(AioTxClient):
     #     information = await self._make_rpc_call(payload)
     #     return information
 
-    def _create_transfer_boc(self, mnemonic_str: str, to_address, amount, seqno) -> str:
+    def _create_transfer_boc(self, mnemonic_str: str, to_address, amount, seqno, memo) -> str:
         mnemonic_list = self._unpack_mnemonic(mnemonic_str)
         _, _, _, wallet = Wallets.from_mnemonics(mnemonic_list, self.wallet_version, self.workchain)
         query = wallet.create_transfer_message(
-            to_addr=to_address, amount=amount, payload="", seqno=seqno
+            to_addr=to_address, amount=amount, payload=memo, seqno=seqno
         )
         boc = bytes_to_b64str(query["message"].to_boc(False))
         return boc
