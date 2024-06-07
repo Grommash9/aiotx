@@ -7,8 +7,7 @@ from ..utils import Address
 class Contract(ABC):
     def __init__(self, **kwargs):
         self.options = kwargs
-        self._address = Address(
-            kwargs["address"]) if "address" in kwargs else None
+        self._address = Address(kwargs["address"]) if "address" in kwargs else None
         if "wc" not in kwargs:
             kwargs["wc"] = self._address.wc if self._address is not None else 0
 
@@ -25,8 +24,7 @@ class Contract(ABC):
         state_init = self.__create_state_init(code_cell, data_cell)
         state_init_hash = state_init.bytes_hash()
 
-        address = Address(
-            str(self.options["wc"]) + ":" + state_init_hash.hex())
+        address = Address(str(self.options["wc"]) + ":" + state_init_hash.hex())
 
         return {
             "code": code_cell,
@@ -54,7 +52,6 @@ class Contract(ABC):
         return {
             "address": address,
             "message": external_message,
-
             "state_init": state_init,
             "code": code,
             "data": data,
@@ -70,10 +67,20 @@ class Contract(ABC):
         return message
 
     @classmethod
-    def create_internal_message_header(cls, dest, grams=0, ihr_disabled=True,
-                                       bounce=None, bounced=False, src=None,
-                                       currency_collection=None, ihr_fees=0,
-                                       fwd_fees=0, created_lt=0, created_at=0):
+    def create_internal_message_header(
+        cls,
+        dest,
+        grams=0,
+        ihr_disabled=True,
+        bounce=None,
+        bounced=False,
+        src=None,
+        currency_collection=None,
+        ihr_fees=0,
+        fwd_fees=0,
+        created_lt=0,
+        created_at=0,
+    ):
         message = Cell()
         message.bits.write_bit(0)
         message.bits.write_bit(ihr_disabled)
@@ -102,7 +109,10 @@ class Contract(ABC):
         common_msg_info.write_cell(header)
         if state_init:
             common_msg_info.bits.write_bit(1)
-            if common_msg_info.bits.get_free_bits() - 1 >= state_init.bits.get_used_bits():
+            if (
+                common_msg_info.bits.get_free_bits() - 1
+                >= state_init.bits.get_used_bits()
+            ):
                 common_msg_info.bits.write_bit(0)
                 common_msg_info.write_cell(state_init)
             else:
@@ -123,14 +133,30 @@ class Contract(ABC):
 
         return common_msg_info
 
-    def __create_state_init(self, code, data, library=None, split_depth=None, ticktock=None):
+    def __create_state_init(
+        self, code, data, library=None, split_depth=None, ticktock=None
+    ):
         if library or split_depth or ticktock:
             raise Exception(
-                "Library/SplitDepth/Ticktock in state init is not implemented")
+                "Library/SplitDepth/Ticktock in state init is not implemented"
+            )
 
         state_init = Cell()
-        settings = bytes(''.join(['1' if i else '0' for i in [bool(split_depth), bool(
-            ticktock), bool(code), bool(data), bool(library)]]), 'utf-8')
+        settings = bytes(
+            "".join(
+                [
+                    "1" if i else "0"
+                    for i in [
+                        bool(split_depth),
+                        bool(ticktock),
+                        bool(code),
+                        bool(data),
+                        bool(library),
+                    ]
+                ]
+            ),
+            "utf-8",
+        )
         state_init.bits.write_bit_array(settings)
 
         if code:

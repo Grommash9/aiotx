@@ -20,9 +20,11 @@ class SendModeEnum(int, Enum):
 
 class WalletContract(Contract):
     def __init__(self, **kwargs):
-        if (("public_key" not in kwargs or "private_key" not in kwargs) and "address" not in kwargs) and 'public_keys' not in kwargs:
-            raise Exception(
-                "WalletContract required publicKey or address in options")
+        if (
+            ("public_key" not in kwargs or "private_key" not in kwargs)
+            and "address" not in kwargs
+        ) and "public_keys" not in kwargs:
+            raise Exception("WalletContract required publicKey or address in options")
         super().__init__(**kwargs)
 
     def create_data_cell(self):
@@ -37,13 +39,16 @@ class WalletContract(Contract):
         cell.bits.write_uint(seqno, 32)
         return cell
 
-    def create_transfer_message(self,
-                                to_addr: str,
-                                amount: int,
-                                seqno: int,
-                                payload: Union[Cell, str, bytes, None] = None,
-                                send_mode=SendModeEnum.ignore_errors | SendModeEnum.pay_gas_separately,
-                                dummy_signature=False, state_init=None):
+    def create_transfer_message(
+        self,
+        to_addr: str,
+        amount: int,
+        seqno: int,
+        payload: Union[Cell, str, bytes, None] = None,
+        send_mode=SendModeEnum.ignore_errors | SendModeEnum.pay_gas_separately,
+        dummy_signature=False,
+        state_init=None,
+    ):
         payload_cell = Cell()
         if payload:
             if isinstance(payload, str):
@@ -55,9 +60,9 @@ class WalletContract(Contract):
                 payload_cell.bits.write_bytes(payload)
 
         order_header = Contract.create_internal_message_header(
-            Address(to_addr), decimal.Decimal(amount))
-        order = Contract.create_common_msg_info(
-            order_header, state_init, payload_cell)
+            Address(to_addr), decimal.Decimal(amount)
+        )
+        order = Contract.create_common_msg_info(order_header, state_init, payload_cell)
         signing_message = self.create_signing_message(seqno)
         signing_message.bits.write_uint8(send_mode)
         signing_message.refs.append(order)
@@ -65,8 +70,13 @@ class WalletContract(Contract):
         return self.create_external_message(signing_message, seqno, dummy_signature)
 
     def create_external_message(self, signing_message, seqno, dummy_signature=False):
-        signature = bytes(64) if dummy_signature else sign_message(
-            bytes(signing_message.bytes_hash()), self.options['private_key']).signature
+        signature = (
+            bytes(64)
+            if dummy_signature
+            else sign_message(
+                bytes(signing_message.bytes_hash()), self.options["private_key"]
+            ).signature
+        )
 
         body = Cell()
         body.bits.write_bytes(signature)
@@ -82,8 +92,7 @@ class WalletContract(Contract):
 
         self_address = self.address
         header = Contract.create_external_message_header(self_address)
-        result_message = Contract.create_common_msg_info(
-            header, state_init, body)
+        result_message = Contract.create_common_msg_info(header, state_init, body)
 
         return {
             "address": self_address,
@@ -105,20 +114,19 @@ class WalletContract(Contract):
 
         signing_message = self.create_signing_message()
         signature = sign_message(
-            bytes(signing_message.bytes_hash()), self.options['private_key']).signature
+            bytes(signing_message.bytes_hash()), self.options["private_key"]
+        ).signature
 
         body = Cell()
         body.bits.write_bytes(signature)
         body.write_cell(signing_message)
 
         header = Contract.create_external_message_header(address)
-        external_message = Contract.create_common_msg_info(
-            header, state_init, body)
+        external_message = Contract.create_common_msg_info(header, state_init, body)
 
         return {
             "address": address,
             "message": external_message,
-
             "body": body,
             "signing_message": signing_message,
             "state_init": state_init,

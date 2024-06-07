@@ -32,7 +32,7 @@ BTC_TEST_NODE_URL = "https://bitter-warmhearted-film.btc-testnet.quiknode.pro/dd
 TON_MAINNET_NODE_URL = "https://go.getblock.io/875fb0dee2544bb0bc59dd08c6f39330/jsonRPC"
 POLYGON_TEST_NODE_URL = "https://polygon-amoy-bor-rpc.publicnode.com"
 TON_TEST_NODE_URL = "https://testnet.toncenter.com/api/v2/jsonRPC"
-TRON_TEST_NODE_URL = "https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839"
+TRON_TEST_NODE_URL = "https://api.shasta.trongrid.io"
 
 pytest.mark.mysql = pytest.mark.mysql
 logging.getLogger("vcr").setLevel(logging.WARNING)
@@ -43,29 +43,35 @@ vcr_c = vcr.VCR(
     filter_headers=["Authorization", "Cookie", "Date"],
 )
 
+
 @pytest.fixture
 def ton_client() -> AioTxTONClient:
-    # current test rpc connection returning -1 as workchain but it should be 0, 
+    # current test rpc connection returning -1 as workchain but it should be 0,
     # so we are setting that param by ourself
     return AioTxTONClient(TON_TEST_NODE_URL, workchain=0)
 
+
 @pytest.fixture
 def ton_mainnet_client() -> AioTxTONClient:
-    # testnet block monitoring is not working as 
+    # testnet block monitoring is not working as
     # expected, and we using mainnet to test monitoring
     return AioTxTONClient(TON_MAINNET_NODE_URL)
+
 
 @pytest.fixture
 def tron_client() -> AioTxTRONClient:
     return AioTxTRONClient(TRON_TEST_NODE_URL)
 
+
 @pytest.fixture
 def bsc_client() -> AioTxBSCClient:
     return AioTxBSCClient(BSC_TEST_NODE_URL)
 
+
 @pytest.fixture
 def polygon_client() -> AioTxPolygonClient:
     return AioTxPolygonClient(POLYGON_TEST_NODE_URL)
+
 
 @pytest.fixture
 def eth_client() -> AioTxETHClient:
@@ -81,7 +87,9 @@ def ltc_public_client(request: FixtureRequest) -> AioTxLTCClient:
             print("test_ltc.sqlite FileNotFoundError")
 
     request.addfinalizer(teardown)
-    return AioTxLTCClient(LTC_TEST_NODE_URL, testnet=True, db_url="sqlite+aiosqlite:///test_ltc.sqlite")
+    return AioTxLTCClient(
+        LTC_TEST_NODE_URL, testnet=True, db_url="sqlite+aiosqlite:///test_ltc.sqlite"
+    )
 
 
 @pytest.fixture
@@ -93,7 +101,9 @@ def btc_client(request: FixtureRequest) -> AioTxBTCClient:
             print("test_btc.sqlite FileNotFoundError")
 
     request.addfinalizer(teardown)
-    return AioTxBTCClient(BTC_TEST_NODE_URL, testnet=True, db_url="sqlite+aiosqlite:///test_btc.sqlite")
+    return AioTxBTCClient(
+        BTC_TEST_NODE_URL, testnet=True, db_url="sqlite+aiosqlite:///test_btc.sqlite"
+    )
 
 
 @pytest.fixture
@@ -104,12 +114,12 @@ def btc_client_mysql(request: FixtureRequest) -> AioTxBTCClient:
         db_url=f"mysql+aiomysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}",
     )
 
-
     def teardown():
         asyncio.run(aiotx_btc_mysql_client.monitor._drop_tables())
 
     request.addfinalizer(teardown)
     return aiotx_btc_mysql_client
+
 
 @pytest.fixture
 def ltc_client_mysql(request: FixtureRequest) -> AioTxLTCClient:
@@ -118,7 +128,6 @@ def ltc_client_mysql(request: FixtureRequest) -> AioTxLTCClient:
         testnet=True,
         db_url=f"mysql+aiomysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}",
     )
-
 
     def teardown():
         asyncio.run(aiotx_ltc_mysql_client.monitor._drop_tables())

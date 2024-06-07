@@ -4,20 +4,20 @@ from typing import Any, Union
 
 
 class TonCurrencyEnum(str, Enum):
-    nanoton = 'nanoton'
-    ton = 'ton'
+    nanoton = "nanoton"
+    ton = "ton"
 
 
 units = {
-    TonCurrencyEnum.nanoton:       decimal.Decimal('1'),
-    TonCurrencyEnum.ton:           decimal.Decimal('1000000000'),
+    TonCurrencyEnum.nanoton: decimal.Decimal("1"),
+    TonCurrencyEnum.ton: decimal.Decimal("1000000000"),
 }
 
 integer_types = (int,)
 string_types = (bytes, str, bytearray)
 
 MIN_VAL = 0
-MAX_VAL = 2 ** 256 - 1
+MAX_VAL = 2**256 - 1
 
 
 def is_integer(value: Any) -> bool:
@@ -50,8 +50,7 @@ def to_nano(number: Union[int, float, str, decimal.Decimal], unit: str) -> int:
     elif isinstance(number, decimal.Decimal):
         d_number = number
     else:
-        raise TypeError(
-            "Unsupported type.  Must be one of integer, float, or string")
+        raise TypeError("Unsupported type.  Must be one of integer, float, or string")
 
     s_number = str(number)
     unit_value = units[unit.lower()]
@@ -63,18 +62,15 @@ def to_nano(number: Union[int, float, str, decimal.Decimal], unit: str) -> int:
         with decimal.localcontext() as ctx:
             multiplier = len(s_number) - s_number.index(".") - 1
             ctx.prec = multiplier
-            d_number = decimal.Decimal(
-                value=number, context=ctx) * 10 ** multiplier
-        unit_value /= 10 ** multiplier
+            d_number = decimal.Decimal(value=number, context=ctx) * 10**multiplier
+        unit_value /= 10**multiplier
 
     with decimal.localcontext() as ctx:
         ctx.prec = 999
-        result_value = decimal.Decimal(
-            value=d_number, context=ctx) * unit_value
+        result_value = decimal.Decimal(value=d_number, context=ctx) * unit_value
 
     if result_value < MIN_VAL or result_value > MAX_VAL:
-        raise ValueError(
-            "Resulting nanoton value must be between 1 and 2**256 - 1")
+        raise ValueError("Resulting nanoton value must be between 1 and 2**256 - 1")
 
     return int(result_value)
 

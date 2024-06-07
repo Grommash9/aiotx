@@ -29,8 +29,12 @@ async def test_async_monitoring(polygon_client: AioTxPolygonClient):
 
     assert 7385898 in blocks
     assert 7385899 in blocks
-    assert "0x568435d3c40e00160885d9030f231adfc230c91a5dab740515e89e30600a734c" in [tx["hash"] for tx in transactions]
-    assert "0x1913ae3314b38254c07538910ebdf2e3a3d6562b084769ef6614a0f0f4e01367" in [tx["hash"] for tx in transactions]
+    assert "0x568435d3c40e00160885d9030f231adfc230c91a5dab740515e89e30600a734c" in [
+        tx["hash"] for tx in transactions
+    ]
+    assert "0x1913ae3314b38254c07538910ebdf2e3a3d6562b084769ef6614a0f0f4e01367" in [
+        tx["hash"] for tx in transactions
+    ]
 
     for tx in transactions:
         assert "aiotx_decoded_input" in tx.keys()

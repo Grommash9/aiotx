@@ -37,7 +37,7 @@ To create an instance of AioTxTRONClient, you need to provide the node URL and. 
       '_value': 300000000}}}
 
       contract_decimals = await tron_client.get_contract_decimals(
-         "TXLAQ63Xg1NAzckPwKHvzw7CSEmLMEqcdj"
+         "TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs"
          )
       print("contract_decimals", contract_decimals)
       Output: contract_decimals 6
@@ -52,10 +52,26 @@ To create an instance of AioTxTRONClient, you need to provide the node URL and. 
       # Getting USDT balance
       contract_balance = await tron_client.get_contract_balance(
          "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", 
-         "TXLAQ63Xg1NAzckPwKHvzw7CSEmLMEqcdj"
+         "TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs"
          )
       print("contract_balance", contract_balance)
       Output: contract_balance 50000000000
+
+      # Sending 10 TRX
+      amount_in_sun = tron_client.to_sun(10)
+      transaction_hash = await tron_client.send(
+         "private_key", "to_address",
+         amount_in_sun, "Example memo"
+      )
+
+      # Sending 10 USDT tokens (assuming 6 decimals)
+      sun_amount = tron_client.to_sun(10)
+      transaction_hash = await tron_client.send_token(
+         "private_key", "to_address", "contract_address", 
+         sun_amount, "Example memo"
+      )
+
+
 
    asyncio.run(main())
 
@@ -71,5 +87,7 @@ Methods
    get_contract_decimals
    get_last_block
    get_transaction
+   send
+   send_token
 
    

@@ -30,38 +30,74 @@ async def test_get_last_master_block(ton_client: AioTxTONClient):
         (
             19563127,
             None,
-            {"2305843009213693952", "6917529027641081856", "-6917529027641081856", "-2305843009213693952"},
+            {
+                "2305843009213693952",
+                "6917529027641081856",
+                "-6917529027641081856",
+                "-2305843009213693952",
+            },
         ),
         (
             19563129,
             None,
-            {"-2305843009213693952", "-6917529027641081856", "2305843009213693952", "6917529027641081856"},
+            {
+                "-2305843009213693952",
+                "-6917529027641081856",
+                "2305843009213693952",
+                "6917529027641081856",
+            },
         ),
         (
             19563128,
             None,
-            {"-2305843009213693952", "-6917529027641081856", "2305843009213693952", "6917529027641081856"},
+            {
+                "-2305843009213693952",
+                "-6917529027641081856",
+                "2305843009213693952",
+                "6917529027641081856",
+            },
         ),
         (
             19566127,
             None,
-            {"-2305843009213693952", "-6917529027641081856", "2305843009213693952", "6917529027641081856"},
+            {
+                "-2305843009213693952",
+                "-6917529027641081856",
+                "2305843009213693952",
+                "6917529027641081856",
+            },
         ),
         (
             19563137,
             None,
-            {"2305843009213693952", "6917529027641081856", "-6917529027641081856", "-2305843009213693952"},
+            {
+                "2305843009213693952",
+                "6917529027641081856",
+                "-6917529027641081856",
+                "-2305843009213693952",
+            },
         ),
         (
             19563227,
             None,
-            {"-2305843009213693952", "-6917529027641081856", "2305843009213693952", "6917529027641081856"},
+            {
+                "-2305843009213693952",
+                "-6917529027641081856",
+                "2305843009213693952",
+                "6917529027641081856",
+            },
         ),
-        (1951663127, BlockNotFoundError, {-2305843009213693952, 6917529027641081856, -2305843009213693952}),
+        (
+            1951663127,
+            BlockNotFoundError,
+            {-2305843009213693952, 6917529027641081856, -2305843009213693952},
+        ),
     ],
 )
 @vcr_c.use_cassette("ton/get_master_block_shards.yaml")
-async def test_get_master_block_shards(ton_client: AioTxTONClient, seqno, expected_exception, shards_result):
+async def test_get_master_block_shards(
+    ton_client: AioTxTONClient, seqno, expected_exception, shards_result
+):
     if expected_exception:
         with pytest.raises(expected_exception):
             await ton_client.get_master_block_shards(seqno=seqno)
@@ -78,7 +114,10 @@ async def test_get_master_block_shards(ton_client: AioTxTONClient, seqno, expect
             2305843009213693952,
             21020822,
             None,
-            {"AwDwEqG+/w64ca+Xoc4JkJl+Iwkrs79Sjs82L2s0Vtw=", "HrT5S8S4zMifwDVspjEKDlSsry/6Nt9IAqmRPnWHdGU="},
+            {
+                "AwDwEqG+/w64ca+Xoc4JkJl+Iwkrs79Sjs82L2s0Vtw=",
+                "HrT5S8S4zMifwDVspjEKDlSsry/6Nt9IAqmRPnWHdGU=",
+            },
         ),
         (
             6917529027641081856,
@@ -96,7 +135,10 @@ async def test_get_master_block_shards(ton_client: AioTxTONClient, seqno, expect
             2305843009213693952,
             21023867,
             None,
-            {"UB4KXyYA5m7cAgQD0UM50AfNhyGCQ2gAsyYyJxrlurI=", "bW6gqpLzLK+cvbiNsd9Njlsrvz7XlJXW2EpUAEV2/dU="},
+            {
+                "UB4KXyYA5m7cAgQD0UM50AfNhyGCQ2gAsyYyJxrlurI=",
+                "bW6gqpLzLK+cvbiNsd9Njlsrvz7XlJXW2EpUAEV2/dU=",
+            },
         ),
         (
             -6917529027641081856,
@@ -113,12 +155,18 @@ async def test_get_master_block_shards(ton_client: AioTxTONClient, seqno, expect
     ],
 )
 @vcr_c.use_cassette("ton/get_block_transactions.yaml")
-async def test_get_block_transactions(ton_client: AioTxTONClient, shard, seqno, expected_exception, tx_data_result):
+async def test_get_block_transactions(
+    ton_client: AioTxTONClient, shard, seqno, expected_exception, tx_data_result
+):
     if expected_exception:
         with pytest.raises(expected_exception):
-            await ton_client.get_block_transactions(workchain=0, seqno=seqno, shard=shard, count=2)
+            await ton_client.get_block_transactions(
+                workchain=0, seqno=seqno, shard=shard, count=2
+            )
     else:
-        tx_data = await ton_client.get_block_transactions(workchain=0, seqno=seqno, shard=shard, count=2)
+        tx_data = await ton_client.get_block_transactions(
+            workchain=0, seqno=seqno, shard=shard, count=2
+        )
         tx_ids = set([shard["hash"] for shard in tx_data])
         assert tx_ids.symmetric_difference(tx_data_result) == set()
 
@@ -169,7 +217,9 @@ async def test_get_block_transactions(ton_client: AioTxTONClient, shard, seqno, 
     ],
 )
 @vcr_c.use_cassette("ton/get_balance.yaml")
-async def test_get_balance(ton_client: AioTxTONClient, address, expected_balance, expected_exception):
+async def test_get_balance(
+    ton_client: AioTxTONClient, address, expected_balance, expected_exception
+):
     if expected_exception:
         with pytest.raises(expected_exception):
             await ton_client.get_balance(address)
@@ -230,13 +280,23 @@ async def test_get_balance(ton_client: AioTxTONClient, address, expected_balance
 )
 @vcr_c.use_cassette("ton/get_transactions.yaml")
 async def test_get_transactions(
-    ton_client: AioTxTONClient, address, limit, lt, hash, to_lt, archival, expected_exception, tx_data_result
+    ton_client: AioTxTONClient,
+    address,
+    limit,
+    lt,
+    hash,
+    to_lt,
+    archival,
+    expected_exception,
+    tx_data_result,
 ):
     if expected_exception:
         with pytest.raises(expected_exception):
             await ton_client.get_transactions(address, limit, lt, hash, to_lt, archival)
     else:
-        tx_data = await ton_client.get_transactions(address, limit, lt, hash, to_lt, archival)
+        tx_data = await ton_client.get_transactions(
+            address, limit, lt, hash, to_lt, archival
+        )
         tx_ids = set([shard["transaction_id"]["hash"] for shard in tx_data])
         assert tx_ids.symmetric_difference(tx_data_result) == set()
 
@@ -272,7 +332,9 @@ async def test_get_transactions(
     ],
 )
 @vcr_c.use_cassette("ton/get_transaction_count.yaml")
-async def test_get_transaction_count(ton_client: AioTxTONClient, address, expected_exception, expected_segno):
+async def test_get_transaction_count(
+    ton_client: AioTxTONClient, address, expected_exception, expected_segno
+):
     if expected_exception:
         with pytest.raises(expected_exception):
             await ton_client.get_transaction_count(address)
@@ -312,7 +374,9 @@ async def test_get_transaction_count(ton_client: AioTxTONClient, address, expect
     ],
 )
 @vcr_c.use_cassette("ton/pack_address.yaml")
-async def test_pack_address(ton_client: AioTxTONClient, address, expected_exception, expected_packed_address):
+async def test_pack_address(
+    ton_client: AioTxTONClient, address, expected_exception, expected_packed_address
+):
     if expected_exception:
         with pytest.raises(expected_exception):
             await ton_client.pack_address(address)
@@ -348,35 +412,61 @@ async def test_pack_address(ton_client: AioTxTONClient, address, expected_except
             "EQAAAAAAAAAAAAAAAAAAAAAABsWLtKN1guG8VIQFELGzgOMO",
             WrongPrivateKey,
         ),
-        (["elevator", "wot"], "None", "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf+ATpkbpT", AssertionError),
+        (
+            ["elevator", "wot"],
+            "None",
+            "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf+ATpkbpT",
+            AssertionError,
+        ),
     ],
 )
 @vcr_c.use_cassette("ton/get_address_from_mnemonics.yaml")
 async def test_get_address_from_mnemonics(
-    ton_client: AioTxTONClient, mnemonics_str, expected_address, expected_raw_address, expected_exception
+    ton_client: AioTxTONClient,
+    mnemonics_str,
+    expected_address,
+    expected_raw_address,
+    expected_exception,
 ):
     if expected_exception:
         with pytest.raises(expected_exception):
             await ton_client.get_address_from_mnemonics(mnemonics_str)
     else:
-        urlsafe_address, raw_address = await ton_client.get_address_from_mnemonics(mnemonics_str)
+        urlsafe_address, raw_address = await ton_client.get_address_from_mnemonics(
+            mnemonics_str
+        )
         assert urlsafe_address == expected_address
         assert raw_address == expected_raw_address
 
 
-@pytest.mark.xfail(raises=CannotOverwriteExistingCassetteException, reason="boc is always new, we can't test it by VCR")
+@pytest.mark.xfail(
+    raises=CannotOverwriteExistingCassetteException,
+    reason="boc is always new, we can't test it by VCR",
+)
 @vcr_c.use_cassette("ton/send_ton_with_custom_seqno.yaml")
 async def test_send_ton(ton_client: AioTxTONClient):
     _, address = await ton_client.get_address_from_mnemonics(TON_TEST_WALLET_MEMO)
     tx_count = await ton_client.get_transaction_count(address)
     amount_in_nano = ton_client.to_nano(0.00001)
-    result_tx_id = await ton_client.send(TON_TEST_WALLET_MEMO, "UQDU1hdX6SeHmrvzvyjIrLEWUAdJUJar2sw8haIuT_5n-FLh", amount_in_nano, seqno=tx_count)
+    result_tx_id = await ton_client.send(
+        TON_TEST_WALLET_MEMO,
+        "UQDU1hdX6SeHmrvzvyjIrLEWUAdJUJar2sw8haIuT_5n-FLh",
+        amount_in_nano,
+        seqno=tx_count,
+    )
     assert result_tx_id == "GxXCUERZwia9JbvEyb5aqHoaTXdkbk/5R+Kel8tqsjw="
 
 
-@pytest.mark.xfail(raises=CannotOverwriteExistingCassetteException, reason="boc is always new, we can't test it by VCR")
+@pytest.mark.xfail(
+    raises=CannotOverwriteExistingCassetteException,
+    reason="boc is always new, we can't test it by VCR",
+)
 @vcr_c.use_cassette("ton/send_ton_with_auto_seqno.yaml")
 async def test_send_ton_with_auto_seqno(ton_client: AioTxTONClient):
     amount_in_nano = ton_client.to_nano(0.00001)
-    result_tx_id = await ton_client.send(TON_TEST_WALLET_MEMO, "UQDU1hdX6SeHmrvzvyjIrLEWUAdJUJar2sw8haIuT_5n-FLh", amount_in_nano)
+    result_tx_id = await ton_client.send(
+        TON_TEST_WALLET_MEMO,
+        "UQDU1hdX6SeHmrvzvyjIrLEWUAdJUJar2sw8haIuT_5n-FLh",
+        amount_in_nano,
+    )
     assert result_tx_id == "aJWE/d/toIz8a3vKut952phyEySylxrKFlqg49qDlQA="

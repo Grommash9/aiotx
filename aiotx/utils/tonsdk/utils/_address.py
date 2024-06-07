@@ -8,14 +8,16 @@ from ._utils import crc16, string_to_bytes
 def parse_friendly_address(addr_str):
     if len(addr_str) != 48:
         raise InvalidAddressError(
-            "User-friendly address should contain strictly 48 characters")
+            "User-friendly address should contain strictly 48 characters"
+        )
 
     # avoid padding error (https://gist.github.com/perrygeo/ee7c65bb1541ff6ac770)
-    data = string_to_bytes(base64.b64decode(addr_str+"=="))
+    data = string_to_bytes(base64.b64decode(addr_str + "=="))
 
     if len(data) != 36:
         raise InvalidAddressError(
-            "Unknown address type: byte length is not equal to 36")
+            "Unknown address type: byte length is not equal to 36"
+        )
 
     addr = data[:34]
     crc = data[34:36]
@@ -34,7 +36,7 @@ def parse_friendly_address(addr_str):
 
     is_bounceable = tag == Address.BOUNCEABLE_TAG
 
-    if addr[1] == 0xff:
+    if addr[1] == 0xFF:
         workchain = -1
     else:
         workchain = addr[1]
@@ -69,7 +71,7 @@ class Address:
             return
 
         if any_form.find("-") > 0 or any_form.find("_") > 0:
-            any_form = any_form.replace("-", '+').replace("_", '/')
+            any_form = any_form.replace("-", "+").replace("_", "/")
             self.is_url_safe = True
         else:
             self.is_url_safe = False
@@ -90,7 +92,7 @@ class Address:
 
             address_hex = arr[1]
             if len(address_hex) != 64:
-                raise InvalidAddressError(f'Invalid address hex {any_form}')
+                raise InvalidAddressError(f"Invalid address hex {any_form}")
 
             self.is_user_friendly = False
             self.wc = wc
@@ -105,7 +107,13 @@ class Address:
             self.is_test_only = parse_result["is_test_only"]
             self.is_bounceable = parse_result["is_bounceable"]
 
-    def to_string(self, is_user_friendly=None, is_url_safe=None, is_bounceable=None, is_test_only=None):
+    def to_string(
+        self,
+        is_user_friendly=None,
+        is_url_safe=None,
+        is_bounceable=None,
+        is_test_only=None,
+    ):
         if is_user_friendly is None:
             is_user_friendly = self.is_user_friendly
         if is_url_safe is None:
@@ -118,7 +126,9 @@ class Address:
         if not is_user_friendly:
             return f"{self.wc}:{self.hash_part.hex()}"
         else:
-            tag = Address.BOUNCEABLE_TAG if is_bounceable else Address.NON_BOUNCEABLE_TAG
+            tag = (
+                Address.BOUNCEABLE_TAG if is_bounceable else Address.NON_BOUNCEABLE_TAG
+            )
 
             if is_test_only:
                 tag |= Address.TEST_FLAG
@@ -131,11 +141,9 @@ class Address:
             address_with_checksum[:34] = addr
             address_with_checksum[34:] = crc16(addr)
 
-            address_base_64 = base64.b64encode(
-                address_with_checksum).decode('utf-8')
+            address_base_64 = base64.b64encode(address_with_checksum).decode("utf-8")
             if is_url_safe:
-                address_base_64 = address_base_64.replace(
-                    "+", '-').replace("/", '_')
+                address_base_64 = address_base_64.replace("+", "-").replace("/", "_")
 
             return str(address_base_64)
 

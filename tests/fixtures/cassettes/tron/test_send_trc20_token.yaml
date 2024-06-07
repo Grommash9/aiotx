@@ -1,0 +1,404 @@
+interactions:
+- request:
+    body: '{"owner_address": "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", "contract_address":
+      "TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs", "function_selector": "transfer(address,uint256)",
+      "parameter": "000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f300000000000000000000000000000000000000000000000000000000000f4240",
+      "fee_limit": 15000000000, "call_value": 0, "visible": true, "extra_data": ""}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/triggersmartcontract
+  response:
+    body:
+      string: '{"result":{"result":true},"transaction":{"visible":true,"txID":"99dce8bfadc68a0388d7ff28702648402d4fe3dd50e916665368c0a0b6a28273","raw_data":{"contract":[{"parameter":{"value":{"data":"a9059cbb000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f300000000000000000000000000000000000000000000000000000000000f4240","owner_address":"TEZQQ5BXq3nFKUFJknoV15CW24twzH81La","contract_address":"TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs"},"type_url":"type.googleapis.com/protocol.TriggerSmartContract"},"type":"TriggerSmartContract"}],"ref_block_bytes":"ab6d","ref_block_hash":"5d89dbd9f999d854","expiration":1717760277000,"fee_limit":15000000000,"timestamp":1717760217613},"raw_data_hex":"0a02ab6d22085d89dbd9f999d8544088f4f693ff315aae01081f12a9010a31747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e54726967676572536d617274436f6e747261637412740a1541325828ce56c69e0e6be7c3da62ba0c60992b547e12154142a1e39aefa49290f2b3f9ed688d7cecf86cd6e02244a9059cbb000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f300000000000000000000000000000000000000000000000000000000000f4240708da4f393ff31900180acc7f037"}}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:36:57 GMT
+      Server:
+      - openresty
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"signature": ["e1cfa8ed7bf7617208cd665447a5f40aba22287628ebbfa8cec89dc6130121314be97e981648fba042e183605687451bf0a3f04294f49546674b2e549c8f744801"],
+      "raw_data_hex": "0a02ab6d22085d89dbd9f999d8544088f4f693ff315aae01081f12a9010a31747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e54726967676572536d617274436f6e747261637412740a1541325828ce56c69e0e6be7c3da62ba0c60992b547e12154142a1e39aefa49290f2b3f9ed688d7cecf86cd6e02244a9059cbb000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f300000000000000000000000000000000000000000000000000000000000f4240708da4f393ff31900180acc7f037",
+      "raw_data": {"contract": [{"parameter": {"value": {"data": "a9059cbb000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f300000000000000000000000000000000000000000000000000000000000f4240",
+      "owner_address": "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", "contract_address": "TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs"},
+      "type_url": "type.googleapis.com/protocol.TriggerSmartContract"}, "type": "TriggerSmartContract"}],
+      "ref_block_bytes": "ab6d", "ref_block_hash": "5d89dbd9f999d854", "expiration":
+      1717760277000, "fee_limit": 15000000000, "timestamp": 1717760217613}, "visible":
+      true, "txID": "99dce8bfadc68a0388d7ff28702648402d4fe3dd50e916665368c0a0b6a28273"}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/broadcasttransaction
+  response:
+    body:
+      string: '{"result":true,"txid":"99dce8bfadc68a0388d7ff28702648402d4fe3dd50e916665368c0a0b6a28273"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '90'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:36:58 GMT
+      Server:
+      - openresty
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"owner_address": "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", "contract_address":
+      "TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs", "function_selector": "transfer(address,uint256)",
+      "parameter": "000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f300000000000000000000000000000000000000000000000000000000004c4b40",
+      "fee_limit": 15000000000, "call_value": 0, "visible": true, "extra_data": "6f72703375686724c2a328545550343274333850284855246833723567382929"}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/triggersmartcontract
+  response:
+    body:
+      string: '{"result":{"result":true},"transaction":{"visible":true,"txID":"f610753e84a5fe9b8fe72e1ac3175d5584887844e87f14cb08d532d0c66ff1ed","raw_data":{"contract":[{"parameter":{"value":{"data":"a9059cbb000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f300000000000000000000000000000000000000000000000000000000004c4b40","owner_address":"TEZQQ5BXq3nFKUFJknoV15CW24twzH81La","contract_address":"TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs"},"type_url":"type.googleapis.com/protocol.TriggerSmartContract"},"type":"TriggerSmartContract"}],"ref_block_bytes":"ab6d","ref_block_hash":"5d89dbd9f999d854","expiration":1717760277000,"fee_limit":15000000000,"timestamp":1717760219616},"raw_data_hex":"0a02ab6d22085d89dbd9f999d8544088f4f693ff315aae01081f12a9010a31747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e54726967676572536d617274436f6e747261637412740a1541325828ce56c69e0e6be7c3da62ba0c60992b547e12154142a1e39aefa49290f2b3f9ed688d7cecf86cd6e02244a9059cbb000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f300000000000000000000000000000000000000000000000000000000004c4b4070e0b3f393ff31900180acc7f037"}}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:36:59 GMT
+      Server:
+      - openresty
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"signature": ["725f51c195de1e62e054ac52f1c9633941116230cb6e27c673ac50fdd4ece70b681d15a4f2570cc9886a1b93ec7185c21b8970b4abe0edfb5d52908a647bf7ab01"],
+      "raw_data_hex": "0a02ab6d22085d89dbd9f999d8544088f4f693ff315aae01081f12a9010a31747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e54726967676572536d617274436f6e747261637412740a1541325828ce56c69e0e6be7c3da62ba0c60992b547e12154142a1e39aefa49290f2b3f9ed688d7cecf86cd6e02244a9059cbb000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f300000000000000000000000000000000000000000000000000000000004c4b4070e0b3f393ff31900180acc7f037",
+      "raw_data": {"contract": [{"parameter": {"value": {"data": "a9059cbb000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f300000000000000000000000000000000000000000000000000000000004c4b40",
+      "owner_address": "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", "contract_address": "TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs"},
+      "type_url": "type.googleapis.com/protocol.TriggerSmartContract"}, "type": "TriggerSmartContract"}],
+      "ref_block_bytes": "ab6d", "ref_block_hash": "5d89dbd9f999d854", "expiration":
+      1717760277000, "fee_limit": 15000000000, "timestamp": 1717760219616}, "visible":
+      true, "txID": "f610753e84a5fe9b8fe72e1ac3175d5584887844e87f14cb08d532d0c66ff1ed"}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/broadcasttransaction
+  response:
+    body:
+      string: '{"result":true,"txid":"f610753e84a5fe9b8fe72e1ac3175d5584887844e87f14cb08d532d0c66ff1ed"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '90'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:37:00 GMT
+      Server:
+      - openresty
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"owner_address": "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", "contract_address":
+      "TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs", "function_selector": "transfer(address,uint256)",
+      "parameter": "000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f3000000000000000000000000000000000000000000000000016345785d7abdc0",
+      "fee_limit": 15000000000, "call_value": 0, "visible": true, "extra_data": "746573745f6d656d6f"}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/triggersmartcontract
+  response:
+    body:
+      string: '{"result":{"result":true},"transaction":{"visible":true,"txID":"31dc98c67bdf5d21bda64f4c11c9fc3c629d3ea0dc437314615c852a27f09b8e","raw_data":{"contract":[{"parameter":{"value":{"data":"a9059cbb000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f3000000000000000000000000000000000000000000000000016345785d7abdc0","owner_address":"TEZQQ5BXq3nFKUFJknoV15CW24twzH81La","contract_address":"TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs"},"type_url":"type.googleapis.com/protocol.TriggerSmartContract"},"type":"TriggerSmartContract"}],"ref_block_bytes":"ab6e","ref_block_hash":"2631eae4f611183e","expiration":1717760280000,"fee_limit":15000000000,"timestamp":1717760221494},"raw_data_hex":"0a02ab6e22082631eae4f611183e40c08bf793ff315aae01081f12a9010a31747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e54726967676572536d617274436f6e747261637412740a1541325828ce56c69e0e6be7c3da62ba0c60992b547e12154142a1e39aefa49290f2b3f9ed688d7cecf86cd6e02244a9059cbb000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f3000000000000000000000000000000000000000000000000016345785d7abdc070b6c2f393ff31900180acc7f037"}}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:37:01 GMT
+      Server:
+      - openresty
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"signature": ["9f59876490fe0d5f4a9d5eea91ea86d71b9a8e6f6069a56bf41a78d7b68647454252df8a75f6ec3e77b6b51b352661727dfeb6bb2896597611041c3bc69c993b01"],
+      "raw_data_hex": "0a02ab6e22082631eae4f611183e40c08bf793ff315aae01081f12a9010a31747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e54726967676572536d617274436f6e747261637412740a1541325828ce56c69e0e6be7c3da62ba0c60992b547e12154142a1e39aefa49290f2b3f9ed688d7cecf86cd6e02244a9059cbb000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f3000000000000000000000000000000000000000000000000016345785d7abdc070b6c2f393ff31900180acc7f037",
+      "raw_data": {"contract": [{"parameter": {"value": {"data": "a9059cbb000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f3000000000000000000000000000000000000000000000000016345785d7abdc0",
+      "owner_address": "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", "contract_address": "TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs"},
+      "type_url": "type.googleapis.com/protocol.TriggerSmartContract"}, "type": "TriggerSmartContract"}],
+      "ref_block_bytes": "ab6e", "ref_block_hash": "2631eae4f611183e", "expiration":
+      1717760280000, "fee_limit": 15000000000, "timestamp": 1717760221494}, "visible":
+      true, "txID": "31dc98c67bdf5d21bda64f4c11c9fc3c629d3ea0dc437314615c852a27f09b8e"}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/broadcasttransaction
+  response:
+    body:
+      string: '{"result":true,"txid":"31dc98c67bdf5d21bda64f4c11c9fc3c629d3ea0dc437314615c852a27f09b8e"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '90'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:37:02 GMT
+      Server:
+      - openresty
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"owner_address": "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", "contract_address":
+      "TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs", "function_selector": "transfer(address,uint256)",
+      "parameter": "000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f3000000000000000000000000000000000000000000000000016345785d7abdc0",
+      "fee_limit": 15000000000, "call_value": 0, "visible": true, "extra_data": ""}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/triggersmartcontract
+  response:
+    body:
+      string: '{"result":{"result":true},"transaction":{"visible":true,"txID":"ff0c8255eda1cf21d3e3f150570e1798a7c0a320490b00623601ace17a769bb2","raw_data":{"contract":[{"parameter":{"value":{"data":"a9059cbb000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f3000000000000000000000000000000000000000000000000016345785d7abdc0","owner_address":"TEZQQ5BXq3nFKUFJknoV15CW24twzH81La","contract_address":"TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs"},"type_url":"type.googleapis.com/protocol.TriggerSmartContract"},"type":"TriggerSmartContract"}],"ref_block_bytes":"ab6e","ref_block_hash":"2631eae4f611183e","expiration":1717760280000,"fee_limit":15000000000,"timestamp":1717760223197},"raw_data_hex":"0a02ab6e22082631eae4f611183e40c08bf793ff315aae01081f12a9010a31747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e54726967676572536d617274436f6e747261637412740a1541325828ce56c69e0e6be7c3da62ba0c60992b547e12154142a1e39aefa49290f2b3f9ed688d7cecf86cd6e02244a9059cbb000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f3000000000000000000000000000000000000000000000000016345785d7abdc070ddcff393ff31900180acc7f037"}}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:37:03 GMT
+      Server:
+      - openresty
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"signature": ["7cda51072c0818c6f8780a19bf7014784186bb2ad4155b47a2858a698a0f5d633c419aab64a294a7d9dfe42f003912476444460ef42a9bb6779a8a67da60033c01"],
+      "raw_data_hex": "0a02ab6e22082631eae4f611183e40c08bf793ff315aae01081f12a9010a31747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e54726967676572536d617274436f6e747261637412740a1541325828ce56c69e0e6be7c3da62ba0c60992b547e12154142a1e39aefa49290f2b3f9ed688d7cecf86cd6e02244a9059cbb000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f3000000000000000000000000000000000000000000000000016345785d7abdc070ddcff393ff31900180acc7f037",
+      "raw_data": {"contract": [{"parameter": {"value": {"data": "a9059cbb000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f3000000000000000000000000000000000000000000000000016345785d7abdc0",
+      "owner_address": "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", "contract_address": "TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs"},
+      "type_url": "type.googleapis.com/protocol.TriggerSmartContract"}, "type": "TriggerSmartContract"}],
+      "ref_block_bytes": "ab6e", "ref_block_hash": "2631eae4f611183e", "expiration":
+      1717760280000, "fee_limit": 15000000000, "timestamp": 1717760223197}, "visible":
+      true, "txID": "ff0c8255eda1cf21d3e3f150570e1798a7c0a320490b00623601ace17a769bb2"}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/broadcasttransaction
+  response:
+    body:
+      string: '{"result":true,"txid":"ff0c8255eda1cf21d3e3f150570e1798a7c0a320490b00623601ace17a769bb2"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '90'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:37:03 GMT
+      Server:
+      - openresty
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"owner_address": "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", "contract_address":
+      "", "function_selector": "transfer(address,uint256)", "parameter": "000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f300000000000000000000000000000000000000000000000000000000000f4240",
+      "fee_limit": 15000000000, "call_value": 0, "visible": true, "extra_data": ""}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/triggersmartcontract
+  response:
+    body:
+      string: '{"result":{"code":"OTHER_ERROR","message":"class java.security.InvalidParameterException
+        : contract_address isn''t set."}}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '122'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:37:04 GMT
+      Server:
+      - openresty
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"owner_address": "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", "contract_address":
+      "d", "function_selector": "transfer(address,uint256)", "parameter": "000000000000000000000000f928b8f3ffb2763e11442cd26ef37b89a7f396f300000000000000000000000000000000000000000000000000000000000f4240",
+      "fee_limit": 15000000000, "call_value": 0, "visible": true, "extra_data": ""}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/triggersmartcontract
+  response:
+    body:
+      string: '{"result":{"code":"OTHER_ERROR","message":"class java.lang.NullPointerException
+        : null"}}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '90'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:37:05 GMT
+      Server:
+      - openresty
+    status:
+      code: 200
+      message: OK
+version: 1

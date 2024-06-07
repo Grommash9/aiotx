@@ -13,7 +13,9 @@ from aiotx.exceptions import (
 )
 
 PRIVATE_KEY_TO_SEND_FROM = os.environ.get("TEST_ETH_WALLET_PRIVATE_KEY")
-assert PRIVATE_KEY_TO_SEND_FROM is not None, "Please provide TEST_ETH_WALLET_PRIVATE_KEY"
+assert (
+    PRIVATE_KEY_TO_SEND_FROM is not None
+), "Please provide TEST_ETH_WALLET_PRIVATE_KEY"
 CONTRACT = "0x419Fe9f14Ff3aA22e46ff1d03a73EdF3b70A62ED"
 DESTINATION_ADDRESS = "0xD515F5737044238B0f0d6c100109DA44066bE749"
 
@@ -44,7 +46,9 @@ async def test_get_chain_id(eth_client: AioTxETHClient):
     ],
 )
 @vcr_c.use_cassette("eth/get_balance.yaml")
-async def test_get_balance(eth_client: AioTxETHClient, wallet_address, expected_exception, expected_balance):
+async def test_get_balance(
+    eth_client: AioTxETHClient, wallet_address, expected_exception, expected_balance
+):
     if expected_exception:
         with pytest.raises(expected_exception):
             await eth_client.get_balance(wallet_address)
@@ -63,9 +67,18 @@ async def test_get_balance(eth_client: AioTxETHClient, wallet_address, expected_
         ("0x2f88aa536f9ef65087ce0e81918febf65396cf4a8ff5d535d58a45de4a13d076", None),
         ("0xcb5ad4fd610b6e9e687b5154f4832c0233a527719dcfad6d47500c9f3a50f7cc", None),
         ("0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf2701b72", None),
-        ("0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf2701b73", TransactionNotFound),
-        ("0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf2701b2", InvalidArgumentError),
-        ("0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf701b72", InvalidArgumentError),
+        (
+            "0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf2701b73",
+            TransactionNotFound,
+        ),
+        (
+            "0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf2701b2",
+            InvalidArgumentError,
+        ),
+        (
+            "0x93ff17f18511c4fa74166a2dbd53ffa7ce5cc2ee431cbb4fd5e02bbdf701b72",
+            InvalidArgumentError,
+        ),
     ],
 )
 @vcr_c.use_cassette("eth/get_transaction.yaml")
@@ -88,14 +101,22 @@ async def test_get_transaction(eth_client: AioTxETHClient, tx_id, expected_excep
         ("0x9cd384d1Dc5Ba08234aE8D57b0d43724caE8C4d6", CONTRACT, None, 11200000000),
         ("0x42827369CD85aD4E88d93D482C144803Aca448C1", CONTRACT, None, 11000000000),
         ("0xDA31b5ac94C559478Eeaa7E347ee4557f9a6F71C", CONTRACT, None, 0),
-        ("0xDA31b5ac94C559478Eeaa7E347ee4557f9a6F71C", "Eeaa7E347ee4557f9a6F71C", InvalidArgumentError, 0),
+        (
+            "0xDA31b5ac94C559478Eeaa7E347ee4557f9a6F71C",
+            "Eeaa7E347ee4557f9a6F71C",
+            InvalidArgumentError,
+            0,
+        ),
     ],
 )
 @vcr_c.use_cassette("eth/get_token_balance.yaml")
 async def test_get_token_balance(
-    eth_client: AioTxETHClient, wallet_address, contract, expected_exception, expected_balance
+    eth_client: AioTxETHClient,
+    wallet_address,
+    contract,
+    expected_exception,
+    expected_balance,
 ):
-
     if expected_exception:
         with pytest.raises(expected_exception):
             await eth_client.get_contract_balance(wallet_address, contract)
@@ -119,7 +140,9 @@ async def test_get_token_balance(
     ],
 )
 @vcr_c.use_cassette("eth/get_transaction_count.yaml")
-async def test_get_transaction_count(eth_client: AioTxETHClient, wallet_address, expected_exception, expected_count):
+async def test_get_transaction_count(
+    eth_client: AioTxETHClient, wallet_address, expected_exception, expected_count
+):
     if expected_exception:
         with pytest.raises(expected_exception):
             await eth_client.get_transactions_count(wallet_address)
@@ -162,20 +185,68 @@ async def test_get_gas_price(eth_client: AioTxETHClient):
             21000,
             WrongPrivateKey,
         ),
-        (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5", 0.00001, 5, 21000, ValueError),
-        (PRIVATE_KEY_TO_SEND_FROM, "f9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", 0.00001, 5, 21000, None),
-        (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E84d3f6FF662Ba4c306b5a", 0.00001, 5, 21000, ValueError),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0.00001, 5, 21000, ReplacementTransactionUnderpriced),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5",
+            0.00001,
+            5,
+            21000,
+            ValueError,
+        ),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            "f9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b5a",
+            0.00001,
+            5,
+            21000,
+            None,
+        ),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            "0xf9E35E4e1CbcF08E84d3f6FF662Ba4c306b5a",
+            0.00001,
+            5,
+            21000,
+            ValueError,
+        ),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            DESTINATION_ADDRESS,
+            0.00001,
+            5,
+            21000,
+            ReplacementTransactionUnderpriced,
+        ),
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 5, 5, 21000, AioTxError),
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0.00001, 0, 21000, AioTxError),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0, 5, 21000, ReplacementTransactionUnderpriced),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            DESTINATION_ADDRESS,
+            0,
+            5,
+            21000,
+            ReplacementTransactionUnderpriced,
+        ),
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0.00001, 5, 0, AioTxError),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, 0.00001, 5, 61000, ReplacementTransactionUnderpriced),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            DESTINATION_ADDRESS,
+            0.00001,
+            5,
+            61000,
+            ReplacementTransactionUnderpriced,
+        ),
     ],
 )
 @vcr_c.use_cassette("eth/send_transaction.yaml")
 async def test_send_transaction(
-    eth_client: AioTxETHClient, private_key, to_address, amount, gas_price, gas_limit, expected_exception
+    eth_client: AioTxETHClient,
+    private_key,
+    to_address,
+    amount,
+    gas_price,
+    gas_limit,
+    expected_exception,
 ):
     """
     Here it's raising ReplacementTransactionUnderpriced and NonceTooLowError because we have reusing
@@ -185,9 +256,21 @@ async def test_send_transaction(
     wei_amount = eth_client.to_wei(amount, "ether")
     if expected_exception:
         with pytest.raises(expected_exception):
-            await eth_client.send(private_key, to_address, wei_amount, gas_price=gas_price, gas_limit=gas_limit)
+            await eth_client.send(
+                private_key,
+                to_address,
+                wei_amount,
+                gas_price=gas_price,
+                gas_limit=gas_limit,
+            )
     else:
-        result = await eth_client.send(private_key, to_address, wei_amount, gas_price=gas_price, gas_limit=gas_limit)
+        result = await eth_client.send(
+            private_key,
+            to_address,
+            wei_amount,
+            gas_price=gas_price,
+            gas_limit=gas_limit,
+        )
         assert isinstance(result, str)
 
 
@@ -225,9 +308,13 @@ async def test_send_transaction_with_custom_nonce(eth_client: AioTxETHClient):
     wei_amount = eth_client.to_wei(0.00001, "ether")
     sender_address = eth_client.get_address_from_private_key(PRIVATE_KEY_TO_SEND_FROM)
     nonce = await eth_client.get_transactions_count(sender_address)
-    first_tx = await eth_client.send(PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, wei_amount, nonce=nonce)
+    first_tx = await eth_client.send(
+        PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, wei_amount, nonce=nonce
+    )
     assert isinstance(first_tx, str)
-    second_tx = await eth_client.send(PRIVATE_KEY_TO_SEND_FROM, sender_address, wei_amount, nonce=nonce + 1)
+    second_tx = await eth_client.send(
+        PRIVATE_KEY_TO_SEND_FROM, sender_address, wei_amount, nonce=nonce + 1
+    )
     assert isinstance(second_tx, str)
 
 
@@ -240,7 +327,9 @@ async def test_send_transaction_with_custom_nonce(eth_client: AioTxETHClient):
     ],
 )
 @vcr_c.use_cassette("eth/get_contract_decimals.yaml")
-async def test_get_contract_decimals(eth_client: AioTxETHClient, contract, expected_decimals, expected_exception):
+async def test_get_contract_decimals(
+    eth_client: AioTxETHClient, contract, expected_decimals, expected_exception
+):
     if expected_exception:
         with pytest.raises(expected_exception):
             await eth_client.get_contract_decimals(contract)
@@ -279,9 +368,33 @@ async def test_get_contract_decimals(eth_client: AioTxETHClient, contract, expec
             61000,
             WrongPrivateKey,
         ),
-        (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E984d3f6FF662Ba4c306b5a", CONTRACT, 1, 5, 61000, ValueError),
-        (PRIVATE_KEY_TO_SEND_FROM, "f9E5E4e1CbcF08E99B84d3f6FF662Ba4c306b5a", CONTRACT, 1, 5, 61000, ValueError),
-        (PRIVATE_KEY_TO_SEND_FROM, "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b", CONTRACT, 1, 5, 61000, ValueError),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            "0xf9E35E4e1CbcF08E984d3f6FF662Ba4c306b5a",
+            CONTRACT,
+            1,
+            5,
+            61000,
+            ValueError,
+        ),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            "f9E5E4e1CbcF08E99B84d3f6FF662Ba4c306b5a",
+            CONTRACT,
+            1,
+            5,
+            61000,
+            ValueError,
+        ),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            "0xf9E35E4e1CbcF08E99B84d3f6FF662Ba4c306b",
+            CONTRACT,
+            1,
+            5,
+            61000,
+            ValueError,
+        ),
         (
             PRIVATE_KEY_TO_SEND_FROM,
             DESTINATION_ADDRESS,
@@ -309,17 +422,64 @@ async def test_get_contract_decimals(eth_client: AioTxETHClient, contract, expec
             61000,
             ValueError,
         ),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 5, 61000, ReplacementTransactionUnderpriced),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1000, 5, 61000, ReplacementTransactionUnderpriced),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 0, 61000, AioTxError),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 0, 5, 61000, ReplacementTransactionUnderpriced),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            1,
+            5,
+            61000,
+            ReplacementTransactionUnderpriced,
+        ),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            1000,
+            5,
+            61000,
+            ReplacementTransactionUnderpriced,
+        ),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            1,
+            0,
+            61000,
+            AioTxError,
+        ),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            0,
+            5,
+            61000,
+            ReplacementTransactionUnderpriced,
+        ),
         (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 5, 0, AioTxError),
-        (PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, 1, 5, 61000, ReplacementTransactionUnderpriced),
+        (
+            PRIVATE_KEY_TO_SEND_FROM,
+            DESTINATION_ADDRESS,
+            CONTRACT,
+            1,
+            5,
+            61000,
+            ReplacementTransactionUnderpriced,
+        ),
     ],
 )
 @vcr_c.use_cassette("eth/send_token_transaction.yaml")
 async def test_send_token_transaction(
-    eth_client: AioTxETHClient, private_key, to_address, contract, amount, gas_price, gas_limit, expected_exception
+    eth_client: AioTxETHClient,
+    private_key,
+    to_address,
+    contract,
+    amount,
+    gas_price,
+    gas_limit,
+    expected_exception,
 ):
     """
     Here it's raising ReplacementTransactionUnderpriced and NonceTooLowError because we have reusing
@@ -331,11 +491,21 @@ async def test_send_token_transaction(
     if expected_exception:
         with pytest.raises(expected_exception):
             await eth_client.send_token(
-                private_key, to_address, contract, wei_amount, gas_price=gas_price, gas_limit=gas_limit
+                private_key,
+                to_address,
+                contract,
+                wei_amount,
+                gas_price=gas_price,
+                gas_limit=gas_limit,
             )
     else:
         result = await eth_client.send_token(
-            private_key, to_address, contract, wei_amount, gas_price=gas_price, gas_limit=gas_limit
+            private_key,
+            to_address,
+            contract,
+            wei_amount,
+            gas_price=gas_price,
+            gas_limit=gas_limit,
         )
         assert isinstance(result, str)
 
@@ -358,5 +528,7 @@ async def test_send_token_transaction_with_custom_nonce(eth_client: AioTxETHClie
 @vcr_c.use_cassette("eth/send_token_transaction_with_auto_params.yaml")
 async def test_send_transaction_with_auto_params(eth_client: AioTxETHClient):
     wei_amount = eth_client.to_wei(0.00001, "mwei")
-    tx_id = await eth_client.send_token(PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, wei_amount)
+    tx_id = await eth_client.send_token(
+        PRIVATE_KEY_TO_SEND_FROM, DESTINATION_ADDRESS, CONTRACT, wei_amount
+    )
     assert isinstance(tx_id, str)

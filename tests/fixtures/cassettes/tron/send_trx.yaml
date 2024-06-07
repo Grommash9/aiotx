@@ -1,0 +1,259 @@
+interactions:
+- request:
+    body: '{"owner_address": "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", "to_address": "TYge3Gid6vVaQvnPVRJ6SVwzC64cw2eBkN",
+      "amount": 1000000, "visible": true, "extra_data": ""}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/createtransaction
+  response:
+    body:
+      string: '{"visible":true,"txID":"53a4f1ef3614b49c530708c109556246bc87faab6d34a428e77c0419ea940041","raw_data":{"contract":[{"parameter":{"value":{"amount":1000000,"owner_address":"TEZQQ5BXq3nFKUFJknoV15CW24twzH81La","to_address":"TYge3Gid6vVaQvnPVRJ6SVwzC64cw2eBkN"},"type_url":"type.googleapis.com/protocol.TransferContract"},"type":"TransferContract"}],"ref_block_bytes":"aa53","ref_block_hash":"fef397778701762c","expiration":1717759425000,"timestamp":1717759367828},"raw_data_hex":"0a02aa532208fef397778701762c40e8f3c293ff315a67080112630a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412320a1541325828ce56c69e0e6be7c3da62ba0c60992b547e121541f928b8f3ffb2763e11442cd26ef37b89a7f396f318c0843d7094b5bf93ff31"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '746'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:22:47 GMT
+      Server:
+      - openresty
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"signature": ["23b209dd478b391de109c51262ed006cc05c19e29480db3a954031a9afea604e787e2f2c39447471f94ca4bf8c3686f50afb9b35504f6ec0ec13564daa5cc15800"],
+      "raw_data_hex": "0a02aa532208fef397778701762c40e8f3c293ff315a67080112630a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412320a1541325828ce56c69e0e6be7c3da62ba0c60992b547e121541f928b8f3ffb2763e11442cd26ef37b89a7f396f318c0843d7094b5bf93ff31",
+      "raw_data": {"contract": [{"parameter": {"value": {"amount": 1000000, "owner_address":
+      "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", "to_address": "TYge3Gid6vVaQvnPVRJ6SVwzC64cw2eBkN"},
+      "type_url": "type.googleapis.com/protocol.TransferContract"}, "type": "TransferContract"}],
+      "ref_block_bytes": "aa53", "ref_block_hash": "fef397778701762c", "expiration":
+      1717759425000, "timestamp": 1717759367828}, "visible": true, "txID": "53a4f1ef3614b49c530708c109556246bc87faab6d34a428e77c0419ea940041"}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/broadcasttransaction
+  response:
+    body:
+      string: '{"result":true,"txid":"53a4f1ef3614b49c530708c109556246bc87faab6d34a428e77c0419ea940041"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '90'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:22:48 GMT
+      Server:
+      - openresty
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"owner_address": "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", "to_address": "TYge3Gid6vVaQvnPVRJ6SVwzC64cw2eBkN",
+      "amount": 5000000, "visible": true, "extra_data": "6f72703375686724c2a328545550343274333850284855246833723567382929"}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/createtransaction
+  response:
+    body:
+      string: '{"visible":true,"txID":"06227edc693ed47962d1789fecf6bab84fe9fe8d9961a35daf79127c57256ecb","raw_data":{"data":"36663732373033333735363836373234633261333238353435353530333433323734333333383530323834383535323436383333373233353637333832393239","contract":[{"parameter":{"value":{"amount":5000000,"owner_address":"TEZQQ5BXq3nFKUFJknoV15CW24twzH81La","to_address":"TYge3Gid6vVaQvnPVRJ6SVwzC64cw2eBkN"},"type_url":"type.googleapis.com/protocol.TransferContract"},"type":"TransferContract"}],"ref_block_bytes":"aa54","ref_block_hash":"4f2e29a8652c555e","expiration":1717759428000,"timestamp":1717759369650},"raw_data_hex":"0a02aa5422084f2e29a8652c555e40a08bc393ff315240366637323730333337353638363732346332613332383534353535303334333237343333333835303238343835353234363833333732333536373338323932395a68080112640a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412330a1541325828ce56c69e0e6be7c3da62ba0c60992b547e121541f928b8f3ffb2763e11442cd26ef37b89a7f396f318c096b10270b2c3bf93ff31"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1018'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:22:49 GMT
+      Server:
+      - openresty
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"signature": ["f5b2b4f92e4ae9dad32c79cef6da24042e30df74602f87d36935f199d542bb2b42ff00f9f5c3cb38b8d1ef5028b8cc2d5bce85fed87d73aa1ea3298e50e2dce400"],
+      "raw_data_hex": "0a02aa5422084f2e29a8652c555e40a08bc393ff315240366637323730333337353638363732346332613332383534353535303334333237343333333835303238343835353234363833333732333536373338323932395a68080112640a2d747970652e676f6f676c65617069732e636f6d2f70726f746f636f6c2e5472616e73666572436f6e747261637412330a1541325828ce56c69e0e6be7c3da62ba0c60992b547e121541f928b8f3ffb2763e11442cd26ef37b89a7f396f318c096b10270b2c3bf93ff31",
+      "raw_data": {"data": "36663732373033333735363836373234633261333238353435353530333433323734333333383530323834383535323436383333373233353637333832393239",
+      "contract": [{"parameter": {"value": {"amount": 5000000, "owner_address": "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La",
+      "to_address": "TYge3Gid6vVaQvnPVRJ6SVwzC64cw2eBkN"}, "type_url": "type.googleapis.com/protocol.TransferContract"},
+      "type": "TransferContract"}], "ref_block_bytes": "aa54", "ref_block_hash": "4f2e29a8652c555e",
+      "expiration": 1717759428000, "timestamp": 1717759369650}, "visible": true, "txID":
+      "06227edc693ed47962d1789fecf6bab84fe9fe8d9961a35daf79127c57256ecb"}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/broadcasttransaction
+  response:
+    body:
+      string: '{"result":true,"txid":"06227edc693ed47962d1789fecf6bab84fe9fe8d9961a35daf79127c57256ecb"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '90'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:22:50 GMT
+      Server:
+      - openresty
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"owner_address": "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", "to_address": "TYge3Gid6vVaQvnPVRJ6SVwzC64cw2eBkN",
+      "amount": 99999999999000000, "visible": true, "extra_data": "746573745f6d656d6f"}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/createtransaction
+  response:
+    body:
+      string: '{"Error":"class org.tron.core.exception.ContractValidateException :
+        Validate TransferContract error, balance is not sufficient."}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '130'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:22:51 GMT
+      Server:
+      - openresty
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"owner_address": "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", "to_address": "d",
+      "amount": 1000000, "visible": true, "extra_data": "746573745f6d656d6f"}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/createtransaction
+  response:
+    body:
+      string: '{"Error":"class java.lang.NullPointerException : null"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '56'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:22:52 GMT
+      Server:
+      - openresty
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"owner_address": "TEZQQ5BXq3nFKUFJknoV15CW24twzH81La", "to_address": "Yge3Gid6vVaQvnPVRJ6SVwzC64cw2eBkN",
+      "amount": 2000000, "visible": true, "extra_data": "746573745f6d656d6f"}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://api.shasta.trongrid.io/wallet/createtransaction
+  response:
+    body:
+      string: '{"Error":"class java.lang.NullPointerException : null"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '56'
+      Content-Type:
+      - application/json;charset=utf-8
+      Date:
+      - Fri, 07 Jun 2024 11:22:53 GMT
+      Server:
+      - openresty
+    status:
+      code: 200
+      message: OK
+version: 1

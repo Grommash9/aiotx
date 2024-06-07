@@ -1,26 +1,36 @@
 interactions:
 - request:
-    body: '{"method": "eth_call", "params": [{"to": "41ea51342dabbb928ae1e576bd39eff8aaf070a8c6",
+    body: '{"method": "eth_call", "params": [{"to": "4142a1e39aefa49290f2b3f9ed688d7cecf86cd6e0",
       "data": "0x313ce567"}, "latest"], "jsonrpc": "2.0", "id": 1}'
     headers:
       Content-Type:
       - application/json
     method: POST
-    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+    uri: https://api.shasta.trongrid.io/jsonrpc
   response:
     body:
       string: '{"jsonrpc":"2.0","id":1,"result":"0x0000000000000000000000000000000000000000000000000000000000000006"}
 
         '
     headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
       Content-Length:
       - '103'
       Content-Type:
-      - application/json-rpc
+      - application/json; charset=utf-8
       Date:
-      - Mon, 03 Jun 2024 04:03:29 GMT
+      - Fri, 07 Jun 2024 11:22:44 GMT
       Server:
-      - envoy
+      - openresty
     status:
       code: 200
       message: OK
@@ -31,21 +41,32 @@ interactions:
       Content-Type:
       - application/json
     method: POST
-    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+    uri: https://api.shasta.trongrid.io/jsonrpc
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"result":"0x0000000000000000000000000000000000000000000000000000000000000012"}
+      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32600,"message":"Smart contract
+        is not exist.","data":"{}"}}
 
         '
     headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
       Content-Length:
-      - '103'
+      - '102'
       Content-Type:
-      - application/json-rpc
+      - application/json; charset=utf-8
       Date:
-      - Mon, 03 Jun 2024 04:03:29 GMT
+      - Fri, 07 Jun 2024 11:22:45 GMT
       Server:
-      - envoy
+      - openresty
     status:
       code: 200
       message: OK
@@ -56,48 +77,67 @@ interactions:
       Content-Type:
       - application/json
     method: POST
-    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+    uri: https://api.shasta.trongrid.io/jsonrpc
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32000,"message":"REVERT opcode
-        executed","data":"{}"}}
+      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32600,"message":"Smart contract
+        is not exist.","data":"{}"}}
 
         '
     headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
       Content-Length:
-      - '96'
+      - '102'
       Content-Type:
-      - application/json-rpc
+      - application/json; charset=utf-8
       Date:
-      - Mon, 03 Jun 2024 04:03:30 GMT
+      - Fri, 07 Jun 2024 11:22:46 GMT
       Server:
-      - envoy
+      - openresty
     status:
       code: 200
       message: OK
 - request:
-    body: '{"method": "eth_call", "params": [{"to": "DSos1xxjqMrGKBxycVmtgrnFvv9M6FDFUX",
+    body: '{"method": "eth_call", "params": [{"to": "410c22811755ec2eca943e8b0618b4010011940202",
       "data": "0x313ce567"}, "latest"], "jsonrpc": "2.0", "id": 1}'
     headers:
       Content-Type:
       - application/json
     method: POST
-    uri: https://go.getblock.io/d5d80fb886f2401a98a7f4fe57d88839/jsonrpc
+    uri: https://api.shasta.trongrid.io/jsonrpc
   response:
     body:
-      string: '{"jsonrpc":"2.0","id":1,"error":{"code":-32602,"message":"exception
-        decoding Hex string: invalid characters encountered in Hex string","data":"{}"}}
+      string: '{"jsonrpc":"2.0","id":1,"result":"0x0000000000000000000000000000000000000000000000000000000000000006"}
 
         '
     headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - '*'
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      Connection:
+      - keep-alive
       Content-Length:
-      - '149'
+      - '103'
       Content-Type:
-      - application/json-rpc
+      - application/json; charset=utf-8
       Date:
-      - Mon, 03 Jun 2024 04:03:30 GMT
+      - Fri, 07 Jun 2024 11:25:49 GMT
       Server:
-      - envoy
+      - openresty
     status:
       code: 200
       message: OK

@@ -29,8 +29,12 @@ async def test_async_monitoring(bsc_client: AioTxBSCClient):
 
     assert 584 in blocks
     assert 585 in blocks
-    assert "0x2a9d5aea2c8e4759e4e664f48e0dac79e76cb024e670251ddb2788144cee6f43" in [tx["hash"] for tx in transactions]
-    assert "0xa45ccbf3c820f7bec2809461a8b7f1856246ed3b650ec2840bfbc303f118b76c" in [tx["hash"] for tx in transactions]
+    assert "0x2a9d5aea2c8e4759e4e664f48e0dac79e76cb024e670251ddb2788144cee6f43" in [
+        tx["hash"] for tx in transactions
+    ]
+    assert "0xa45ccbf3c820f7bec2809461a8b7f1856246ed3b650ec2840bfbc303f118b76c" in [
+        tx["hash"] for tx in transactions
+    ]
 
     for tx in transactions:
         assert "aiotx_decoded_input" in tx.keys()

@@ -9,17 +9,17 @@ class DictBuilder:
         self.ended = False
 
     def store_cell(self, index, value: Cell):
-        assert self.ended is False, 'Already ended'
+        assert self.ended is False, "Already ended"
         if isinstance(index, bytes):
             index = int(index.hex(), 16)
 
-        assert isinstance(index, int), 'Invalid index type'
-        assert index not in self.items, f'Item {index} already exist'
+        assert isinstance(index, int), "Invalid index type"
+        assert index not in self.items, f"Item {index} already exist"
         self.items[index] = value
         return self
 
     def store_ref(self, index, value: Cell):
-        assert self.ended is False, 'Already ended'
+        assert self.ended is False, "Already ended"
 
         cell = Cell()
         cell.refs.append(value)
@@ -27,7 +27,7 @@ class DictBuilder:
         return self
 
     def end_dict(self) -> Cell:
-        assert self.ended is False, 'Already ended'
+        assert self.ended is False, "Already ended"
         self.ended = True
         if not self.items:
             return Cell()  # ?
@@ -38,9 +38,10 @@ class DictBuilder:
         return serialize_dict(self.items, self.key_size, default_serializer)
 
     def end_cell(self) -> Cell:
-        assert self.ended is False, 'Already ended'
-        assert self.items, 'Dict is empty'
+        assert self.ended is False, "Already ended"
+        assert self.items, "Dict is empty"
         return self.end_dict()
+
 
 def begin_dict(key_size):
     return DictBuilder(key_size)

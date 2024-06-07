@@ -7,21 +7,26 @@ ETH_TEST_NODE_URL = "https://ethereum-sepolia-rpc.publicnode.com"
 bsc_client = AioTxBSCClient(BSC_TEST_NODE_URL)
 eth_client = AioTxETHClient(ETH_TEST_NODE_URL)
 
+
 @bsc_client.monitor.on_block
 async def handle_block(block):
     print("bsc_client: block", block)
+
 
 @bsc_client.monitor.on_transaction
 async def handle_transaction(transaction):
     print("bsc_client: transaction", transaction)
 
+
 @eth_client.monitor.on_block
 async def handle_block(block):
     print("eth_client: block", block)
 
+
 @eth_client.monitor.on_transaction
 async def handle_transaction(transaction):
     print("eth_client: transaction", transaction)
+
 
 async def main():
     monitoring_task1 = asyncio.create_task(bsc_client.start_monitoring(584))

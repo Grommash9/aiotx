@@ -29,9 +29,11 @@ async def handle_transaction(transaction):
     message = f"New transaction: {transaction_hash}"
     await bot.send_message(chat_id=chat_id, text=message)
 
+
 async def main():
     monitoring_task = asyncio.create_task(bsc_client.start_monitoring(584))
     await asyncio.gather(monitoring_task, dispatcher.start_polling(bot))
+
 
 if __name__ == "__main__":
     asyncio.run(main())

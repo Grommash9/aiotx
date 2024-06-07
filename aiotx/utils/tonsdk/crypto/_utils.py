@@ -33,8 +33,12 @@ def get_secure_random_number(min_v, max_v):
 
 
 def is_basic_seed(entropy):
-    seed = pbkdf2_hmac("sha512", entropy, 'TON seed version'.encode(
-        'utf-8'), max(1, math.floor(PBKDF_ITERATIONS / 256)))
+    seed = pbkdf2_hmac(
+        "sha512",
+        entropy,
+        "TON seed version".encode("utf-8"),
+        max(1, math.floor(PBKDF_ITERATIONS / 256)),
+    )
     return seed[0] == 0
 
 

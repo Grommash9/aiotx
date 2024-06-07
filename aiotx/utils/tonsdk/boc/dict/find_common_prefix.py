@@ -1,8 +1,7 @@
-
 def find_common_prefix(src):
     # Corner cases
     if len(src) == 0:
-        return ''
+        return ""
     if len(src) == 1:
         return src[0]
 
@@ -16,4 +15,3 @@ def find_common_prefix(src):
             break
 
     return _sorted[0][:size]
-

@@ -45,7 +45,6 @@ from aiotx.types import BlockParam
 
 
 class AioTxEVMBaseClient(AioTxClient):
-
     def __init__(self, node_url):
         super().__init__(node_url)
         self.chain_id = None
@@ -58,7 +57,7 @@ class AioTxEVMBaseClient(AioTxClient):
             return True
         except ValueError:
             return False
-        
+
     def _get_abi_entries(self):
         # Redefine that in you client
         return []
@@ -81,9 +80,10 @@ class AioTxEVMBaseClient(AioTxClient):
                     logger.warning(
                         f"Input does not match the expected format for the method '{function_name}' "
                         f"to decode the transaction with input '{input_data}'. "
-                        "It seems to have its own implementation.")
+                        "It seems to have its own implementation."
+                    )
                     return {"function_name": None, "parameters": None}
-               
+
                 decoded_params = {}
                 for i, param in enumerate(decoded_data):
                     param_name = abi_entry["inputs"][i]["name"]
@@ -99,13 +99,23 @@ class AioTxEVMBaseClient(AioTxClient):
         last_block = await self._make_rpc_call(payload)
         return int(last_block, 16)
 
-    async def get_block_by_number(self, block_number: int, transaction_detail_flag: bool = True):
-        payload = {"method": "eth_getBlockByNumber", "params": [hex(block_number), transaction_detail_flag]}
+    async def get_block_by_number(
+        self, block_number: int, transaction_detail_flag: bool = True
+    ):
+        payload = {
+            "method": "eth_getBlockByNumber",
+            "params": [hex(block_number), transaction_detail_flag],
+        }
         result = await self._make_rpc_call(payload)
         return result
 
-    async def get_balance(self, address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
-        payload = {"method": "eth_getBalance", "params": [address, block_parameter.value]}
+    async def get_balance(
+        self, address, block_parameter: BlockParam = BlockParam.LATEST
+    ) -> int:
+        payload = {
+            "method": "eth_getBalance",
+            "params": [address, block_parameter.value],
+        }
         balance = await self._make_rpc_call(payload)
         return 0 if balance == "0x" else int(balance, 16)
 
@@ -136,7 +146,7 @@ class AioTxEVMBaseClient(AioTxClient):
         }
         decimals = await self._make_rpc_call(payload)
         return 0 if decimals == "0x" else int(decimals, 16)
-    
+
     async def get_transaction(self, hash) -> dict:
         payload = {"method": "eth_getTransactionByHash", "params": [hash]}
         tx_data = await self._make_rpc_call(payload)
@@ -144,12 +154,13 @@ class AioTxEVMBaseClient(AioTxClient):
             raise TransactionNotFound(f"Transaction {hash} not found!")
         tx_data["aiotx_decoded_input"] = self.decode_transaction_input(tx_data["input"])
         return tx_data
-    
+
     async def get_chain_id(self) -> int:
         payload = {"method": "eth_chainId", "params": []}
         tx_count = await self._make_rpc_call(payload)
         return 0 if tx_count == "0x" else int(tx_count, 16)
-    
+
+
 class AioTxEVMClient(AioTxEVMBaseClient):
     def __init__(self, node_url):
         super().__init__(node_url)
@@ -170,13 +181,17 @@ class AioTxEVMClient(AioTxEVMBaseClient):
             raise WrongPrivateKey(e)
         return to_checksum_address(from_address)
 
-    def from_wei(self, number: Union[int, str], unit: str = "ether") -> Union[int, decimal.Decimal]:
+    def from_wei(
+        self, number: Union[int, str], unit: str = "ether"
+    ) -> Union[int, decimal.Decimal]:
         if isinstance(number, str):
             if self.is_hex(number):
                 number = int(number, 16)
         return currency.from_wei(number, unit)
 
-    def to_wei(self, number: Union[int, float, str, decimal.Decimal], unit: str = "ether") -> int:
+    def to_wei(
+        self, number: Union[int, float, str, decimal.Decimal], unit: str = "ether"
+    ) -> int:
         if isinstance(number, str):
             if self.is_hex(number):
                 number = int(number, 16)
@@ -186,10 +201,14 @@ class AioTxEVMClient(AioTxEVMBaseClient):
         payload = {"method": "eth_gasPrice", "params": []}
         price = await self._make_rpc_call(payload)
         return 0 if price == "0x" else int(price, 16)
-    
 
-    async def get_transactions_count(self, address, block_parameter: BlockParam = BlockParam.LATEST) -> int:
-        payload = {"method": "eth_getTransactionCount", "params": [address, block_parameter.value]}
+    async def get_transactions_count(
+        self, address, block_parameter: BlockParam = BlockParam.LATEST
+    ) -> int:
+        payload = {
+            "method": "eth_getTransactionCount",
+            "params": [address, block_parameter.value],
+        }
         tx_count = await self._make_rpc_call(payload)
         return 0 if tx_count == "0x" else int(tx_count, 16)
 
@@ -244,7 +263,9 @@ class AioTxEVMClient(AioTxEVMBaseClient):
             self.chain_id = await self.get_chain_id()
         function_signature = "transfer(address,uint256)"
         function_selector = keccak(function_signature.encode("utf-8"))[:4].hex()
-        transfer_data = encode(["address", "uint256"], [to_checksum_address(to_address), amount])
+        transfer_data = encode(
+            ["address", "uint256"], [to_checksum_address(to_address), amount]
+        )
         data = "0x" + function_selector + transfer_data.hex()
 
         transaction = {
@@ -263,7 +284,7 @@ class AioTxEVMClient(AioTxEVMBaseClient):
         payload = {"method": "eth_sendRawTransaction", "params": [raw_tx]}
         result = await self._make_rpc_call(payload)
         return result
-    
+
     async def get_chain_id(self) -> int:
         payload = {"method": "eth_chainId", "params": []}
         tx_count = await self._make_rpc_call(payload)
@@ -273,7 +294,9 @@ class AioTxEVMClient(AioTxEVMBaseClient):
         payload["jsonrpc"] = "2.0"
         payload["id"] = 1
         async with aiohttp.ClientSession() as session:
-            async with session.post(self.node_url, data=json.dumps(payload)) as response:
+            async with session.post(
+                self.node_url, data=json.dumps(payload)
+            ) as response:
                 if response.status != 200:
                     raise RpcConnectionError(await response.text())
                 result = await response.json()
@@ -282,7 +305,10 @@ class AioTxEVMClient(AioTxEVMBaseClient):
                 error_code = result["error"]["code"]
                 error_message = result["error"]["message"]
                 if error_code == -32000:
-                    if "header not found" in error_message or "could not find block" in error_message:
+                    if (
+                        "header not found" in error_message
+                        or "could not find block" in error_message
+                    ):
                         raise BlockNotFoundError(error_message)
                     elif "stack limit reached" in error_message:
                         raise StackLimitReachedError(error_message)
@@ -314,12 +340,17 @@ class AioTxEVMClient(AioTxEVMBaseClient):
                 elif error_code == -32602:
                     if (
                         "invalid argument" in error_message
-                        and "cannot unmarshal hex string without 0x prefix" in error_message
-                        or "cannot unmarshal hex string of odd length into" in error_message
+                        and "cannot unmarshal hex string without 0x prefix"
+                        in error_message
+                        or "cannot unmarshal hex string of odd length into"
+                        in error_message
                         or "hex string has length" in error_message
                     ):
                         raise InvalidArgumentError(error_message)
-                    elif "eth_getLogs and eth_newFilter are limited to a 10,000 blocks range" in error_message:
+                    elif (
+                        "eth_getLogs and eth_newFilter are limited to a 10,000 blocks range"
+                        in error_message
+                    ):
                         raise BlockRangeLimitExceededError(error_message)
                 elif error_code == -32603:
                     raise InternalJSONRPCError(error_message)
@@ -339,7 +370,9 @@ class EvmMonitor(BlockMonitor):
         self,
     ):
         network_latest_block = await self.client.get_last_block_number()
-        target_block = network_latest_block if self._latest_block is None else self._latest_block
+        target_block = (
+            network_latest_block if self._latest_block is None else self._latest_block
+        )
         if target_block > network_latest_block:
             return
         block = await self.client.get_block_by_number(target_block)
@@ -352,5 +385,7 @@ class EvmMonitor(BlockMonitor):
 
         for transaction in block["transactions"]:
             for handler in self.transaction_handlers:
-                transaction["aiotx_decoded_input"] = self.client.decode_transaction_input(transaction["input"])
+                transaction["aiotx_decoded_input"] = (
+                    self.client.decode_transaction_input(transaction["input"])
+                )
                 await handler(transaction)
