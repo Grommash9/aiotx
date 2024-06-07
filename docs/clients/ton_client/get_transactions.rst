@@ -4,7 +4,7 @@ get_transactions
 .. code-block:: python
 
     async def get_transactions(
-        self, address, 
+        address, 
         limit: int = None, 
         lt: int = None, 
         hash: str = None, 

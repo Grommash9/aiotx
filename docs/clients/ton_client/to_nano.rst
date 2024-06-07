@@ -4,7 +4,6 @@ to_nano
 .. code-block:: python
 
     def to_nano(
-        self, 
         number: Union[int, float, str, decimal.Decimal], 
         unit: str = "ton"
         ) -> int:
