@@ -16,13 +16,13 @@ recipients_list = [
         "address": "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
         "amount": 1,
         "payload": "Hello, recipient 1!",
-        "send_mode": 3,
+        "send_mode": 1,
     },
     {
         "address": "UQDlTHD4T79EyT96gkYNKd3iuRd2__6gGh2PCKpU57jSWQ7j",
         "amount": 10,
         "payload": "Hello, recipient 5!",
-        "send_mode": 3,
+        "send_mode": 1,
     },
 ]
 

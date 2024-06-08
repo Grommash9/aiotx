@@ -12,12 +12,13 @@ Send TON tokens to multiple recipients in a single transaction using the Highloa
     **Important:** Before using the `send_bulk` method, you must create and deploy a HighloadWalletV2Contract wallet. The default wallet will not work with this method. Ensure that the wallet has sufficient balance to deploy itself and cover the transaction fees.
 
 Parameters:
+
     - **mnemonic** (str): The mnemonic phrase of the sender's HighloadWalletV2Contract wallet.
     - **destinations** (list[dict]): A list of dictionaries representing the recipient information. Each dictionary should contain the following keys:
         - **address** (str): The TON blockchain address of the recipient.
         - **amount** (int): The amount of TON tokens to send to the recipient, in nano grams.
         - **payload** (str, optional): The payload (memo) to include with the transaction for the recipient.
-        - **send_mode** (int, optional): The send mode for the transaction (default is 3).
+        - **send_mode** (int, optional): The send mode for the transaction (default is 1).
 
 Returns:
 
@@ -43,13 +44,13 @@ Example usage:
     "address": "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
     "amount": 1,
     "payload": "Hello, recipient 1!",
-    "send_mode": 3,
+    "send_mode": 1,
     },
     {
     "address": "UQDlTHD4T79EyT96gkYNKd3iuRd2__6gGh2PCKpU57jSWQ7j",
     "amount": 10,
     "payload": "Hello, recipient 5!",
-    "send_mode": 3,
+    "send_mode": 1,
     },
     ]
     # Deploy the HighloadWalletV2Contract wallet (required before sending)
