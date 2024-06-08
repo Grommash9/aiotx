@@ -15,7 +15,7 @@ Key Features
 
 2. **UTXO Client:** For UTXO-based networks like Bitcoin and Litecoin, AioTx provides a UTXO client. This client allows you to generate addresses, import addresses for monitoring, retrieve balances, estimate fees, and send transactions effortlessly. The UTXO client also includes support for bulk transactions, enabling you to send multiple transactions in a single operation.
 
-3. **TON Client:** Client for Telegram Open Network - now we have monitoring and token sending for it
+3. **TON Client:** Client for Telegram Open Network - now we have monitoring and token sending TON and bulk send
 
 4. **TRON Client:** Client for TRON (trx) blockchain - you can monitor transaction and do TRX/TRC20 transactions
 
@@ -86,7 +86,7 @@ async def main():
 asyncio.run(main())
 ```
 
-Sending TON:
+Sending TON (for bulk please check [/examples](https://github.com/Grommash9/aiotx/tree/main/examples)):
 ```python
     from aiotx.clients import AioTxTONClient
     import asyncio
