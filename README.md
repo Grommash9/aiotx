@@ -1,6 +1,17 @@
 ## AioTx
 
 [![PyPI Downloads](https://img.shields.io/pypi/dm/aiotx.svg)](https://pypistats.org/packages/aiotx)
+[![Ruff](https://img.shields.io/badge/code%20style-ruff-ff69b4.svg)](https://github.com/charliermarsh/ruff)
+[![Python Versions](https://img.shields.io/pypi/pyversions/aiotx.svg)](https://pypi.org/project/aiotx/)
+[![OS Support](https://img.shields.io/badge/OS-Windows%20%7C%20macOS%20%7C%20Linux-blue.svg)](https://pypi.org/project/aiotx/)
+
+[![Bitcoin](https://img.shields.io/badge/Bitcoin-BTC-orange.svg)](https://bitcoin.org/)
+[![Litecoin](https://img.shields.io/badge/Litecoin-LTC-lightgrey.svg)](https://litecoin.org/)
+[![Ethereum](https://img.shields.io/badge/Ethereum-ETH-blue.svg)](https://ethereum.org/)
+[![Binance Smart Chain](https://img.shields.io/badge/Binance%20Smart%20Chain-BSC-yellow.svg)](https://www.binance.org/en/smartChain)
+[![Polygon](https://img.shields.io/badge/Polygon-MATIC-purple.svg)](https://polygon.technology/)
+[![TON](https://img.shields.io/badge/TON-TON-blue.svg)](https://ton.org/)
+[![TRON](https://img.shields.io/badge/TRON-TRX-red.svg)](https://tron.network/)
 
 AioTx is a comprehensive Python package designed to simplify and streamline your cryptocurrency operations. Whether you're working with Ethereum Virtual Machine (EVM) based networks, UTXO-based networks like Bitcoin and Litecoin, or TON, AioTx provides a unified and user-friendly interface for interacting with these blockchains.
 
