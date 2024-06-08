@@ -1,5 +1,7 @@
 ## AioTx
 
+[![PyPI Downloads](https://img.shields.io/pypi/dm/aiotx.svg)](https://pypistats.org/packages/aiotx)
+
 AioTx is a comprehensive Python package designed to simplify and streamline your cryptocurrency operations. Whether you're working with Ethereum Virtual Machine (EVM) based networks, UTXO-based networks like Bitcoin and Litecoin, or TON, AioTx provides a unified and user-friendly interface for interacting with these blockchains.
 
 I created AioTx because I wanted to consolidate all the crypto operations that I frequently use into one convenient package. The goal was to have a collection of crypto clients that I regularly work with, all in one place, with a consistent and intuitive API.
