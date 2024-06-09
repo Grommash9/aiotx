@@ -5,7 +5,9 @@ Get the current transaction count (seqno) for a given address.
 
 .. code-block:: python
     
-    def get_transaction_count(address) -> int
+    def get_transaction_count(
+        address
+        ) -> int
 
 Parameters:
 
@@ -33,13 +35,23 @@ Example:
 .. code-block:: python
 
     # Get the current transaction count
-    seqno = await ton_client.get_transaction_count(from_address)
+    seqno = await ton_client.get_transaction_count(
+        from_address
+        )
 
     # Send the first transaction
-    tx_hash = await ton_client.send(mnemonic, to_address, amount, seqno=seqno)
+    tx_hash = await ton_client.send(
+        mnemonic, 
+        to_address, 
+        amount, 
+        seqno=seqno)
 
     # Increment the seqno for the next transaction
     seqno += 1
 
     # Send the second transaction with the incremented seqno
-    tx_hash = await ton_client.send(mnemonic, to_address, amount, seqno=seqno)
+    tx_hash = await ton_client.send(
+        mnemonic, 
+        to_address,
+        amount, 
+        seqno=seqno)
