@@ -5,7 +5,12 @@ TRON client
 QuickStart 
 ----------
 
-To create an instance of AioTxTRONClient, you need to provide the node URL and. Here's an example:
+To create an instance of `AioTxTRONClient`, you need to provide the following parameters:
+
+    - **node_url**: The URL of the node to connect to.
+    - **headers** (dict, optional): The list of headers what will be used for interactions with node
+
+Here's an example:
 
 .. code-block:: python
 

@@ -2,7 +2,7 @@ from aiotx.clients import AioTxTONClient
 import asyncio
 
 
-ton_client = AioTxTONClient("https://testnet.toncenter.com/api/v2/jsonRPC", workchain=0)
+ton_client = AioTxTONClient("https://testnet.toncenter.com/api/v2", workchain=0)
 # We are adding workchain here because testnet.toncenter working bad and identify itself as -1 but it should be 0
 # If you are using any other provider it should work fine without workchain param
 

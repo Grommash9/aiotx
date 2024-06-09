@@ -11,6 +11,7 @@ from aiotx.exceptions import (
     RpcConnectionError,
     WrongPrivateKey,
 )
+from aiotx.log import logger
 from aiotx.utils.tonsdk.contract.wallet import Wallets, WalletVersionEnum
 from aiotx.utils.tonsdk.crypto import mnemonic_new
 from aiotx.utils.tonsdk.crypto._mnemonic import mnemonic_is_valid
@@ -22,17 +23,25 @@ from aiotx.utils.tonsdk.utils import to_nano as tonsdk_to_nano
 class AioTxTONClient(AioTxClient):
     def __init__(
         self,
-        node_url,
+        node_url: str,
+        headers: dict = {},
         wallet_version: WalletVersionEnum = WalletVersionEnum.v4r2,
         workchain: Optional[int] = None,
     ):
-        super().__init__(node_url)
+        super().__init__(node_url, headers)
         self.monitor = TonMonitor(self)
         self._monitoring_task = None
         self.workchain = workchain
         self.wallet_version = wallet_version
         self.shift = 0
         self.bit_number = 0
+
+        if "jsonRPC" in node_url:
+            logger.warning(
+                "Deprecation warning: You should not manually add the 'jsonRPC' part to the URL. This practice will soon be deprecated, and the library will handle it for you. Please update your codebase accordingly."
+            )
+        else:
+            self.node_url += "/jsonRPC"
 
     async def generate_address(self) -> tuple[str, str, str]:
         if self.workchain is None:
@@ -271,6 +280,7 @@ class AioTxTONClient(AioTxClient):
         payload["id"] = 1
         payload_json = json.dumps(payload)
         headers = {"Content-Type": "application/json"}
+        headers.update(self._headers)
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 self.node_url, data=payload_json, headers=headers

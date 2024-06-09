@@ -11,7 +11,14 @@ The TON Client supports the TON cryptocurrency and offers a range of functionali
 QuickStart
 ----------
 
-To get started with the TON Client, you need to create an instance of `AioTxTONClient` by providing the TON node URL. Here's an example:
+To create an instance of `AioTxTONClient`, you need to provide the following parameters:
+
+    - **node_url**: The URL of the node to connect to.
+    - **headers** (dict, optional): The list of headers what will be used for interactions with node
+
+
+Here's an example:
+
 
 .. code-block:: python
 
@@ -19,7 +26,7 @@ To get started with the TON Client, you need to create an instance of `AioTxTONC
    import asyncio
 
    async def main():
-      ton_client = AioTxTONClient("https://ton.getblock.io/<token>/jsonRPC")
+      ton_client = AioTxTONClient("https://ton.getblock.io/<token>")
 
       # Create a new wallet
       memo, address, raw_address = await ton_client.generate_address()
@@ -45,7 +52,7 @@ To get started with the TON Client, you need to create an instance of `AioTxTONC
       #Bulk send
       # Create a TON client with HighloadWalletV2Contract
       bulk_ton_client = AioTxTONClient(
-      "https://ton.getblock.io/<token>/jsonRPC",
+      "https://ton.getblock.io/<token>",
       wallet_version=WalletVersionEnum.hv2,
       )
 

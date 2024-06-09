@@ -35,11 +35,25 @@ To register a transaction handler, use the `@client.monitor.on_transaction` deco
 Starting and Stopping Monitoring
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-To start monitoring, you can use the `start_monitoring` method of the AioTxBSCClient instance. You can optionally specify the starting block number from which to begin monitoring. If no starting block is provided, monitoring will start from the latest block.
+To start monitoring, you can use the `start_monitoring` method of the AioTxBSCClient instance. 
+
+You can optionally specify the starting block number from which to begin monitoring. 
+
+If no starting block is provided, monitoring will start from the latest block.
+
+You can also use the `timeout_between_blocks` param for choose how much time monitoring should wait to try get new block.
+In BTC for example we can wait 5-10 seconds and it's fine, but for TON we should wait <1 second
+
+`timeout_between_blocks` is optional and set to 1 second by default
+
+    - **monitoring_start_block** (int, optional): Block number from which to begin monitoring.
+    - **timeout_between_blocks** (int, optional): How much seconds monitoring should wait to try get new block
 
 .. code-block:: python
 
-    await bsc_client.start_monitoring(584)
+    await bsc_client.start_monitoring(
+        monitoring_start_block=584, 
+        timeout_between_blocks=2)
 
 To stop monitoring, you can use the `stop_monitoring` method.
 
@@ -135,7 +149,7 @@ To monitor the TON blockchain, you need to create an instance of `AioTxTONClient
     from aiotx.clients import AioTxTONClient
     import asyncio
 
-    ton_client = AioTxTONClient("https://go.getblock.io/<token>/jsonRPC")
+    ton_client = AioTxTONClient("https://go.getblock.io/<token>")
 
     @ton_client.monitor.on_block
     async def handle_block(block):
