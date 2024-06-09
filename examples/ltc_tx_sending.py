@@ -1,5 +1,6 @@
-from aiotx.clients import AioTxLTCClient
 import asyncio
+
+from aiotx.clients import AioTxLTCClient
 
 LTC_TEST_NODE_URL = "TESTNET NODE URL"
 ltc_client = AioTxLTCClient(LTC_TEST_NODE_URL, testnet=True)

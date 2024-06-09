@@ -1,5 +1,6 @@
-from aiotx.clients import AioTxBSCClient, AioTxETHClient
 import asyncio
+
+from aiotx.clients import AioTxBSCClient, AioTxETHClient
 
 BSC_TEST_NODE_URL = "https://bsc-testnet-rpc.publicnode.com"
 ETH_TEST_NODE_URL = "https://ethereum-sepolia-rpc.publicnode.com"

@@ -1,5 +1,6 @@
-from aiotx.clients import AioTxLTCClient
 import asyncio
+
+from aiotx.clients import AioTxLTCClient
 
 ltc_client = AioTxLTCClient(
     node_url="https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet",

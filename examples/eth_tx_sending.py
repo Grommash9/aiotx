@@ -1,5 +1,6 @@
-from aiotx.clients import AioTxETHClient
 import asyncio
+
+from aiotx.clients import AioTxETHClient
 
 eth_client = AioTxETHClient(node_url="https://ethereum-sepolia-rpc.publicnode.com")
 
