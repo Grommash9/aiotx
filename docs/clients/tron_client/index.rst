@@ -17,7 +17,7 @@ Here's an example:
    from aiotx.clients import AioTxTRONClient
    import asyncio
 
-   tron_client = AioTxTRONClient("NodeUrl")
+   tron_client = AioTxTRONClient("https://api.shasta.trongrid.io")
 
 
    async def main():

@@ -16,11 +16,11 @@ QuickStart
 To create an instance of `AioTxBTCClient` or `AioTxLTCClient`, you need to provide the following parameters:
 
     - **node_url**: The URL of the node to connect to.
+    - **headers** (dict, optional): The list of headers what will be used for interactions with node
     - **testnet** (optional): A boolean indicating whether to use the testnet network (default is `False`).
     - **node_username** (optional): The username for authentication with the node (default is an empty string).
     - **node_password** (optional): The password for authentication with the node (default is an empty string).
     - **db_url** (optional): The URL of the database to store transaction and UTXO data (default is `"sqlite+aiosqlite:///aiotx_utxo.sqlite"`).
-    - **headers** (dict, optional): The list of headers what will be used for interactions with node
 
 .. code-block:: python
 
