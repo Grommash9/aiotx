@@ -63,12 +63,8 @@ class BlockMonitor:
         self.running = True
         self._latest_block = monitoring_start_block
         while self.running:
-            try:
-                await self.poll_blocks()
-                await asyncio.sleep(timeout_between_blocks)
-            except Exception as e:
-                print(f"Error during polling: {e}")
-                await asyncio.sleep(2)
+            await self.poll_blocks()
+            await asyncio.sleep(timeout_between_blocks)
 
     def stop(self):
         self.running = False
