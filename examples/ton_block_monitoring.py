@@ -1,7 +1,11 @@
-from aiotx.clients import AioTxTONClient
 import asyncio
 
-ton_client = AioTxTONClient("https://go.getblock.io/<token>/jsonRPC")
+from aiotx.clients import AioTxTONClient
+
+ton_client = AioTxTONClient(
+    "https://testnet.toncenter.com/api/v2",
+    headers={"X-API-Key": "GET API KEY FROM https://t.me/tonapibot"},
+)
 
 
 @ton_client.monitor.on_block

@@ -34,7 +34,7 @@ Example usage:
 
     # Create a TON client with HighloadWalletV2Contract
     bulk_ton_client = AioTxTONClient(
-    "https://testnet.toncenter.com/api/v2/jsonRPC",
+    "https://testnet.toncenter.com/api/v2",
     workchain=0,
     wallet_version=WalletVersionEnum.hv2,
     )

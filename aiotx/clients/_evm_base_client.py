@@ -45,8 +45,8 @@ from aiotx.types import BlockParam
 
 
 class AioTxEVMBaseClient(AioTxClient):
-    def __init__(self, node_url):
-        super().__init__(node_url)
+    def __init__(self, node_url: str, headers: dict):
+        super().__init__(node_url, headers)
         self.chain_id = None
         self.monitor = EvmMonitor(self)
         self._monitoring_task = None
@@ -162,8 +162,8 @@ class AioTxEVMBaseClient(AioTxClient):
 
 
 class AioTxEVMClient(AioTxEVMBaseClient):
-    def __init__(self, node_url):
-        super().__init__(node_url)
+    def __init__(self, node_url, headers):
+        super().__init__(node_url, headers)
         self.chain_id = None
         self.monitor = EvmMonitor(self)
         self._monitoring_task = None
@@ -295,7 +295,7 @@ class AioTxEVMClient(AioTxEVMBaseClient):
         payload["id"] = 1
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                self.node_url, data=json.dumps(payload)
+                self.node_url, data=json.dumps(payload), headers=self._headers
             ) as response:
                 if response.status != 200:
                     raise RpcConnectionError(await response.text())

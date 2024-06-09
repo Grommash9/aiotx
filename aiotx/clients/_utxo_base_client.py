@@ -67,9 +67,16 @@ def create_last_block_model(currency_name):
 
 class AioTxUTXOClient(AioTxClient):
     def __init__(
-        self, node_url, testnet, node_username, node_password, network_name, db_url
+        self,
+        node_url: str,
+        headers,
+        testnet: bool,
+        node_username,
+        node_password,
+        network_name,
+        db_url,
     ):
-        super().__init__(node_url)
+        super().__init__(node_url, headers)
         self.node_username = node_username
         self.node_password = node_password
         self.testnet = testnet
@@ -309,6 +316,7 @@ class AioTxUTXOClient(AioTxClient):
             async with session.post(
                 self.node_url,
                 data=json.dumps(payload),
+                headers=self._headers,
                 auth=aiohttp.BasicAuth(self.node_username, self.node_password),
             ) as response:
                 if response.status != 200:

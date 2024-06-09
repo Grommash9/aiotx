@@ -1,11 +1,12 @@
-from aiotx.utils.tonsdk.contract.wallet import WalletVersionEnum
-from aiotx.clients import AioTxTONClient
 import asyncio
+
+from aiotx.clients import AioTxTONClient
+from aiotx.utils.tonsdk.contract.wallet import WalletVersionEnum
 
 # For bulk send we should use HighloadWalletV2Contract and deploy it before the first send!
 
 ton_client = AioTxTONClient(
-    "https://testnet.toncenter.com/api/v2/jsonRPC",
+    "https://testnet.toncenter.com/api/v2",
     workchain=0,
     wallet_version=WalletVersionEnum.hv2,
 )

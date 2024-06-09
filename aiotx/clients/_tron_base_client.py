@@ -32,9 +32,10 @@ MAX_SUN = 10**18
 class AioTxTRONClient(AioTxEVMBaseClient):
     def __init__(
         self,
-        node_url,
+        node_url: str,
+        headers: dict = {},
     ):
-        super().__init__(node_url)
+        super().__init__(node_url, headers)
         self.monitor = TronMonitor(self)
         self._monitoring_task = None
         trc20_abi_json = pkg_resources.resource_string("aiotx.utils", "trc20_abi.json")
@@ -301,6 +302,7 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         async with aiohttp.ClientSession() as session:
             if method == "POST":
                 headers = {"Content-Type": "application/json"}
+                headers.update(self._headers)
                 payload_json = json.dumps(payload)
                 async with session.post(
                     url, data=payload_json, headers=headers

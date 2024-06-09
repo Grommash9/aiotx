@@ -19,8 +19,8 @@ __all__ = [
 
 
 class AioTxBSCClient(AioTxEVMClient):
-    def __init__(self, node_url):
-        super().__init__(node_url)
+    def __init__(self, node_url: str, headers: dict = {}):
+        super().__init__(node_url, headers)
         bep20_abi_json = pkg_resources.resource_string("aiotx.utils", "bep20_abi.json")
         self._bep20_abi = json.loads(bep20_abi_json)
 
@@ -29,8 +29,8 @@ class AioTxBSCClient(AioTxEVMClient):
 
 
 class AioTxETHClient(AioTxEVMClient):
-    def __init__(self, node_url):
-        super().__init__(node_url)
+    def __init__(self, node_url: str, headers: dict = {}):
+        super().__init__(node_url, headers)
         erc20_abi_json = pkg_resources.resource_string("aiotx.utils", "erc20_abi.json")
         self._erc20_abi = json.loads(erc20_abi_json)
 
@@ -39,8 +39,8 @@ class AioTxETHClient(AioTxEVMClient):
 
 
 class AioTxPolygonClient(AioTxEVMClient):
-    def __init__(self, node_url):
-        super().__init__(node_url)
+    def __init__(self, node_url: str, headers: dict = {}):
+        super().__init__(node_url, headers)
         erc20_abi_json = pkg_resources.resource_string("aiotx.utils", "erc20_abi.json")
         self._erc20_abi = json.loads(erc20_abi_json)
 
@@ -52,6 +52,7 @@ class AioTxBTCClient(AioTxUTXOClient):
     def __init__(
         self,
         node_url,
+        headers: dict = {},
         testnet=False,
         node_username: str = "",
         node_password: str = "",
@@ -59,7 +60,13 @@ class AioTxBTCClient(AioTxUTXOClient):
     ):
         network_name = "testnet" if testnet else "bitcoin"
         super().__init__(
-            node_url, testnet, node_username, node_password, network_name, db_url
+            node_url,
+            headers,
+            testnet,
+            node_username,
+            node_password,
+            network_name,
+            db_url,
         )
 
 
@@ -67,6 +74,7 @@ class AioTxLTCClient(AioTxUTXOClient):
     def __init__(
         self,
         node_url,
+        headers: dict = {},
         testnet=False,
         node_username: str = "",
         node_password: str = "",
@@ -74,5 +82,11 @@ class AioTxLTCClient(AioTxUTXOClient):
     ):
         network_name = "litecoin_testnet" if testnet else "litecoin"
         super().__init__(
-            node_url, testnet, node_username, node_password, network_name, db_url
+            node_url,
+            headers,
+            testnet,
+            node_username,
+            node_password,
+            network_name,
+            db_url,
         )

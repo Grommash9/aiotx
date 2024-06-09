@@ -2,15 +2,18 @@ import asyncio
 
 
 class AioTxClient:
-    def __init__(self, node_url):
+    def __init__(self, node_url: str, headers: dict = {}):
         self.node_url = node_url
+        self._headers = headers
         self.monitor = BlockMonitor(self)
         self._monitoring_task = None
 
-    async def start_monitoring(self, monitoring_start_block: int = None):
+    async def start_monitoring(
+        self, monitoring_start_block: int = None, timeout_between_blocks: int = 1
+    ):
         if self._monitoring_task is None:
             self._monitoring_task = asyncio.create_task(
-                self._run_monitoring(monitoring_start_block)
+                self._run_monitoring(monitoring_start_block, timeout_between_blocks)
             )
         return self._monitoring_task
 
@@ -23,10 +26,12 @@ class AioTxClient:
                 pass
             self._monitoring_task = None
 
-    async def _run_monitoring(self, monitoring_start_block):
+    async def _run_monitoring(
+        self, monitoring_start_block: int, timeout_between_blocks: int
+    ):
         try:
             async with self.monitor:
-                await self.monitor.start(monitoring_start_block)
+                await self.monitor.start(monitoring_start_block, timeout_between_blocks)
         except asyncio.CancelledError:
             pass
 
@@ -54,13 +59,13 @@ class BlockMonitor:
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         self.stop()
 
-    async def start(self, monitoring_start_block):
+    async def start(self, monitoring_start_block, timeout_between_blocks):
         self.running = True
         self._latest_block = monitoring_start_block
         while self.running:
             try:
                 await self.poll_blocks()
-                await asyncio.sleep(1)
+                await asyncio.sleep(timeout_between_blocks)
             except Exception as e:
                 print(f"Error during polling: {e}")
                 await asyncio.sleep(2)
