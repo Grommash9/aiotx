@@ -1,5 +1,6 @@
 import decimal
 import json
+import time
 from typing import Optional, Union
 
 import aiohttp
@@ -33,8 +34,9 @@ class AioTxTONClient(AioTxClient):
         self._monitoring_task = None
         self.workchain = workchain
         self.wallet_version = wallet_version
-        self.shift = 0
-        self.bit_number = 0
+        self.query_number = 0
+        self.max_query_number = 2**32 - 1
+        self.timestamp = int(time.time())
 
         if "jsonRPC" in node_url:
             logger.warning(
@@ -194,19 +196,19 @@ class AioTxTONClient(AioTxClient):
             self.workchain,
         )
         query = wallet.create_transfer_message(
-            recipients_list, query_id=self.generate_query_id()
+            recipients_list, query_id=self.generate_query_id(60)
         )
         boc = bytes_to_b64str(query["message"].to_boc(False))
         return boc
 
-    def generate_query_id(self):
-        query_id = (self.shift << 10) | self.bit_number
-        self.bit_number += 1
-        if self.bit_number > 1022:
-            self.bit_number = 0
-            self.shift += 1
-            if self.shift > 8191:
-                self.shift = 0
+    def generate_query_id(self, timeout):
+        timestamp = int(time.time() + timeout)
+        if timestamp > self.timestamp:
+            self.timestamp = timestamp
+            self.query_number = 0
+
+        query_id = (self.timestamp << 32) + self.query_number
+        self.query_number = (self.query_number + 1) % (self.max_query_number + 1)
         return query_id
 
     def _create_transfer_boc(
