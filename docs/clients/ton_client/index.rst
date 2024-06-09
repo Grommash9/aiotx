@@ -22,11 +22,14 @@ Here's an example:
 
 .. code-block:: python
 
-   from aiotx.clients import AioTxTONClient
-   import asyncio
+      from aiotx.clients import AioTxTONClient
+      import asyncio
 
-   async def main():
-      ton_client = AioTxTONClient("https://ton.getblock.io/<token>")
+      async def main():
+         ton_client = AioTxTONClient(
+            "https://testnet.toncenter.com/api/v2",
+            headers={"X-API-Key": "GET API KEY FROM https://t.me/tonapibot"},
+   )
 
       # Create a new wallet
       memo, address, raw_address = await ton_client.generate_address()
@@ -51,9 +54,11 @@ Here's an example:
 
       #Bulk send
       # Create a TON client with HighloadWalletV2Contract
-      bulk_ton_client = AioTxTONClient(
-      "https://ton.getblock.io/<token>",
-      wallet_version=WalletVersionEnum.hv2,
+
+      ton_client = AioTxTONClient(
+         "https://testnet.toncenter.com/api/v2",
+         headers={"X-API-Key": "GET API KEY FROM https://t.me/tonapibot"},
+         wallet_version=WalletVersionEnum.hv2,
       )
 
       # Deploy the HighloadWalletV2Contract wallet (required before sending)
@@ -94,6 +99,7 @@ Methods
    get_transactions
    to_nano
    from_nano
+   get_transaction_count
    send
    send_bulk
    
