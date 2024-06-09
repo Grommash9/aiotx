@@ -80,7 +80,7 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         private_key: str,
         to_address: str,
         amount: int,
-        memo: str = None,
+        memo: str = "",
     ) -> str:
         if not isinstance(memo, str):
             raise TypeError("Memo should be represented as a string!")
@@ -104,7 +104,7 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         to_address: str,
         contract: str,
         amount: int,
-        memo: str = None,
+        memo: str = "",
     ):
         if not isinstance(memo, str):
             raise TypeError("Memo should be represented as a string!")
