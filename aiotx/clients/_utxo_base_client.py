@@ -8,7 +8,7 @@ from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
 from bitcoinlib.keys import HDKey, Key
 from bitcoinlib.networks import Network
 from bitcoinlib.transactions import Transaction
-from sqlalchemy import Boolean, Column, Integer, String, select, update
+from sqlalchemy import BigInteger, Boolean, Column, Integer, String, select, update
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 from sqlalchemy.pool import NullPool
@@ -49,7 +49,7 @@ def create_utxo_model(currency_name):
         tx_id = Column(String(255), primary_key=True)
         output_n = Column(Integer, primary_key=True)
         address = Column(String(255))
-        amount_satoshi = Column(Integer)
+        amount_satoshi = Column(BigInteger)
         used = Column(Boolean, default=False)
 
     return UTXO
