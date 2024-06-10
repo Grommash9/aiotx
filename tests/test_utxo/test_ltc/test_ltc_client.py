@@ -532,3 +532,18 @@ async def test_monitoring_balance_send_mark_as_used(ltc_client_mysql: AioTxLTCCl
         deduct_fee=True,
     )
     assert tx_id == "e9830d6d57c3a77a8d64c0df1a44eccdb0eeed6ef8fda66fb82d113c45dff6a1"
+
+
+@pytest.mark.mysql
+@vcr_c.use_cassette("ltc/big_integer_field_for_satoshi_check.yaml")
+async def test_big_integer_field_for_satoshi_check(ltc_client_mysql: AioTxLTCClient):
+    await ltc_client_mysql.import_address(TEST_LTC_ADDRESS, 3262692)
+    utxo_value_balance = 317013443500
+    await ltc_client_mysql.monitor._add_new_utxo(
+        TEST_LTC_ADDRESS,
+        "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525",
+        utxo_value_balance,
+        0,
+    )
+    balance = await ltc_client_mysql.get_balance(TEST_LTC_ADDRESS)
+    assert balance == utxo_value_balance
