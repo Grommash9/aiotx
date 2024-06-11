@@ -2,7 +2,7 @@ import decimal
 import json
 from decimal import localcontext
 from typing import Optional, Union
-from aiotx.log import logger
+
 import aiohttp
 import pkg_resources
 from aiohttp import ClientResponse
@@ -18,6 +18,7 @@ from aiotx.exceptions import (
     InvalidArgumentError,
     RpcConnectionError,
 )
+from aiotx.log import logger
 from aiotx.types import BlockParam
 
 units = {
