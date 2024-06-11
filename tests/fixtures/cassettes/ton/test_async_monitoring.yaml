@@ -569,4 +569,25 @@ interactions:
     status:
       code: 200
       message: OK
+- request:
+    body: '{"method": "getMasterchainInfo", "params": {}, "jsonrpc": "2.0", "id":
+      1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://go.getblock.io/875fb0dee2544bb0bc59dd08c6f39330/jsonRPC
+  response:
+    body:
+      string: ''
+    headers:
+      Content-Length:
+      - '0'
+      Date:
+      - Tue, 11 Jun 2024 17:40:42 GMT
+      Server:
+      - envoy
+    status:
+      code: 404
+      message: Not Found
 version: 1

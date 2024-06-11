@@ -790,4 +790,114 @@ interactions:
     status:
       code: 200
       message: OK
+- request:
+    body: '{"method": "getMasterchainInfo", "params": {}, "jsonrpc": "2.0", "id":
+      1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"@type":"blocks.masterchainInfo","last":{"@type":"ton.blockIdExt","workchain":-1,"shard":"-9223372036854775808","seqno":20049088,"root_hash":"4NuQkZ6eymePMcvU1vkjtmOL15oUu3NdLJZpUn9uKKo=","file_hash":"rxH2WUkEDdpn148tfqEGa4qlq+aA1/QTU7Y9GW/wDUU="},"state_root_hash":"X+o9nOknRd1T726ONctyUI0ML7DroXvwhM6bwmlZ24Q=","init":{"@type":"ton.blockIdExt","workchain":-1,"shard":"0","seqno":0,"root_hash":"gj+B8wb/AmlPk1z1AhVI484rhrUpgSr2oSFIh56VoSg=","file_hash":"Z+IKwYS54DmmJmesw/nAD5DzWadnOCMzee+kdgSYDOg="},"@extra":"1718127654.701747:4:0.44676475998868126"},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 892363567d797309-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 11 Jun 2024 17:40:45 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "shards", "params": {"seqno": 19627953}, "jsonrpc": "2.0", "id":
+      1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"@type":"blocks.shards","shards":[{"@type":"ton.blockIdExt","workchain":0,"shard":"2305843009213693952","seqno":21086014,"root_hash":"doHruA/E9ptkv8b/m3SIowYFlraWcgSuPm8tVJ+sPDk=","file_hash":"sxGe2bM5fpmNqVfa9AVFm2oMYiMlNxgs+F8VQTROzlI="},{"@type":"ton.blockIdExt","workchain":0,"shard":"6917529027641081856","seqno":21086025,"root_hash":"TcT7bSc6nnbeOD3z9TIELxi47YDhfNvZAsSBX9Hu8Jc=","file_hash":"a4X+l6Te1yIauiopgXIz/Eo8eelH71FajAa73WOrZZM="},{"@type":"ton.blockIdExt","workchain":0,"shard":"-6917529027641081856","seqno":21083299,"root_hash":"MeBJeZKZDNI5RXxb3bCN4GnSW0BNekLzgR/NMfpUvhY=","file_hash":"jXt6FIbvvDnb1b5+H/j0EWMqCD4BidjLXQoNZV8hWiQ="},{"@type":"ton.blockIdExt","workchain":0,"shard":"-2305843009213693952","seqno":21084228,"root_hash":"mS075KDLuTnFk7cU9E/n9pFJKUc7qynzE91Gzp7AIOg=","file_hash":"bg2pgpACXfiOfaMTgnF+ec4ceB/E4TrZVATI+3vgekE="}],"@extra":"1718127465.5614314:2:0.7505514337708258"},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 89236357af963860-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 11 Jun 2024 17:40:45 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getBlockTransactions", "params": {"workchain": 0, "shard":
+      "2305843009213693952", "seqno": 21086014, "count": 1000}, "jsonrpc": "2.0",
+      "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":false,"result":"Ratelimit exceed","code":429}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 892363594e1e954b-LHR
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '51'
+      Content-Type:
+      - application/json
+      Date:
+      - Tue, 11 Jun 2024 17:40:45 GMT
+      Server:
+      - cloudflare
+    status:
+      code: 429
+      message: Too Many Requests
 version: 1
