@@ -1,8 +1,9 @@
+import asyncio
 import decimal
 import json
 import time
 from typing import Optional, Union
-import asyncio
+
 import aiohttp
 
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
