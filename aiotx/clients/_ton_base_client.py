@@ -283,11 +283,13 @@ class AioTxTONClient(AioTxClient):
         payload_json = json.dumps(payload)
         headers = {"Content-Type": "application/json"}
         headers.update(self._headers)
+        logger.info(f"rpc call payload: {payload}")
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 self.node_url, data=payload_json, headers=headers
             ) as response:
                 response_text = await response.text()
+                logger.info(f"rpc call result: {response_text}")
                 if response.status != 200:
                     if "cannot find block" in response_text:
                         raise BlockNotFoundError(response_text)
