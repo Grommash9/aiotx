@@ -1,7 +1,7 @@
 import asyncio
 import json
 from typing import Optional, Union
-
+from decimal import Decimal
 import aiohttp
 from aiohttp.client_exceptions import ClientError, ClientOSError
 from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
@@ -86,7 +86,7 @@ class AioTxUTXOClient(AioTxClient):
 
     @staticmethod
     def to_satoshi(amount: Union[int, float]) -> int:
-        return int(amount * 10**8)
+        return int(Decimal(str(amount)) * Decimal(10**8))
 
     @staticmethod
     def from_satoshi(amount: int) -> float:
@@ -254,7 +254,7 @@ class AioTxUTXOClient(AioTxClient):
         if deduct_fee:
             leftover = total_value - total_amount
         else:
-            leftover = total_value - total_amount - fee
+            leftover = int(total_value - total_amount - fee)
 
         if leftover > 0:
             outputs.append((from_address, leftover))
