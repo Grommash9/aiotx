@@ -1,7 +1,8 @@
 import asyncio
 import json
-from typing import Optional, Union
 from decimal import Decimal
+from typing import Optional, Union
+
 import aiohttp
 from aiohttp.client_exceptions import ClientError, ClientOSError
 from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
