@@ -59,17 +59,17 @@ class BlockMonitor:
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         self.stop()
 
-    async def start(self, monitoring_start_block, timeout_between_blocks):
+    async def start(self, monitoring_start_block: int, timeout_between_blocks: int):
         self.running = True
         self._latest_block = monitoring_start_block
         while self.running:
-            await self.poll_blocks()
+            await self.poll_blocks(timeout_between_blocks)
             await asyncio.sleep(timeout_between_blocks)
 
     def stop(self):
         self.running = False
 
-    async def poll_blocks(self):
+    async def poll_blocks(self, _: int):
         pass
 
     async def process_block(self, block):

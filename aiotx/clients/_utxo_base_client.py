@@ -359,7 +359,7 @@ class UTXOMonitor(BlockMonitor):
         self.UTXO = create_utxo_model(self.client._network.name)
         self.LastBlock = create_last_block_model(self.client._network.name)
 
-    async def poll_blocks(self):
+    async def poll_blocks(self, _: int):
         network_last_block = await self.client.get_last_block_number()
         local_latest_block = await self._get_last_block()
         if local_latest_block is None:

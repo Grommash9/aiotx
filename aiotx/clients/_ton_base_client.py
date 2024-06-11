@@ -1,3 +1,4 @@
+import asyncio
 import decimal
 import json
 import time
@@ -310,9 +311,7 @@ class TonMonitor(BlockMonitor):
         self.running = False
         self._last_master_block = last_master_block
 
-    async def poll_blocks(
-        self,
-    ):
+    async def poll_blocks(self, timeout_between_blocks: int):
         workchain, shard, seqno = await self.client._get_network_params()
         if self.client.workchain is None:
             self.client.workchain = workchain
@@ -321,6 +320,7 @@ class TonMonitor(BlockMonitor):
             return
         shards = await self.client.get_master_block_shards(target_block)
         for shard in shards:
+            asyncio.sleep(timeout_between_blocks)
             shard_transactions = await self.client.get_block_transactions(
                 shard["workchain"], shard["shard"], shard["seqno"], 1000
             )

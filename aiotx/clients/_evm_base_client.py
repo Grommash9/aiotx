@@ -369,9 +369,7 @@ class EvmMonitor(BlockMonitor):
         self.running = False
         self._latest_block = None
 
-    async def poll_blocks(
-        self,
-    ):
+    async def poll_blocks(self, _: int):
         network_latest_block = await self.client.get_last_block_number()
         target_block = (
             network_latest_block if self._latest_block is None else self._latest_block
