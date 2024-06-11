@@ -13,6 +13,10 @@
 [![TON](https://img.shields.io/badge/TON-TON-blue.svg)](https://ton.org/)
 [![TRON](https://img.shields.io/badge/TRON-TRX-red.svg)](https://tron.network/)
 
+[![MySQL Test](https://github.com/Grommash9/aiotx/actions/workflows/mysql_test.yml/badge.svg)](https://github.com/Grommash9/aiotx/actions/workflows/mysql_test.yml)
+[![Test](https://github.com/Grommash9/aiotx/actions/workflows/test.yml/badge.svg)](https://github.com/Grommash9/aiotx/actions/workflows/test.yml)
+[![Ruff lint check](https://github.com/Grommash9/aiotx/actions/workflows/lint-check.yml/badge.svg)](https://github.com/Grommash9/aiotx/actions/workflows/lint-check.yml)
+
 AioTx is a comprehensive Python package designed to simplify and streamline your cryptocurrency operations. Whether you're working with Ethereum Virtual Machine (EVM) based networks, UTXO-based networks like Bitcoin and Litecoin, or TON, AioTx provides a unified and user-friendly interface for interacting with these blockchains.
 
 I created AioTx because I wanted to consolidate all the crypto operations that I frequently use into one convenient package. The goal was to have a collection of crypto clients that I regularly work with, all in one place, with a consistent and intuitive API.

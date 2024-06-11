@@ -131,7 +131,7 @@ async def test_async_monitoring_mysql(btc_client_mysql: AioTxBTCClient):
     utxo = await btc_client_mysql.monitor._get_utxo_data(
         "tb1p2z70my9zwxsuqevdxjn909c7jyp89z4qv3uhy5wggn47ruvfa65s4fnngd"
     )
-    assert balance == 478778279
+    assert balance == 478778280
 
     end_balance_utxo_wallet = await btc_client_mysql.get_balance(
         "tb1paf6damf5052arl3r2lsufuhyu48yth8mrgxdtqj9pervz624q6xqxm7ew3"

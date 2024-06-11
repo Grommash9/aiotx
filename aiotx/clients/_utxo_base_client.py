@@ -1,5 +1,6 @@
 import asyncio
 import json
+from decimal import Decimal
 from typing import Optional, Union
 
 import aiohttp
@@ -86,7 +87,7 @@ class AioTxUTXOClient(AioTxClient):
 
     @staticmethod
     def to_satoshi(amount: Union[int, float]) -> int:
-        return int(amount * 10**8)
+        return int(Decimal(str(amount)) * Decimal(10**8))
 
     @staticmethod
     def from_satoshi(amount: int) -> float:
@@ -254,7 +255,7 @@ class AioTxUTXOClient(AioTxClient):
         if deduct_fee:
             leftover = total_value - total_amount
         else:
-            leftover = total_value - total_amount - fee
+            leftover = int(total_value - total_amount - fee)
 
         if leftover > 0:
             outputs.append((from_address, leftover))
