@@ -18,6 +18,7 @@ from aiotx.exceptions import (
     InvalidArgumentError,
     RpcConnectionError,
 )
+from aiotx.log import logger
 from aiotx.types import BlockParam
 
 units = {
@@ -299,6 +300,7 @@ class AioTxTRONClient(AioTxEVMBaseClient):
 
     async def _make_api_call(self, payload, method, path) -> dict:
         url = self.node_url + path
+        logger.info(f"api call payload: {payload} method: {method} path: {path}")
         async with aiohttp.ClientSession() as session:
             if method == "POST":
                 headers = {"Content-Type": "application/json"}
@@ -313,6 +315,7 @@ class AioTxTRONClient(AioTxEVMBaseClient):
 
     async def _process_api_answer(self, response: ClientResponse) -> dict:
         response_text = await response.text()
+        logger.info(f"api call result: {response_text} status: {response.status}")
         if response.status != 200:
             raise RpcConnectionError(
                 f"Node response status code: {response.status} response test: {response_text}"
@@ -324,12 +327,14 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         payload["jsonrpc"] = "2.0"
         payload["id"] = 1
         payload_json = json.dumps(payload)
+        logger.info(f"rpc call payload: {payload}")
         headers = {"Content-Type": "application/json"}
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 self.node_url + path, data=payload_json, headers=headers
             ) as response:
                 response_text = await response.text()
+                logger.info(f"rpc call result: {response_text}")
                 if response.status != 200:
                     raise RpcConnectionError(
                         f"Node response status code: {response.status} response test: {response_text}"

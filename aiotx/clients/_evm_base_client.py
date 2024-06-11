@@ -293,12 +293,15 @@ class AioTxEVMClient(AioTxEVMBaseClient):
     async def _make_rpc_call(self, payload) -> dict:
         payload["jsonrpc"] = "2.0"
         payload["id"] = 1
+        logger.info(f"rpc call payload: {payload}")
         async with aiohttp.ClientSession() as session:
             async with session.post(
                 self.node_url, data=json.dumps(payload), headers=self._headers
             ) as response:
+                response_text = await response.text()
+                logger.info(f"rpc call result: {response_text}")
                 if response.status != 200:
-                    raise RpcConnectionError(await response.text())
+                    raise RpcConnectionError(response_text)
                 result = await response.json()
                 if "error" not in result.keys():
                     return result["result"]
