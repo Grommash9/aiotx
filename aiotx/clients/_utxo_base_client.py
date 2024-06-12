@@ -30,7 +30,6 @@ from aiotx.types import FeeEstimate
 
 Base = declarative_base()
 
-
 def create_address_model(currency_name):
     class Address(Base):
         __tablename__ = f"{currency_name}_addresses"
@@ -40,7 +39,6 @@ def create_address_model(currency_name):
         block_number = Column(Integer)
 
     return Address
-
 
 def create_utxo_model(currency_name):
     class UTXO(Base):
@@ -55,7 +53,6 @@ def create_utxo_model(currency_name):
 
     return UTXO
 
-
 def create_last_block_model(currency_name):
     class LastBlock(Base):
         __tablename__ = f"{currency_name}_last_block"
@@ -64,7 +61,6 @@ def create_last_block_model(currency_name):
         block_number = Column(Integer, primary_key=True)
 
     return LastBlock
-
 
 class AioTxUTXOClient(AioTxClient):
     def __init__(
@@ -342,7 +338,6 @@ class AioTxUTXOClient(AioTxClient):
                     raise InternalJSONRPCError(error_message)
                 else:
                     raise AioTxError(f"Error {error_code}: {error_message}")
-
 
 class UTXOMonitor(BlockMonitor):
     def __init__(self, client: AioTxUTXOClient, db_url):
