@@ -6,7 +6,7 @@ from typing import Union
 
 import aiohttp
 from eth_abi import decode, encode
-from eth_abi.exceptions import NonEmptyPaddingBytes
+from eth_abi.exceptions import InsufficientDataBytes, NonEmptyPaddingBytes
 from eth_account import Account
 from eth_utils import (
     currency,
@@ -76,7 +76,7 @@ class AioTxEVMBaseClient(AioTxClient):
             if input_data.startswith("0x" + function_selector.hex()):
                 try:
                     decoded_data = decode(input_types, decode_hex(input_data[10:]))
-                except NonEmptyPaddingBytes:
+                except (NonEmptyPaddingBytes, InsufficientDataBytes):
                     logger.warning(
                         f"Input does not match the expected format for the method '{function_name}' "
                         f"to decode the transaction with input '{input_data}'. "
