@@ -16,7 +16,6 @@ from sqlalchemy.pool import NullPool
 
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
-    AioTxError,
     BlockNotFoundError,
     InsufficientFunds,
     InternalJSONRPCError,
