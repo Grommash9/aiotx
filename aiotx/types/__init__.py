@@ -1,5 +1,5 @@
 from enum import Enum
-
+from dataclasses import dataclass
 
 class BlockParam(Enum):
     LATEST = "latest"
@@ -13,3 +13,13 @@ class FeeEstimate(Enum):
     UNSET = "UNSET"
     ECONOMICAL = "ECONOMICAL"
     CONSERVATIVE = "CONSERVATIVE"
+
+
+
+@dataclass
+class UTXOType:
+    tx_id: str
+    output_n: int
+    address: str
+    amount_satoshi: int
+    used: bool

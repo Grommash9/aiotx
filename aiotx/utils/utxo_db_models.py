@@ -1,6 +1,7 @@
 from sqlalchemy import BigInteger, Boolean, Column, Integer, String
 from sqlalchemy.orm import declarative_base
 
+
 Base = declarative_base()
 
 

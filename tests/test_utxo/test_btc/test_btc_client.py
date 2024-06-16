@@ -280,3 +280,44 @@ async def test_get_raw_transaction(
         tx_data = await btc_client.get_raw_transaction(tx_id)
         assert isinstance(tx_data, dict)
         assert "txid" in tx_data.keys()
+
+
+
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="Skipping transaction signing tests on Windows because we are not using RFC6979 from fastecdsa by default",
+)
+@vcr_c.use_cassette("btc/cpfp_transaction.yaml")
+async def test_cpfp_transaction(btc_client: AioTxBTCClient):
+    amount = btc_client.to_satoshi(3.68059994)
+    await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
+    await btc_client.monitor._add_new_utxo(
+        TEST_BTC_ADDRESS,
+        "dea64fb299ea06975a74d460c1515c689df40d4878f0579af9b20cb987032e62",
+        amount,
+        0,
+    )
+
+    amount = 1000
+    
+    tx_id = await btc_client.send(
+        TEST_BTC_WALLET_PRIVATE_KEY,
+        "tb1p2tzs7ghuanrm8mmqqjgvm2fdkkl4t6yvmupmt8wwpvsgwcj2vsasvwnjvy",
+        amount,
+        total_fee=200,
+    )
+
+
+
+
+    utxo_list = await btc_client.monitor._get_utxo_data(TEST_BTC_ADDRESS)
+    assert len(utxo_list) == 1
+    assert (
+        utxo_list[0][0]
+        == "4f9a64d28ae22134379f7da50282d7ca2ead8a1f8378b20e25defcaaa5c59228"
+    )
+    assert utxo_list[0][2] == 14263
+    assert tx_id == "4f9a64d28ae22134379f7da50282d7ca2ead8a1f8378b20e25defcaaa5c59228"
+    await btc_client.monitor._delete_utxo(
+        "25d56f693d5c4d00d3f98e58c8bd66e8db930e38c8a556bd67737b66cbf31ab9", 0
+    )

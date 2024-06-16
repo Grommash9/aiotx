@@ -17,9 +17,11 @@ from aiotx.exceptions import (
     MethodNotFoundError,
     NotImplementedError,
     RpcConnectionError,
+    CreateTransactionError,
 )
 from aiotx.log import logger
-from aiotx.types import FeeEstimate
+from aiotx.types import FeeEstimate, UTXOType
+
 
 
 class AioTxUTXOClient(AioTxClient):
@@ -109,6 +111,85 @@ class AioTxUTXOClient(AioTxClient):
         if len(utxo_data) == 0:
             return 0
         return sum(utxo.amount_satoshi for utxo in utxo_data)
+    
+    async def speed_up_transaction_by_self_child_payment(
+            self,
+            private_key: str,
+            tx_id: str,
+            conf_target: int = 6,
+            estimate_mode: FeeEstimate = FeeEstimate.CONSERVATIVE,
+            total_fee: Optional[int] = None,
+            fee_per_byte: Optional[int] = None):
+        
+        from_wallet = self.get_address_from_private_key(private_key)
+        from_address = from_wallet["address"]
+        
+        # Getting utxo from unconfirmed slow transaction
+        slow_transaction_raw_data = await self.get_raw_transaction(tx_id)
+        outputs_from_slow_transaction = []
+        for output in slow_transaction_raw_data["vout"]:
+            # breakpoint()
+            if output["scriptPubKey"]["address"] != from_address:
+                continue
+            utxo = UTXOType(tx_id, output["n"], from_address, self.to_satoshi(output["value"]), False)
+            outputs_from_slow_transaction.append(utxo)
+        address_utxo_list: list[tuple] = await self.monitor._get_utxo_data(from_address)
+        # Adding UTXO from database in case we need more UTXO to cover transaction costs
+        print(outputs_from_slow_transaction)
+
+        for utxo_to_use in outputs_from_slow_transaction:
+            try:
+                address_utxo_list.remove(utxo_to_use)
+            except ValueError:
+                raise CreateTransactionError("Unable to allocate unspent outputs from slow transaction")
+            address_utxo_list.insert(0, utxo_to_use)
+
+        if total_fee is None:
+            # putting here 0 to just count total transaction fee based on weight
+            destinations = {from_address: 0}
+            total_fee = await self._estimate_total_fee(
+                private_key, destinations, conf_target,
+                estimate_mode, fee_per_byte, address_utxo_list, 
+                from_address, True)
+        
+        # putting total_fee * 2 to get real number of inputs to be used, 
+        # because we will not be able to send empty transaction into network 
+        # and we will also deduct commission from amount
+        destinations = {from_address: total_fee * 2}
+
+        _, inputs_used, _ = await self._create_transaction(
+            destinations, address_utxo_list, from_address, total_fee * 2, True
+        )
+        # Getting real sum to be sended to our own wallet to spend all the UTXO's what we will use for that
+        total_sum = sum([satoshi_amount for _, _, satoshi_amount in inputs_used])
+        destinations = {from_address: total_sum}
+
+        return await self._build_and_send_transaction(
+            private_key,
+            destinations,
+            conf_target,
+            estimate_mode,
+            total_fee,
+            fee_per_byte,
+            True
+        )
+            
+
+    async def _estimate_total_fee(self, private_key: str, destinations: dict, conf_target:int, estimate_mode: FeeEstimate, fee_per_byte: Optional[int], utxo_list: list, from_address: str, deduct_fee: bool):
+        empty_fee_transaction, _, _ = await self._create_transaction(
+            destinations, utxo_list, from_address, 0, deduct_fee
+        )
+        if fee_per_byte is None:
+            fee_per_kb = await self.estimate_smart_fee(conf_target, estimate_mode)
+        else:
+            fee_per_kb = fee_per_byte * 1024
+        empty_fee_transaction.fee_per_kb = fee_per_kb
+        empty_fee_transaction = self._sign_transaction(
+            empty_fee_transaction, [private_key]
+        )
+        empty_fee_transaction.estimate_size()
+        return empty_fee_transaction.calculate_fee()
+
 
     async def _build_and_send_transaction(
         self,
@@ -119,25 +200,17 @@ class AioTxUTXOClient(AioTxClient):
         total_fee: Optional[int],
         fee_per_byte: Optional[int],
         deduct_fee: bool,
+        utxo_list: list = None,
     ) -> str:
         from_wallet = self.get_address_from_private_key(private_key)
         from_address = from_wallet["address"]
         utxo_list = await self.monitor._get_utxo_data(from_address)
 
         if total_fee is None:
-            empty_fee_transaction, _, _ = await self._create_transaction(
-                destinations, utxo_list, from_address, 0, deduct_fee
-            )
-            if fee_per_byte is None:
-                fee_per_kb = await self.estimate_smart_fee(conf_target, estimate_mode)
-            else:
-                fee_per_kb = fee_per_byte * 1024
-            empty_fee_transaction.fee_per_kb = fee_per_kb
-            empty_fee_transaction = self._sign_transaction(
-                empty_fee_transaction, [private_key]
-            )
-            empty_fee_transaction.estimate_size()
-            total_fee = empty_fee_transaction.calculate_fee()
+            total_fee = await self._estimate_total_fee(
+                private_key, destinations, conf_target,
+                estimate_mode, fee_per_byte, utxo_list, 
+                from_address, deduct_fee)
 
         transaction, inputs_used, outputs_used = await self._create_transaction(
             destinations, utxo_list, from_address, total_fee, deduct_fee
@@ -531,7 +604,7 @@ class UTXOMonitor(BlockMonitor):
         if utxo:
             await self._delete_utxo(txid, vout)
 
-    async def _get_utxo_data(self, address: str, spent=False):
+    async def _get_utxo_data(self, address: str, spent=False) -> UTXOType:
         from sqlalchemy import select
 
         async with self._session() as session:
@@ -543,8 +616,18 @@ class UTXOMonitor(BlockMonitor):
                     self.UTXO.used,
                 ).where((self.UTXO.address == address) & (self.UTXO.used == spent))
             )
-            return result.fetchall()
-
+            rows = result.fetchall()
+            return [
+            UTXOType(
+                tx_id=row.tx_id,
+                output_n=row.output_n,
+                address=address,
+                amount_satoshi=row.amount_satoshi,
+                used=row.used,
+            )
+            for row in rows
+            ]
+        
     async def _mark_utxo_used(self, tx_id: str, output_n: str) -> None:
         from sqlalchemy import update
 
