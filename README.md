@@ -63,7 +63,7 @@ sudo apt-get install libgmp-dev
 
 Some clients need sub-dependencies, and if you want to use only TON, for example, you may not need sub-dependencies for BTC/ETH. Because of that, they are divided into extras.
 
-To be able to use TON/TRON, please use:
+To be able to use TON, please use:
 
 ```python
 pip install aiotx
@@ -75,7 +75,7 @@ To be able to use BTC/LTC (UTXO), please use:
 pip install aiotx[utxo]
 ```
 
-To be able to use ETH/MATIC/BSC (EVM), please use:
+To be able to use ETH/MATIC/BSC/TRON (EVM), please use:
 
 ```python
 pip install aiotx[evm]
