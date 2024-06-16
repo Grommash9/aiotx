@@ -6,7 +6,7 @@ import pytest
 from conftest import vcr_c
 
 from aiotx.clients import AioTxLTCClient
-from aiotx.exceptions import InsufficientFunds
+from aiotx.exceptions import InsufficientFunds, NotImplementedError, RpcConnectionError
 
 TEST_LTC_WALLET_PRIVATE_KEY = os.getenv("TEST_LTC_WALLET_PRIVATE_KEY")
 assert TEST_LTC_WALLET_PRIVATE_KEY is not None, "add TEST_LTC_WALLET_PRIVATE_KEY"
@@ -547,3 +547,87 @@ async def test_big_integer_field_for_satoshi_check(ltc_client_mysql: AioTxLTCCli
     )
     balance = await ltc_client_mysql.get_balance(TEST_LTC_ADDRESS)
     assert balance == utxo_value_balance
+
+
+@pytest.mark.parametrize(
+    "tx_id, expected_exception, expected_fee",
+    [
+        (
+            "9ae506a01d89213bb84c91f5fd4365f7bc62b70bb61f30ec1d877bbf84600c30",
+            NotImplementedError,
+            0,
+        ),
+        ("c966837e3a29863341e3e85702152f479e97cd80e63684ddb2061c7c5cf92851", None, 534),
+        (
+            "3fcd11698664ffea5fe00adef6bd2c1c35de66c3fafb50f9076c74ff13fea139",
+            None,
+            500000,
+        ),
+        ("503112c3b7958161a45ceaf9d6ba5208d90849c641d2fad36f1c254ae11988b3", None, 534),
+        ("c3623c6865885879bd4f908b9a97a77cbaf20a738675571a5af8bfd277c56a24", None, 0),
+        (
+            "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525",
+            None,
+            500000,
+        ),
+        (
+            "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d5",
+            RpcConnectionError,
+            0,
+        ),
+        (
+            "863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525",
+            RpcConnectionError,
+            0,
+        ),
+    ],
+)
+@vcr_c.use_cassette("ltc/get_tx_fee.yaml")
+async def test_get_tx_fee(
+    ltc_public_client: AioTxLTCClient, tx_id, expected_exception, expected_fee
+):
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await ltc_public_client.get_tx_fee(tx_id)
+    else:
+        fee = await ltc_public_client.get_tx_fee(tx_id)
+        assert isinstance(fee, int)
+        assert fee == expected_fee
+
+
+@pytest.mark.parametrize(
+    "tx_id, expected_exception",
+    [
+        (
+            "9ae506a01d89213bb84c91f5fd4365f7bc62b70bb61f30ec1d877bbf84600c30",
+            None,
+        ),
+        (
+            "c966837e3a29863341e3e85702152f479e97cd80e63684ddb2061c7c5cf92851",
+            None,
+        ),
+        (
+            "503112c3b7958161a45ceaf9d6ba5208d90849c641d2fad36f1c254ae11988b3",
+            None,
+        ),
+        (
+            "863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525",
+            RpcConnectionError,
+        ),
+        (
+            "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d5",
+            RpcConnectionError,
+        ),
+    ],
+)
+@vcr_c.use_cassette("ltc/get_raw_transaction.yaml")
+async def test_get_raw_transaction(
+    ltc_public_client: AioTxLTCClient, tx_id, expected_exception
+):
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await ltc_public_client.get_raw_transaction(tx_id)
+    else:
+        tx_data = await ltc_public_client.get_raw_transaction(tx_id)
+        assert isinstance(tx_data, dict)
+        assert "txid" in tx_data.keys()

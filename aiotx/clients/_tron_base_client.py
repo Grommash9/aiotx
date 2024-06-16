@@ -6,8 +6,6 @@ from typing import Optional, Union
 import aiohttp
 import pkg_resources
 from aiohttp import ClientResponse
-from coincurve import PrivateKey as CoincurvePrivateKey
-from eth_abi import encode
 from tronpy import Tron
 from tronpy.keys import PrivateKey
 
@@ -123,6 +121,8 @@ class AioTxTRONClient(AioTxEVMBaseClient):
 
     def sign_msg_hash(self, priv_key: str, message_hash: bytes) -> str:
         """Sign a message hash(sha256)."""
+        from coincurve import PrivateKey as CoincurvePrivateKey
+
         private_key_bytes = bytes.fromhex(priv_key)
         signature_bytes = CoincurvePrivateKey(private_key_bytes).sign_recoverable(
             message_hash,
@@ -180,6 +180,8 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         visible: bool = True,
         memo: str = None,
     ) -> dict:
+        from eth_abi import encode
+
         # Construct the TRC20 token transfer transaction
         hex_eth_like_address = self.base58_to_hex_address(to_address).replace(
             "41", "0x"

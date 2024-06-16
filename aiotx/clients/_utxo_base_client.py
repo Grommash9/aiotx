@@ -1,69 +1,25 @@
 import asyncio
 import json
+import sys
 from decimal import Decimal
 from typing import Optional, Union
 
 import aiohttp
 from aiohttp.client_exceptions import ClientError, ClientOSError
-from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
-from bitcoinlib.keys import HDKey, Key
-from bitcoinlib.networks import Network
-from bitcoinlib.transactions import Transaction
-from sqlalchemy import BigInteger, Boolean, Column, Integer, String, select, update
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
-from sqlalchemy.pool import NullPool
 
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
-    AioTxError,
     BlockNotFoundError,
     InsufficientFunds,
     InternalJSONRPCError,
     InvalidArgumentError,
     InvalidRequestError,
     MethodNotFoundError,
+    NotImplementedError,
     RpcConnectionError,
 )
 from aiotx.log import logger
 from aiotx.types import FeeEstimate
-
-Base = declarative_base()
-
-
-def create_address_model(currency_name):
-    class Address(Base):
-        __tablename__ = f"{currency_name}_addresses"
-        __table_args__ = {"extend_existing": True}
-
-        address = Column(String(255), primary_key=True)
-        block_number = Column(Integer)
-
-    return Address
-
-
-def create_utxo_model(currency_name):
-    class UTXO(Base):
-        __tablename__ = f"{currency_name}_utxo"
-        __table_args__ = {"extend_existing": True}
-
-        tx_id = Column(String(255), primary_key=True)
-        output_n = Column(Integer, primary_key=True)
-        address = Column(String(255))
-        amount_satoshi = Column(BigInteger)
-        used = Column(Boolean, default=False)
-
-    return UTXO
-
-
-def create_last_block_model(currency_name):
-    class LastBlock(Base):
-        __tablename__ = f"{currency_name}_last_block"
-        __table_args__ = {"extend_existing": True}
-
-        block_number = Column(Integer, primary_key=True)
-
-    return LastBlock
 
 
 class AioTxUTXOClient(AioTxClient):
@@ -77,6 +33,17 @@ class AioTxUTXOClient(AioTxClient):
         network_name,
         db_url,
     ):
+        try:
+            from bitcoinlib.networks import Network
+
+        except ImportError:
+            logger.error(
+                "The required dependencies for AioTxLTCClient or AioTxLTCClient are not installed. "
+                "Please install the necessary packages and try again."
+                "pip install aiotx[utxo]"
+            )
+            sys.exit(-1)
+
         super().__init__(node_url, headers)
         self.node_username = node_username
         self.node_password = node_password
@@ -86,7 +53,7 @@ class AioTxUTXOClient(AioTxClient):
         asyncio.run(self.monitor._init_db())
 
     @staticmethod
-    def to_satoshi(amount: Union[int, float]) -> int:
+    def to_satoshi(amount: Union[int, float, str]) -> int:
         return int(Decimal(str(amount)) * Decimal(10**8))
 
     @staticmethod
@@ -94,6 +61,9 @@ class AioTxUTXOClient(AioTxClient):
         return amount / 10**8
 
     async def generate_address(self) -> dict:
+        from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
+        from bitcoinlib.keys import HDKey
+
         hdkey = HDKey()
         derivation_path = f"m/84'/{self._network.bip44_cointype}'/0'/0/0"
         private_key = hdkey.subkey_for_path(derivation_path).private_hex
@@ -106,6 +76,9 @@ class AioTxUTXOClient(AioTxClient):
         return private_key, address
 
     def get_address_from_private_key(self, private_key):
+        from bitcoinlib.encoding import pubkeyhash_to_addr_bech32
+        from bitcoinlib.keys import Key
+
         key = Key(private_key)
         address = pubkeyhash_to_addr_bech32(
             key.hash160, prefix=self._network.prefix_bech32, witver=0, separator="1"
@@ -227,6 +200,38 @@ class AioTxUTXOClient(AioTxClient):
             deduct_fee,
         )
 
+    async def get_raw_transaction(self, tx_id: str, verbosity: int = 2) -> dict:
+        payload = {"method": "getrawtransaction", "params": [tx_id, verbosity]}
+        transaction_data = await self._make_rpc_call(payload)
+        return transaction_data["result"]
+
+    async def get_tx_fee(self, tx_id: str) -> int:
+        total_output = 0
+        total_input = 0
+        raw_tx_data = await self.get_raw_transaction(tx_id)
+        for output in raw_tx_data["vout"]:
+            total_output += self.to_satoshi(output["value"])
+        tx_inputs = await self._get_tx_inputs_details(raw_tx_data)
+        for _, _, input_value in tx_inputs:
+            total_input += input_value
+        return total_input - total_output
+
+    async def _get_tx_inputs_details(self, raw_tx_data: dict) -> list[tuple]:
+        inputs_list = []
+        for input in raw_tx_data["vin"]:
+            if input.get("txid") is None:
+                raise NotImplementedError(
+                    "Miner transactions processing are not implemented yet!"
+                )
+            input_tx_data = await self.get_raw_transaction(input["txid"])
+            for output in input_tx_data["vout"]:
+                if output["n"] != input["vout"]:
+                    continue
+                inputs_list.append(
+                    (input["txid"], output["n"], self.to_satoshi(output["value"]))
+                )
+        return inputs_list
+
     async def _create_transaction(
         self,
         destinations: dict[str, int],
@@ -234,7 +239,9 @@ class AioTxUTXOClient(AioTxClient):
         from_address: str,
         fee: int,
         deduct_fee: bool,
-    ) -> tuple[Transaction, list]:
+    ):
+        from bitcoinlib.transactions import Transaction
+
         transaction = Transaction(network=self._network.name, witness_type="segwit")
         inputs = []
         outputs = []
@@ -280,9 +287,9 @@ class AioTxUTXOClient(AioTxClient):
 
         return transaction, inputs, outputs
 
-    def _sign_transaction(
-        self, transaction: Transaction, private_keys: list[str]
-    ) -> Transaction:
+    def _sign_transaction(self, transaction, private_keys: list[str]):
+        from bitcoinlib.keys import Key
+
         for i, private_key in enumerate(private_keys):
             key = Key(private_key)
             transaction.sign(key, i)
@@ -341,11 +348,21 @@ class AioTxUTXOClient(AioTxClient):
                 elif error_code == -32603:
                     raise InternalJSONRPCError(error_message)
                 else:
-                    raise AioTxError(f"Error {error_code}: {error_message}")
+                    raise RpcConnectionError(f"Error {error_code}: {error_message}")
 
 
 class UTXOMonitor(BlockMonitor):
     def __init__(self, client: AioTxUTXOClient, db_url):
+        from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
+        from sqlalchemy.orm import sessionmaker
+        from sqlalchemy.pool import NullPool
+
+        from aiotx.utils.utxo_db_models import (
+            create_address_model,
+            create_last_block_model,
+            create_utxo_model,
+        )
+
         self.client = client
         self.block_handlers = []
         self.transaction_handlers = []
@@ -418,6 +435,8 @@ class UTXOMonitor(BlockMonitor):
                 await handler(transaction)
 
     async def _init_db(self):
+        from aiotx.utils.utxo_db_models import Base
+
         async with self._engine.begin() as conn:
             await conn.run_sync(Base.metadata.create_all)
             try:
@@ -430,10 +449,14 @@ class UTXOMonitor(BlockMonitor):
                 await self._init_last_block(last_known_block)
 
     async def _drop_tables(self):
+        from aiotx.utils.utxo_db_models import Base
+
         async with self._engine.begin() as conn:
             await conn.run_sync(Base.metadata.drop_all)
 
     async def _add_new_address(self, address: str, block_number: int = None):
+        from sqlalchemy import select
+
         last_known_block = await self.client.get_last_block_number()
         if block_number is None:
             block_number = last_known_block
@@ -457,6 +480,8 @@ class UTXOMonitor(BlockMonitor):
     async def _add_new_utxo(
         self, address: str, tx_id: str, amount: int, output_n: int
     ) -> None:
+        from sqlalchemy import select
+
         async with self._session() as session:
             async with session.begin():
                 existing_utxo = await session.scalar(
@@ -478,6 +503,8 @@ class UTXOMonitor(BlockMonitor):
                 await session.commit()
 
     async def _update_last_block(self, block_number: int) -> None:
+        from sqlalchemy import select
+
         async with self._session() as session:
             async with session.begin():
                 data = await session.execute(select(self.LastBlock))
@@ -489,6 +516,8 @@ class UTXOMonitor(BlockMonitor):
                     await session.commit()
 
     async def _init_last_block(self, block_number: int) -> None:
+        from sqlalchemy import select
+
         async with self._session() as session:
             async with session.begin():
                 data = await session.execute(select(self.LastBlock))
@@ -503,6 +532,8 @@ class UTXOMonitor(BlockMonitor):
             await self._delete_utxo(txid, vout)
 
     async def _get_utxo_data(self, address: str, spent=False):
+        from sqlalchemy import select
+
         async with self._session() as session:
             result = await session.execute(
                 select(
@@ -515,6 +546,8 @@ class UTXOMonitor(BlockMonitor):
             return result.fetchall()
 
     async def _mark_utxo_used(self, tx_id: str, output_n: str) -> None:
+        from sqlalchemy import update
+
         async with self._session() as session:
             async with session.begin():
                 stmt = (
@@ -528,6 +561,8 @@ class UTXOMonitor(BlockMonitor):
                 await session.commit()
 
     async def _get_utxo(self, tx_id: str, output_n: int):
+        from sqlalchemy import select
+
         async with self._session() as session:
             result = await session.execute(
                 select(self.UTXO).where(
@@ -537,6 +572,8 @@ class UTXOMonitor(BlockMonitor):
             return result.scalar()
 
     async def _get_all_utxo_tx_ids(self):
+        from sqlalchemy import select
+
         """
         Function to optimize UTXO checking on new block to not make a SELECT for each input in the block
         """
@@ -551,11 +588,15 @@ class UTXOMonitor(BlockMonitor):
                 await session.commit()
 
     async def _get_last_block(self) -> Optional[int]:
+        from sqlalchemy import select
+
         async with self._session() as session:
             result = await session.execute(select(self.LastBlock.block_number))
             return result.scalar()
 
     async def _get_addresses(self) -> list[str]:
+        from sqlalchemy import select
+
         async with self._session() as session:
             result = await session.execute(select(self.Address.address))
             return {row[0] for row in result.fetchall()}

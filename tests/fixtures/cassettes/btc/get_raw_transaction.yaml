@@ -1,0 +1,191 @@
+interactions:
+- request:
+    body: '{"method": "getrawtransaction", "params": ["35158b7a8b6057bc67f6d904c64b5986adea8260f0bc96cbd755b530878e3cc2",
+      2], "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://ultra-special-dust.btc-testnet.quiknode.pro/331c45aef598f74795cef49fd7e5be98d37d7f06/
+  response:
+    body:
+      string: '{"result":{"txid":"35158b7a8b6057bc67f6d904c64b5986adea8260f0bc96cbd755b530878e3cc2","hash":"a872541715e90ca454cb6a9666d82cdedbcda1efba207dc7047f7238aa2e9797","version":1,"size":331,"vsize":250,"weight":997,"locktime":0,"vin":[{"txid":"25d56f693d5c4d00d3f98e58c8bd66e8db930e38c8a556bd67737b66cbf31ab9","vout":0,"scriptSig":{"asm":"","hex":""},"txinwitness":["3044022043d9458b77a69e55477e3674ecc39160de9340703a81254a82dff7cf70c052b202202f29540d74e50f22c402986982789ccee7b1d0860139057217e4105a4c9e384101","032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a9"],"prevout":{"generated":false,"height":2814756,"value":0.00016263,"scriptPubKey":{"asm":"0
+        83a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","desc":"addr(tb1qswslzcdulvlk62gdrg8wa0sw36f938h2pyfreh)#c7sqqp3w","hex":"001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","address":"tb1qswslzcdulvlk62gdrg8wa0sw36f938h2pyfreh","type":"witness_v0_keyhash"}},"sequence":4294967295}],"vout":[{"value":0.00006263,"n":0,"scriptPubKey":{"asm":"0
+        83a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","desc":"addr(tb1qswslzcdulvlk62gdrg8wa0sw36f938h2pyfreh)#c7sqqp3w","hex":"001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","address":"tb1qswslzcdulvlk62gdrg8wa0sw36f938h2pyfreh","type":"witness_v0_keyhash"}},{"value":0.00001000,"n":1,"scriptPubKey":{"asm":"OP_DUP
+        OP_HASH160 912e2b234f941f30b18afbb4fa46171214bf66c8 OP_EQUALVERIFY OP_CHECKSIG","desc":"addr(mtkbaiLiUH3fvGJeSzuN3kUgmJzqinLejJ)#4l7785sp","hex":"76a914912e2b234f941f30b18afbb4fa46171214bf66c888ac","address":"mtkbaiLiUH3fvGJeSzuN3kUgmJzqinLejJ","type":"pubkeyhash"}},{"value":0.00001000,"n":2,"scriptPubKey":{"asm":"OP_HASH160
+        deb0be8cf350aced0168a5864cdc587d53cdb2e0 OP_EQUAL","desc":"addr(2NDYhjHKdPLYjD5kVZVgeo8JxDrDUcRC14Q)#9ag0uly7","hex":"a914deb0be8cf350aced0168a5864cdc587d53cdb2e087","address":"2NDYhjHKdPLYjD5kVZVgeo8JxDrDUcRC14Q","type":"scripthash"}},{"value":0.00001000,"n":3,"scriptPubKey":{"asm":"0
+        057a4289cad910ee6055f3357837afaf4bf513b2","desc":"addr(tb1qq4ay9zw2mygwucz47v6hsda04a9l2yajyynh00)#e3eqe0ww","hex":"0014057a4289cad910ee6055f3357837afaf4bf513b2","address":"tb1qq4ay9zw2mygwucz47v6hsda04a9l2yajyynh00","type":"witness_v0_keyhash"}},{"value":0.00001000,"n":4,"scriptPubKey":{"asm":"1
+        72258d7a9a3e39a64f086674f5eb3dbade370ea17349b98c3910c390a220a2cf","desc":"rawtr(72258d7a9a3e39a64f086674f5eb3dbade370ea17349b98c3910c390a220a2cf)#rcc0txff","hex":"512072258d7a9a3e39a64f086674f5eb3dbade370ea17349b98c3910c390a220a2cf","address":"tb1pwgjc67568cu6vncgve60t6eaht0rwr4pwdymnrpezrpepg3q5t8sp5250h","type":"witness_v1_taproot"}}],"fee":0.00006000,"hex":"01000000000101b91af3cb667b7367bd56a5c8380e93dbe866bdc8588ef9d3004d5c3d696fd5250000000000ffffffff05771800000000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eeae8030000000000001976a914912e2b234f941f30b18afbb4fa46171214bf66c888ace80300000000000017a914deb0be8cf350aced0168a5864cdc587d53cdb2e087e803000000000000160014057a4289cad910ee6055f3357837afaf4bf513b2e80300000000000022512072258d7a9a3e39a64f086674f5eb3dbade370ea17349b98c3910c390a220a2cf02473044022043d9458b77a69e55477e3674ecc39160de9340703a81254a82dff7cf70c052b202202f29540d74e50f22c402986982789ccee7b1d0860139057217e4105a4c9e38410121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a900000000","blockhash":"000000000000000f286bca038a14b837e580208df725201f56a6dc2fab6c5274","confirmations":6150,"time":1715709891,"blocktime":1715709891},"error":null,"id":"curltest"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Encoding:
+      - gzip
+      Content-Length:
+      - '1433'
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 16 Jun 2024 09:18:29 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-d46e6ad25adfe563
+      X-Node-Id:
+      - bitcoin_btc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getrawtransaction", "params": ["77cb20c4b0325242b9e5f45f4850e5387dc585d6b72bb36ba65a126534436973",
+      2], "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://ultra-special-dust.btc-testnet.quiknode.pro/331c45aef598f74795cef49fd7e5be98d37d7f06/
+  response:
+    body:
+      string: '{"result":{"txid":"77cb20c4b0325242b9e5f45f4850e5387dc585d6b72bb36ba65a126534436973","hash":"4251764ab66314bb4ddcbd2882da948d5d4db08078c26b959d5734068b3658bb","version":1,"size":195,"vsize":113,"weight":450,"locktime":0,"vin":[{"txid":"35158b7a8b6057bc67f6d904c64b5986adea8260f0bc96cbd755b530878e3cc2","vout":0,"scriptSig":{"asm":"","hex":""},"txinwitness":["3045022100b2cf6022cabe152a87f173542238565b953718159ad1932c9cc24fcd7af674a002201ca194aa7d32dfaadd1d3d7fbcd0bb1d7736b7b705734548cf41cfacb5946c4201","032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a9"],"prevout":{"generated":false,"height":2815299,"value":0.00006263,"scriptPubKey":{"asm":"0
+        83a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","desc":"addr(tb1qswslzcdulvlk62gdrg8wa0sw36f938h2pyfreh)#c7sqqp3w","hex":"001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea","address":"tb1qswslzcdulvlk62gdrg8wa0sw36f938h2pyfreh","type":"witness_v0_keyhash"}},"sequence":4294967295}],"vout":[{"value":0.00001000,"n":0,"scriptPubKey":{"asm":"OP_DUP
+        OP_HASH160 912e2b234f941f30b18afbb4fa46171214bf66c8 OP_EQUALVERIFY OP_CHECKSIG","desc":"addr(mtkbaiLiUH3fvGJeSzuN3kUgmJzqinLejJ)#4l7785sp","hex":"76a914912e2b234f941f30b18afbb4fa46171214bf66c888ac","address":"mtkbaiLiUH3fvGJeSzuN3kUgmJzqinLejJ","type":"pubkeyhash"}}],"fee":0.00005263,"hex":"01000000000101c23c8e8730b555d7cb96bcf06082eaad86594bc604d9f667bc57608b7a8b15350000000000ffffffff01e8030000000000001976a914912e2b234f941f30b18afbb4fa46171214bf66c888ac02483045022100b2cf6022cabe152a87f173542238565b953718159ad1932c9cc24fcd7af674a002201ca194aa7d32dfaadd1d3d7fbcd0bb1d7736b7b705734548cf41cfacb5946c420121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a900000000","blockhash":"0000000000000017a90b44147937e896add074e53240b6cc16195e75cfba3753","confirmations":5759,"time":1715844026,"blocktime":1715844026},"error":null,"id":"curltest"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '1856'
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 16 Jun 2024 09:18:30 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-d46e6ad25adfe563
+      X-Node-Id:
+      - bitcoin_btc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getrawtransaction", "params": ["2ab5a6a291ece2240642369589442029a6ae4baaefb83ff6760893e542f2f8ac",
+      2], "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://ultra-special-dust.btc-testnet.quiknode.pro/331c45aef598f74795cef49fd7e5be98d37d7f06/
+  response:
+    body:
+      string: '{"result":{"txid":"2ab5a6a291ece2240642369589442029a6ae4baaefb83ff6760893e542f2f8ac","hash":"5b41547261c8b7a3dfeda0aa0ce2f91f345e1f286650b9ccf2a67a94056f79b8","version":1,"size":169,"vsize":142,"weight":568,"locktime":0,"vin":[{"coinbase":"032a0d2b","txinwitness":["0000000000000000000000000000000000000000000000000000000000000000"],"sequence":4294967295}],"vout":[{"value":0.31754252,"n":0,"scriptPubKey":{"asm":"0
+        78510d745b9a42e9ca1811ce9223585c121a075a","desc":"addr(tb1q0pgs6azmnfpwnjscz88fyg6ctsfp5p66hs5c9e)#jrfmlm23","hex":"001478510d745b9a42e9ca1811ce9223585c121a075a","address":"tb1q0pgs6azmnfpwnjscz88fyg6ctsfp5p66hs5c9e","type":"witness_v0_keyhash"}},{"value":0.00000000,"n":1,"scriptPubKey":{"asm":"OP_RETURN
+        aa21a9ed4fdb71f64bca638c66e56c0d551c4a32be7019b8c80fb705ca1e0146e3ed45ea","desc":"raw(6a24aa21a9ed4fdb71f64bca638c66e56c0d551c4a32be7019b8c80fb705ca1e0146e3ed45ea)#vuq2swly","hex":"6a24aa21a9ed4fdb71f64bca638c66e56c0d551c4a32be7019b8c80fb705ca1e0146e3ed45ea","type":"nulldata"}}],"hex":"010000000001010000000000000000000000000000000000000000000000000000000000000000ffffffff04032a0d2bffffffff020c88e4010000000016001478510d745b9a42e9ca1811ce9223585c121a075a0000000000000000266a24aa21a9ed4fdb71f64bca638c66e56c0d551c4a32be7019b8c80fb705ca1e0146e3ed45ea0120000000000000000000000000000000000000000000000000000000000000000000000000","blockhash":"00000000a4404eae051bdc63114f996a4f459236358fc8d124ebce1a92c3fcd4","confirmations":31,"time":1718500512,"blocktime":1718500512},"error":null,"id":"curltest"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '1519'
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 16 Jun 2024 09:18:30 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-d46e6ad25adfe563
+      X-Node-Id:
+      - bitcoin_btc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "getrawtransaction", "params": ["55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d5",
+      2], "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://ultra-special-dust.btc-testnet.quiknode.pro/331c45aef598f74795cef49fd7e5be98d37d7f06/
+  response:
+    body:
+      string: '{"result":null,"error":{"code":-8,"message":"parameter 1 must be of
+        length 64 (not 62, for ''55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d5'')"},"id":"curltest"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '176'
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 16 Jun 2024 09:18:31 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-a12d19355fbb795
+      X-Node-Id:
+      - bitcoin_btc-testnet_iad
+    status:
+      code: 500
+      message: Internal Server Error
+- request:
+    body: '{"method": "getrawtransaction", "params": ["863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525",
+      2], "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://ultra-special-dust.btc-testnet.quiknode.pro/331c45aef598f74795cef49fd7e5be98d37d7f06/
+  response:
+    body:
+      string: '{"result":null,"error":{"code":-8,"message":"parameter 1 must be of
+        length 64 (not 62, for ''863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525'')"},"id":"curltest"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '176'
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 16 Jun 2024 09:18:32 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-a12d19355fbb795
+      X-Node-Id:
+      - bitcoin_btc-testnet_iad
+    status:
+      code: 500
+      message: Internal Server Error
+version: 1

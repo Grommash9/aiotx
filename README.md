@@ -60,8 +60,31 @@ There is a high chance what on Ubuntu or other Linux OS you will need to install
 sudo apt-get install libgmp-dev
 ```
 
+
+Some clients need sub-dependencies, and if you want to use only TON, for example, you may not need sub-dependencies for BTC/ETH. Because of that, they are divided into extras.
+
+To be able to use TON, please use:
+
 ```python
-   pip install aiotx
+pip install aiotx
+```
+
+To be able to use BTC/LTC (UTXO), please use:
+
+```python
+pip install aiotx[utxo]
+```
+
+To be able to use ETH/MATIC/BSC/TRON (EVM), please use:
+
+```python
+pip install aiotx[evm]
+```
+
+or for all of them:
+
+```python
+pip install aiotx[utxo,evm]
 ```
 
 Once installed, you can import the desired client and start interacting with the respective blockchain. Here's a quick example of how to use the EVM client:

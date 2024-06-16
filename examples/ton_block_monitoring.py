@@ -4,7 +4,9 @@ from aiotx.clients import AioTxTONClient
 
 ton_client = AioTxTONClient(
     "https://testnet.toncenter.com/api/v2",
-    headers={"X-API-Key": "GET API KEY FROM https://t.me/tonapibot"},
+    headers={
+        "X-API-Key": "c87fbfad07e66b778bffbe20a5183e55e72f0db97bf68bf5e50170cb53fb115b"
+    },
 )
 
 
