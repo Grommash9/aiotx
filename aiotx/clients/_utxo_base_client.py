@@ -673,14 +673,15 @@ class UTXOMonitor(BlockMonitor):
             result = await session.execute(query)
             rows = result.scalars().all()
             return [
-                    UTXOType(
-                        tx_id=row.tx_id,
-                        output_n=row.output_n,
-                        address=row.address,
-                        amount_satoshi=row.amount_satoshi,
-                        used=row.used,
-                    ) for row in rows
-                ]
+                UTXOType(
+                    tx_id=row.tx_id,
+                    output_n=row.output_n,
+                    address=row.address,
+                    amount_satoshi=row.amount_satoshi,
+                    used=row.used,
+                )
+                for row in rows
+            ]
 
     async def _get_all_utxo_tx_ids(self) -> list[str]:
         from sqlalchemy import select
