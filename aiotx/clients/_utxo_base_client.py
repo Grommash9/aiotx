@@ -86,7 +86,7 @@ class AioTxUTXOClient(AioTxClient):
         asyncio.run(self.monitor._init_db())
 
     @staticmethod
-    def to_satoshi(amount: Union[int, float]) -> int:
+    def to_satoshi(amount: Union[int, float, str]) -> int:
         return int(Decimal(str(amount)) * Decimal(10**8))
 
     @staticmethod
