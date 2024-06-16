@@ -281,39 +281,111 @@ async def test_get_raw_transaction(
         assert "txid" in tx_data.keys()
 
 
-# @pytest.mark.skipif(
-#     sys.platform == "win32",
-#     reason="Skipping transaction signing tests on Windows because we are not using RFC6979 from fastecdsa by default",
-# )
-# @vcr_c.use_cassette("btc/cpfp_transaction.yaml")
-# async def test_cpfp_transaction(btc_client: AioTxBTCClient):
-#     amount = btc_client.to_satoshi(3.68059994)
-#     await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
-#     await btc_client.monitor._add_new_utxo(
-#         TEST_BTC_ADDRESS,
-#         "dea64fb299ea06975a74d460c1515c689df40d4878f0579af9b20cb987032e62",
-#         amount,
-#         0,
-#     )
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="Skipping transaction signing tests on Windows because we are not using RFC6979 from fastecdsa by default",
+)
+@vcr_c.use_cassette("btc/speed_up_transaction.yaml")
+async def test_speed_up_transaction(btc_client: AioTxBTCClient):
+    amount = btc_client.to_satoshi(3.66831842)
+    await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
+    await btc_client.monitor._add_new_utxo(
+        TEST_BTC_ADDRESS,
+        "8c5cff8d9ed8e3638d302bbc60dfce260ef4590c367d9174ccd2400df1211383",
+        amount,
+        0,
+    )
+    amount = 1000
 
-#     amount = 1000
+    parent_tx_id = await btc_client.send(
+        TEST_BTC_WALLET_PRIVATE_KEY,
+        "tb1p2tzs7ghuanrm8mmqqjgvm2fdkkl4t6yvmupmt8wwpvsgwcj2vsasvwnjvy",
+        amount,
+        total_fee=int(btc_client.to_satoshi(0.00154914) / 6),
+    )
 
-#     tx_id = await btc_client.send(
-#         TEST_BTC_WALLET_PRIVATE_KEY,
-#         "tb1p2tzs7ghuanrm8mmqqjgvm2fdkkl4t6yvmupmt8wwpvsgwcj2vsasvwnjvy",
-#         amount,
-#         total_fee=200,
-#     )
+    assert (
+        parent_tx_id
+        == "233647f2d1ea8ec0620e617f4c7d235ffcc642a175b0929b26985c39ea749de7"
+    )
+
+    child_tx_id = await btc_client.speed_up_transaction_by_self_child_payment(
+        TEST_BTC_WALLET_PRIVATE_KEY,
+        "233647f2d1ea8ec0620e617f4c7d235ffcc642a175b0929b26985c39ea749de7",
+        conf_target=1,
+    )
+    assert (
+        child_tx_id
+        == "95004689daaea1ec557c0d81fe2f7380449bc5ad968e8355709c150a74cff86f"
+    )
 
 
-#     utxo_list = await btc_client.monitor._get_utxo_data(TEST_BTC_ADDRESS)
-#     assert len(utxo_list) == 1
-#     assert (
-#         utxo_list[0][0]
-#         == "4f9a64d28ae22134379f7da50282d7ca2ead8a1f8378b20e25defcaaa5c59228"
-#     )
-#     assert utxo_list[0][2] == 14263
-#     assert tx_id == "4f9a64d28ae22134379f7da50282d7ca2ead8a1f8378b20e25defcaaa5c59228"
-#     await btc_client.monitor._delete_utxo(
-#         "25d56f693d5c4d00d3f98e58c8bd66e8db930e38c8a556bd67737b66cbf31ab9", 0
-#     )
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="Skipping transaction signing tests on Windows because we are not using RFC6979 from fastecdsa by default",
+)
+@vcr_c.use_cassette("btc/speed_up_transaction_not_enough_outputs.yaml")
+async def test_speed_up_transaction_not_enough_outputs(btc_client: AioTxBTCClient):
+    await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
+
+    await btc_client.monitor._add_new_utxo(
+        TEST_BTC_ADDRESS,
+        "b68f08d7e9e98c48460475eebd820dddc956f87857f573770f20aa67e70e8df9",
+        btc_client.to_satoshi(0.0006635),
+        1,
+    )
+
+    amount = 500
+    parent_tx_id = await btc_client.send(
+        TEST_BTC_WALLET_PRIVATE_KEY,
+        TEST_BTC_ADDRESS,
+        amount,
+        total_fee=btc_client.to_satoshi(0.0006635) - amount,
+    )
+
+    assert (
+        parent_tx_id
+        == "371e7db7f99ca03cdcd96c69e2822ed3c384f418f7239b388c3ad9e63adfd76f"
+    )
+
+    await btc_client.monitor._add_new_utxo(
+        TEST_BTC_ADDRESS,
+        "b68f08d7e9e98c48460475eebd820dddc956f87857f573770f20aa67e70e8df9",
+        btc_client.to_satoshi(3.65162827),
+        0,
+    )
+
+    child_tx_id = await btc_client.speed_up_transaction_by_self_child_payment(
+        TEST_BTC_WALLET_PRIVATE_KEY,
+        "48b4c17afda93204f0875987a9281b4bfd90c29a5590046f09a5e3d910fab8f2",
+        conf_target=1,
+    )
+    assert (
+        child_tx_id
+        == "9e6fd5e4c946bde7f96c7f5921c46588f2462c33d68315b266373bf60735a39e"
+    )
+
+
+@pytest.mark.skipif(
+    sys.platform == "win32",
+    reason="Skipping transaction signing tests on Windows because we are not using RFC6979 from fastecdsa by default",
+)
+@vcr_c.use_cassette("btc/bulk_send.yaml")
+async def test_bulk_send(btc_client: AioTxBTCClient):
+    await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
+
+    await btc_client.monitor._add_new_utxo(
+        TEST_BTC_ADDRESS,
+        "a7d8e3dea2da06c30dde62f3ead03b9260372e09b77fd74aebc7d58245a4a8bc",
+        btc_client.to_satoshi(3.65416086),
+        0,
+    )
+
+    tx_id = await btc_client.send_bulk(
+        TEST_BTC_WALLET_PRIVATE_KEY,
+        destinations={
+            TEST_BTC_ADDRESS: btc_client.to_satoshi(0.0006635),
+            "tb1p2tzs7ghuanrm8mmqqjgvm2fdkkl4t6yvmupmt8wwpvsgwcj2vsasvwnjvy": 600,
+        },
+    )
+    assert tx_id == "b68f08d7e9e98c48460475eebd820dddc956f87857f573770f20aa67e70e8df9"
