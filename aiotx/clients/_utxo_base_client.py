@@ -456,6 +456,7 @@ class UTXOMonitor(BlockMonitor):
 
     async def _add_new_address(self, address: str, block_number: int = None):
         from sqlalchemy import select
+
         last_known_block = await self.client.get_last_block_number()
         if block_number is None:
             block_number = last_known_block
@@ -503,6 +504,7 @@ class UTXOMonitor(BlockMonitor):
 
     async def _update_last_block(self, block_number: int) -> None:
         from sqlalchemy import select
+
         async with self._session() as session:
             async with session.begin():
                 data = await session.execute(select(self.LastBlock))
