@@ -242,3 +242,41 @@ async def test_get_tx_fee(
         fee = await btc_client.get_tx_fee(tx_id)
         assert isinstance(fee, int)
         assert fee == expected_fee
+
+
+@pytest.mark.parametrize(
+    "tx_id, expected_exception",
+    [
+        (
+            "35158b7a8b6057bc67f6d904c64b5986adea8260f0bc96cbd755b530878e3cc2",
+            None,
+        ),
+        (
+            "77cb20c4b0325242b9e5f45f4850e5387dc585d6b72bb36ba65a126534436973",
+            None,
+        ),
+        (
+            "2ab5a6a291ece2240642369589442029a6ae4baaefb83ff6760893e542f2f8ac",
+            None,
+        ),
+        (
+            "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d5",
+            RpcConnectionError,
+        ),
+        (
+            "863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525",
+            RpcConnectionError,
+        ),
+    ],
+)
+@vcr_c.use_cassette("btc/get_raw_transaction.yaml")
+async def test_get_raw_transaction(
+    btc_client: AioTxBTCClient, tx_id, expected_exception
+):
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await btc_client.get_raw_transaction(tx_id)
+    else:
+        tx_data = await btc_client.get_raw_transaction(tx_id)
+        assert isinstance(tx_data, dict)
+        assert "txid" in tx_data.keys()

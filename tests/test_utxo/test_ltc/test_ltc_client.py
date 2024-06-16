@@ -593,3 +593,41 @@ async def test_get_tx_fee(
         fee = await ltc_public_client.get_tx_fee(tx_id)
         assert isinstance(fee, int)
         assert fee == expected_fee
+
+
+@pytest.mark.parametrize(
+    "tx_id, expected_exception",
+    [
+        (
+            "9ae506a01d89213bb84c91f5fd4365f7bc62b70bb61f30ec1d877bbf84600c30",
+            None,
+        ),
+        (
+            "c966837e3a29863341e3e85702152f479e97cd80e63684ddb2061c7c5cf92851",
+            None,
+        ),
+        (
+            "503112c3b7958161a45ceaf9d6ba5208d90849c641d2fad36f1c254ae11988b3",
+            None,
+        ),
+        (
+            "863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525",
+            RpcConnectionError,
+        ),
+        (
+            "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d5",
+            RpcConnectionError,
+        ),
+    ],
+)
+@vcr_c.use_cassette("ltc/get_raw_transaction.yaml")
+async def test_get_raw_transaction(
+    ltc_public_client: AioTxLTCClient, tx_id, expected_exception
+):
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await ltc_public_client.get_raw_transaction(tx_id)
+    else:
+        tx_data = await ltc_public_client.get_raw_transaction(tx_id)
+        assert isinstance(tx_data, dict)
+        assert "txid" in tx_data.keys()
