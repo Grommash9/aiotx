@@ -287,11 +287,11 @@ async def test_get_raw_transaction(
 )
 @vcr_c.use_cassette("btc/speed_up_transaction.yaml")
 async def test_speed_up_transaction(btc_client: AioTxBTCClient):
-    amount = btc_client.to_satoshi(3.66831842)
+    amount = btc_client.to_satoshi(3.6473502)
     await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
     await btc_client.monitor._add_new_utxo(
         TEST_BTC_ADDRESS,
-        "8c5cff8d9ed8e3638d302bbc60dfce260ef4590c367d9174ccd2400df1211383",
+        "9e6fd5e4c946bde7f96c7f5921c46588f2462c33d68315b266373bf60735a39e",
         amount,
         0,
     )
@@ -306,17 +306,17 @@ async def test_speed_up_transaction(btc_client: AioTxBTCClient):
 
     assert (
         parent_tx_id
-        == "233647f2d1ea8ec0620e617f4c7d235ffcc642a175b0929b26985c39ea749de7"
+        == "83d4a70c215017ae757b504c1c9f076b7dad31544d994b862113466d12318c48"
     )
 
     child_tx_id = await btc_client.speed_up_transaction_by_self_child_payment(
         TEST_BTC_WALLET_PRIVATE_KEY,
-        "233647f2d1ea8ec0620e617f4c7d235ffcc642a175b0929b26985c39ea749de7",
+        "83d4a70c215017ae757b504c1c9f076b7dad31544d994b862113466d12318c48",
         conf_target=1,
     )
     assert (
         child_tx_id
-        == "95004689daaea1ec557c0d81fe2f7380449bc5ad968e8355709c150a74cff86f"
+        == "30aebb6b7f1b80ffd8700fb492e1a2820b8a04e7d6c95ddb8a163c138f6690b4"
     )
 
 
