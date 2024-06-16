@@ -95,7 +95,7 @@ async def test_async_monitoring_mysql(btc_client_mysql: AioTxBTCClient):
     utxo = await btc_client_mysql.monitor._get_utxo_data(
         "tb1pmuuv2qjujv9qawqcc424nhlnmux7mvsyqj7qgc6z0vwqujvx4k9s34kuxn"
     )
-    utxo_tx_id_list = [tx[0] for tx in utxo]
+    utxo_tx_id_list = [tx.tx_id for tx in utxo]
     assert (
         "0cfe0b554f766ed374a426497a9163a3beb9732e799ffa623894efaea81a4415"
         in utxo_tx_id_list
