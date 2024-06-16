@@ -12,7 +12,6 @@ to_address = "tb1q3t09ltyprf9djw244yt7xa2wumck8qav489km5"
 
 
 async def main():
-
     await btc_client.import_address(address)
 
     # await btc_client.monitor._add_new_utxo(address, "cf917450acb35ffaf313b25efe5f02cb927f22e7aed12300912bd98421c0c616",
@@ -27,8 +26,9 @@ async def main():
     # tx_id = await btc_client.send(private_key, to_address, amount_in_satoshi)
     # print(tx_id)
 
-    tx_id = await btc_client.speed_up_transaction_by_self_child_payment(private_key,
-                                                                        "dea64fb299ea06975a74d460c1515c689df40d4878f0579af9b20cb987032e62")
+    tx_id = await btc_client.speed_up_transaction_by_self_child_payment(
+        private_key, "dea64fb299ea06975a74d460c1515c689df40d4878f0579af9b20cb987032e62"
+    )
     print(tx_id)
     # # Deduct fee from client
     # tx_id = await ltc_client.send(

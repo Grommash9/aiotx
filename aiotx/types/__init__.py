@@ -1,5 +1,6 @@
-from enum import Enum
 from dataclasses import dataclass
+from enum import Enum
+
 
 class BlockParam(Enum):
     LATEST = "latest"
@@ -13,7 +14,6 @@ class FeeEstimate(Enum):
     UNSET = "UNSET"
     ECONOMICAL = "ECONOMICAL"
     CONSERVATIVE = "CONSERVATIVE"
-
 
 
 @dataclass
