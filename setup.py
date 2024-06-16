@@ -16,6 +16,26 @@ extras_test = (
     ]
 )
 
+extras_evm = (
+    [
+        "eth_keys==0.5.*",
+        "eth_utils==4.1.*",
+        "eth_account==0.13.*",
+    ]
+)
+
+extras_utxo = (
+    [
+        "sqlalchemy",
+        "aiosqlite",
+        "aiomysql",
+        "greenlet",
+        "cryptography",
+        "bitcoinlib==0.6.*",
+    ]
+)
+
+
 setup(
     name="aiotx",
     keywords=[
@@ -44,21 +64,14 @@ setup(
     ],
     install_requires=[
         "aiohttp",
-        "eth_keys==0.5.*",
-        "eth_utils==4.1.*",
-        "eth_account==0.13.*",
-        "sqlalchemy",
-        "aiosqlite",
-        "aiomysql",
-        "cryptography",
-        "bitcoinlib==0.6.*",
-        "greenlet",
         "setuptools",
         "pynacl>=1.4.0",
         "tronpy",
     ],
     extras_require={
         "test": extras_test,
+        "utxo": extras_utxo,
+        "evm": extras_evm,
     },
     url="https://github.com/Grommash9/aiotx",
     project_urls={

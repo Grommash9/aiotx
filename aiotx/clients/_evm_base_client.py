@@ -2,20 +2,10 @@ import binascii
 import decimal
 import json
 import secrets
+import sys
 from typing import Union
 
 import aiohttp
-from eth_abi import decode, encode
-from eth_abi.exceptions import InsufficientDataBytes, NonEmptyPaddingBytes
-from eth_account import Account
-from eth_utils import (
-    currency,
-    decode_hex,
-    function_signature_to_4byte_selector,
-    keccak,
-    to_checksum_address,
-    to_hex,
-)
 
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
@@ -46,6 +36,18 @@ from aiotx.types import BlockParam
 
 class AioTxEVMBaseClient(AioTxClient):
     def __init__(self, node_url: str, headers: dict):
+        try:
+            import eth_abi  # noqa: F401
+            import eth_account  # noqa: F401
+            import eth_utils  # noqa: F401
+        except ImportError:
+            logger.error(
+                "The required dependencies for (AioTxETHClient, AioTxBSCClient, AioTxTRONClient, AioTxMATICClient) clients are not installed. "
+                "Please install the necessary packages and try again."
+                "pip install aiotx[evm]"
+            )
+            sys.exit(-1)
+
         super().__init__(node_url, headers)
         self.chain_id = None
         self.monitor = EvmMonitor(self)
@@ -63,6 +65,10 @@ class AioTxEVMBaseClient(AioTxClient):
         return []
 
     def decode_transaction_input(self, input_data: str) -> dict:
+        from eth_abi import decode
+        from eth_abi.exceptions import InsufficientDataBytes, NonEmptyPaddingBytes
+        from eth_utils import decode_hex, function_signature_to_4byte_selector
+
         if input_data == "0x":
             return {"function_name": None, "parameters": None}
         for abi_entry in self._get_abi_entries():
@@ -122,6 +128,10 @@ class AioTxEVMBaseClient(AioTxClient):
     async def get_contract_balance(
         self, address, contract_address, block_parameter: BlockParam = BlockParam.LATEST
     ) -> int:
+        from eth_utils import (
+            keccak,
+        )
+
         function_signature = "balanceOf(address)".encode("UTF-8")
         hash_result = keccak(function_signature)
         method_id = hash_result.hex()[:8]
@@ -137,6 +147,8 @@ class AioTxEVMBaseClient(AioTxClient):
         return 0 if balance == "0x" else int(balance, 16)
 
     async def get_contract_decimals(self, contract_address) -> int:
+        from eth_utils import keccak
+
         function_signature = "decimals()".encode("UTF-8")
         hash_result = keccak(function_signature)
         method_id = hash_result.hex()[:8]
@@ -169,12 +181,19 @@ class AioTxEVMClient(AioTxEVMBaseClient):
         self._monitoring_task = None
 
     def generate_address(self):
+        from eth_account import Account
+
         private_key_bytes = secrets.token_hex(32)
         private_key = "0x" + private_key_bytes
         acct = Account.from_key(private_key)
         return private_key, acct.address
 
     def get_address_from_private_key(self, private_key: str):
+        from eth_account import Account
+        from eth_utils import (
+            to_checksum_address,
+        )
+
         try:
             from_address = Account.from_key(private_key).address
         except binascii.Error as e:
@@ -184,6 +203,8 @@ class AioTxEVMClient(AioTxEVMBaseClient):
     def from_wei(
         self, number: Union[int, str], unit: str = "ether"
     ) -> Union[int, decimal.Decimal]:
+        from eth_utils import currency
+
         if isinstance(number, str):
             if self.is_hex(number):
                 number = int(number, 16)
@@ -192,6 +213,8 @@ class AioTxEVMClient(AioTxEVMBaseClient):
     def to_wei(
         self, number: Union[int, float, str, decimal.Decimal], unit: str = "ether"
     ) -> int:
+        from eth_utils import currency
+
         if isinstance(number, str):
             if self.is_hex(number):
                 number = int(number, 16)
@@ -221,6 +244,12 @@ class AioTxEVMClient(AioTxEVMBaseClient):
         gas_price: int = None,
         gas_limit: int = 21000,
     ) -> str:
+        from eth_account import Account
+        from eth_utils import (
+            to_checksum_address,
+            to_hex,
+        )
+
         if gas_price is None:
             gas_price = await self.get_gas_price()
 
@@ -254,6 +283,14 @@ class AioTxEVMClient(AioTxEVMBaseClient):
         gas_price: int = None,
         gas_limit: int = 100000,
     ) -> str:
+        from eth_abi import encode
+        from eth_account import Account
+        from eth_utils import (
+            keccak,
+            to_checksum_address,
+            to_hex,
+        )
+
         from_address = self.get_address_from_private_key(private_key)
         if nonce is None:
             nonce = await self.get_transactions_count(from_address, BlockParam.PENDING)

@@ -17,9 +17,9 @@ Key Features
 
 2. **UTXO Client:** For UTXO-based networks like Bitcoin and Litecoin, AioTx provides a UTXO client. This client allows you to generate addresses, import addresses for monitoring, retrieve balances, estimate fees, and send transactions effortlessly. The UTXO client also includes support for bulk transactions, enabling you to send multiple transactions in a single operation.
 
-3. **TON Client:** Client for Telegram Open Network - now we have monitoring and token sending for it
+3. **TON Client:** Client for Telegram Open Network - now we have monitoring and token sending for it. TON client also includes support for bulk transactions, enabling you to send multiple transactions in a single operation.
 
-4. **TRON Client:** Client for TRON (trx) blockchain - now we have only read operations
+4. **TRON Client:** Client for TRON (trx) blockchain - you can monitor transaction and do TRX/TRC20 transactions
 
 5. **Blockchain Monitoring:** One of the standout features of AioTx is its blockchain monitoring capabilities. You can easily monitor new blocks and transactions on the supported blockchains by registering custom handlers. AioTx provides a simple and intuitive way to start and stop monitoring, and it even allows you to monitor multiple clients simultaneously. Integration with the Aiogram library is also supported, enabling you to send notifications or perform actions based on the received blocks and transactions.
 
@@ -33,6 +33,35 @@ Getting Node Url
 For testing purposes, you can use public nodes, but for production, it's better to get a private or at least a shared node. You can obtain one for free on platforms like `Get Block <https://account.getblock.io/sign-in?ref=NWUzNjUzNjktY2EzMy01YzI3LWFlZDUtZjYzYmM1OWU0NmFk>`_ or `Quick Node <https://www.quicknode.com/?via=aiotx>`_
 
 By using these referral URLs, you'll be supporting the project, and I would greatly appreciate your contribution.
+
+Installing
+----------
+
+Some clients need sub-dependencies, and if you want to use only TON, for example, you may not need sub-dependencies for BTC/ETH. Because of that, they are divided into extras.
+
+To be able to use TON/TRON, please use:
+
+```python
+pip install aiotx
+```
+
+To be able to use BTC/LTC (UTXO), please use:
+
+```python
+pip install aiotx[utxo]
+```
+
+To be able to use ETH/MATIC/BSC (EVM), please use:
+
+```python
+pip install aiotx[evm]
+```
+
+or for all of them:
+
+```python
+pip install aiotx[utxo,evm]
+```
 
 
 Getting Started
