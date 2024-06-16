@@ -23,8 +23,8 @@ from aiotx.exceptions import (
     InvalidArgumentError,
     InvalidRequestError,
     MethodNotFoundError,
+    NotImplementedError,
     RpcConnectionError,
-    NotImplementedError
 )
 from aiotx.log import logger
 from aiotx.types import FeeEstimate
@@ -227,12 +227,12 @@ class AioTxUTXOClient(AioTxClient):
             fee_per_byte,
             deduct_fee,
         )
-    
+
     async def get_raw_transaction(self, tx_id: str, verbosity: int = 2) -> dict:
         payload = {"method": "getrawtransaction", "params": [tx_id, verbosity]}
         transaction_data = await self._make_rpc_call(payload)
         return transaction_data["result"]
-    
+
     async def get_tx_fee(self, tx_id: str) -> int:
         total_output = 0
         total_input = 0
@@ -248,12 +248,16 @@ class AioTxUTXOClient(AioTxClient):
         inputs_list = []
         for input in raw_tx_data["vin"]:
             if input.get("txid") is None:
-                raise NotImplementedError("Miner transactions processing are not implemented yet!")
+                raise NotImplementedError(
+                    "Miner transactions processing are not implemented yet!"
+                )
             input_tx_data = await self.get_raw_transaction(input["txid"])
             for output in input_tx_data["vout"]:
                 if output["n"] != input["vout"]:
                     continue
-                inputs_list.append((input["txid"], output["n"], self.to_satoshi(output["value"])))
+                inputs_list.append(
+                    (input["txid"], output["n"], self.to_satoshi(output["value"]))
+                )
         return inputs_list
 
     async def _create_transaction(
