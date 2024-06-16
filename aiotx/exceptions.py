@@ -90,3 +90,6 @@ class RpcConnectionError(AioTxError):
 
 class CreateTransactionError(AioTxError):
     pass
+
+class NotImplementedError(AioTxError):
+    pass

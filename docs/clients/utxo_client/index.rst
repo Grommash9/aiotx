@@ -151,4 +151,5 @@ Methods
    estimate_smart_fee
    send
    send_bulk
+   get_tx_fee
    

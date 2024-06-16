@@ -24,6 +24,7 @@ from aiotx.exceptions import (
     InvalidRequestError,
     MethodNotFoundError,
     RpcConnectionError,
+    NotImplementedError
 )
 from aiotx.log import logger
 from aiotx.types import FeeEstimate
@@ -226,6 +227,34 @@ class AioTxUTXOClient(AioTxClient):
             fee_per_byte,
             deduct_fee,
         )
+    
+    async def get_raw_transaction(self, tx_id: str, verbosity: int = 2) -> dict:
+        payload = {"method": "getrawtransaction", "params": [tx_id, verbosity]}
+        transaction_data = await self._make_rpc_call(payload)
+        return transaction_data["result"]
+    
+    async def get_tx_fee(self, tx_id: str) -> int:
+        total_output = 0
+        total_input = 0
+        raw_tx_data = await self.get_raw_transaction(tx_id)
+        for output in raw_tx_data["vout"]:
+            total_output += self.to_satoshi(output["value"])
+        tx_inputs = await self._get_tx_inputs_details(raw_tx_data)
+        for _, _, input_value in tx_inputs:
+            total_input += input_value
+        return total_input - total_output
+
+    async def _get_tx_inputs_details(self, raw_tx_data: dict) -> list[tuple]:
+        inputs_list = []
+        for input in raw_tx_data["vin"]:
+            if input.get("txid") is None:
+                raise NotImplementedError("Miner transactions processing are not implemented yet!")
+            input_tx_data = await self.get_raw_transaction(input["txid"])
+            for output in input_tx_data["vout"]:
+                if output["n"] != input["vout"]:
+                    continue
+                inputs_list.append((input["txid"], output["n"], self.to_satoshi(output["value"])))
+        return inputs_list
 
     async def _create_transaction(
         self,
@@ -341,7 +370,7 @@ class AioTxUTXOClient(AioTxClient):
                 elif error_code == -32603:
                     raise InternalJSONRPCError(error_message)
                 else:
-                    raise AioTxError(f"Error {error_code}: {error_message}")
+                    raise RpcConnectionError(f"Error {error_code}: {error_message}")
 
 
 class UTXOMonitor(BlockMonitor):

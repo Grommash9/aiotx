@@ -6,6 +6,7 @@ from conftest import vcr_c
 
 from aiotx.clients import AioTxBTCClient
 from aiotx.types import FeeEstimate
+from aiotx.exceptions import NotImplementedError, RpcConnectionError
 
 TEST_BTC_WALLET_PRIVATE_KEY = os.getenv("TEST_BTC_WALLET_PRIVATE_KEY")
 assert TEST_BTC_WALLET_PRIVATE_KEY is not None, "add TEST_BTC_WALLET_PRIVATE_KEY"
@@ -183,3 +184,29 @@ async def test_get_balance_mysql(btc_client_mysql: AioTxBTCClient):
 
     balance = await btc_client_mysql.get_balance(TEST_BTC_ADDRESS)
     assert balance == 0
+
+
+@pytest.mark.parametrize(
+    "tx_id, expected_exception, expected_fee",
+    [
+        ("35158b7a8b6057bc67f6d904c64b5986adea8260f0bc96cbd755b530878e3cc2", None, 6000),
+        ("77cb20c4b0325242b9e5f45f4850e5387dc585d6b72bb36ba65a126534436973", None, 5263),
+        ("25d56f693d5c4d00d3f98e58c8bd66e8db930e38c8a556bd67737b66cbf31ab9", None, 6890),
+        ("12d9d269b4468aaf663b0712e9cef2b1a86fc7e758094af19434b0de86208611", None, 648000),
+        ("07ce6824d6c7ee226c3d311d6729d06144b0cb1fd371208b7466a6283de0c2fe", None, 462000),
+        ("2ab5a6a291ece2240642369589442029a6ae4baaefb83ff6760893e542f2f8ac", NotImplementedError, 0),
+        ("55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d5", RpcConnectionError, 0),
+        ("863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525", RpcConnectionError, 0),
+    ],
+)
+@vcr_c.use_cassette("btc/get_tx_fee.yaml")
+async def test_get_tx_fee(
+    btc_client: AioTxBTCClient, tx_id, expected_exception, expected_fee
+):
+    if expected_exception:
+        with pytest.raises(expected_exception):
+            await btc_client.get_tx_fee(tx_id)
+    else:
+        fee = await btc_client.get_tx_fee(tx_id)
+        assert isinstance(fee, int)
+        assert fee == expected_fee

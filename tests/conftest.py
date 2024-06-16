@@ -29,7 +29,7 @@ set_logger_level("INFO")
 BSC_TEST_NODE_URL = "https://bsc-testnet-rpc.publicnode.com"
 ETH_TEST_NODE_URL = "https://ethereum-sepolia-rpc.publicnode.com"
 LTC_TEST_NODE_URL = "https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet"
-BTC_TEST_NODE_URL = "https://bitter-warmhearted-film.btc-testnet.quiknode.pro/ddf238a16e9d7342e403d000a6134a2d750765f8/"
+BTC_TEST_NODE_URL = "https://ultra-special-dust.btc-testnet.quiknode.pro/331c45aef598f74795cef49fd7e5be98d37d7f06/"
 TON_MAINNET_NODE_URL = "https://go.getblock.io/875fb0dee2544bb0bc59dd08c6f39330"
 POLYGON_TEST_NODE_URL = "https://polygon-amoy-bor-rpc.publicnode.com"
 TON_TEST_NODE_URL = "https://testnet.toncenter.com/api/v2/jsonRPC"
