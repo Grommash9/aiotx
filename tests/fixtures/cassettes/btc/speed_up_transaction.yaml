@@ -1,0 +1,141 @@
+interactions:
+- request:
+    body: '{"method": "getblockcount", "params": [], "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://ultra-special-dust.btc-testnet.quiknode.pro/331c45aef598f74795cef49fd7e5be98d37d7f06/
+  response:
+    body:
+      string: '{"result":2821483,"error":null,"id":"curltest"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '48'
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 16 Jun 2024 17:05:26 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-a12d19355fbb795
+      X-Node-Id:
+      - bitcoin_btc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "sendrawtransaction", "params": ["010000000001019ea33507f63b3766b21583d6332c46f28865c421597f6cf9e7bd46c9e4d56f9e0000000000ffffffff026901bd150000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eeae80300000000000022512052c50f22fcecc7b3ef600490cda92db5bf55e88cdf03b59dce0b2087624a643b02483045022100d8482d8c82bf4da15ca9343d8d52da8cdd829d9116f0f458c2aaaddf55609e68022066085c5022e6644490e662b5edfc9359839acabc6d56d903238fcdc5bbb18ba00121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a900000000"],
+      "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://ultra-special-dust.btc-testnet.quiknode.pro/331c45aef598f74795cef49fd7e5be98d37d7f06/
+  response:
+    body:
+      string: '{"result":"83d4a70c215017ae757b504c1c9f076b7dad31544d994b862113466d12318c48","error":null,"id":"curltest"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '107'
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 16 Jun 2024 17:05:27 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-a12d19355fbb795
+      X-Node-Id:
+      - bitcoin_btc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "estimatesmartfee", "params": [1, "CONSERVATIVE"], "jsonrpc":
+      "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://ultra-special-dust.btc-testnet.quiknode.pro/331c45aef598f74795cef49fd7e5be98d37d7f06/
+  response:
+    body:
+      string: '{"result":{"feerate":0.01012618,"blocks":2},"error":null,"id":"curltest"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '74'
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 16 Jun 2024 17:05:52 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-a12d19355fbb795
+      X-Node-Id:
+      - bitcoin_btc-testnet_iad
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "sendrawtransaction", "params": ["01000000000101488c31126d461321864b994d5431ad7d6b079f1c4c507b75ae1750210ca7d4830000000000ffffffff013878b6150000000016001483a1f161bcfb3f6d290d1a0eeebe0e8e92589eea02483045022100e184a467fd0825615d3d90d5da2903a7785aa23d14e5d3addd52f700078e99aa022065f69fc0c1f5a95a82c91192dbe3976975c0e8bca27a53c6a9e3ff6d419b2e6b0121032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a900000000"],
+      "jsonrpc": "2.0", "id": "curltest"}'
+    headers: {}
+    method: POST
+    uri: https://ultra-special-dust.btc-testnet.quiknode.pro/331c45aef598f74795cef49fd7e5be98d37d7f06/
+  response:
+    body:
+      string: '{"result":"30aebb6b7f1b80ffd8700fb492e1a2820b8a04e7d6c95ddb8a163c138f6690b4","error":null,"id":"curltest"}
+
+        '
+    headers:
+      Access-Control-Allow-Credentials:
+      - 'true'
+      Access-Control-Allow-Headers:
+      - Content-Type,Authorization,User-Agent
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - ''
+      Content-Length:
+      - '107'
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 16 Jun 2024 17:05:53 GMT
+      Vary:
+      - Accept-Encoding
+      X-Host-Id:
+      - f1b546936d23e3b5-d46e6ad25adfe563
+      X-Node-Id:
+      - bitcoin_btc-testnet_iad
+    status:
+      code: 200
+      message: OK
+version: 1

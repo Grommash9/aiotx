@@ -64,10 +64,10 @@ async def test_send_transaction(ltc_public_client: AioTxLTCClient):
     utxo_list = await ltc_public_client.monitor._get_utxo_data(TEST_LTC_ADDRESS)
     assert len(utxo_list) == 1
     assert (
-        utxo_list[0][0]
+        utxo_list[0].tx_id
         == "a006aedf3a08f423434aa781988997a0526f9365fe228fb8934ea64bbbb9d055"
     )
-    assert utxo_list[0][2] == 28500000
+    assert utxo_list[0].amount_satoshi == 28500000
     await ltc_public_client.monitor._delete_utxo(
         "55863cc61de0c6c1c87282d3d6fb03650c0fc90ed3282191c618069cbde1d525", 0
     )
@@ -100,10 +100,10 @@ async def test_bulk_send_transaction(ltc_public_client: AioTxLTCClient):
     utxo_list = await ltc_public_client.monitor._get_utxo_data(TEST_LTC_ADDRESS)
     assert len(utxo_list) == 1
     assert (
-        utxo_list[0][0]
+        utxo_list[0].tx_id
         == "64a89e7e269469c126e96d1de7b553850716c71d9081b153429ff781758a59a1"
     )
-    assert utxo_list[0][2] == 20000000
+    assert utxo_list[0].amount_satoshi == 20000000
     assert tx_id == "64a89e7e269469c126e96d1de7b553850716c71d9081b153429ff781758a59a1"
 
 
@@ -134,10 +134,10 @@ async def test_send_from_two_utxo(ltc_public_client: AioTxLTCClient):
     utxo_list = await ltc_public_client.monitor._get_utxo_data(TEST_LTC_ADDRESS)
     assert len(utxo_list) == 1
     assert (
-        utxo_list[0][0]
+        utxo_list[0].tx_id
         == "3fcd11698664ffea5fe00adef6bd2c1c35de66c3fafb50f9076c74ff13fea139"
     )
-    assert utxo_list[0][2] == 48000000
+    assert utxo_list[0].amount_satoshi == 48000000
     assert tx_id == "3fcd11698664ffea5fe00adef6bd2c1c35de66c3fafb50f9076c74ff13fea139"
 
 
@@ -162,10 +162,10 @@ async def test_send_to_legacy_address(ltc_public_client: AioTxLTCClient):
     utxo_list = await ltc_public_client.monitor._get_utxo_data(TEST_LTC_ADDRESS)
     assert len(utxo_list) == 1
     assert (
-        utxo_list[0][0]
+        utxo_list[0].tx_id
         == "141c30ea6326ab447423465d2a7f4c3067812f06ef1e505c0443e85c06ed684a"
     )
-    assert utxo_list[0][2] == 47000000
+    assert utxo_list[0].amount_satoshi == 47000000
     assert tx_id == "141c30ea6326ab447423465d2a7f4c3067812f06ef1e505c0443e85c06ed684a"
 
 
@@ -195,10 +195,10 @@ async def test_send_to_legacy_and_segwit_address(ltc_public_client: AioTxLTCClie
     utxo_list = await ltc_public_client.monitor._get_utxo_data(TEST_LTC_ADDRESS)
     assert len(utxo_list) == 1
     assert (
-        utxo_list[0][0]
+        utxo_list[0].tx_id
         == "33f67e7ac0dde523598f416f8efa5928d9e8a4a681db48f7df7d174701225dd0"
     )
-    assert utxo_list[0][2] == 45500000
+    assert utxo_list[0].amount_satoshi == 45500000
     assert tx_id == "33f67e7ac0dde523598f416f8efa5928d9e8a4a681db48f7df7d174701225dd0"
 
 
@@ -222,10 +222,10 @@ async def test_send_with_auto_fee(ltc_public_client: AioTxLTCClient):
     utxo_list = await ltc_public_client.monitor._get_utxo_data(TEST_LTC_ADDRESS)
     assert len(utxo_list) == 1
     assert (
-        utxo_list[0][0]
+        utxo_list[0].tx_id
         == "ac3c62cb37887a41235fecbc8dd22c8a8b5b74e1d2695dbc78e6d05a0cbdf2e9"
     )
-    assert utxo_list[0][2] == 44999715
+    assert utxo_list[0].amount_satoshi == 44999715
     assert tx_id == "ac3c62cb37887a41235fecbc8dd22c8a8b5b74e1d2695dbc78e6d05a0cbdf2e9"
 
 
@@ -255,10 +255,10 @@ async def test_send_with_auto_fee_and_deduct_commission(
     utxo_list = await ltc_public_client.monitor._get_utxo_data(TEST_LTC_ADDRESS)
     assert len(utxo_list) == 1
     assert (
-        utxo_list[0][0]
+        utxo_list[0].tx_id
         == "3ed6c7a8e3b263679c47223f3e9c65721f865378e1b6799182f0607e1ebf9179"
     )
-    assert utxo_list[0][2] == 43898584
+    assert utxo_list[0].amount_satoshi == 43898584
     assert tx_id == "3ed6c7a8e3b263679c47223f3e9c65721f865378e1b6799182f0607e1ebf9179"
 
 
@@ -291,10 +291,10 @@ async def test_bulk_send_with_auto_fee_and_deduct_commission(
     utxo_list = await ltc_public_client.monitor._get_utxo_data(TEST_LTC_ADDRESS)
     assert len(utxo_list) == 1
     assert (
-        utxo_list[0][0]
+        utxo_list[0].tx_id
         == "e328d42e61f6b022c1534cd2e7e184180574172c988bea359f0b8e8734f178c6"
     )
-    assert utxo_list[0][2] == 42397453
+    assert utxo_list[0].amount_satoshi == 42397453
     assert tx_id == "e328d42e61f6b022c1534cd2e7e184180574172c988bea359f0b8e8734f178c6"
 
 
@@ -368,10 +368,10 @@ async def test_send_few_single_transactions(ltc_public_client: AioTxLTCClient):
     utxo_list = await ltc_public_client.monitor._get_utxo_data(TEST_LTC_ADDRESS)
     assert len(utxo_list) == 1
     assert (
-        utxo_list[0][0]
+        utxo_list[0].tx_id
         == "477ff66cdf3c97661c66d38a05cfae018d0358fec300a8b85bde65808e6cf8f9"
     )
-    assert utxo_list[0][2] == 997636
+    assert utxo_list[0].amount_satoshi == 997636
     assert tx_id == "477ff66cdf3c97661c66d38a05cfae018d0358fec300a8b85bde65808e6cf8f9"
 
     await ltc_public_client.monitor._mark_utxo_used(
