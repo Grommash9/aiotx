@@ -242,12 +242,16 @@ class AioTxTRONClient(AioTxEVMBaseClient):
             with localcontext() as ctx:
                 multiplier = len(s_number) - s_number.index(".") - 1
                 ctx.prec = multiplier
-                d_number = decimal.Decimal(value=number, context=ctx) * 10**multiplier
+                d_number = decimal.Decimal(value=number, context=ctx) * decimal.Decimal(
+                    10**multiplier
+                )
                 unit_value /= 10**multiplier
 
         with localcontext() as ctx:
             ctx.prec = 999
-            result_value = decimal.Decimal(value=d_number, context=ctx) * unit_value
+            result_value = decimal.Decimal(
+                value=d_number, context=ctx
+            ) * decimal.Decimal(unit_value)
 
         if result_value < MIN_SUN or result_value > MAX_SUN:
             raise ValueError("Resulting Sun value must be between 1 and 10^18")
