@@ -62,7 +62,7 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         # HACK sometimes we have address with 0x prefix?
         # Should we handle it somehow?
         if hex_address.startswith("0x"):
-            hex_address = hex_address.replace("0x", "41")
+            hex_address = "41" + hex_address[2:]
         client = Tron()
         if not client.is_hex_address(hex_address):
             raise TypeError("Please provide hex address")
@@ -183,9 +183,8 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         from eth_abi import encode
 
         # Construct the TRC20 token transfer transaction
-        hex_eth_like_address = self.base58_to_hex_address(to_address).replace(
-            "41", "0x"
-        )
+        hex_eth_like_address = self.base58_to_hex_address(to_address)
+        hex_eth_like_address = "0x" + hex_eth_like_address[2:]
 
         transfer_data = encode(["address", "uint256"], [hex_eth_like_address, amount])
         parameter = transfer_data.hex()
