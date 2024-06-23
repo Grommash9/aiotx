@@ -1,39 +1,33 @@
 from setuptools import find_packages, setup
 
 
-extras_test = (
-    [
-        "hypothesis",
-        "ruff",
-        "pyproj",
-        "pytest",
-        "pytest-cov",
-        "sphinx",
-        "pytest-asyncio",
-        "tox",
-        "build",
-        "vcrpy"
-    ]
-)
+extras_test = [
+    "hypothesis",
+    "ruff",
+    "pyproj",
+    "pytest",
+    "pytest-cov",
+    "sphinx",
+    "pytest-asyncio",
+    "tox",
+    "build",
+    "vcrpy",
+]
 
-extras_evm = (
-    [
-        "eth_keys==0.5.*",
-        "eth_utils==4.1.*",
-        "eth_account==0.13.*",
-    ]
-)
+extras_evm = [
+    "eth_keys==0.5.*",
+    "eth_utils==4.1.*",
+    "eth_account==0.13.*",
+]
 
-extras_utxo = (
-    [
-        "sqlalchemy",
-        "aiosqlite",
-        "aiomysql",
-        "greenlet",
-        "cryptography",
-        "bitcoinlib==0.6.*",
-    ]
-)
+extras_utxo = [
+    "sqlalchemy",
+    "aiosqlite",
+    "aiomysql",
+    "greenlet",
+    "cryptography",
+    "bitcoinlib==0.6.*",
+]
 
 
 setup(
@@ -75,9 +69,9 @@ setup(
     },
     url="https://github.com/Grommash9/aiotx",
     project_urls={
-        'Documentation': 'https://grommash9.github.io/aiotx/',
-        'Source': 'https://github.com/Grommash9/aiotx'
-        },
+        "Documentation": "https://grommash9.github.io/aiotx/",
+        "Source": "https://github.com/Grommash9/aiotx",
+    },
     author="Oleksandr Prudnikov",
     author_email="prudnikov21@icloud.com",
     classifiers=[
