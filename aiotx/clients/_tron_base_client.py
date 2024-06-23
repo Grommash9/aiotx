@@ -95,7 +95,11 @@ class AioTxTRONClient(AioTxEVMBaseClient):
             created_txd["raw_data"],
             tx_id=created_txd["txID"],
         )
-        return result["txid"]
+        if result.get("result"):
+            return result["txid"]
+        raise CreateTransactionError(
+            f"Code: {result.get('code')} Message: {result.get('message')}"
+        )
 
     async def send_token(
         self,
@@ -117,7 +121,11 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         result = await self.broadcast_transaction(
             [sig], created_txd["raw_data_hex"], created_txd["raw_data"], tx_id
         )
-        return result["txid"]
+        if result.get("result"):
+            return result["txid"]
+        raise CreateTransactionError(
+            f"Code: {result.get('code')} Message: {result.get('message')}"
+        )
 
     def sign_msg_hash(self, priv_key: str, message_hash: bytes) -> str:
         """Sign a message hash(sha256)."""
