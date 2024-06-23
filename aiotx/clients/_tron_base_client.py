@@ -97,7 +97,7 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         )
         if result.get("result"):
             return result["txid"]
-        raise RpcConnectionError(
+        raise CreateTransactionError(
             f"Code: {result.get('code')} Message: {result.get('message')}"
         )
 
@@ -123,7 +123,7 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         )
         if result.get("result"):
             return result["txid"]
-        raise RpcConnectionError(
+        raise CreateTransactionError(
             f"Code: {result.get('code')} Message: {result.get('message')}"
         )
 
