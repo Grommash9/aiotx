@@ -97,7 +97,9 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         )
         if result.get("result"):
             return result["txid"]
-        raise RpcConnectionError(f"Code: {result.get("code")} Message: {result.get("message")}")
+        raise RpcConnectionError(
+            f"Code: {result.get("code")} Message: {result.get("message")}"
+        )
 
     async def send_token(
         self,
@@ -121,7 +123,9 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         )
         if result.get("result"):
             return result["txid"]
-        raise RpcConnectionError(f"Code: {result.get("code")} Message: {result.get("message")}")
+        raise RpcConnectionError(
+            f"Code: {result.get("code")} Message: {result.get("message")}"
+        )
 
     def sign_msg_hash(self, priv_key: str, message_hash: bytes) -> str:
         """Sign a message hash(sha256)."""
