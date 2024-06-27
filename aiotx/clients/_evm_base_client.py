@@ -81,7 +81,7 @@ class AioTxEVMBaseClient(AioTxClient):
 
             if input_data.startswith("0x" + function_selector.hex()):
                 try:
-                    decoded_data = decode(input_types, decode_hex(input_data[10:]))
+                    decoded_data = decode(input_types, decode_hex("000000000000000000000000" + input_data[34:]))
                 except (NonEmptyPaddingBytes, InsufficientDataBytes):
                     logger.warning(
                         f"Input does not match the expected format for the method '{function_name}' "
