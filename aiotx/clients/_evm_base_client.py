@@ -80,15 +80,16 @@ class AioTxEVMBaseClient(AioTxClient):
             function_selector = function_signature_to_4byte_selector(function_signature)
 
             if input_data.startswith("0x" + function_selector.hex()):
+                            if input_data.startswith("0x" + function_selector.hex()):
                 try:
-                    decoded_data = decode(input_types, decode_hex("000000000000000000000000" + input_data[34:]))
+                    decoded_data = decode(input_types, decode_hex(input_data[10:]))
                 except (NonEmptyPaddingBytes, InsufficientDataBytes):
-                    logger.warning(
-                        f"Input does not match the expected format for the method '{function_name}' "
-                        f"to decode the transaction with input '{input_data}'. "
-                        "It seems to have its own implementation."
-                    )
-                    return {"function_name": None, "parameters": None}
+                    try:
+                        decoded_data = decode(input_types, decode_hex("000000000000000000000000" + input_data[34:]))
+                    except Exception as e:
+                        logger.warning(
+                            f"Input does not match the expected format for the method '{function_name}' ")
+                        return {"function_name": None, "parameters": None}
 
                 decoded_params = {}
                 for i, param in enumerate(decoded_data):
