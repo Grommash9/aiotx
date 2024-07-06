@@ -51,10 +51,7 @@ def ton_client() -> AioTxTONClient:
     # so we are setting that param by ourself
     return AioTxTONClient(
         TON_TEST_NODE_URL,
-        workchain=0,
-        headers={
-            "X-API-Key": "c87fbfad07e66b778bffbe20a5183e55e72f0db97bf68bf5e50170cb53fb115b"
-        },
+        workchain=0
     )
 
 
