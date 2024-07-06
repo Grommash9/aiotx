@@ -307,6 +307,82 @@ async def test_get_jetton_wallet_balance(
             assert expected_balance == balance
 
 
+def get_jetton_address_generate_cassette_name(address, jetton_master_address):
+    return (
+        f"ton/get_jetton_wallet_address_{address[:8]}_{jetton_master_address[:8]}.yaml"
+    )
+
+
+@pytest.mark.parametrize(
+    "address, jetton_master_address, expected_jetton_address, expected_exception",
+    [
+        (
+            "0QDlTHD4T79EyT96gkYNKd3iuRd2__6gGh2PCKpU57jSWbVp",
+            "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di",
+            "EQAkr7ojLnvr1I894iS4hed-9j0BHr10AgpzI_WMdf8Rnepj",
+            None,
+        ),
+        (
+            "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
+            "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di",
+            "EQBwxMdpfbD1UuvQeOgeCHUksnuUEeKZo9VxOGmz24Bacw7c",
+            None,
+        ),
+        (
+            "EQCYRLyN3G4jePSCOnVVuutLk2pdTCjjSSkGtgOcgZ4GZjHb",
+            "kQCKt2WPGX-fh0cIAz38Ljd_OKQjoZE_cqk7QrYGsNP6wfP0",
+            "EQAy78ko9RJSTUD0Jrcdb__KlPkcxaPuaAcCaQaXymjyqcDk",
+            None,
+        ),
+        (
+            "0QDBorbUtHys99DsbZ4rhfhvE7ddrC1LqUbTmRGNGVEgvVFS",
+            "kQCKt2WPGX-fh0cIAz38Ljd_OKQjoZE_cqk7QrYGsNP6wfP0",
+            "EQCihRIajzYSzuyWpbROGi5pnv2lvMFcIR_cIgLIuYFWabip",
+            None,
+        ),
+        (
+            "0QDGi5-PodzUMc-WzvN7Fv1ysVUpcrAX1xKW9Feb1Y2VD4gl",
+            "kQCKt2WPGX-fh0cIAz38Ljd_OKQjoZE_cqk7QrYGsNP6wfP0",
+            "EQCh-LEZtAIxMCFGFrIgR0hZSAT37itKz02BHyv92KUCFMHV",
+            None,
+        ),
+        (
+            "0QDGi5-PodzUMc-WzvN7Fv1ysVUpc1xKW9Feb1Y2VD4gl",
+            "kQCKt2WPGX-fh0cIAz38Ljd_OKQjoZE_cqk7QrYGsNP6wfP0",
+            "0",
+            InvalidAddressError,
+        ),
+        (
+            "0QDGi5-PodzUMc-WzvN7Fv1ysVUpcrAX1xKW9Feb1Y2VD4gl",
+            "QCKt2WPGX-fh0cIAz38Ljd_OKQjoZE_cqk7QrYGsNP6wfP0",
+            "0",
+            RpcConnectionError,
+        ),
+    ],
+)
+async def test_get_jetton_wallet_address(
+    ton_client: AioTxTONClient,
+    address,
+    jetton_master_address,
+    expected_jetton_address,
+    expected_exception,
+):
+    cassette_name = get_jetton_balance_generate_cassette_name(
+        address, jetton_master_address
+    )
+    with vcr_c.use_cassette(cassette_name):
+        if expected_exception:
+            with pytest.raises(expected_exception):
+                await ton_client.get_jetton_wallet_address(
+                    address, jetton_master_address
+                )
+        else:
+            jetton_wallet_address = await ton_client.get_jetton_wallet_address(
+                address, jetton_master_address
+            )
+            assert expected_jetton_address == jetton_wallet_address
+
+
 @pytest.mark.parametrize(
     "address, limit, lt, hash, to_lt, archival, expected_exception, tx_data_result",
     [
