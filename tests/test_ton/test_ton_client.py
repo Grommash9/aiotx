@@ -3,15 +3,16 @@ import os
 import pytest
 from conftest import vcr_c  # noqa
 from vcr.errors import CannotOverwriteExistingCassetteException
-from aiotx.utils.tonsdk.utils._exceptions import InvalidAddressError
+
 from aiotx.clients import AioTxTONClient
 from aiotx.exceptions import (
     AioTxError,
     BlockNotFoundError,
     InvalidArgumentError,
-    WrongPrivateKey,
     RpcConnectionError,
+    WrongPrivateKey,
 )
+from aiotx.utils.tonsdk.utils._exceptions import InvalidAddressError
 
 TON_TEST_WALLET_MEMO = os.environ.get("TON_TEST_WALLET_MEMO")
 assert TON_TEST_WALLET_MEMO is not None, "Please provide TON_TEST_WALLET_MEMO"

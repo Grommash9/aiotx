@@ -1,11 +1,12 @@
 import asyncio
+import base64
 import decimal
 import json
 import time
 from typing import Optional, Union
 
 import aiohttp
-import base64
+
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     BlockNotFoundError,
@@ -14,13 +15,13 @@ from aiotx.exceptions import (
     WrongPrivateKey,
 )
 from aiotx.log import logger
+from aiotx.utils.tonsdk.boc import Cell
 from aiotx.utils.tonsdk.contract.wallet import Wallets, WalletVersionEnum
 from aiotx.utils.tonsdk.crypto import mnemonic_new
 from aiotx.utils.tonsdk.crypto._mnemonic import mnemonic_is_valid
-from aiotx.utils.tonsdk.utils import bytes_to_b64str, Address
+from aiotx.utils.tonsdk.utils import Address, bytes_to_b64str
 from aiotx.utils.tonsdk.utils import from_nano as tonsdk_from_nano
 from aiotx.utils.tonsdk.utils import to_nano as tonsdk_to_nano
-from aiotx.utils.tonsdk.boc import Cell
 
 
 class AioTxTONClient(AioTxClient):
