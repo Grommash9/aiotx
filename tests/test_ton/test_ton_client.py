@@ -367,7 +367,7 @@ async def test_get_jetton_wallet_address(
     expected_jetton_address,
     expected_exception,
 ):
-    cassette_name = get_jetton_balance_generate_cassette_name(
+    cassette_name = get_jetton_address_generate_cassette_name(
         address, jetton_master_address
     )
     with vcr_c.use_cassette(cassette_name):

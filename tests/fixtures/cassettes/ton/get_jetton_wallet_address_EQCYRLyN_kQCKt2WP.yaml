@@ -1,0 +1,38 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/runGetMethod
+  response:
+    body:
+      string: '{"ok":true,"result":{"@type":"smc.runResult","gas_used":4479,"stack":[["cell",{"bytes":"te6cckEBAQEAJAAAQ4AGXfklHqJKSagehNbjrf/5Up8jmLR9zQDgTSDS+U0eVTCsZYX2","object":{"data":{"b64":"gAZd+SUeokpJqB6E1uOt//lSnyOYtH3NAOBNINL5TR5VIA==","len":267},"refs":[],"special":false}}]],"exit_code":0,"@extra":"1720256609.4059172:3:0.8395616873995666","block_id":{"@type":"ton.blockIdExt","workchain":-1,"shard":"-9223372036854775808","seqno":20780401,"root_hash":"jK3rvpUeTijnOrWmWDtCk0COABHYNFU6OzO9hjUMh/I=","file_hash":"ygdDBj0/dYRHlrMtEPpp7G8xh9TnUDwy9yj4ug9GCeo="},"last_transaction_id":{"@type":"internal.transactionId","lt":"22748989000001","hash":"c8A26ReI5wRJERNod5dOktWJW8RsIRKAx2XeY5OCztk="}}}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 89ee6bc1de726412-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 06 Jul 2024 09:03:19 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+version: 1
