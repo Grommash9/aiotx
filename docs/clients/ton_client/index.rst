@@ -102,4 +102,7 @@ Methods
    get_transaction_count
    send
    send_bulk
+   get_jetton_wallet_address
+   get_jetton_wallet_balance
+
    

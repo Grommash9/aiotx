@@ -32,7 +32,7 @@ LTC_TEST_NODE_URL = "https://api.tatum.io/v3/blockchain/node/litecoin-core-testn
 BTC_TEST_NODE_URL = "https://ultra-special-dust.btc-testnet.quiknode.pro/331c45aef598f74795cef49fd7e5be98d37d7f06/"
 TON_MAINNET_NODE_URL = "https://go.getblock.io/875fb0dee2544bb0bc59dd08c6f39330"
 POLYGON_TEST_NODE_URL = "https://polygon-amoy-bor-rpc.publicnode.com"
-TON_TEST_NODE_URL = "https://testnet.toncenter.com/api/v2/jsonRPC"
+TON_TEST_NODE_URL = "https://testnet.toncenter.com/api/v2"
 TRON_TEST_NODE_URL = "https://api.shasta.trongrid.io"
 
 pytest.mark.mysql = pytest.mark.mysql
@@ -41,7 +41,7 @@ vcr_c = vcr.VCR(
     cassette_library_dir="tests/fixtures/cassettes",
     record_mode=os.environ.get("VCR_RECORD_MODE", "none"),
     match_on=["host", "path", "method", "query", "raw_body", "body"],
-    filter_headers=["Authorization", "Cookie", "Date"],
+    filter_headers=["Authorization", "Cookie", "Date", "X-API-Key"],
 )
 
 

@@ -1,0 +1,74 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/runGetMethod
+  response:
+    body:
+      string: '{"ok":true,"result":{"@type":"smc.runResult","gas_used":2961,"stack":[["cell",{"bytes":"te6cckEBAQEAJAAAQ4AElfdEZc99epHnvESXELzv3segI9eugEFOZH6xjr/iM7DqRfdG","object":{"data":{"b64":"gASV90Rlz316kee8RJcQvO/ex6Aj166AQU5kfrGOv+IzoA==","len":267},"refs":[],"special":false}}]],"exit_code":0,"@extra":"1720255817.6719897:0:0.24308560731908802","block_id":{"@type":"ton.blockIdExt","workchain":-1,"shard":"-9223372036854775808","seqno":20780093,"root_hash":"TTag3OSdjP5h8JXBb5bOK+DJcMuBJ5vIl7Lwqi1jdUA=","file_hash":"mrabrfN31zTid2K+BL6VH7pOBP50n7gGpB5O+cSnGno="},"last_transaction_id":{"@type":"internal.transactionId","lt":"22719568000001","hash":"dVN9Rwx55EEGuVoTWLDuMm+l5uEUYX7iOtYFYhDcoQE="}}}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 89ee586d3a682502-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 06 Jul 2024 08:50:07 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/runGetMethod
+  response:
+    body:
+      string: '{"ok":true,"result":{"@type":"smc.runResult","gas_used":549,"stack":[["num","0x1eb8167b600"],["cell",{"bytes":"te6cckEBAQEAJAAAQ4AcqY4fCffomSfvUEjBpTu8VyLu3//UA0Ox4RVKnPcaSzDNTf3K","object":{"data":{"b64":"gBypjh8J9+iZJ+9QSMGlO7xXIu7f/9QDQ7HhFUqc9xpLIA==","len":267},"refs":[],"special":false}}],["cell",{"bytes":"te6cckEBAQEAJAAAQ4AETdAYl/9SNbgjtbDuDapZpy4I+CUIrdpQzaCpOxxWLHDcm5Yu","object":{"data":{"b64":"gARN0BiX/1I1uCO1sO4NqlmnLgj4JQit2lDNoKk7HFYsYA==","len":267},"refs":[],"special":false}}],["cell",{"bytes":"te6cckECEQEAAyMAART/APSkE/S88sgLAQIBYgIDAgLMBAUAG6D2BdqJofQB9IH0gahhAgHUBgcCASAICQDDCDHAJJfBOAB0NMDAXGwlRNfA/AM4PpA+kAx+gAxcdch+gAx+gAwc6m0AALTH4IQD4p+pVIgupUxNFnwCeCCEBeNRRlSILqWMUREA/AK4DWCEFlfB7y6k1nwC+BfBIQP8vCAAET6RDBwuvLhTYAIBIAoLAIPUAQa5D2omh9AH0gfSBqGAJpj8EIC8aijKkQXUEIPe7L7wndCVj5cWLpn5j9ABgJ0CgR5CgCfQEsZ4sA54tmZPaqQB8VA9M/+gD6QCHwAe1E0PoA+kD6QNQwUTahUirHBfLiwSjC//LiwlQ0QnBUIBNUFAPIUAT6AljPFgHPFszJIsjLARL0APQAywDJIPkAcHTIywLKB8v/ydAE+kD0BDH6ACDXScIA8uLEd4AYyMsFUAjPFnD6AhfLaxPMgMAgEgDQ4AnoIQF41FGcjLHxnLP1AH+gIizxZQBs8WJfoCUAPPFslQBcwjkXKRceJQCKgToIIJycOAoBS88uLFBMmAQPsAECPIUAT6AljPFgHPFszJ7VQC9ztRND6APpA+kDUMAjTP/oAUVGgBfpA+kBTW8cFVHNtcFQgE1QUA8hQBPoCWM8WAc8WzMkiyMsBEvQA9ADLAMn5AHB0yMsCygfL/8nQUA3HBRyx8uLDCvoAUaihggiYloBmtgihggiYloCgGKEnlxBJEDg3XwTjDSXXCwGAPEADXO1E0PoA+kD6QNQwB9M/+gD6QDBRUaFSSccF8uLBJ8L/8uLCBYIJMS0AoBa88uLDghB73ZfeyMsfFcs/UAP6AiLPFgHPFslxgBjIywUkzxZw+gLLaszJgED7AEATyFAE+gJYzxYBzxbMye1UgAHBSeaAYoYIQc2LQnMjLH1Iwyz9Y+gJQB88WUAfPFslxgBDIywUkzxZQBvoCFctqFMzJcfsAECQQIwB8wwAjwgCwjiGCENUydttwgBDIywVQCM8WUAT6AhbLahLLHxLLP8ly+wCTNWwh4gPIUAT6AljPFgHPFszJ7VSV6u3X","object":{"data":{"b64":"/wD0pBP0vPLICw==","len":80},"refs":[{"data":{"b64":"YA==","len":6},"refs":[{"data":{"b64":"zA==","len":8},"refs":[{"data":{"b64":"0A==","len":5},"refs":[{"data":{"b64":"CDHAJJfBOAB0NMDAXGwlRNfA/AM4PpA+kAx+gAxcdch+gAx+gAwc6m0AALTH4IQD4p+pVIgupUxNFnwCeCCEBeNRRlSILqWMUREA/AK4DWCEFlfB7y6k1nwC+BfBIQP8vAA=","len":778},"refs":[],"special":false},{"data":{"b64":"PpEMHC68uFNA","len":66},"refs":[],"special":false}],"special":false},{"data":{"b64":"AA==","len":2},"refs":[{"data":{"b64":"AA==","len":2},"refs":[{"data":{"b64":"UD0z/6APpAIfAB7UTQ+gD6QPpA1DBRNqFSKscF8uLBKML/8uLCVDRCcFQgE1QUA8hQBPoCWM8WAc8WzMkiyMsBEvQA9ADLAMkg+QBwdMjLAsoHy//J0AT6QPQEMfoAINdJwgDy4sR3gBjIywVQCM8WcPoCF8trE8wA==","len":964},"refs":[{"data":{"b64":"ghAXjUUZyMsfGcs/UAf6AiLPFlAGzxYl+gJQA88WyVAFzCORcpFx4lAIqBOgggnJw4CgFLzy4sUEyYBA+wAQI8hQBPoCWM8WAc8WzMntVA==","len":632},"refs":[],"special":false}],"special":false},{"data":{"b64":"AA==","len":2},"refs":[{"data":{"b64":"O1E0PoA+kD6QNQwCNM/+gBRUaAF+kD6QFNbxwVUc21wVCATVBQDyFAE+gJYzxYBzxbMySLIywES9AD0AMsAyfkAcHTIywLKB8v/ydBQDccFHLHy4sMK+gBRqKGCCJiWgGa2CKGCCJiWgKAYoSeXEEkQODdfBOMNJdcLAQA==","len":986},"refs":[{"data":{"b64":"UnmgGKGCEHNi0JzIyx9SMMs/WPoCUAfPFlAHzxbJcYAQyMsFJM8WUAb6AhXLahTMyXH7ABAkECM=","len":448},"refs":[],"special":false},{"data":{"b64":"wwAjwgCwjiGCENUydttwgBDIywVQCM8WUAT6AhbLahLLHxLLP8ly+wCTNWwh4gPIUAT6AljPFgHPFszJ7VQ=","len":496},"refs":[],"special":false}],"special":false},{"data":{"b64":"O1E0PoA+kD6QNQwB9M/+gD6QDBRUaFSSccF8uLBJ8L/8uLCBYIJMS0AoBa88uLDghB73ZfeyMsfFcs/UAP6AiLPFgHPFslxgBjIywUkzxZw+gLLaszJgED7AEATyFAE+gJYzxYBzxbMye1UA","len":858},"refs":[],"special":false}],"special":false}],"special":false},{"data":{"b64":"1AEGuQ9qJofQB9IH0gahgCaY/BCAvGooypEF1BCD3uy+8J3QlY+XFi6Z+Y/QAYCdAoEeQoAn0BLGeLAOeLZmT2qg","len":525},"refs":[],"special":false}],"special":false}],"special":false},{"data":{"b64":"oPYF2omh9AH0gfSBqGA=","len":111},"refs":[],"special":false}],"special":false}],"special":false}}]],"exit_code":0,"@extra":"1720255817.9048207:3:0.8144251299967418","block_id":{"@type":"ton.blockIdExt","workchain":-1,"shard":"-9223372036854775808","seqno":20780094,"root_hash":"RLswAw4uvpGEDVPM7DNDQw2TgqU1JbqSOlGi5TfluRI=","file_hash":"kZ4W031PnbbN9qvsrWmH+Utz0icl21Q+sSJbt9Ci2Gw="},"last_transaction_id":{"@type":"internal.transactionId","lt":"22719255000001","hash":"MVPSRQat0gfX7pD5xCa5huSbDXpYMshSzv3InDL2xeg="}}}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 89ee586ea84960f8-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 06 Jul 2024 08:50:07 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+version: 1
