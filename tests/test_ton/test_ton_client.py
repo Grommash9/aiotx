@@ -259,7 +259,7 @@ async def test_transfer_jettons(
                     memo,
                 )
         else:
-            tx_id = await ton_client.transfer_jettons(
+            await ton_client.transfer_jettons(
                 TON_TEST_WALLET_MEMO,
                 destination_address,
                 jetton_master_address,
