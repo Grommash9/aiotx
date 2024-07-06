@@ -11,35 +11,19 @@ ton_client = AioTxTONClient(
     wallet_version=WalletVersionEnum.hv2,
 )
 
+# jetton_wallet_address = asyncio.run(
+#     ton_client.get_jetton_wallet_address(
+#         "0QDlTHD4T79EyT96gkYNKd3iuRd2__6gGh2PCKpU57jSWbVp", "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di"
+#     )
+# )
 
-recipients_list = [
-    {
-        "address": "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
-        "amount": 1,
-        "payload": "Hello, recipient 1!",
-        "send_mode": 1,
-    },
-    {
-        "address": "UQDlTHD4T79EyT96gkYNKd3iuRd2__6gGh2PCKpU57jSWQ7j",
-        "amount": 10,
-        "payload": "Hello, recipient 5!",
-        "send_mode": 1,
-    },
-]
+# print("jetton_wallet_address", jetton_wallet_address)
 
-# You should deploy the wallet before you will be able to start using it, wallet should have balance for that to deploy itself!
-
-tx_id = asyncio.run(
-    ton_client.deploy_wallet(
-        "ancient reason board glue post sea write shrimp feel motion win away pizza sword mobile ethics film lawsuit nephew cloud crash okay hero step"
+balance = asyncio.run(
+    ton_client.get_jetton_wallet_balance(
+        "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
+        "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di",
     )
 )
 
-tx_id = asyncio.run(
-    ton_client.send_bulk(
-        "ancient reason board glue post sea write shrimp feel motion win away pizza sword mobile ethics film lawsuit nephew cloud crash okay hero step",
-        recipients_list,
-    )
-)
-
-print("tx_id", tx_id)
+print("balance", balance)

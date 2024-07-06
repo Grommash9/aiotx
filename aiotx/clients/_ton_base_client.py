@@ -5,7 +5,7 @@ import time
 from typing import Optional, Union
 
 import aiohttp
-
+import base64
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     BlockNotFoundError,
@@ -17,9 +17,10 @@ from aiotx.log import logger
 from aiotx.utils.tonsdk.contract.wallet import Wallets, WalletVersionEnum
 from aiotx.utils.tonsdk.crypto import mnemonic_new
 from aiotx.utils.tonsdk.crypto._mnemonic import mnemonic_is_valid
-from aiotx.utils.tonsdk.utils import bytes_to_b64str
+from aiotx.utils.tonsdk.utils import bytes_to_b64str, Address
 from aiotx.utils.tonsdk.utils import from_nano as tonsdk_from_nano
 from aiotx.utils.tonsdk.utils import to_nano as tonsdk_to_nano
+from aiotx.utils.tonsdk.boc import Cell
 
 
 class AioTxTONClient(AioTxClient):
@@ -38,13 +39,6 @@ class AioTxTONClient(AioTxClient):
         self.query_number = 0
         self.max_query_number = 2**32 - 1
         self.timestamp = int(time.time())
-
-        if "jsonRPC" in node_url:
-            logger.warning(
-                "Deprecation warning: You should not manually add the 'jsonRPC' part to the URL. This practice will soon be deprecated, and the library will handle it for you. Please update your codebase accordingly."
-            )
-        else:
-            self.node_url += "/jsonRPC"
 
     async def generate_address(self) -> tuple[str, str, str]:
         if self.workchain is None:
@@ -278,6 +272,58 @@ class AioTxTONClient(AioTxClient):
         information = await self._make_rpc_call(payload)
         return information
 
+    def _read_address(self, cell):
+        data = "".join([str(cell.bits.get(x)) for x in range(cell.bits.length)])
+        if len(data) < 267:
+            return None
+        wc = int(data[3:11], 2)
+        hashpart = int(data[11 : 11 + 256], 2).to_bytes(32, "big").hex()
+        return Address(f"{wc if wc != 255 else -1}:{hashpart}")
+
+    async def get_jetton_wallet_address(self, address: str, jetton_master_address: str):
+        cell = Cell()
+        cell.bits.write_address(Address(address))
+        data = await self.run_get_method(
+            address=jetton_master_address,
+            method="get_wallet_address",
+            stack=[["tvm.Slice", bytes_to_b64str(cell.to_boc(False))]],
+        )
+
+        jetton_wallet_raw_address = self._read_address(
+            Cell.one_from_boc(base64.b64decode(data["stack"][0][1]["bytes"]))
+        ).to_string()
+        return Address(jetton_wallet_raw_address).to_string(True, True, True)
+
+    async def get_jetton_wallet_balance(self, wallet_address, jetton_master_address):
+        jetton_wallet_address = await self.get_jetton_wallet_address(
+            wallet_address, jetton_master_address
+        )
+        data = await self.run_get_method(
+            address=jetton_wallet_address, method="get_wallet_data", stack=[]
+        )
+        if (
+            "stack" not in data
+            or len(data["stack"]) < 1
+            or data["stack"][0][0] != "num"
+        ):
+            raise ValueError(f"Unexpected data structure: {data}")
+        balance = int(data["stack"][0][1], 16)
+        return balance
+
+    async def run_get_method(self, method: str, address: str, stack: list):
+        headers = {"Content-Type": "application/json"}
+        headers.update(self._headers)
+
+        async with aiohttp.ClientSession() as session:
+            target_url = self.node_url + "/runGetMethod"
+            data = {"address": address, "method": method, "stack": stack}
+            response = await session.post(url=target_url, json=data, headers=headers)
+            result = await response.json()
+            if result["ok"]:
+                return result["result"]
+            else:
+                raise RpcConnectionError(str(result))
+
     async def _make_rpc_call(self, payload) -> dict:
         payload["jsonrpc"] = "2.0"
         payload["id"] = 1
@@ -285,9 +331,10 @@ class AioTxTONClient(AioTxClient):
         headers = {"Content-Type": "application/json"}
         headers.update(self._headers)
         logger.info(f"rpc call payload: {payload}")
+
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                self.node_url, data=payload_json, headers=headers
+                self.node_url + "/jsonRPC", data=payload_json, headers=headers
             ) as response:
                 response_text = await response.text()
                 logger.info(f"rpc call result: {response_text}")

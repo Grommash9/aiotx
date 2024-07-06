@@ -3,13 +3,14 @@ import os
 import pytest
 from conftest import vcr_c  # noqa
 from vcr.errors import CannotOverwriteExistingCassetteException
-
+from aiotx.utils.tonsdk.utils._exceptions import InvalidAddressError
 from aiotx.clients import AioTxTONClient
 from aiotx.exceptions import (
     AioTxError,
     BlockNotFoundError,
     InvalidArgumentError,
     WrongPrivateKey,
+    RpcConnectionError,
 )
 
 TON_TEST_WALLET_MEMO = os.environ.get("TON_TEST_WALLET_MEMO")
@@ -228,6 +229,82 @@ async def test_get_balance(
     else:
         balance = await ton_client.get_balance(address)
         assert expected_balance == balance
+
+
+def get_jetton_balance_generate_cassette_name(address, jetton_master_address):
+    return (
+        f"ton/get_jetton_wallet_balance_{address[:8]}_{jetton_master_address[:8]}.yaml"
+    )
+
+
+@pytest.mark.parametrize(
+    "address, jetton_master_address, expected_balance, expected_exception",
+    [
+        (
+            "0QDlTHD4T79EyT96gkYNKd3iuRd2__6gGh2PCKpU57jSWbVp",
+            "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di",
+            2111000000000,
+            None,
+        ),
+        (
+            "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
+            "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di",
+            999999999999999997889000000000,
+            None,
+        ),
+        (
+            "EQCYRLyN3G4jePSCOnVVuutLk2pdTCjjSSkGtgOcgZ4GZjHb",
+            "kQCKt2WPGX-fh0cIAz38Ljd_OKQjoZE_cqk7QrYGsNP6wfP0",
+            58076874355,
+            None,
+        ),
+        (
+            "0QDBorbUtHys99DsbZ4rhfhvE7ddrC1LqUbTmRGNGVEgvVFS",
+            "kQCKt2WPGX-fh0cIAz38Ljd_OKQjoZE_cqk7QrYGsNP6wfP0",
+            1731564544000,
+            None,
+        ),
+        (
+            "0QDGi5-PodzUMc-WzvN7Fv1ysVUpcrAX1xKW9Feb1Y2VD4gl",
+            "kQCKt2WPGX-fh0cIAz38Ljd_OKQjoZE_cqk7QrYGsNP6wfP0",
+            19192552733,
+            None,
+        ),
+        (
+            "0QDGi5-PodzUMc-WzvN7Fv1ysVUpc1xKW9Feb1Y2VD4gl",
+            "kQCKt2WPGX-fh0cIAz38Ljd_OKQjoZE_cqk7QrYGsNP6wfP0",
+            0,
+            InvalidAddressError,
+        ),
+        (
+            "0QDGi5-PodzUMc-WzvN7Fv1ysVUpcrAX1xKW9Feb1Y2VD4gl",
+            "QCKt2WPGX-fh0cIAz38Ljd_OKQjoZE_cqk7QrYGsNP6wfP0",
+            0,
+            RpcConnectionError,
+        ),
+    ],
+)
+async def test_get_jetton_wallet_balance(
+    ton_client: AioTxTONClient,
+    address,
+    jetton_master_address,
+    expected_balance,
+    expected_exception,
+):
+    cassette_name = get_jetton_balance_generate_cassette_name(
+        address, jetton_master_address
+    )
+    with vcr_c.use_cassette(cassette_name):
+        if expected_exception:
+            with pytest.raises(expected_exception):
+                await ton_client.get_jetton_wallet_balance(
+                    address, jetton_master_address
+                )
+        else:
+            balance = await ton_client.get_jetton_wallet_balance(
+                address, jetton_master_address
+            )
+            assert expected_balance == balance
 
 
 @pytest.mark.parametrize(
