@@ -24,3 +24,18 @@ tx_id = asyncio.run(
     )
 )
 print(tx_id)
+
+
+# Sending jettons example:
+
+recipient_address = "EQCc39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2e"
+jetton_master_address = "EQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di"
+amount = 1000000000  # 1 Jetton (assuming 9 decimal places)
+memo = "Payment for services"
+
+tx_hash = asyncio.run(
+    ton_client.transfer_jettons(
+        mnemonic_str, recipient_address, jetton_master_address, amount, memo
+    )
+)
+print(f"Transfer transaction hash: {tx_hash}")

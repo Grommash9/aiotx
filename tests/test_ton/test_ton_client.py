@@ -175,6 +175,99 @@ async def test_get_block_transactions(
         assert tx_ids.symmetric_difference(tx_data_result) == set()
 
 
+def get_transfer_jetton_cassette_name(destination_address, jetton_master_address):
+    return f"ton/transfer_jetton_{destination_address[:8]}_{jetton_master_address[:8]}.yaml"
+
+
+@pytest.mark.parametrize(
+    "destination_address, jetton_master_address, memo, amount, expected_exception",
+    [
+        (
+            "kQDiDH4VMBYWihFazYIkNjYz_QR3SspD6Q8McEQqAYiilIXZ",
+            "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di",
+            "vcr tests",
+            1 * 10**9,
+            None,
+        ),
+        (
+            "UQAcVdsfjRvKSq7vZwXwfkCCKxpEBcxQRfXXokdsZOjiLuzW",
+            "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di",
+            "vcr tests",
+            0,
+            None,
+        ),
+        (
+            "0QDGQx-qkikxyLLI7gaQOE1au7hsG4f3C6mmzyvoLtStLpiZ",
+            "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di",
+            "vcr tests",
+            1 * 10**9,
+            None,
+        ),
+        (
+            "UQCz7lj1SxRybh3HS9jjlcXmBKAFGKjYAt93df5ZRz9JtW8g",
+            "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di",
+            "vcr tests",
+            1 * 10**9,
+            None,
+        ),
+        (
+            "0QDGi5-PodzUMc-WzvN7Fv1ysVUpcrAX1xKW9Feb1Y2VD4gl",
+            "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di",
+            "vcr tests",
+            1000000 * 10**9,
+            None,
+        ),
+        (
+            "QDmJUWtxXuUpN1nGk3ycdo22n2MO6ovJ4fGYFhpipfJ4qO9",
+            "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di",
+            "vcr tests",
+            122,
+            InvalidAddressError,
+        ),
+        (
+            "0QDGi5-PodzUMc-WzvN7Fv1ysVUpcrAX1xKW9Feb1Y2VD4gl",
+            "QAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di",
+            "vcr tests",
+            0,
+            RpcConnectionError,
+        ),
+    ],
+)
+@pytest.mark.xfail(
+    raises=CannotOverwriteExistingCassetteException,
+    reason="boc is always new, we can't test it by VCR",
+)
+async def test_transfer_jettons(
+    ton_client: AioTxTONClient,
+    destination_address,
+    jetton_master_address,
+    memo,
+    amount,
+    expected_exception,
+):
+    cassette_name = get_transfer_jetton_cassette_name(
+        destination_address, jetton_master_address
+    )
+    with vcr_c.use_cassette(cassette_name):
+        if expected_exception:
+            with pytest.raises(expected_exception):
+                await ton_client.transfer_jettons(
+                    TON_TEST_WALLET_MEMO,
+                    destination_address,
+                    jetton_master_address,
+                    amount,
+                    memo,
+                )
+        else:
+            await ton_client.transfer_jettons(
+                TON_TEST_WALLET_MEMO,
+                destination_address,
+                jetton_master_address,
+                amount,
+                memo,
+            )
+
+
 @pytest.mark.parametrize(
     "address, expected_balance, expected_exception",
     [

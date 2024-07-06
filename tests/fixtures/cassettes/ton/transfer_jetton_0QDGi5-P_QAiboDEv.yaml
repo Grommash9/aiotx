@@ -1,0 +1,74 @@
+interactions:
+- request:
+    body: '{"method": "getWalletInformation", "params": {"address": "UQDGQx-qkikxyLLI7gaQOE1au7hsG4f3C6mmzyvoLtStLiMT"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"wallet":true,"balance":"864417906","account_state":"active","wallet_type":"wallet
+        v4 r2","seqno":6,"last_transaction_id":{"@type":"internal.transactionId","lt":"23359459000001","hash":"ZLh7+UpINkRA3Oevh7dg9AHDkjMUS4FVIkmvcjPplkU="},"wallet_id":698983191},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 89f04ba7cb87957d-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 06 Jul 2024 14:30:56 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/runGetMethod
+  response:
+    body:
+      string: '{"ok":false,"error":"Incorrect address","code":416}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 89f04ba8cb594883-LHR
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '51'
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 06 Jul 2024 14:30:56 GMT
+      Server:
+      - cloudflare
+    status:
+      code: 416
+      message: Range Not Satisfiable
+version: 1
