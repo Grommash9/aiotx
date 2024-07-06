@@ -32,7 +32,7 @@ Key Features
 
 2. **UTXO Client:** For UTXO-based networks like Bitcoin and Litecoin, AioTx provides a UTXO client. This client allows you to generate addresses, import addresses for monitoring, retrieve balances, estimate fees, and send transactions effortlessly. The UTXO client also includes support for bulk transactions, enabling you to send multiple transactions in a single operation.
 
-3. **TON Client:** Client for Telegram Open Network - now we have monitoring and token sending TON and bulk send
+3. **TON Client:** Client for Telegram Open Network - now we have monitoring and token sending TON and bulk send, also sending jettons and checking jetton balance
 
 4. **TRON Client:** Client for TRON (trx) blockchain - you can monitor transaction and do TRX/TRC20 transactions
 
@@ -142,6 +142,33 @@ Sending TON (for bulk please check [/examples](https://github.com/Grommash9/aiot
 
     tx_id = asyncio.run(ton_client.send(mnemonic_str, "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT", amount))
     print(tx_id)
+
+    
+```
+Transferring Jettons:
+
+```python
+
+    from aiotx.clients import AioTxTONClient
+    import asyncio
+
+    ton_client = AioTxTONClient("https://testnet.toncenter.com/api/v2", workchain=0)
+
+    mnemonic_str = "your wallet mnemonic phrase here"
+    recipient_address = "EQCc39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2e"
+    jetton_master_address = "EQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di"
+    amount = 1000000000  # 1 Jetton (assuming 9 decimal places)
+    memo = "Payment for services"
+
+    tx_hash = asyncio.run(ton_client.transfer_jettons(
+        mnemonic_str,
+        recipient_address,
+        jetton_master_address,
+        amount,
+        memo
+    ))
+    print(f"Jetton transfer transaction hash: {tx_hash}")
+    
 ```
 
 Sending Native Currency (Ethereum):

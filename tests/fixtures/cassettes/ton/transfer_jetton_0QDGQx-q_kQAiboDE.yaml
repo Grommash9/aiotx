@@ -1,0 +1,113 @@
+interactions:
+- request:
+    body: '{"method": "getWalletInformation", "params": {"address": "UQDGQx-qkikxyLLI7gaQOE1au7hsG4f3C6mmzyvoLtStLiMT"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"wallet":true,"balance":"890885147","account_state":"active","wallet_type":"wallet
+        v4 r2","seqno":4,"last_transaction_id":{"@type":"internal.transactionId","lt":"23359394000001","hash":"a2s2AI9hc39PK2tPYX5seoUZV/86WuV9rh5zj7tq+2g="},"wallet_id":698983191},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 89f048999f8094a2-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 06 Jul 2024 14:28:50 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/runGetMethod
+  response:
+    body:
+      string: '{"ok":true,"result":{"@type":"smc.runResult","gas_used":2961,"stack":[["cell",{"bytes":"te6cckEBAQEAJAAAQ4AIcv7XdKwxBbuh2KzAzfIJOeHsy2XbGX6xN1weSePNRBAfthGs","object":{"data":{"b64":"gAhy/td0rDEFu6HYrMDN8gk54ezLZdsZfrE3XB5J481EAA==","len":267},"refs":[],"special":false}}]],"exit_code":0,"@extra":"1720276141.0797257:4:0.9200716357295012","block_id":{"@type":"ton.blockIdExt","workchain":-1,"shard":"-9223372036854775808","seqno":20787677,"root_hash":"p34fJzNkY6s0SozWIeu6CX+iMwMoFrmm274B9e/R70w=","file_hash":"gKyPSNxfsGXSx9i7ER9juOIObymlfSwDxklVuQlOVik="},"last_transaction_id":{"@type":"internal.transactionId","lt":"22719568000001","hash":"dVN9Rwx55EEGuVoTWLDuMm+l5uEUYX7iOtYFYhDcoQE="}}}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 89f0489a9bcf63f9-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 06 Jul 2024 14:28:51 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "sendBocReturnHash", "params": {"boc": "te6cckECBAEAAREAAeGIAYyGP1UkUmORZZHcDSBwmrV3cNg3D+4XU02eV9BdqVpcBGb2i/WY5Z0lnddY7Jzgq0GpwEffWzGf3+MqQrWQ+uHLSHKqxvL3utmP35f01zHw5nN0y8NNTU/dtbbltZ8bmElNTRi7NEqm+AAAACAAHAEBaGIAIcv7XdKwxBbuh2KzAzfIJOeHsy2XbGX6xN1weSePNRAgF9eEAAAAAAAAAAAAAAAAAAECAagPin6lAAAAAAAAAABDuaygCAGMhj9VJFJjkWWR3A0gcJq1d3DYNw/uF1NNnlfQXalaXQAxkMfqpIpMciyyO4GkDhNWru4bBuH9wupps8r6C7UrS4EDABoAAAAAdmNyIHRlc3Rz/G94DA=="},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"@type":"raw.extMessageInfo","hash":"MfxhFgXgVIXJeTDnSQUx4vEK2SYs2gAoDbKSl7ZET8c=","@extra":"1720276141.3451984:2:0.3231344256849259"},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 89f0489c6b773da9-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sat, 06 Jul 2024 14:28:51 GMT
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+    status:
+      code: 200
+      message: OK
+version: 1

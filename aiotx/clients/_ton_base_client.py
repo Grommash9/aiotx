@@ -311,6 +311,59 @@ class AioTxTONClient(AioTxClient):
         balance = int(data["stack"][0][1], 16)
         return balance
 
+    async def transfer_jettons(
+        self,
+        mnemonic: str,
+        to_address: str,
+        jetton_master_address: str,
+        amount: int,
+        memo: str = None,
+        seqno: int = None,
+        fee_amount: int = None,
+    ) -> str:
+        if self.workchain is None:
+            await self._get_network_params()
+        from_address, _ = await self.get_address_from_mnemonics(mnemonic)
+        if seqno is None:
+            seqno = await self.get_transaction_count(from_address)
+        sender_jetton_wallet = await self.get_jetton_wallet_address(
+            from_address, jetton_master_address
+        )
+        transfer_body = Cell()
+        transfer_body.bits.write_uint(0x0F8A7EA5, 32)  # op (transfer)
+        transfer_body.bits.write_uint(0, 64)  # query_id
+        transfer_body.bits.write_coins(amount)  # amount
+        transfer_body.bits.write_address(Address(to_address))  # destination
+        transfer_body.bits.write_address(Address(from_address))  # response_destination
+        transfer_body.bits.write_coins(0)  # forward_ton_amount
+        transfer_body.bits.write_bit(
+            False
+        )  # forward_payload in this slice, not separate cell
+        if memo:
+            transfer_body.bits.write_bit(True)
+            memo_cell = Cell()
+            memo_cell.bits.write_uint(0, 32)
+            memo_cell.bits.write_string(memo)
+            transfer_body.refs.append(memo_cell)
+        else:
+            transfer_body.bits.write_bit(False)
+
+        wallet_mnemonic_list = self._unpack_mnemonic(mnemonic)
+        _, _, _, wallet = Wallets.from_mnemonics(
+            wallet_mnemonic_list, self.wallet_version, self.workchain
+        )
+        if fee_amount is None:
+            fee_amount = int(0.05 * 10**9)
+        query = wallet.create_transfer_message(
+            to_addr=sender_jetton_wallet,
+            amount=fee_amount,
+            payload=transfer_body,
+            seqno=seqno,
+        )
+        boc = bytes_to_b64str(query["message"].to_boc(False))
+        boc_answer_data = await self.send_boc_return_hash(boc)
+        return boc_answer_data["hash"]
+
     async def run_get_method(self, method: str, address: str, stack: list):
         headers = {"Content-Type": "application/json"}
         headers.update(self._headers)
