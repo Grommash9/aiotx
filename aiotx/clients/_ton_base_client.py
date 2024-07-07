@@ -233,7 +233,8 @@ class AioTxTONClient(AioTxClient):
         workchain = master_block_data["workchain"]
         shard = master_block_data["shard"]
         seqno = master_block_data["seqno"]
-        self.workchain = workchain
+        if self.workchain is None:
+            self.workchain = workchain
         return workchain, shard, seqno
 
     async def get_transactions(
