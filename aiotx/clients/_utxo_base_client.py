@@ -456,6 +456,7 @@ class UTXOMonitor(BlockMonitor):
         self.client = client
         self.block_handlers = []
         self.transaction_handlers = []
+        self.block_transactions_handlers = []
         self.running = False
         self._db_url = db_url
         self._engine = create_async_engine(db_url, poolclass=NullPool)
@@ -523,6 +524,8 @@ class UTXOMonitor(BlockMonitor):
         for transaction in block_data["tx"]:
             for handler in self.transaction_handlers:
                 await handler(transaction)
+        for handler in self.block_transactions_handlers:
+            await handler(block_data["tx"])
 
     async def _init_db(self) -> None:
         from aiotx.utils.utxo_db_models import Base

@@ -41,11 +41,16 @@ class BlockMonitor:
         self.client = client
         self.block_handlers = []
         self.transaction_handlers = []
+        self.block_transactions_handlers = []
         self.running = False
         self._latest_block = None
 
     def on_block(self, func):
         self.block_handlers.append(func)
+        return func
+
+    def on_block_transactions(self, func):
+        self.block_transactions_handlers.append(func)
         return func
 
     def on_transaction(self, func):

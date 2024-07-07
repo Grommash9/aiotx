@@ -11,6 +11,7 @@ from aiotx.clients import AioTxBTCClient
 async def test_async_monitoring_mysql(btc_client_mysql: AioTxBTCClient):
     blocks = []
     transactions = []
+    block_transactions_list = []
 
     @btc_client_mysql.monitor.on_block
     async def handle_block(block):
@@ -19,6 +20,10 @@ async def test_async_monitoring_mysql(btc_client_mysql: AioTxBTCClient):
     @btc_client_mysql.monitor.on_transaction
     async def handle_transaction(transaction):
         transactions.append(transaction)
+
+    @btc_client_mysql.monitor.on_block_transactions
+    async def handle_block_transactions(transactions):
+        block_transactions_list.append(transactions)
 
     await btc_client_mysql.import_address(
         "tb1pmuuv2qjujv9qawqcc424nhlnmux7mvsyqj7qgc6z0vwqujvx4k9s34kuxn", 2811502
@@ -89,6 +94,23 @@ async def test_async_monitoring_mysql(btc_client_mysql: AioTxBTCClient):
         tx["txid"] for tx in transactions
     ]
 
+    assert "56f677b37c44f9609f6d2ee121effe5a59b0c550c9be5073d03d8c365dde0e83" in [
+        tx["txid"] for tx in block_transactions_list[0]
+    ]
+
+    assert "a9bfc94a0a5d7e7e46f1626b9d1848da96cc85689528ca3187e55164be8f3d04" in [
+        tx["txid"] for tx in block_transactions_list[2]
+    ]
+    assert "5f8c9b318ab9156598d3d04701c08f374832bb1ce8704e629a68961b08d290c1" in [
+        tx["txid"] for tx in block_transactions_list[2]
+    ]
+    assert "1eb37d5cbad786b6c2954b5d6f69df62a7294a13d068a1393ce4869f61c8b293" in [
+        tx["txid"] for tx in block_transactions_list[2]
+    ]
+    assert "6643bcac7025154b1ad35d92da73acf7dc51df5d80fab23d9734b07600d8b615" in [
+        tx["txid"] for tx in block_transactions_list[2]
+    ]
+
     balance = await btc_client_mysql.get_balance(
         "tb1pmuuv2qjujv9qawqcc424nhlnmux7mvsyqj7qgc6z0vwqujvx4k9s34kuxn"
     )
@@ -143,10 +165,15 @@ async def test_async_monitoring_mysql(btc_client_mysql: AioTxBTCClient):
 async def test_async_monitoring(btc_client: AioTxBTCClient):
     blocks = []
     transactions = []
+    block_transactions_list = []
 
     @btc_client.monitor.on_block
     async def handle_block(block):
         blocks.append(block)
+
+    @btc_client.monitor.on_block_transactions
+    async def handle_block_transactions(transactions):
+        block_transactions_list.append(transactions)
 
     @btc_client.monitor.on_transaction
     async def handle_transaction(transaction):
@@ -211,4 +238,7 @@ async def test_async_monitoring(btc_client: AioTxBTCClient):
     ]
     assert "56f677b37c44f9609f6d2ee121effe5a59b0c550c9be5073d03d8c365dde0e83" in [
         tx["txid"] for tx in transactions
+    ]
+    assert "56f677b37c44f9609f6d2ee121effe5a59b0c550c9be5073d03d8c365dde0e83" in [
+        tx["txid"] for tx in block_transactions_list[0]
     ]
