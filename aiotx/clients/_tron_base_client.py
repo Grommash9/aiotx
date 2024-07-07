@@ -372,6 +372,7 @@ class TronMonitor(BlockMonitor):
         self.client = client
         self.block_handlers = []
         self.transaction_handlers = []
+        self.block_transactions_handlers = []
         self.running = False
         self._last_block = last_block
 
@@ -398,3 +399,5 @@ class TronMonitor(BlockMonitor):
             )
             for handler in self.transaction_handlers:
                 await handler(transaction)
+        for handler in self.block_transactions_handlers:
+            await handler(transactions)

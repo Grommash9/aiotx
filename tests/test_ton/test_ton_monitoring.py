@@ -9,6 +9,7 @@ from aiotx.clients import AioTxTONClient
 async def test_async_monitoring(ton_mainnet_client: AioTxTONClient):
     blocks = []
     transactions = []
+    block_transactions_list = []
 
     @ton_mainnet_client.monitor.on_block
     async def handle_block(block):
@@ -17,6 +18,10 @@ async def test_async_monitoring(ton_mainnet_client: AioTxTONClient):
     @ton_mainnet_client.monitor.on_transaction
     async def handle_transaction(transaction):
         transactions.append(transaction)
+
+    @ton_mainnet_client.monitor.on_block_transactions
+    async def handle_block_transactions(transactions):
+        block_transactions_list.append(transactions)
 
     await ton_mainnet_client.start_monitoring(38093046, timeout_between_blocks=0.1)
     try:
@@ -64,6 +69,27 @@ async def test_async_monitoring(ton_mainnet_client: AioTxTONClient):
     ]
     assert "GKZ+EwkxxAONtWntnUTD/ISg2aZ2iy16XkVS/wiS3Lw=" in [
         tx["hash"] for tx in transactions
+    ]
+
+    for block_number, tx_block_list in enumerate(block_transactions_list):
+        print(f"tx_block_list {block_number}:", tx_block_list)
+
+    assert "r4r7FlGRAflxcnfEeDwVy1uqhEh/ajyZsUCgrwbATTY=" in [
+        tx["hash"] for tx in block_transactions_list[1]
+    ]
+    assert "/NiBkmuPCaFdu4pv+Y1oxdJ0dlOWkEgCFPf+Mg/S6LU=" in [
+        tx["hash"] for tx in block_transactions_list[6]
+    ]
+
+    assert "xcPkFFntBatwm/mC06Enl3tYZmCQhnfcQncZ0InbA3o=" in [
+        tx["hash"] for tx in block_transactions_list[5]
+    ]
+    assert "EPfqGpYOWZg1LpGQ06HfxFhxwwWNZKeQQtIAJ4U60Eg=" in [
+        tx["hash"] for tx in block_transactions_list[0]
+    ]
+
+    assert "NZEK2M1V3VqEdhuEmj5qayWh2e0Sc/lEcOYGMpUDe0o=" in [
+        tx["hash"] for tx in block_transactions_list[1]
     ]
 
 

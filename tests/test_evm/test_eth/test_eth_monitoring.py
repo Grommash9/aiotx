@@ -9,6 +9,7 @@ from aiotx.clients import AioTxBSCClient
 async def test_async_monitoring(eth_client: AioTxBSCClient):
     blocks = []
     transactions = []
+    block_transactions_list = []
 
     @eth_client.monitor.on_block
     async def handle_block(block):
@@ -17,6 +18,10 @@ async def test_async_monitoring(eth_client: AioTxBSCClient):
     @eth_client.monitor.on_transaction
     async def handle_transaction(transaction):
         transactions.append(transaction)
+
+    @eth_client.monitor.on_block_transactions
+    async def handle_block_transactions(transactions):
+        block_transactions_list.append(transactions)
 
     await eth_client.start_monitoring(2834064)
     try:
@@ -37,4 +42,14 @@ async def test_async_monitoring(eth_client: AioTxBSCClient):
     ]
 
     for tx in transactions:
+        assert "aiotx_decoded_input" in tx.keys()
+
+    assert "0x5b6fd8fda590e887531df12dec5faf2ce8c94a3eeb56bcc1fde760fabd64e56e" in [
+        tx["hash"] for tx in block_transactions_list[0]
+    ]
+    assert "0x10f4376f7efe2637be4d012eebad143dce58626146befa48204f1275476064d6" in [
+        tx["hash"] for tx in block_transactions_list[0]
+    ]
+
+    for tx in block_transactions_list[0]:
         assert "aiotx_decoded_input" in tx.keys()

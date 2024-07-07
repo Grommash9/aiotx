@@ -422,6 +422,7 @@ class EvmMonitor(BlockMonitor):
         self.client = client
         self.block_handlers = []
         self.transaction_handlers = []
+        self.block_transactions_handlers = []
         self.running = False
         self._latest_block = None
 
@@ -441,8 +442,11 @@ class EvmMonitor(BlockMonitor):
             await handler(int(block["number"], 16))
 
         for transaction in block["transactions"]:
+            transaction["aiotx_decoded_input"] = self.client.decode_transaction_input(
+                transaction["input"]
+            )
             for handler in self.transaction_handlers:
-                transaction["aiotx_decoded_input"] = (
-                    self.client.decode_transaction_input(transaction["input"])
-                )
                 await handler(transaction)
+
+        for handler in self.block_transactions_handlers:
+            await handler(block["transactions"])

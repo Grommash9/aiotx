@@ -409,6 +409,7 @@ class TonMonitor(BlockMonitor):
         self.client = client
         self.block_handlers = []
         self.transaction_handlers = []
+        self.block_transactions_handlers = []
         self.running = False
         self._last_master_block = last_master_block
 
@@ -434,6 +435,9 @@ class TonMonitor(BlockMonitor):
             await handler(block)
 
     async def process_shard_transactions(self, shard_transactions):
+        for handler in self.block_transactions_handlers:
+            await handler(shard_transactions)
+
         for transaction in shard_transactions:
             for handler in self.transaction_handlers:
                 await handler(transaction)
