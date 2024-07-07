@@ -71,6 +71,8 @@ class AioTxEVMBaseClient(AioTxClient):
 
         if input_data == "0x":
             return {"function_name": None, "parameters": None}
+        if not input_data.startswith("0x"):
+            input_data = "0x" + input_data
         for abi_entry in self._get_abi_entries():
             function_name = abi_entry.get("name")
             if function_name is None:
@@ -78,17 +80,33 @@ class AioTxEVMBaseClient(AioTxClient):
             input_types = [inp["type"] for inp in abi_entry["inputs"]]
             function_signature = f"{function_name}({','.join(input_types)})"
             function_selector = function_signature_to_4byte_selector(function_signature)
-
             if input_data.startswith("0x" + function_selector.hex()):
-                            if input_data.startswith("0x" + function_selector.hex()):
                 try:
                     decoded_data = decode(input_types, decode_hex(input_data[10:]))
+
                 except (NonEmptyPaddingBytes, InsufficientDataBytes):
+                    # If decoding fails, try to handle potential Tron-specific format
                     try:
-                        decoded_data = decode(input_types, decode_hex("000000000000000000000000" + input_data[34:]))
+                        # For Tron, we need to handle the '41' prefix in the address
+                        address_start = 10  # Start of address (after function selector)
+                        address_end = 74  # End of address (32 bytes after start)
+                        value_start = 74  # Start of value
+
+                        address = input_data[address_start:address_end].replace(
+                            "0000000000000000000000", ""
+                        )
+                        if address.startswith("41"):
+                            address = "0x" + address[2:]  # Remove '41' and add '0x'
+                        else:
+                            address = "0x" + address
+
+                        value = int(input_data[value_start:], 16)
+
+                        decoded_data = [address, value]
                     except Exception as e:
                         logger.warning(
-                            f"Input does not match the expected format for the method '{function_name}' ")
+                            f"Failed to decode input for method '{function_signature}'. Error: {str(e)}"
+                        )
                         return {"function_name": None, "parameters": None}
 
                 decoded_params = {}

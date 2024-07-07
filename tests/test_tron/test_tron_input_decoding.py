@@ -26,6 +26,26 @@ import pytest
             },
         ),
         ("0x12345678", {"function_name": None, "parameters": None}),
+        (
+            "0xa9059cbb00000000000000000000004118904342b21b40509660d84662da1cdfc49c32ef0000000000000000000000000000000000000000000000000000000000989680",
+            {
+                "function_name": "transfer",
+                "parameters": {
+                    "_to": "0x18904342b21b40509660d84662da1cdfc49c32ef",
+                    "_value": 10000000,
+                },
+            },
+        ),
+        (
+            "a9059cbb0000000000000000000000419dc3641c2d79e63055aa06f89b26b899ff51f3aa000000000000000000000000000000000000000000000000000000001df557eb",
+            {
+                "function_name": "transfer",
+                "parameters": {
+                    "_to": "0x9dc3641c2d79e63055aa06f89b26b899ff51f3aa",
+                    "_value": 502618091,
+                },
+            },
+        ),
     ],
 )
 def test_decode_transaction_input(tron_client, input_data, expected_output):
