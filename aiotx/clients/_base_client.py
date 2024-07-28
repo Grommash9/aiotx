@@ -1,7 +1,8 @@
 import asyncio
 import signal
 from contextlib import suppress
-from typing import Optional, List
+from typing import List, Optional
+
 
 class AioTxClient:
     def __init__(self, node_url: str, headers: dict = {}):
@@ -21,10 +22,12 @@ class AioTxClient:
         self,
         monitoring_start_block: Optional[int] = None,
         timeout_between_blocks: int = 1,
-        **kwargs
+        **kwargs,
     ) -> None:
         if not self.monitor:
-            raise ValueError("BlockMonitor instance must be set before starting monitoring")
+            raise ValueError(
+                "BlockMonitor instance must be set before starting monitoring"
+            )
 
         async with self._running_lock:
             if self._stop_signal is None:
@@ -46,15 +49,12 @@ class AioTxClient:
                 stop_task = asyncio.create_task(self._stop_signal.wait())
                 monitoring_task = asyncio.create_task(
                     self.monitor.start(
-                        monitoring_start_block,
-                        timeout_between_blocks,
-                        **workflow_data
+                        monitoring_start_block, timeout_between_blocks, **workflow_data
                     )
                 )
 
                 done, pending = await asyncio.wait(
-                    [monitoring_task, stop_task],
-                    return_when=asyncio.FIRST_COMPLETED
+                    [monitoring_task, stop_task], return_when=asyncio.FIRST_COMPLETED
                 )
 
                 for task in pending:
@@ -108,7 +108,7 @@ class BlockMonitor:
         self,
         monitoring_start_block: Optional[int],
         timeout_between_blocks: int,
-        **kwargs
+        **kwargs,
     ):
         self._stop_signal = asyncio.Event()
         self._latest_block = monitoring_start_block
@@ -126,12 +126,15 @@ class BlockMonitor:
 
     async def poll_blocks(self, timeout: int, **kwargs):
         # This method should be implemented by subclasses
-        raise NotImplementedError("poll_blocks method must be implemented by subclasses")
+        raise NotImplementedError(
+            "poll_blocks method must be implemented by subclasses"
+        )
 
     async def process_block(self, block, **kwargs):
-         # This method should be implemented by subclasses
-        raise NotImplementedError("process_block method must be implemented by subclasses")
-
+        # This method should be implemented by subclasses
+        raise NotImplementedError(
+            "process_block method must be implemented by subclasses"
+        )
 
     async def shutdown(self, **kwargs):
         pass

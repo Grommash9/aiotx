@@ -23,7 +23,7 @@ async def test_async_monitoring(tron_client: AioTxBSCClient):
     async def handle_block_transactions(transactions):
         block_transactions_list.append(transactions)
 
-    await tron_client.start_monitoring(44739341)
+    asyncio.create_task(tron_client.start_monitoring(44739341))
     try:
         await asyncio.sleep(3)
     except KeyboardInterrupt:

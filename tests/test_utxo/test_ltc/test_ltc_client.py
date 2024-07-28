@@ -493,7 +493,7 @@ async def test_monitoring_balance_send_mark_as_used(ltc_client_mysql: AioTxLTCCl
         transactions.append(transaction)
 
     await ltc_client_mysql.import_address(TEST_LTC_ADDRESS, 3262692)
-    await ltc_client_mysql.start_monitoring()
+    asyncio.create_task(ltc_client_mysql.start_monitoring())
 
     try:
         await asyncio.sleep(2)
