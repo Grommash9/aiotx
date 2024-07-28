@@ -1,4 +1,5 @@
 import asyncio
+import signal
 from contextlib import suppress
 from typing import Optional, List
 
@@ -10,6 +11,11 @@ class AioTxClient:
         self._stop_signal: Optional[asyncio.Event] = None
         self._stopped_signal: Optional[asyncio.Event] = None
         self._running_lock = asyncio.Lock()
+
+    def _setup_signal_handlers(self):
+        loop = asyncio.get_running_loop()
+        for sig in (signal.SIGINT, signal.SIGTERM):
+            loop.add_signal_handler(sig, self.stop_monitoring)
 
     async def start_monitoring(
         self,
@@ -29,12 +35,15 @@ class AioTxClient:
             self._stop_signal.clear()
             self._stopped_signal.clear()
 
+            self._setup_signal_handlers()
+
             workflow_data = {
                 "client": self,
                 **kwargs,
             }
 
             try:
+                stop_task = asyncio.create_task(self._stop_signal.wait())
                 monitoring_task = asyncio.create_task(
                     self.monitor.start(
                         monitoring_start_block,
@@ -42,7 +51,6 @@ class AioTxClient:
                         **workflow_data
                     )
                 )
-                stop_task = asyncio.create_task(self._stop_signal.wait())
 
                 done, pending = await asyncio.wait(
                     [monitoring_task, stop_task],
@@ -126,5 +134,4 @@ class BlockMonitor:
 
 
     async def shutdown(self, **kwargs):
-        # Implement any cleanup logic here
         pass
