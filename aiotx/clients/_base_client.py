@@ -1,8 +1,9 @@
 import asyncio
+import os
 import signal
 from contextlib import suppress
 from typing import List, Optional
-import os
+
 
 class AioTxClient:
     def __init__(self, node_url: str, headers: dict = {}):
