@@ -36,8 +36,6 @@ async def handle_transaction(transaction):
 
 async def main():
     await ton_client.start_monitoring()
-    while True:
-        await asyncio.sleep(1)
 
 
 if __name__ == "__main__":
