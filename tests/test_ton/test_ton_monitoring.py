@@ -23,7 +23,9 @@ async def test_async_monitoring(ton_mainnet_client: AioTxTONClient):
     async def handle_block_transactions(transactions):
         block_transactions_list.append(transactions)
 
-    asyncio.create_task(ton_mainnet_client.start_monitoring(38093046, timeout_between_blocks=0.1))
+    asyncio.create_task(
+        ton_mainnet_client.start_monitoring(38093046, timeout_between_blocks=0.1)
+    )
     try:
         await asyncio.sleep(3)
     except KeyboardInterrupt:
@@ -106,7 +108,9 @@ async def test_async_monitoring_testnet(ton_client: AioTxTONClient):
     async def handle_transaction(transaction):
         transactions.append(transaction)
 
-    asyncio.create_task(ton_client.start_monitoring(19627950, timeout_between_blocks=0.1))
+    asyncio.create_task(
+        ton_client.start_monitoring(19627950, timeout_between_blocks=0.1)
+    )
     try:
         await asyncio.sleep(3)
     except KeyboardInterrupt:

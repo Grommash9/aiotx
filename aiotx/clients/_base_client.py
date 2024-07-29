@@ -15,7 +15,7 @@ class AioTxClient:
         self._running_lock = asyncio.Lock()
 
     def _setup_signal_handlers(self):
-        if os.name == 'nt':
+        if os.name == "nt":
             # TODO WINDOWS SUPPORT FOR SIGNALS
             return
         loop = asyncio.get_running_loop()

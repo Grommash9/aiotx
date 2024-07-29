@@ -311,6 +311,7 @@ async def test_zero_balance_error(ltc_public_client: AioTxLTCClient):
         == "We have only 0 satoshi and it's 500000 at least needed to cover that transaction!"
     )
 
+
 @vcr_c.use_cassette("ltc/test_not_enough_balance_error.yaml")
 async def test_not_enough_balance_error(ltc_public_client: AioTxLTCClient):
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
