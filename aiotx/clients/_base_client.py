@@ -2,7 +2,7 @@ import asyncio
 import signal
 from contextlib import suppress
 from typing import List, Optional
-
+import os
 
 class AioTxClient:
     def __init__(self, node_url: str, headers: dict = {}):
@@ -14,6 +14,9 @@ class AioTxClient:
         self._running_lock = asyncio.Lock()
 
     def _setup_signal_handlers(self):
+        if os.name == 'nt':
+            # TODO WINDOWS SUPPORT FOR SIGNALS
+            return
         loop = asyncio.get_running_loop()
         for sig in (signal.SIGINT, signal.SIGTERM):
             loop.add_signal_handler(sig, self.stop_monitoring)
