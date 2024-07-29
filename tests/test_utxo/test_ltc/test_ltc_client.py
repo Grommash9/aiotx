@@ -298,6 +298,7 @@ async def test_bulk_send_with_auto_fee_and_deduct_commission(
     assert tx_id == "e328d42e61f6b022c1534cd2e7e184180574172c988bea359f0b8e8734f178c6"
 
 
+@vcr_c.use_cassette("ltc/test_zero_balance_error.yaml")
 async def test_zero_balance_error(ltc_public_client: AioTxLTCClient):
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
     amount = ltc_public_client.to_satoshi(0.005)
@@ -311,6 +312,7 @@ async def test_zero_balance_error(ltc_public_client: AioTxLTCClient):
     )
 
 
+@vcr_c.use_cassette("ltc/test_not_enough_balance_error.yaml")
 async def test_not_enough_balance_error(ltc_public_client: AioTxLTCClient):
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
     utxo_amount = ltc_public_client.to_satoshi(0.005)
@@ -493,7 +495,7 @@ async def test_monitoring_balance_send_mark_as_used(ltc_client_mysql: AioTxLTCCl
         transactions.append(transaction)
 
     await ltc_client_mysql.import_address(TEST_LTC_ADDRESS, 3262692)
-    await ltc_client_mysql.start_monitoring()
+    asyncio.create_task(ltc_client_mysql.start_monitoring())
 
     try:
         await asyncio.sleep(2)

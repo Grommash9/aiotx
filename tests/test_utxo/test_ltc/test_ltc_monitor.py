@@ -26,7 +26,7 @@ async def test_async_monitoring(ltc_public_client: AioTxLTCClient):
     await ltc_public_client.import_address(
         "tltc1qsawz44ppfnxmnat7635f83exgf9mynrzs5tsgl", 3247853
     )
-    await ltc_public_client.start_monitoring()
+    asyncio.create_task(ltc_public_client.start_monitoring())
 
     try:
         await asyncio.sleep(3)

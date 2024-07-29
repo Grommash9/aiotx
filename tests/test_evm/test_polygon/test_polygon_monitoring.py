@@ -23,7 +23,7 @@ async def test_async_monitoring(polygon_client: AioTxPolygonClient):
     async def handle_block_transactions(transactions):
         block_transactions_list.append(transactions)
 
-    await polygon_client.start_monitoring(7385898)
+    asyncio.create_task(polygon_client.start_monitoring(7385898))
     try:
         await asyncio.sleep(3)
     except KeyboardInterrupt:

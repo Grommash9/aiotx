@@ -47,7 +47,7 @@ async def test_async_monitoring_mysql(btc_client_mysql: AioTxBTCClient):
         "tb1paf6damf5052arl3r2lsufuhyu48yth8mrgxdtqj9pervz624q6xqxm7ew3"
     )
     assert start_balance_utxo_wallet == 499824213
-    await btc_client_mysql.start_monitoring()
+    asyncio.create_task(btc_client_mysql.start_monitoring())
 
     try:
         await asyncio.sleep(4)
@@ -201,7 +201,7 @@ async def test_async_monitoring(btc_client: AioTxBTCClient):
         "tb1paf6damf5052arl3r2lsufuhyu48yth8mrgxdtqj9pervz624q6xqxm7ew3"
     )
     assert start_balance_utxo_wallet == 499824213
-    await btc_client.start_monitoring()
+    asyncio.create_task(btc_client.start_monitoring())
 
     try:
         await asyncio.sleep(3)

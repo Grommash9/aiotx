@@ -8,6 +8,10 @@ class BlockNotFoundError(AioTxError):
     pass
 
 
+class BlockMonitoringError(AioTxError):
+    pass
+
+
 class InternalJSONRPCError(AioTxError):
     pass
 
