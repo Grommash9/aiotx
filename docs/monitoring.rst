@@ -21,6 +21,15 @@ To register a block handler, use the `@client.monitor.on_block` decorator. The d
     async def handle_block(block):
         print("Block:", block)
 
+For EVM based client we now have cur_block (we are on that block) and last network block so we can know how far are we from sync:
+
+.. code-block:: python
+
+    @bsc_client.monitor.on_block
+    async def handle_block(cur_block, latest_block):
+        print("Block:", cur_block, "last:", latest_block)
+
+
 Transaction Handler
 """""""""""""""""""
 
