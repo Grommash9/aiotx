@@ -10,7 +10,7 @@ eth_client = AioTxETHClient(ETH_TEST_NODE_URL)
 
 
 @bsc_client.monitor.on_block
-async def handle_block(block):
+async def handle_block(block, latest_block):
     print("bsc_client: block", block)
 
 
@@ -20,7 +20,7 @@ async def handle_transaction(transaction):
 
 
 @eth_client.monitor.on_block
-async def handle_block(block):
+async def handle_block(block, latest_block):
     print("eth_client: block", block)
 
 

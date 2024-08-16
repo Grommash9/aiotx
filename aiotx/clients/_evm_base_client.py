@@ -433,15 +433,17 @@ class EvmMonitor(BlockMonitor):
         )
         if target_block > network_latest_block:
             return
-        block = await self.client.get_block_by_number(target_block)
-        await self.process_block(block)
+        cur_block = await self.client.get_block_by_number(target_block)
+        await self.process_block(cur_block, network_latest_block)
         self._latest_block = target_block + 1
 
-    async def process_block(self, block):
+    async def process_block(self, cur_block, network_latest_block):
         for handler in self.block_handlers:
-            await handler(int(block["number"], 16))
+            if not isinstance(network_latest_block, int):
+                network_latest_block = int(network_latest_block, 16)
+            await handler(int(cur_block["number"], 16), network_latest_block)
 
-        for transaction in block["transactions"]:
+        for transaction in cur_block["transactions"]:
             transaction["aiotx_decoded_input"] = self.client.decode_transaction_input(
                 transaction["input"]
             )
@@ -449,4 +451,4 @@ class EvmMonitor(BlockMonitor):
                 await handler(transaction)
 
         for handler in self.block_transactions_handlers:
-            await handler(block["transactions"])
+            await handler(cur_block["transactions"])
