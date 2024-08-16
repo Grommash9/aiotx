@@ -385,12 +385,12 @@ class TronMonitor(BlockMonitor):
             return
         block_data = await self.client.get_block_by_number(target_block)
         await self.process_transactions(block_data["transactions"])
-        await self.process_block(target_block)
+        await self.process_block(target_block, network_last_block)
         self._latest_block = target_block + 1
 
-    async def process_block(self, block):
+    async def process_block(self, block, network_last_block):
         for handler in self.block_handlers:
-            await handler(block)
+            await handler(block, network_last_block)
 
     async def process_transactions(self, transactions):
         for transaction in transactions:

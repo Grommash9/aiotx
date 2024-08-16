@@ -12,7 +12,7 @@ async def test_async_monitoring(polygon_client: AioTxPolygonClient):
     block_transactions_list = []
 
     @polygon_client.monitor.on_block
-    async def handle_block(block):
+    async def handle_block(block, latest_block):
         blocks.append(block)
 
     @polygon_client.monitor.on_transaction

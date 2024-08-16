@@ -14,7 +14,7 @@ bsc_client = AioTxBSCClient("https://bsc-testnet-rpc.publicnode.com")
 
 # Define the block handler
 @bsc_client.monitor.on_block
-async def handle_block(block):
+async def handle_block(block, latest_block):
     block_number = block
     chat_id = "5454053704"  # Replace with the actual chat ID
     message = f"New block: {block_number}"

@@ -12,7 +12,7 @@ async def test_async_monitoring(eth_client: AioTxBSCClient):
     block_transactions_list = []
 
     @eth_client.monitor.on_block
-    async def handle_block(block):
+    async def handle_block(block, latest_block):
         blocks.append(block)
 
     @eth_client.monitor.on_transaction
