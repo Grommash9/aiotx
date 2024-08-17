@@ -3,7 +3,7 @@ import asyncio
 from aiotx.clients import AioTxTRONClient
 
 tron_client = AioTxTRONClient(
-    node_url="https://serene-green-spring.tron-mainnet.quiknode.pro/c40ceacc2b511e09fe5c7e0fe85d97767c22f1bc"
+    node_url="https://api.shasta.trongrid.io"
 )
 
 
