@@ -3,7 +3,7 @@ interactions:
     body: '{"method": "getblockcount", "params": [], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://ultra-special-dust.btc-testnet.quiknode.pro/331c45aef598f74795cef49fd7e5be98d37d7f06/
+    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-eecc770265e8462e806b601f/
   response:
     body:
       string: '{"result":2815184,"error":null,"id":"curltest"}
@@ -38,7 +38,7 @@ interactions:
       "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://ultra-special-dust.btc-testnet.quiknode.pro/331c45aef598f74795cef49fd7e5be98d37d7f06/
+    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-eecc770265e8462e806b601f/
   response:
     body:
       string: '{"result":null,"error":{"code":-26,"message":"mempool min fee not met,
@@ -74,7 +74,7 @@ interactions:
       "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://ultra-special-dust.btc-testnet.quiknode.pro/331c45aef598f74795cef49fd7e5be98d37d7f06/
+    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-eecc770265e8462e806b601f/
   response:
     body:
       string: '{"result":"35158b7a8b6057bc67f6d904c64b5986adea8260f0bc96cbd755b530878e3cc2","error":null,"id":"curltest"}

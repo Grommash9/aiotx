@@ -3,7 +3,7 @@ interactions:
     body: '{"method": "getblockcount", "params": [], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet/t-66b98fa76a2e46001c79a063-6be61af199b34129a4797ed2/
   response:
     body:
       string: '{"result":3262693,"error":null,"id":"curltest"}'
@@ -68,7 +68,7 @@ interactions:
       "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet/t-66b98fa76a2e46001c79a063-6be61af199b34129a4797ed2/
   response:
     body:
       string: '{"result":{"feerate":0.00013284,"blocks":6},"error":null,"id":"curltest"}'
@@ -135,7 +135,7 @@ interactions:
       "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet/t-66b98fa76a2e46001c79a063-6be61af199b34129a4797ed2/
   response:
     body:
       string: '{"result":"477ff66cdf3c97661c66d38a05cfae018d0358fec300a8b85bde65808e6cf8f9","error":null,"id":"curltest"}'
@@ -202,7 +202,7 @@ interactions:
       "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet/t-66b98fa76a2e46001c79a063-6be61af199b34129a4797ed2/
   response:
     body:
       string: '{"result":{"feerate":0.00013284,"blocks":6},"error":null,"id":"curltest"}'
@@ -269,7 +269,7 @@ interactions:
       "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet/t-66b98fa76a2e46001c79a063-6be61af199b34129a4797ed2/
   response:
     body:
       string: '{"result":"09dac3c34ce8013a074890cdc34f90e264fda192b995350b7ad6d283f7d9276d","error":null,"id":"curltest"}'

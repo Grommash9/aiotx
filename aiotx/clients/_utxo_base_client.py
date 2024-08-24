@@ -456,6 +456,7 @@ class UTXOMonitor(BlockMonitor):
         self.client = client
         self.block_handlers = []
         self.transaction_handlers = []
+        self.new_utxo_transaction_handlers = []
         self.block_transactions_handlers = []
         self.running = False
         self._db_url = db_url
@@ -510,6 +511,9 @@ class UTXOMonitor(BlockMonitor):
                 await self._add_new_utxo(
                     to_address, transaction["txid"], value, output_n
                 )
+
+                for handler in self.new_utxo_transaction_handlers:
+                    await handler(transaction)
 
         all_utxo_tx_ids = await self._get_all_utxo_tx_ids()
         for transaction in block_data["tx"]:

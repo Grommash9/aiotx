@@ -3,7 +3,7 @@ interactions:
     body: '{"method": "getblockcount", "params": [], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet/t-66b98fa76a2e46001c79a063-6be61af199b34129a4797ed2/
   response:
     body:
       string: '{"result":3255142,"error":null,"id":"curltest"}'
@@ -68,7 +68,7 @@ interactions:
       "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet/t-66b98fa76a2e46001c79a063-6be61af199b34129a4797ed2/
   response:
     body:
       string: '{"result":"64a89e7e269469c126e96d1de7b553850716c71d9081b153429ff781758a59a1","error":null,"id":"curltest"}'

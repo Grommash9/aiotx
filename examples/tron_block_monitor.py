@@ -2,9 +2,7 @@ import asyncio
 
 from aiotx.clients import AioTxTRONClient
 
-tron_client = AioTxTRONClient(
-    node_url="https://api.shasta.trongrid.io"
-)
+tron_client = AioTxTRONClient(node_url="https://api.shasta.trongrid.io")
 
 
 @tron_client.monitor.on_block
