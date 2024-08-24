@@ -4,7 +4,7 @@ interactions:
       2], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet/t-66b98fa76a2e46001c79a063-6be61af199b34129a4797ed2/
   response:
     body:
       string: '{"result":{"txid":"9ae506a01d89213bb84c91f5fd4365f7bc62b70bb61f30ec1d877bbf84600c30","hash":"ca8b712c358a26edab8ce982342430a7e51de7734879de431efbe3d37922255f","version":1,"size":296,"vsize":269,"weight":1076,"locktime":0,"vin":[{"ismweb":false,"coinbase":"0327a7320462626e660850c4720300000000482f6a61616a506f6f6ce29b8fefb88f2068747470733a2f2f6a61616a2e70616765732e64657620f09f918841736b20666f72206672656520744c54432c206f72206d696e652077697468206d652f","txinwitness":["0000000000000000000000000000000000000000000000000000000000000000"],"sequence":0}],"vout":[{"ismweb":false,"value":6.24938568,"n":0,"scriptPubKey":{"asm":"0
@@ -76,7 +76,7 @@ interactions:
       2], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet/t-66b98fa76a2e46001c79a063-6be61af199b34129a4797ed2/
   response:
     body:
       string: '{"result":{"txid":"c966837e3a29863341e3e85702152f479e97cd80e63684ddb2061c7c5cf92851","hash":"d83b394898c81d95918da2f7300822534efdc6e926a9e44f4ea563b36e4df040","version":2,"size":283,"vsize":202,"weight":805,"locktime":0,"vin":[{"ismweb":false,"txid":"008d89fae54adb20125a96673336a9ce3886358984b9c701d41b0d823f237cc3","vout":0,"scriptSig":{"asm":"","hex":""},"txinwitness":["304402207b562c1a04de15b4eca848b9dc3d557d56871cea0178670036a3be5921232ee4022028bb5eddb47f7e16c5e73e997e0ed665baec5875fd014162cc821431d4d19d9401","03369f8a894c7793bb78bfe8a8938031a0e204dac3451f527eeac3f271d2acca0e"],"sequence":4294967295}],"vout":[{"ismweb":false,"value":3.01859589,"n":0,"scriptPubKey":{"asm":"0
@@ -147,7 +147,7 @@ interactions:
       2], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet/t-66b98fa76a2e46001c79a063-6be61af199b34129a4797ed2/
   response:
     body:
       string: '{"result":{"txid":"503112c3b7958161a45ceaf9d6ba5208d90849c641d2fad36f1c254ae11988b3","hash":"57d7134c04dbb77c5a5d85c7be9841066b1bfa24a66d18b6db66c6331719fe5e","version":2,"size":283,"vsize":202,"weight":805,"locktime":0,"vin":[{"ismweb":false,"txid":"050e15ff5b24126f20c81fed8c1d6046c593071987d40366c05a1d8ef3bac082","vout":0,"scriptSig":{"asm":"","hex":""},"txinwitness":["30440220737fa1208236c1b29fb1e7f1892889f9268ce510052ad8ae8454f23293efb0b202202ced3e3ede633459afb5a3ca7754adafc301eaebfc0fac797d9480e701ad953201","028eaef6c2f7ad30a4683054a4d1d3e88f7305cdfd1f1d3ffcba2b02b28085c08f"],"sequence":4294967295}],"vout":[{"ismweb":false,"value":6.09856916,"n":0,"scriptPubKey":{"asm":"0
@@ -218,7 +218,7 @@ interactions:
       2], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet/t-66b98fa76a2e46001c79a063-6be61af199b34129a4797ed2/
   response:
     body:
       string: '{"jsonrpc":"2.0","error":{"code":-32000,"message":"Server error"}}'
@@ -285,7 +285,7 @@ interactions:
       2], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet
+    uri: https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet/t-66b98fa76a2e46001c79a063-6be61af199b34129a4797ed2/
   response:
     body:
       string: '{"jsonrpc":"2.0","error":{"code":-32000,"message":"Server error"}}'

@@ -28,7 +28,7 @@ set_logger_level("INFO")
 
 BSC_TEST_NODE_URL = "https://bsc-testnet-rpc.publicnode.com"
 ETH_TEST_NODE_URL = "https://ethereum-sepolia-rpc.publicnode.com"
-LTC_TEST_NODE_URL = "https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet"
+LTC_TEST_NODE_URL = "https://api.tatum.io/v3/blockchain/node/litecoin-core-testnet/t-66b98fa76a2e46001c79a063-6be61af199b34129a4797ed2/"
 BTC_TEST_NODE_URL = "https://ultra-special-dust.btc-testnet.quiknode.pro/331c45aef598f74795cef49fd7e5be98d37d7f06/"
 TON_MAINNET_NODE_URL = "https://go.getblock.io/875fb0dee2544bb0bc59dd08c6f39330"
 POLYGON_TEST_NODE_URL = "https://polygon-amoy-bor-rpc.publicnode.com"
@@ -89,6 +89,7 @@ def eth_client() -> AioTxETHClient:
 
 
 @pytest.fixture
+@vcr_c.use_cassette("ltc/create_client.yaml")
 def ltc_public_client(request: FixtureRequest) -> AioTxLTCClient:
     def teardown():
         try:
@@ -132,6 +133,7 @@ def btc_client_mysql(request: FixtureRequest) -> AioTxBTCClient:
 
 
 @pytest.fixture
+@vcr_c.use_cassette("ltc/create_client_mysql.yaml")
 def ltc_client_mysql(request: FixtureRequest) -> AioTxLTCClient:
     aiotx_ltc_mysql_client = AioTxLTCClient(
         LTC_TEST_NODE_URL,
