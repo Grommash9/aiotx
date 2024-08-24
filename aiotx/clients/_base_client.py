@@ -92,6 +92,7 @@ class BlockMonitor:
         self.client = client
         self.block_handlers: List[callable] = []
         self.transaction_handlers: List[callable] = []
+        self.new_utxo_transaction_handlers: List[callable] = []
         self.block_transactions_handlers: List[callable] = []
         self._stop_signal: Optional[asyncio.Event] = None
         self._latest_block: Optional[int] = None
@@ -106,6 +107,10 @@ class BlockMonitor:
 
     def on_transaction(self, func):
         self.transaction_handlers.append(func)
+        return func
+
+    def on_new_utxo_transaction(self, func):
+        self.new_utxo_transaction_handlers.append(func)
         return func
 
     async def start(
