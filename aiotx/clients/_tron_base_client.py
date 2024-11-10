@@ -15,6 +15,7 @@ from aiotx.exceptions import (
     CreateTransactionError,
     InvalidArgumentError,
     RpcConnectionError,
+    TransactionNotFound,
 )
 from aiotx.log import logger
 from aiotx.types import BlockParam
@@ -137,6 +138,20 @@ class AioTxTRONClient(AioTxEVMBaseClient):
             hasher=None,
         )
         return signature_bytes.hex()
+
+    async def get_transaction_status(self, tx_id: str):
+        result = await self._make_api_call(
+            {
+                "value": tx_id,
+            },
+            "POST",
+            path="/wallet/gettransactionbyid",
+        )
+        if not result:
+            raise TransactionNotFound
+        if "Error" in result.keys():
+            raise RpcConnectionError(result["Error"])
+        return result
 
     async def broadcast_transaction(
         self,
