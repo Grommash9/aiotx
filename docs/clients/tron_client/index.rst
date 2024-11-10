@@ -93,6 +93,7 @@ Methods
    get_last_block
    get_transaction
    get_transaction_status
+   get_transaction_info
    send
    send_token
 
