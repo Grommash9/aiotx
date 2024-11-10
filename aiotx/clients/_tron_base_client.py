@@ -153,6 +153,20 @@ class AioTxTRONClient(AioTxEVMBaseClient):
             raise RpcConnectionError(result["Error"])
         return result
 
+    async def get_transaction_info(self, tx_id: str):
+        result = await self._make_api_call(
+            {
+                "value": tx_id,
+            },
+            "POST",
+            path="/wallet/gettransactioninfobyid",
+        )
+        if not result:
+            raise TransactionNotFound
+        if "Error" in result.keys():
+            raise RpcConnectionError(result["Error"])
+        return result
+
     async def broadcast_transaction(
         self,
         signature: list[str],
