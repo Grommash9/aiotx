@@ -149,6 +149,8 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         )
         if not result:
             raise TransactionNotFound
+        if "Error" in result.keys():
+            raise RpcConnectionError(result["Error"])
         return result
 
     async def broadcast_transaction(

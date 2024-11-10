@@ -51,6 +51,7 @@ Returns:
 Raises:
  - **TransactionNotFound**: If the transaction is not found.
  - **InvalidArgumentError**: invalid hash value
+ - **RpcConnectionError**: RpcConnectionError
 
 Example usage:
 
