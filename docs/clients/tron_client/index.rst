@@ -92,6 +92,7 @@ Methods
    get_contract_decimals
    get_last_block
    get_transaction
+   get_transaction_status
    send
    send_token
 
