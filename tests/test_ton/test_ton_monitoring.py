@@ -1,9 +1,10 @@
 import asyncio
-import pytest
 
+import pytest
 from conftest import vcr_c
 
 from aiotx.clients import AioTxTONClient
+
 
 @pytest.mark.xfail(
     raises=SystemExit,
@@ -97,6 +98,7 @@ async def test_async_monitoring(ton_mainnet_client: AioTxTONClient):
     assert "NZEK2M1V3VqEdhuEmj5qayWh2e0Sc/lEcOYGMpUDe0o=" in [
         tx["hash"] for tx in block_transactions_list[1]
     ]
+
 
 @pytest.mark.xfail(
     raises=SystemExit,
