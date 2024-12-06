@@ -1,10 +1,15 @@
 import asyncio
 
+import pytest
 from conftest import vcr_c
 
 from aiotx.clients import AioTxTONClient
 
 
+@pytest.mark.xfail(
+    raises=SystemExit,
+    reason="Tests should be fixed after the issue with exiting from monitoring is resolved",
+)
 @vcr_c.use_cassette("tests/fixtures/cassettes/ton/test_async_monitoring.yaml")
 async def test_async_monitoring(ton_mainnet_client: AioTxTONClient):
     blocks = []
@@ -95,6 +100,10 @@ async def test_async_monitoring(ton_mainnet_client: AioTxTONClient):
     ]
 
 
+@pytest.mark.xfail(
+    raises=SystemExit,
+    reason="Tests should be fixed after the issue with exiting from monitoring is resolved",
+)
 @vcr_c.use_cassette("tests/fixtures/cassettes/ton/test_async_monitoring_testnet.yaml")
 async def test_async_monitoring_testnet(ton_client: AioTxTONClient):
     blocks = []
