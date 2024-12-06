@@ -132,6 +132,7 @@ class BlockMonitor:
                 print(f"Error during block monitoring: {e}")
                 self._stop_signal.set()
                 import sys
+
                 sys.exit(1)
 
     async def poll_blocks(self, timeout: int, **kwargs):
