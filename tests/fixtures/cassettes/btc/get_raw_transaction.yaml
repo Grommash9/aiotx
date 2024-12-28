@@ -4,7 +4,7 @@ interactions:
       2], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-692fb071f17244618fc5b2e9/
+    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-eecc770265e8462e806b601f/
   response:
     body:
       string: '{"result":{"txid":"35158b7a8b6057bc67f6d904c64b5986adea8260f0bc96cbd755b530878e3cc2","hash":"a872541715e90ca454cb6a9666d82cdedbcda1efba207dc7047f7238aa2e9797","version":1,"size":331,"vsize":250,"weight":997,"locktime":0,"vin":[{"txid":"25d56f693d5c4d00d3f98e58c8bd66e8db930e38c8a556bd67737b66cbf31ab9","vout":0,"scriptSig":{"asm":"","hex":""},"txinwitness":["3044022043d9458b77a69e55477e3674ecc39160de9340703a81254a82dff7cf70c052b202202f29540d74e50f22c402986982789ccee7b1d0860139057217e4105a4c9e384101","032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a9"],"prevout":{"generated":false,"height":2814756,"value":0.00016263,"scriptPubKey":{"asm":"0
@@ -47,7 +47,7 @@ interactions:
       2], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-692fb071f17244618fc5b2e9/
+    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-eecc770265e8462e806b601f/
   response:
     body:
       string: '{"result":{"txid":"77cb20c4b0325242b9e5f45f4850e5387dc585d6b72bb36ba65a126534436973","hash":"4251764ab66314bb4ddcbd2882da948d5d4db08078c26b959d5734068b3658bb","version":1,"size":195,"vsize":113,"weight":450,"locktime":0,"vin":[{"txid":"35158b7a8b6057bc67f6d904c64b5986adea8260f0bc96cbd755b530878e3cc2","vout":0,"scriptSig":{"asm":"","hex":""},"txinwitness":["3045022100b2cf6022cabe152a87f173542238565b953718159ad1932c9cc24fcd7af674a002201ca194aa7d32dfaadd1d3d7fbcd0bb1d7736b7b705734548cf41cfacb5946c4201","032483516ae6532dbeaf537cb5c1da64f973a6066fbde788f665b3dbd45f7417a9"],"prevout":{"generated":false,"height":2815299,"value":0.00006263,"scriptPubKey":{"asm":"0
@@ -84,7 +84,7 @@ interactions:
       2], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-692fb071f17244618fc5b2e9/
+    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-eecc770265e8462e806b601f/
   response:
     body:
       string: '{"result":{"txid":"2ab5a6a291ece2240642369589442029a6ae4baaefb83ff6760893e542f2f8ac","hash":"5b41547261c8b7a3dfeda0aa0ce2f91f345e1f286650b9ccf2a67a94056f79b8","version":1,"size":169,"vsize":142,"weight":568,"locktime":0,"vin":[{"coinbase":"032a0d2b","txinwitness":["0000000000000000000000000000000000000000000000000000000000000000"],"sequence":4294967295}],"vout":[{"value":0.31754252,"n":0,"scriptPubKey":{"asm":"0
@@ -121,7 +121,7 @@ interactions:
       2], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-692fb071f17244618fc5b2e9/
+    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-eecc770265e8462e806b601f/
   response:
     body:
       string: '{"result":null,"error":{"code":-8,"message":"parameter 1 must be of
@@ -157,7 +157,7 @@ interactions:
       2], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-692fb071f17244618fc5b2e9/
+    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-eecc770265e8462e806b601f/
   response:
     body:
       string: '{"result":null,"error":{"code":-8,"message":"parameter 1 must be of
