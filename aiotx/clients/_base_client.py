@@ -131,9 +131,7 @@ class BlockMonitor:
             except Exception as e:
                 print(f"Error during block monitoring: {e}")
                 self._stop_signal.set()
-                import sys
-
-                sys.exit(1)
+                raise
 
     async def poll_blocks(self, timeout: int, **kwargs):
         # This method should be implemented by subclasses

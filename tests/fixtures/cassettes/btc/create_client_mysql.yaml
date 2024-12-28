@@ -3,7 +3,7 @@ interactions:
     body: '{"method": "getblockcount", "params": [], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-692fb071f17244618fc5b2e9/
+    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-eecc770265e8462e806b601f/
   response:
     body:
       string: '{"result":2874563,"error":null,"id":"curltest"}'

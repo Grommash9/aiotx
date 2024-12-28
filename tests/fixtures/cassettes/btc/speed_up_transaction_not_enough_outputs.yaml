@@ -3,7 +3,7 @@ interactions:
     body: '{"method": "getblockcount", "params": [], "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-692fb071f17244618fc5b2e9/
+    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-eecc770265e8462e806b601f/
   response:
     body:
       string: '{"result":2821482,"error":null,"id":"curltest"}
@@ -38,7 +38,7 @@ interactions:
       "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-692fb071f17244618fc5b2e9/
+    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-eecc770265e8462e806b601f/
   response:
     body:
       string: '{"result":"371e7db7f99ca03cdcd96c69e2822ed3c384f418f7239b388c3ad9e63adfd76f","error":null,"id":"curltest"}
@@ -73,7 +73,7 @@ interactions:
       "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-692fb071f17244618fc5b2e9/
+    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-eecc770265e8462e806b601f/
   response:
     body:
       string: '{"result":{"feerate":0.01012551,"blocks":2},"error":null,"id":"curltest"}
@@ -108,7 +108,7 @@ interactions:
       "jsonrpc": "2.0", "id": "curltest"}'
     headers: {}
     method: POST
-    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-692fb071f17244618fc5b2e9/
+    uri: https://api.tatum.io/v3/blockchain/node/bitcoin-testnet/t-66b98fa76a2e46001c79a063-eecc770265e8462e806b601f/
   response:
     body:
       string: '{"result":"9e6fd5e4c946bde7f96c7f5921c46588f2462c33d68315b266373bf60735a39e","error":null,"id":"curltest"}
