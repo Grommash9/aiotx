@@ -420,10 +420,10 @@ class TonMonitor(BlockMonitor):
             self.client.workchain = workchain
         target_block = seqno if self._latest_block is None else self._latest_block
         if target_block > seqno:
+            await asyncio.sleep(timeout_between_blocks)
             return
         shards = await self.client.get_master_block_shards(target_block)
         for shard in shards:
-            await asyncio.sleep(timeout_between_blocks)
             shard_transactions = await self.client.get_block_transactions(
                 shard["workchain"], shard["shard"], shard["seqno"], 1000
             )

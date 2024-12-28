@@ -66,8 +66,6 @@ If no starting block is provided, monitoring will start from the latest block.
 You can also use the `timeout_between_blocks` param to choose how much time monitoring should wait to try get new block.
 For BTC, for example, we can wait 5-10 seconds and it's fine, but for TON we should wait <1 second.
 
-In TON, `timeout_between_blocks` will also be used as timeout between getting shards for master block to prevent 429 error.
-
 `timeout_between_blocks` is optional and set to 1 second by default.
 
     - **monitoring_start_block** (int, optional): Block number from which to begin monitoring.
