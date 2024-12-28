@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [6.0.0]
+- Move timeout between blocks for TON outside of shards logic
+    - Before
+        - We had a delay between all the shards of master block
+    - Now
+        - We well have a delay only when our latest block is bigger to network latests (we are up to date)
+    It should speed up TON block monitoring but you know will get 429 limits on free tiers for sure
+    Maybe later more variables will be added to cover TON network monitoring
+
 ## [5.1.0]
 - revert all the changes from 5.0.0
 
