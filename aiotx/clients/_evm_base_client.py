@@ -5,7 +5,6 @@ import secrets
 import sys
 from typing import Union
 
-
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     AioTxError,

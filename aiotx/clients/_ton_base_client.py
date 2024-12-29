@@ -5,7 +5,6 @@ import json
 import time
 from typing import Optional, Union
 
-
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     BlockNotFoundError,
@@ -391,12 +390,9 @@ class AioTxTONClient(AioTxClient):
         logger.info(f"rpc call payload: {payload}")
 
         response = await self._make_request(
-            "POST", 
-            self.node_url + "/jsonRPC", 
-            data=payload_json, 
-            headers=headers
+            "POST", self.node_url + "/jsonRPC", data=payload_json, headers=headers
         )
-        
+
         response_text = await response.text()
         logger.info(f"rpc call result: {response_text}")
 
