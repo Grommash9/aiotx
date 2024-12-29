@@ -116,7 +116,6 @@ from aiotx.clients import AioTxBTCClient
 
 async def main():
     btc_client = AioTxBTCClient("NODE_URL")
-    await btc_client.connect()
     destinations = {
         "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa": 1000000,
         "1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2": 500000
@@ -216,7 +215,6 @@ from aiotx.clients import AioTxBTCClient
 
 async def main():
     btc_client = AioTxBTCClient("NODE_URL")
-    await btc_client.connect()
     private_key = "YOUR_PRIVATE_KEY"
     to_address = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
     amount = 1000000  # Sending 0.01 BTC (amount is in satoshis)
@@ -233,7 +231,6 @@ from aiotx.clients import AioTxBTCClient
 
 async def main():
     btc_client = AioTxBTCClient("NODE_URL")
-    await btc_client.connect()
     # Converting satoshis to BTC
     satoshis = 1000000
     btc = btc_client.from_satoshi(satoshis)

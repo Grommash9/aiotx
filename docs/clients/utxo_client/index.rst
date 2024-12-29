@@ -32,14 +32,14 @@ To create an instance of `AioTxBTCClient` or `AioTxLTCClient`, you need to provi
         btc_mainnet_client = AioTxBTCClient(
          node_url="https://bitcoin-node-url"
          )
-        await btc_mainnet_client.connect()
+        
 
         # Create a Litecoin client instance for testnet
         ltc_testnet_client = AioTxLTCClient(
          node_url="https://litecoin-testnet-node-url", 
          testnet=True
          )
-        await ltc_testnet_client.connect()
+        
         # Use the client instances to interact with the respective networks
         # ...
 
