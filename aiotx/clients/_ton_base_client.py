@@ -382,6 +382,7 @@ class AioTxTONClient(AioTxClient):
 
     async def _make_rpc_call(self, payload) -> dict:
         self._check_connection()
+
         payload["jsonrpc"] = "2.0"
         payload["id"] = 1
         payload_json = json.dumps(payload)
@@ -410,11 +411,11 @@ class AioTxTONClient(AioTxClient):
 
 class TonMonitor(BlockMonitor):
     def __init__(
-        self, 
-        client: AioTxTONClient, 
+        self,
+        client: AioTxTONClient,
         last_master_block: Optional[int] = None,
         max_retries: int = 10,
-        retry_delay: float = 0.2
+        retry_delay: float = 0.2,
     ):
         self.client = client
         self.block_handlers = []
@@ -424,7 +425,7 @@ class TonMonitor(BlockMonitor):
         self._last_master_block = last_master_block
         self.max_retries = max_retries
         self.retry_delay = retry_delay
-        
+
     async def _process_shard(self, shard: dict, timeout_between_blocks: int):
         """Process a single shard and its transactions."""
         shard_transactions = await self._make_request_with_retry(
@@ -432,7 +433,7 @@ class TonMonitor(BlockMonitor):
             shard["workchain"],
             shard["shard"],
             shard["seqno"],
-            1000
+            1000,
         )
         await self.process_shard_transactions(shard_transactions)
 
@@ -440,24 +441,22 @@ class TonMonitor(BlockMonitor):
         workchain, shard, seqno = await self.client._get_network_params()
         if self.client.workchain is None:
             self.client.workchain = workchain
-            
+
         target_block = seqno if self._latest_block is None else self._latest_block
         if target_block > seqno:
             await asyncio.sleep(timeout_between_blocks)
             return
-            
+
         shards = await self._make_request_with_retry(
-            self.client.get_master_block_shards,
-            target_block
+            self.client.get_master_block_shards, target_block
         )
-        
+
         # Process all shards concurrently
         shard_tasks = [
-            self._process_shard(shard, timeout_between_blocks) 
-            for shard in shards
+            self._process_shard(shard, timeout_between_blocks) for shard in shards
         ]
         await asyncio.gather(*shard_tasks)
-        
+
         await self.process_master_block(target_block)
         self._latest_block = target_block + 1
 

@@ -3,9 +3,11 @@ import os
 import signal
 from contextlib import suppress
 from typing import List, Optional
-from aiotx.log import logger
-from aiotx.exceptions import RpcConnectionError
+
 import aiohttp
+
+from aiotx.exceptions import RpcConnectionError
+from aiotx.log import logger
 
 
 class NotConnectedError(Exception):
@@ -161,16 +163,18 @@ class BlockMonitor:
     def on_new_utxo_transaction(self, func):
         self.new_utxo_transaction_handlers.append(func)
         return func
-    
+
     async def _make_request_with_retry(self, request_func, *args, **kwargs):
         """Make a request with retry logic."""
         for attempt in range(self.max_retries):
             try:
                 return await request_func(*args, **kwargs)
             except RpcConnectionError as e:
-                if "No working liteservers" in str(e) and attempt < self.max_retries - 1:
-                    delay = self.retry_delay * (2 ** attempt)
-                    logger.warning(f"Lite server unavailable, retrying in {delay} seconds... (Attempt {attempt + 1}/{self.max_retries})")
+                if attempt < self.max_retries - 1:
+                    delay = self.retry_delay * (2**attempt)
+                    logger.warning(
+                        f"RpcConnectionError {e}, retrying in {delay} seconds... (Attempt {attempt + 1}/{self.max_retries})"
+                    )
                     await asyncio.sleep(delay)
                 else:
                     raise

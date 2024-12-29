@@ -400,8 +400,13 @@ class AioTxTRONClient(AioTxEVMBaseClient):
 
 
 class TronMonitor(BlockMonitor):
-    def __init__(self, client: AioTxTRONClient, last_block: Optional[int] = None, max_retries: int = 3,
-        retry_delay: float = 1):
+    def __init__(
+        self,
+        client: AioTxTRONClient,
+        last_block: Optional[int] = None,
+        max_retries: int = 3,
+        retry_delay: float = 1,
+    ):
         self.client = client
         self.block_handlers = []
         self.transaction_handlers = []
