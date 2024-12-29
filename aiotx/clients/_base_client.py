@@ -3,7 +3,8 @@ import os
 import signal
 from contextlib import suppress
 from typing import List, Optional
-
+from aiotx.log import logger
+from aiotx.exceptions import RpcConnectionError
 import aiohttp
 
 
@@ -142,6 +143,8 @@ class BlockMonitor:
         self.block_transactions_handlers: List[callable] = []
         self._stop_signal: Optional[asyncio.Event] = None
         self._latest_block: Optional[int] = None
+        self.max_retries: Optional[int] = 10
+        self.retry_delay: Optional[float] = 0.2
 
     def on_block(self, func):
         self.block_handlers.append(func)
@@ -158,6 +161,19 @@ class BlockMonitor:
     def on_new_utxo_transaction(self, func):
         self.new_utxo_transaction_handlers.append(func)
         return func
+    
+    async def _make_request_with_retry(self, request_func, *args, **kwargs):
+        """Make a request with retry logic."""
+        for attempt in range(self.max_retries):
+            try:
+                return await request_func(*args, **kwargs)
+            except RpcConnectionError as e:
+                if "No working liteservers" in str(e) and attempt < self.max_retries - 1:
+                    delay = self.retry_delay * (2 ** attempt)
+                    logger.warning(f"Lite server unavailable, retrying in {delay} seconds... (Attempt {attempt + 1}/{self.max_retries})")
+                    await asyncio.sleep(delay)
+                else:
+                    raise
 
     async def start(
         self,
