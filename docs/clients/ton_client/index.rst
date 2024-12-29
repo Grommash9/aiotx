@@ -30,7 +30,7 @@ Here's an example:
             "https://testnet.toncenter.com/api/v2",
             headers={"X-API-Key": "GET API KEY FROM https://t.me/tonapibot"},
    )
-
+      await ton_client.connect()
       # Create a new wallet
       memo, address, raw_address = await ton_client.generate_address()
       print("New wallet address:", address)
