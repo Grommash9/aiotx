@@ -3,11 +3,15 @@ import os
 import signal
 from contextlib import suppress
 from typing import List, Optional
+
 import aiohttp
+
 
 class NotConnectedError(Exception):
     """Raised when trying to use client methods before connecting."""
+
     pass
+
 
 class AioTxClient:
     def __init__(self, node_url: str, headers: dict = {}):
@@ -62,7 +66,7 @@ class AioTxClient:
         **kwargs,
     ) -> None:
         self._check_connection()
-        
+
         if not self.monitor:
             raise ValueError(
                 "BlockMonitor instance must be set before starting monitoring"
@@ -121,11 +125,14 @@ class AioTxClient:
         if self._stopped_signal:
             await self._stopped_signal.wait()
 
-    async def _make_request(self, method: str, url: str, **kwargs) -> aiohttp.ClientResponse:
+    async def _make_request(
+        self, method: str, url: str, **kwargs
+    ) -> aiohttp.ClientResponse:
         """Make HTTP request using the shared session."""
         self._check_connection()
         return await self._session.request(method, url, **kwargs)
-    
+
+
 class BlockMonitor:
     def __init__(self, client: AioTxClient):
         self.client = client

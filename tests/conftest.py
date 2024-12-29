@@ -46,51 +46,65 @@ vcr_c = vcr.VCR(
 
 
 @pytest.fixture
-def ton_client() -> AioTxTONClient:
+async def ton_client() -> AioTxTONClient:
     # current test rpc connection returning -1 as workchain but it should be 0,
     # so we are setting that param by ourself
-    return AioTxTONClient(TON_TEST_NODE_URL, workchain=0)
+    client = AioTxTONClient(TON_TEST_NODE_URL, workchain=0)
+    await client.connect()
+    return client
 
 
 @pytest.fixture
-def ton_mainnet_client() -> AioTxTONClient:
+async def ton_mainnet_client() -> AioTxTONClient:
     # testnet block monitoring is not working as
     # expected, and we using mainnet to test monitoring
-    return AioTxTONClient(TON_MAINNET_NODE_URL)
+    client =  AioTxTONClient(TON_MAINNET_NODE_URL)
+    await client.connect()
+    return client
 
 
 @pytest.fixture
-def ton_testnet_client_with_hv_wallet() -> AioTxTONClient:
+async def ton_testnet_client_with_hv_wallet() -> AioTxTONClient:
     # testnet block monitoring is not working as
     # expected, and we using mainnet to test monitoring
-    return AioTxTONClient(
+    client =  AioTxTONClient(
         TON_TEST_NODE_URL, workchain=0, wallet_version=WalletVersionEnum.hv2
     )
+    await client.connect()
+    return client
 
 
 @pytest.fixture
-def tron_client() -> AioTxTRONClient:
-    return AioTxTRONClient(TRON_TEST_NODE_URL)
+async def tron_client() -> AioTxTRONClient:
+    client = AioTxTRONClient(TRON_TEST_NODE_URL)
+    await client.connect()
+    return client
 
 
 @pytest.fixture
-def bsc_client() -> AioTxBSCClient:
-    return AioTxBSCClient(BSC_TEST_NODE_URL)
+async def bsc_client() -> AioTxBSCClient:
+    client = AioTxBSCClient(BSC_TEST_NODE_URL)
+    await client.connect()
+    return client
 
 
 @pytest.fixture
-def polygon_client() -> AioTxPolygonClient:
-    return AioTxPolygonClient(POLYGON_TEST_NODE_URL)
+async def polygon_client() -> AioTxPolygonClient:
+    client = AioTxPolygonClient(POLYGON_TEST_NODE_URL)
+    await client.connect()
+    return client
 
 
 @pytest.fixture
-def eth_client() -> AioTxETHClient:
-    return AioTxETHClient(ETH_TEST_NODE_URL)
+async def eth_client() -> AioTxETHClient:
+    client = AioTxETHClient(ETH_TEST_NODE_URL)
+    await client.connect()
+    return client
 
 
 @pytest.fixture
 @vcr_c.use_cassette("ltc/create_client.yaml")
-def ltc_public_client(request: FixtureRequest) -> AioTxLTCClient:
+async def ltc_public_client(request: FixtureRequest) -> AioTxLTCClient:
     def teardown():
         try:
             os.remove("test_ltc.sqlite")
@@ -98,14 +112,16 @@ def ltc_public_client(request: FixtureRequest) -> AioTxLTCClient:
             print("test_ltc.sqlite FileNotFoundError")
 
     request.addfinalizer(teardown)
-    return AioTxLTCClient(
+    client = AioTxLTCClient(
         LTC_TEST_NODE_URL, testnet=True, db_url="sqlite+aiosqlite:///test_ltc.sqlite"
     )
+    await client.connect()
+    return client
 
 
 @pytest.fixture
 @vcr_c.use_cassette("btc/create_client.yaml")
-def btc_client(request: FixtureRequest) -> AioTxBTCClient:
+async def btc_client(request: FixtureRequest) -> AioTxBTCClient:
     def teardown():
         try:
             os.remove("test_btc.sqlite")
@@ -113,19 +129,22 @@ def btc_client(request: FixtureRequest) -> AioTxBTCClient:
             print("test_btc.sqlite FileNotFoundError")
 
     request.addfinalizer(teardown)
-    return AioTxBTCClient(
+    client = AioTxBTCClient(
         BTC_TEST_NODE_URL, testnet=True, db_url="sqlite+aiosqlite:///test_btc.sqlite"
     )
+    await client.connect()
+    return client
 
 
 @pytest.fixture
 @vcr_c.use_cassette("btc/create_client_mysql.yaml")
-def btc_client_mysql(request: FixtureRequest) -> AioTxBTCClient:
+async def btc_client_mysql(request: FixtureRequest) -> AioTxBTCClient:
     aiotx_btc_mysql_client = AioTxBTCClient(
         BTC_TEST_NODE_URL,
         testnet=True,
         db_url=f"mysql+aiomysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}",
     )
+    await aiotx_btc_mysql_client.connect()
 
     def teardown():
         asyncio.run(aiotx_btc_mysql_client.monitor._drop_tables())
@@ -136,12 +155,13 @@ def btc_client_mysql(request: FixtureRequest) -> AioTxBTCClient:
 
 @pytest.fixture
 @vcr_c.use_cassette("ltc/create_client_mysql.yaml")
-def ltc_client_mysql(request: FixtureRequest) -> AioTxLTCClient:
+async def ltc_client_mysql(request: FixtureRequest) -> AioTxLTCClient:
     aiotx_ltc_mysql_client = AioTxLTCClient(
         LTC_TEST_NODE_URL,
         testnet=True,
         db_url=f"mysql+aiomysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}",
     )
+    await aiotx_ltc_mysql_client.connect()
 
     def teardown():
         asyncio.run(aiotx_ltc_mysql_client.monitor._drop_tables())
