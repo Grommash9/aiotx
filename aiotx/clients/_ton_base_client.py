@@ -438,7 +438,9 @@ class TonMonitor(BlockMonitor):
         await self.process_shard_transactions(shard_transactions)
 
     async def poll_blocks(self, timeout_between_blocks: int):
-        workchain, shard, seqno = await self.client._get_network_params()
+        workchain, shard, seqno = await self._make_request_with_retry(
+            self.client._get_network_params
+        )
         if self.client.workchain is None:
             self.client.workchain = workchain
 
