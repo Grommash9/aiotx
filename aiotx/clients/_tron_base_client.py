@@ -400,22 +400,35 @@ class AioTxTRONClient(AioTxEVMBaseClient):
 
 
 class TronMonitor(BlockMonitor):
-    def __init__(self, client: AioTxTRONClient, last_block: Optional[int] = None):
+    def __init__(
+        self,
+        client: AioTxTRONClient,
+        last_block: Optional[int] = None,
+        max_retries: int = 3,
+        retry_delay: float = 1,
+    ):
         self.client = client
         self.block_handlers = []
         self.transaction_handlers = []
         self.block_transactions_handlers = []
         self.running = False
         self._last_block = last_block
+        self.max_retries = max_retries
+        self.retry_delay = retry_delay
 
     async def poll_blocks(self, _: int):
-        network_last_block = await self.client.get_last_block_number()
+        network_last_block = await self._make_request_with_retry(
+            self.client.get_last_block_number
+        )
         target_block = (
             network_last_block if self._latest_block is None else self._latest_block
         )
         if target_block > network_last_block:
             return
-        block_data = await self.client.get_block_by_number(target_block)
+        block_data = await self._make_request_with_retry(
+            self.client.get_block_by_number,
+            target_block,
+        )
         await self.process_transactions(block_data["transactions"])
         await self.process_block(target_block, network_last_block)
         self._latest_block = target_block + 1
