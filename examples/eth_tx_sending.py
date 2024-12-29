@@ -14,6 +14,7 @@ tokens_in_mwei = eth_client.to_wei(1, "mwei")
 
 
 async def main():
+    await eth_client.connect()
     nonce = await eth_client.get_transactions_count(to_address)
     tx_id = await eth_client.send(private_key, to_address, eth_in_wei)
     print(tx_id)

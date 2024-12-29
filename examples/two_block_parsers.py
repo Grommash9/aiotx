@@ -30,6 +30,8 @@ async def handle_transaction(transaction):
 
 
 async def main():
+    await bsc_client.connect()
+    await eth_client.connect()
     monitoring_task1 = asyncio.create_task(bsc_client.start_monitoring(584))
     monitoring_task2 = asyncio.create_task(eth_client.start_monitoring(900))
     await asyncio.gather(monitoring_task1, monitoring_task2)

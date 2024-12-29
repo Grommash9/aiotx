@@ -35,6 +35,7 @@ async def handle_transaction(transaction):
 
 
 async def main():
+    await ton_client.connect()
     await ton_client.start_monitoring()
 
 
