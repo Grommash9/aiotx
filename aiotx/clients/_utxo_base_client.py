@@ -407,43 +407,38 @@ class AioTxUTXOClient(AioTxClient):
         return self.to_satoshi(result["result"]["feerate"])
 
     async def _make_rpc_call(self, payload) -> dict:
-        self._check_connection()
         payload["jsonrpc"] = "2.0"
         payload["id"] = "curltest"
         logger.info(f"rpc call payload: {payload}")
+        async with aiohttp.ClientSession() as session:
+            async with session.post(
+                self.node_url,
+                data=json.dumps(payload),
+                headers=self._headers,
+                auth=aiohttp.BasicAuth(self.node_username, self.node_password),
+            ) as response:
+                if response.status != 200:
+                    raise RpcConnectionError(await response.text())
+                result = await response.json()
+                error = result.get("error")
+                logger.info(f"rpc call result: {result}")
+                if error is None:
+                    return result
 
-        response = await self._make_request(
-            "POST",
-            self.node_url,
-            data=json.dumps(payload),
-            headers=self._headers,
-            auth=aiohttp.BasicAuth(self.node_username, self.node_password),
-        )
-
-        if response.status != 200:
-            raise RpcConnectionError(await response.text())
-
-        result = await response.json()
-        error = result.get("error")
-        logger.info(f"rpc call result: {result}")
-
-        if error is None:
-            return result
-
-        error_code = error.get("code")
-        error_message = error.get("message")
-        if error_code == -5:
-            raise BlockNotFoundError(error_message)
-        elif error_code == -8:
-            raise InvalidArgumentError(error_message)
-        elif error_code == -32600:
-            raise InvalidRequestError(error_message)
-        elif error_code == -32601:
-            raise MethodNotFoundError(error_message)
-        elif error_code == -32603:
-            raise InternalJSONRPCError(error_message)
-        else:
-            raise RpcConnectionError(f"Error {error_code}: {error_message}")
+                error_code = error.get("code")
+                error_message = error.get("message")
+                if error_code == -5:
+                    raise BlockNotFoundError(error_message)
+                elif error_code == -8:
+                    raise InvalidArgumentError(error_message)
+                elif error_code == -32600:
+                    raise InvalidRequestError(error_message)
+                elif error_code == -32601:
+                    raise MethodNotFoundError(error_message)
+                elif error_code == -32603:
+                    raise InternalJSONRPCError(error_message)
+                else:
+                    raise RpcConnectionError(f"Error {error_code}: {error_message}")
 
 
 class UTXOMonitor(BlockMonitor):

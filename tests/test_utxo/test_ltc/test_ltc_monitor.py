@@ -10,7 +10,6 @@ async def test_async_monitoring(ltc_public_client: AioTxLTCClient):
     blocks = []
     transactions = []
     block_transactions_list = []
-    await ltc_public_client.connect()
 
     @ltc_public_client.monitor.on_block
     async def handle_block(block):

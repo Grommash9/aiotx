@@ -19,7 +19,6 @@ TEST_BTC_ADDRESS = "tb1qswslzcdulvlk62gdrg8wa0sw36f938h2pyfreh"
 )
 @vcr_c.use_cassette("btc/send_transaction.yaml")
 async def test_send_transaction(btc_client: AioTxBTCClient):
-    await btc_client.connect()
     await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
     await btc_client.monitor._add_new_utxo(
         TEST_BTC_ADDRESS,
@@ -55,7 +54,6 @@ async def test_send_transaction(btc_client: AioTxBTCClient):
 )
 @vcr_c.use_cassette("btc/send_to_all_address_types.yaml")
 async def test_send_to_all_address_types(btc_client: AioTxBTCClient):
-    await btc_client.connect()
     fee = btc_client.to_satoshi(0.00006)
     await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
     await btc_client.monitor._add_new_utxo(
@@ -91,7 +89,6 @@ async def test_send_to_all_address_types(btc_client: AioTxBTCClient):
 )
 @vcr_c.use_cassette("btc/send_with_auto_fee.yaml")
 async def test_send_with_auto_fee(btc_client: AioTxBTCClient):
-    await btc_client.connect()
     await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
     await btc_client.monitor._add_new_utxo(
         TEST_BTC_ADDRESS,
@@ -115,7 +112,6 @@ async def test_send_with_auto_fee(btc_client: AioTxBTCClient):
 
 @vcr_c.use_cassette("btc/test_get_balance.yaml")
 async def test_get_balance(btc_client: AioTxBTCClient):
-    await btc_client.connect()
     await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
     await btc_client.monitor._add_new_utxo(
         TEST_BTC_ADDRESS,
@@ -154,7 +150,6 @@ async def test_get_balance(btc_client: AioTxBTCClient):
 @pytest.mark.mysql
 @vcr_c.use_cassette("btc/test_get_balance_mysql.yaml")
 async def test_get_balance_mysql(btc_client_mysql: AioTxBTCClient):
-    await btc_client_mysql.connect()
     await btc_client_mysql.monitor._add_new_address(TEST_BTC_ADDRESS)
     await btc_client_mysql.monitor._add_new_utxo(
         TEST_BTC_ADDRESS,
@@ -239,7 +234,6 @@ async def test_get_balance_mysql(btc_client_mysql: AioTxBTCClient):
 async def test_get_tx_fee(
     btc_client: AioTxBTCClient, tx_id, expected_exception, expected_fee
 ):
-    await btc_client.connect()
     if expected_exception:
         with pytest.raises(expected_exception):
             await btc_client.get_tx_fee(tx_id)
@@ -278,7 +272,6 @@ async def test_get_tx_fee(
 async def test_get_raw_transaction(
     btc_client: AioTxBTCClient, tx_id, expected_exception
 ):
-    await btc_client.connect()
     if expected_exception:
         with pytest.raises(expected_exception):
             await btc_client.get_raw_transaction(tx_id)
@@ -294,7 +287,6 @@ async def test_get_raw_transaction(
 )
 @vcr_c.use_cassette("btc/speed_up_transaction.yaml")
 async def test_speed_up_transaction(btc_client: AioTxBTCClient):
-    await btc_client.connect()
     amount = btc_client.to_satoshi(3.6473502)
     await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
     await btc_client.monitor._add_new_utxo(
@@ -334,7 +326,6 @@ async def test_speed_up_transaction(btc_client: AioTxBTCClient):
 )
 @vcr_c.use_cassette("btc/speed_up_transaction_not_enough_outputs.yaml")
 async def test_speed_up_transaction_not_enough_outputs(btc_client: AioTxBTCClient):
-    await btc_client.connect()
     await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
 
     await btc_client.monitor._add_new_utxo(
@@ -381,7 +372,6 @@ async def test_speed_up_transaction_not_enough_outputs(btc_client: AioTxBTCClien
 )
 @vcr_c.use_cassette("btc/bulk_send.yaml")
 async def test_bulk_send(btc_client: AioTxBTCClient):
-    await btc_client.connect()
     await btc_client.monitor._add_new_address(TEST_BTC_ADDRESS)
 
     await btc_client.monitor._add_new_utxo(

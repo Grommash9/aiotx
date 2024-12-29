@@ -15,14 +15,12 @@ TEST_LTC_ADDRESS = "tltc1qswslzcdulvlk62gdrg8wa0sw36f938h2cvtaf7"
 
 @vcr_c.use_cassette("ltc/get_last_block.yaml")
 async def test_get_last_block(ltc_public_client: AioTxLTCClient):
-    await ltc_public_client.connect()
     block_id = await ltc_public_client.get_last_block_number()
     assert isinstance(block_id, int)
 
 
 @vcr_c.use_cassette("ltc/get_block_by_number.yaml")
 async def test_get_block_by_number(ltc_public_client: AioTxLTCClient):
-    await ltc_public_client.connect()
     block = await ltc_public_client.get_block_by_number(3247846)
     assert isinstance(block, dict)
 
@@ -46,7 +44,6 @@ async def test_get_block_by_number(ltc_public_client: AioTxLTCClient):
 )
 @vcr_c.use_cassette("ltc/send_transaction.yaml")
 async def test_send_transaction(ltc_public_client: AioTxLTCClient):
-    await ltc_public_client.connect()
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
     await ltc_public_client.monitor._add_new_utxo(
         TEST_LTC_ADDRESS,
@@ -82,7 +79,6 @@ async def test_send_transaction(ltc_public_client: AioTxLTCClient):
 )
 @vcr_c.use_cassette("ltc/send_bulk.yaml")
 async def test_bulk_send_transaction(ltc_public_client: AioTxLTCClient):
-    await ltc_public_client.connect()
     fee = ltc_public_client.to_satoshi(0.005)
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
     await ltc_public_client.monitor._add_new_utxo(
@@ -117,7 +113,6 @@ async def test_bulk_send_transaction(ltc_public_client: AioTxLTCClient):
 )
 @vcr_c.use_cassette("ltc/send_from_two_utxo.yaml")
 async def test_send_from_two_utxo(ltc_public_client: AioTxLTCClient):
-    await ltc_public_client.connect()
     fee = ltc_public_client.to_satoshi(0.005)
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
     await ltc_public_client.monitor._add_new_utxo(
@@ -152,7 +147,6 @@ async def test_send_from_two_utxo(ltc_public_client: AioTxLTCClient):
 )
 @vcr_c.use_cassette("ltc/send_to_legacy_address.yaml")
 async def test_send_to_legacy_address(ltc_public_client: AioTxLTCClient):
-    await ltc_public_client.connect()
     fee = ltc_public_client.to_satoshi(0.005)
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
     await ltc_public_client.monitor._add_new_utxo(
@@ -181,7 +175,6 @@ async def test_send_to_legacy_address(ltc_public_client: AioTxLTCClient):
 )
 @vcr_c.use_cassette("ltc/send_to_legacy_and_segwit_addresses.yaml")
 async def test_send_to_legacy_and_segwit_address(ltc_public_client: AioTxLTCClient):
-    await ltc_public_client.connect()
     fee = ltc_public_client.to_satoshi(0.005)
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
     await ltc_public_client.monitor._add_new_utxo(
@@ -215,7 +208,6 @@ async def test_send_to_legacy_and_segwit_address(ltc_public_client: AioTxLTCClie
 )
 @vcr_c.use_cassette("ltc/send_with_auto_fee.yaml")
 async def test_send_with_auto_fee(ltc_public_client: AioTxLTCClient):
-    await ltc_public_client.connect()
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
     await ltc_public_client.monitor._add_new_utxo(
         TEST_LTC_ADDRESS,
@@ -245,7 +237,6 @@ async def test_send_with_auto_fee(ltc_public_client: AioTxLTCClient):
 async def test_send_with_auto_fee_and_deduct_commission(
     ltc_public_client: AioTxLTCClient,
 ):
-    await ltc_public_client.connect()
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
     utxo_amount = ltc_public_client.to_satoshi(0.44448584)
     await ltc_public_client.monitor._add_new_utxo(
@@ -279,7 +270,6 @@ async def test_send_with_auto_fee_and_deduct_commission(
 async def test_bulk_send_with_auto_fee_and_deduct_commission(
     ltc_public_client: AioTxLTCClient,
 ):
-    await ltc_public_client.connect()
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
     utxo_amount = ltc_public_client.to_satoshi(0.43397453)
     await ltc_public_client.monitor._add_new_utxo(
@@ -310,7 +300,6 @@ async def test_bulk_send_with_auto_fee_and_deduct_commission(
 
 @vcr_c.use_cassette("ltc/test_zero_balance_error.yaml")
 async def test_zero_balance_error(ltc_public_client: AioTxLTCClient):
-    await ltc_public_client.connect()
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
     amount = ltc_public_client.to_satoshi(0.005)
     with pytest.raises(InsufficientFunds) as excinfo:
@@ -325,7 +314,6 @@ async def test_zero_balance_error(ltc_public_client: AioTxLTCClient):
 
 @vcr_c.use_cassette("ltc/test_not_enough_balance_error.yaml")
 async def test_not_enough_balance_error(ltc_public_client: AioTxLTCClient):
-    await ltc_public_client.connect()
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
     utxo_amount = ltc_public_client.to_satoshi(0.005)
     await ltc_public_client.monitor._add_new_utxo(
@@ -351,7 +339,6 @@ async def test_not_enough_balance_error(ltc_public_client: AioTxLTCClient):
 )
 @vcr_c.use_cassette("ltc/send_few_single_transactions.yaml")
 async def test_send_few_single_transactions(ltc_public_client: AioTxLTCClient):
-    await ltc_public_client.connect()
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
     utxo_amount = ltc_public_client.to_satoshi(0.005)
     await ltc_public_client.monitor._add_new_utxo(
@@ -439,7 +426,6 @@ async def test_send_few_single_transactions(ltc_public_client: AioTxLTCClient):
 )
 @vcr_c.use_cassette("ltc/send_with_fee_per_byte.yaml")
 async def test_send_with_fee_per_byte(ltc_public_client: AioTxLTCClient):
-    await ltc_public_client.connect()
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
     await ltc_public_client.monitor._add_new_utxo(
         TEST_LTC_ADDRESS,
@@ -465,7 +451,6 @@ async def test_send_with_fee_per_byte(ltc_public_client: AioTxLTCClient):
 )
 @vcr_c.use_cassette("ltc/send_with_fee_per_byte2.yaml")
 async def test_send_with_fee_per_byte2(ltc_public_client: AioTxLTCClient):
-    await ltc_public_client.connect()
     await ltc_public_client.monitor._add_new_address(TEST_LTC_ADDRESS)
     await ltc_public_client.monitor._add_new_utxo(
         TEST_LTC_ADDRESS,
@@ -492,7 +477,6 @@ async def test_send_with_fee_per_byte2(ltc_public_client: AioTxLTCClient):
 @pytest.mark.mysql
 @vcr_c.use_cassette("ltc/monitoring_balance_send_mark_as_used.yaml")
 async def test_monitoring_balance_send_mark_as_used(ltc_client_mysql: AioTxLTCClient):
-    await ltc_client_mysql.connect()
     """
     Mega test :D It's for getting UTXO from monitoring (how it will be done by user)
     Checking balance, getting and checking UTXO list and sending transaction, checking what UTXO's was flagged
@@ -555,7 +539,6 @@ async def test_monitoring_balance_send_mark_as_used(ltc_client_mysql: AioTxLTCCl
 @pytest.mark.mysql
 @vcr_c.use_cassette("ltc/big_integer_field_for_satoshi_check.yaml")
 async def test_big_integer_field_for_satoshi_check(ltc_client_mysql: AioTxLTCClient):
-    await ltc_client_mysql.connect()
     await ltc_client_mysql.import_address(TEST_LTC_ADDRESS, 3262692)
     utxo_value_balance = 317013443500
     await ltc_client_mysql.monitor._add_new_utxo(
@@ -605,7 +588,6 @@ async def test_big_integer_field_for_satoshi_check(ltc_client_mysql: AioTxLTCCli
 async def test_get_tx_fee(
     ltc_public_client: AioTxLTCClient, tx_id, expected_exception, expected_fee
 ):
-    await ltc_public_client.connect()
     if expected_exception:
         with pytest.raises(expected_exception):
             await ltc_public_client.get_tx_fee(tx_id)
@@ -644,7 +626,6 @@ async def test_get_tx_fee(
 async def test_get_raw_transaction(
     ltc_public_client: AioTxLTCClient, tx_id, expected_exception
 ):
-    await ltc_public_client.connect()
     if expected_exception:
         with pytest.raises(expected_exception):
             await ltc_public_client.get_raw_transaction(tx_id)

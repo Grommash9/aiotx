@@ -9,7 +9,6 @@ from aiotx.clients import AioTxBTCClient
 @pytest.mark.mysql
 @vcr_c.use_cassette("btc/test_async_monitoring_mysql.yaml")
 async def test_async_monitoring_mysql(btc_client_mysql: AioTxBTCClient):
-    await btc_client_mysql.connect()
     blocks = []
     transactions = []
     block_transactions_list = []
@@ -167,7 +166,6 @@ async def test_async_monitoring(btc_client: AioTxBTCClient):
     blocks = []
     transactions = []
     block_transactions_list = []
-    await btc_client.connect()
 
     @btc_client.monitor.on_block
     async def handle_block(block):
