@@ -369,17 +369,23 @@ class AioTxTONClient(AioTxClient):
         headers = {"Content-Type": "application/json"}
         headers.update(self._headers)
 
-        async with aiohttp.ClientSession() as session:
-            target_url = self.node_url + "/runGetMethod"
-            data = {"address": address, "method": method, "stack": stack}
-            response = await session.post(url=target_url, json=data, headers=headers)
-            result = await response.json()
-            if result["ok"]:
-                return result["result"]
-            else:
-                raise RpcConnectionError(str(result))
+        target_url = self.node_url + "/runGetMethod"
+        data = {"address": address, "method": method, "stack": stack}
+        
+        response = await self._make_request(
+            "POST",
+            target_url,
+            json=data,
+            headers=headers
+        )
+        result = await response.json()
+        if result["ok"]:
+            return result["result"]
+        else:
+            raise RpcConnectionError(str(result))
 
     async def _make_rpc_call(self, payload) -> dict:
+        start_time = time.time()
         payload["jsonrpc"] = "2.0"
         payload["id"] = 1
         payload_json = json.dumps(payload)
@@ -387,22 +393,26 @@ class AioTxTONClient(AioTxClient):
         headers.update(self._headers)
         logger.info(f"rpc call payload: {payload}")
 
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                self.node_url + "/jsonRPC", data=payload_json, headers=headers
-            ) as response:
-                response_text = await response.text()
-                logger.info(f"rpc call result: {response_text}")
-                if response.status != 200:
-                    if "cannot find block" in response_text:
-                        raise BlockNotFoundError(response_text)
-                    if "Incorrect address" in response_text:
-                        raise InvalidArgumentError(response_text)
-                    raise RpcConnectionError(
-                        f"Node response status code: {response.status} response test: {response_text}"
-                    )
-                result = await response.json()
-                return result["result"]
+        response = await self._make_request(
+            "POST",
+            self.node_url + "/jsonRPC",
+            data=payload_json,
+            headers=headers
+        )
+        response_text = await response.text()
+        logger.info(f"rpc call result: {response_text}")
+        print(f"rpc call time: {time.time() - start_time}")
+        
+        if response.status != 200:
+            if "cannot find block" in response_text:
+                raise BlockNotFoundError(response_text)
+            if "Incorrect address" in response_text:
+                raise InvalidArgumentError(response_text)
+            raise RpcConnectionError(
+                f"Node response status code: {response.status} response test: {response_text}"
+            )
+        result = await response.json()
+        return result["result"]
 
 
 class TonMonitor(BlockMonitor):

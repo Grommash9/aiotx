@@ -11,6 +11,8 @@ async def test_async_monitoring(ton_mainnet_client: AioTxTONClient):
     transactions = []
     block_transactions_list = []
 
+    await ton_mainnet_client.connect()
+
     @ton_mainnet_client.monitor.on_block
     async def handle_block(block):
         blocks.append(block)
@@ -99,6 +101,8 @@ async def test_async_monitoring(ton_mainnet_client: AioTxTONClient):
 async def test_async_monitoring_testnet(ton_client: AioTxTONClient):
     blocks = []
     transactions = []
+
+    await ton_client.connect()
 
     @ton_client.monitor.on_block
     async def handle_block(block):
