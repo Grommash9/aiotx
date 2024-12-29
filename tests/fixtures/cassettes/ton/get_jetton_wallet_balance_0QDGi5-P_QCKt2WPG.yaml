@@ -1,6 +1,7 @@
 interactions:
 - request:
-    body: null
+    body: '{"address": "QCKt2WPGX-fh0cIAz38Ljd_OKQjoZE_cqk7QrYGsNP6wfP0", "method":
+      "get_wallet_address", "stack": [["tvm.Slice", "te6cckEBAQEAJAAAQ4AY0XPx9Duahjny2d5vYt+uViqlLlYC+uJS3orzerGyofCiOb+H"]]}'
     headers:
       Content-Type:
       - application/json
@@ -19,7 +20,7 @@ interactions:
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 89ee625139524883-LHR
+      - 8f992128c820beae-LHR
       Connection:
       - keep-alive
       Content-Length:
@@ -27,9 +28,15 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 06 Jul 2024 08:56:52 GMT
+      - Sun, 29 Dec 2024 10:33:01 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=5PRa3Q73rh5eaFDwQjkfmcl9eOO5EJRjU38F4e8adCFe3xutLjVqM%2Fp5%2B6MA8ekwyGZG3I7oTLhcrqbEv14LB7jzn%2B3Wcbw9Kco7N3e8aZArnTOIvLjmO%2FqWc6p4K5NKZ5qRVCkyng%3D%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
+      server-timing:
+      - cfL4;desc="?proto=TCP&rtt=19506&min_rtt=19228&rtt_var=7767&sent=4&recv=7&lost=0&retrans=0&sent_bytes=2414&recv_bytes=1039&delivery_rate=134967&cwnd=218&unsent_bytes=0&cid=5efc6e928f0a4fce&ts=129&x=0"
     status:
       code: 416
       message: Range Not Satisfiable

@@ -365,14 +365,15 @@ class AioTxTONClient(AioTxClient):
         return boc_answer_data["hash"]
 
     async def run_get_method(self, method: str, address: str, stack: list):
+        self._check_connection()
         headers = {"Content-Type": "application/json"}
         headers.update(self._headers)
 
         target_url = self.node_url + "/runGetMethod"
-        data = {"address": address, "method": method, "stack": stack}
+        data = json.dumps({"address": address, "method": method, "stack": stack})
 
         response = await self._make_request(
-            "POST", target_url, json=data, headers=headers
+            "POST", target_url, data=data, headers=headers
         )
         result = await response.json()
         if result["ok"]:
@@ -381,7 +382,7 @@ class AioTxTONClient(AioTxClient):
             raise RpcConnectionError(str(result))
 
     async def _make_rpc_call(self, payload) -> dict:
-        start_time = time.time()
+        self._check_connection()
         payload["jsonrpc"] = "2.0"
         payload["id"] = 1
         payload_json = json.dumps(payload)
@@ -390,11 +391,14 @@ class AioTxTONClient(AioTxClient):
         logger.info(f"rpc call payload: {payload}")
 
         response = await self._make_request(
-            "POST", self.node_url + "/jsonRPC", data=payload_json, headers=headers
+            "POST", 
+            self.node_url + "/jsonRPC", 
+            data=payload_json, 
+            headers=headers
         )
+        
         response_text = await response.text()
         logger.info(f"rpc call result: {response_text}")
-        print(f"rpc call time: {time.time() - start_time}")
 
         if response.status != 200:
             if "cannot find block" in response_text:

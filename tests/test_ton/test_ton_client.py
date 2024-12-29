@@ -337,13 +337,13 @@ def get_jetton_balance_generate_cassette_name(address, jetton_master_address):
         (
             "0QDlTHD4T79EyT96gkYNKd3iuRd2__6gGh2PCKpU57jSWbVp",
             "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di",
-            2111000000000,
+            2112000000000,
             None,
         ),
         (
             "0QAEhA1CupMp7uMOUfHHoh7sqAMNu1xQOydf8fQf-ATpkbpT",
             "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di",
-            999999999999999997889000000000,
+            999999999899999895893050000000,
             None,
         ),
         (

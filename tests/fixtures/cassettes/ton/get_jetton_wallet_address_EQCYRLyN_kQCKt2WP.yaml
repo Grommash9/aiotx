@@ -1,6 +1,7 @@
 interactions:
 - request:
-    body: null
+    body: '{"address": "kQCKt2WPGX-fh0cIAz38Ljd_OKQjoZE_cqk7QrYGsNP6wfP0", "method":
+      "get_wallet_address", "stack": [["tvm.Slice", "te6cckEBAQEAJAAAQ4ATCJeRu43Ebx6QR06qt11pcm1LqYUcaSUg1sBzkDPAzNDYf6kI"]]}'
     headers:
       Content-Type:
       - application/json
@@ -8,7 +9,7 @@ interactions:
     uri: https://testnet.toncenter.com/api/v2/runGetMethod
   response:
     body:
-      string: '{"ok":true,"result":{"@type":"smc.runResult","gas_used":4479,"stack":[["cell",{"bytes":"te6cckEBAQEAJAAAQ4AGXfklHqJKSagehNbjrf/5Up8jmLR9zQDgTSDS+U0eVTCsZYX2","object":{"data":{"b64":"gAZd+SUeokpJqB6E1uOt//lSnyOYtH3NAOBNINL5TR5VIA==","len":267},"refs":[],"special":false}}]],"exit_code":0,"@extra":"1720256609.4059172:3:0.8395616873995666","block_id":{"@type":"ton.blockIdExt","workchain":-1,"shard":"-9223372036854775808","seqno":20780401,"root_hash":"jK3rvpUeTijnOrWmWDtCk0COABHYNFU6OzO9hjUMh/I=","file_hash":"ygdDBj0/dYRHlrMtEPpp7G8xh9TnUDwy9yj4ug9GCeo="},"last_transaction_id":{"@type":"internal.transactionId","lt":"22748989000001","hash":"c8A26ReI5wRJERNod5dOktWJW8RsIRKAx2XeY5OCztk="}}}'
+      string: '{"ok":true,"result":{"@type":"smc.runResult","gas_used":4479,"stack":[["cell",{"bytes":"te6cckEBAQEAJAAAQ4AGXfklHqJKSagehNbjrf/5Up8jmLR9zQDgTSDS+U0eVTCsZYX2","object":{"data":{"b64":"gAZd+SUeokpJqB6E1uOt//lSnyOYtH3NAOBNINL5TR5VIA==","len":267},"refs":[],"special":false}}]],"exit_code":0,"@extra":"1735468347.292001:4:0.06730061067462578","block_id":{"@type":"ton.blockIdExt","workchain":-1,"shard":"-9223372036854775808","seqno":26510783,"root_hash":"l9riU4TybkiFjis4j0KMctf4W4TMrr1obL9hB5hUtx4=","file_hash":"NoWS+Rn+1KbFk5xutwJyEm0eFX4xaE9eBDrJaP0YXks="},"last_transaction_id":{"@type":"internal.transactionId","lt":"25276366000001","hash":"MTfXYDFwr2lQYJh5QVzuxKGWs/vaFFUDqZAftbkMQj4="}}}'
     headers:
       Access-Control-Allow-Headers:
       - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
@@ -19,7 +20,7 @@ interactions:
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 89ee6bc1de726412-LHR
+      - 8f992013482f79bb-LHR
       Connection:
       - keep-alive
       Content-Encoding:
@@ -27,11 +28,17 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 06 Jul 2024 09:03:19 GMT
+      - Sun, 29 Dec 2024 10:32:17 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=JpqhzvxiSmQdZKILSGtj0XNDLB01gyXqtmesiyqqo0L1bxXQo2MagXx7Rv33Ezmi1CI2K7XtK0H5yUmnEDy5u3nmMIvQi6Hv6sbs3Xd3PTIGvCPV97IXq4R6eHQT2kyCCSJRMVIgLw%3D%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Transfer-Encoding:
       - chunked
+      server-timing:
+      - cfL4;desc="?proto=TCP&rtt=26351&min_rtt=25739&rtt_var=10089&sent=4&recv=7&lost=0&retrans=0&sent_bytes=2415&recv_bytes=1040&delivery_rate=112514&cwnd=235&unsent_bytes=0&cid=6924c5856940c5b7&ts=219&x=0"
     status:
       code: 200
       message: OK
