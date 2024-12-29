@@ -1,6 +1,7 @@
 interactions:
 - request:
-    body: null
+    body: '{"address": "kQCKt2WPGX-fh0cIAz38Ljd_OKQjoZE_cqk7QrYGsNP6wfP0", "method":
+      "get_wallet_address", "stack": [["tvm.Slice", "te6cckEBAQEAJAAAQ4ATCJeRu43Ebx6QR06qt11pcm1LqYUcaSUg1sBzkDPAzNDYf6kI"]]}'
     headers:
       Content-Type:
       - application/json
@@ -8,7 +9,7 @@ interactions:
     uri: https://testnet.toncenter.com/api/v2/runGetMethod
   response:
     body:
-      string: '{"ok":true,"result":{"@type":"smc.runResult","gas_used":4479,"stack":[["cell",{"bytes":"te6cckEBAQEAJAAAQ4AGXfklHqJKSagehNbjrf/5Up8jmLR9zQDgTSDS+U0eVTCsZYX2","object":{"data":{"b64":"gAZd+SUeokpJqB6E1uOt//lSnyOYtH3NAOBNINL5TR5VIA==","len":267},"refs":[],"special":false}}]],"exit_code":0,"@extra":"1720256025.9034631:5:0.16140732042111106","block_id":{"@type":"ton.blockIdExt","workchain":-1,"shard":"-9223372036854775808","seqno":20780173,"root_hash":"1XC7rvIT/xnXfGA1ClXbDeJ0/tp1SqzV7YUBKRW5/Ds=","file_hash":"hJt4jLa2m1eBScKSvA0dsRIcdLwrKAULTR0cxJb6t8I="},"last_transaction_id":{"@type":"internal.transactionId","lt":"22748989000001","hash":"c8A26ReI5wRJERNod5dOktWJW8RsIRKAx2XeY5OCztk="}}}'
+      string: '{"ok":true,"result":{"@type":"smc.runResult","gas_used":4479,"stack":[["cell",{"bytes":"te6cckEBAQEAJAAAQ4AGXfklHqJKSagehNbjrf/5Up8jmLR9zQDgTSDS+U0eVTCsZYX2","object":{"data":{"b64":"gAZd+SUeokpJqB6E1uOt//lSnyOYtH3NAOBNINL5TR5VIA==","len":267},"refs":[],"special":false}}]],"exit_code":0,"@extra":"1735468400.262808:4:0.3359452768206683","block_id":{"@type":"ton.blockIdExt","workchain":-1,"shard":"-9223372036854775808","seqno":26510802,"root_hash":"Vt6Qwl+wnUtZua30bKBZ1waQviSTfGnkbpjn+3QI+EI=","file_hash":"rX2cikQ9t77YbPRE6kd5STqV11Qt0x6Ty9EVAHXMUqk="},"last_transaction_id":{"@type":"internal.transactionId","lt":"25276366000001","hash":"MTfXYDFwr2lQYJh5QVzuxKGWs/vaFFUDqZAftbkMQj4="}}}'
     headers:
       Access-Control-Allow-Headers:
       - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
@@ -19,7 +20,7 @@ interactions:
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 89ee5d82aa4f954b-LHR
+      - 8f99215e59ec653e-LHR
       Connection:
       - keep-alive
       Content-Encoding:
@@ -27,16 +28,23 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 06 Jul 2024 08:53:35 GMT
+      - Sun, 29 Dec 2024 10:33:10 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=deUKY22br3KhLiCx926FxTB%2B6bwjQWOUVY8FqWU31ayqZCuvxL9JBlJCg9tnKv3pJMeqMmYLQdfCslFOVk6pylRhFsAtwrfRjXPBbZM8C5nMl9zQwWyrxvocy6FhctCFWSoZ60e5Kw%3D%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Transfer-Encoding:
       - chunked
+      server-timing:
+      - cfL4;desc="?proto=TCP&rtt=25894&min_rtt=25874&rtt_var=9744&sent=4&recv=7&lost=0&retrans=0&sent_bytes=2415&recv_bytes=1040&delivery_rate=111209&cwnd=232&unsent_bytes=0&cid=f2c0cf6b48cb4c06&ts=220&x=0"
     status:
       code: 200
       message: OK
 - request:
-    body: null
+    body: '{"address": "EQAy78ko9RJSTUD0Jrcdb__KlPkcxaPuaAcCaQaXymjyqcDk", "method":
+      "get_wallet_data", "stack": []}'
     headers:
       Content-Type:
       - application/json
@@ -44,7 +52,7 @@ interactions:
     uri: https://testnet.toncenter.com/api/v2/runGetMethod
   response:
     body:
-      string: '{"ok":true,"result":{"@type":"smc.runResult","gas_used":549,"stack":[["num","0xd85a6c673"],["cell",{"bytes":"te6cckEBAQEAJAAAQ4ATCJeRu43Ebx6QR06qt11pcm1LqYUcaSUg1sBzkDPAzNDYf6kI","object":{"data":{"b64":"gBMIl5G7jcRvHpBHTqq3XWlybUuphRxpJSDWwHOQM8DMwA==","len":267},"refs":[],"special":false}}],["cell",{"bytes":"te6cckEBAQEAJAAAQ4ARVuyx4y/z8OjhAGe/hcbv5xSEdDIn7lUnaFbA1hp/WDB7jQMN","object":{"data":{"b64":"gBFW7LHjL/Pw6OEAZ7+Fxu/nFIR0MifuVSdoVsDWGn9YIA==","len":267},"refs":[],"special":false}}],["cell",{"bytes":"te6cckECEQEAAxcAART/APSkE/S88sgLAQIBYgIDAgLMBAUAG6D2BdqJofQB9IH0gahhAgEgBgcCASAICQC30QY4B5IADoaYGAuNhKia+B+AZwfSB9IBj9ABi465D9ABj9ABgBaY/BCAfFP1KpEF1KmJos+ATwQQgLxqKMqRBdSxiZoBn4BXAawQgsr4PeXUms+AXwL4JCB/l4QAEWfpEMHC68uFNgIBIAoLAIPUAQa5D2omh9AH0gfSBqGAJpj8EIC8aijKkQXUEIPe7L7wndCVj5cWLpn5j9ABgJ0CgR5CgCfQEsZ4sA54tmZPaqQB9VA9M/+gD6QCHwBe1E0PoA+kD6QNQwUTahUirHBfLiwSjC//LiwlQ0QnBUIBNUFAPIUAT6AljPFgHPFszJIsjLARL0APQAywDJIPkAcHTIywLKB8v/ydAE+kD0BDH6AHeAGMjLBVAIzxZw+gIXy2sTzIIQF41FGcjLHxmAwCASANDgCOyz9QB/oCIs8WUAbPFiX6AlADzxbJUAXMB6oAE6CCCJiWgKoAggiYloCgoBS88uLFBMmAQPsAECPIUAT6AljPFgHPFszJ7VQC8TtRND6APpA+kDUMAfTP/oAUVGgBfpA+kBTWscFVHNscFQgE1QUA8hQBPoCWM8WAc8WzMkiyMsBEvQA9ADLAMn5AHB0yMsCygfL/8nQUAzHBRux8uLDCfoAggiYloCCCJiWgKAaoSGVEEk4XwTjDSXXCwHDACTCALCAPEADbO1E0PoA+kD6QNQwB9M/+gD6QDBRUaFSSccF8uLBJ8L/8uLCggiYloCqABagFrzy4sOCEHvdl97Iyx8Vyz9QA/oCIs8WAc8WyXGAEMjLBSTPFnD6AstqzMmAQPsAQBPIUAT6AljPFgHPFszJ7VSAAbFIZoBihghBzYtCcyMsfUkDLP1AD+gIBzxZQB88WyXGAGMjLBSXPFlAH+gIWy2oVzMlx+wAQNACCjiqCCJiWgHL7AoIQ1TJ223CAEMjLBVAIzxZQBfoCFstqE8sfE8s/yXL7AFiSbDPiVQLIUAT6AljPFgHPFszJ7VSqevm+","object":{"data":{"b64":"/wD0pBP0vPLICw==","len":80},"refs":[{"data":{"b64":"YA==","len":6},"refs":[{"data":{"b64":"zA==","len":8},"refs":[{"data":{"b64":"AA==","len":2},"refs":[{"data":{"b64":"0QY4B5IADoaYGAuNhKia+B+AZwfSB9IBj9ABi465D9ABj9ABgBaY/BCAfFP1KpEF1KmJos+ATwQQgLxqKMqRBdSxiZoBn4BXAawQgsr4PeXUms+AXwL4JCB/l4A=","len":733},"refs":[],"special":false},{"data":{"b64":"Z+kQwcLry4U0","len":70},"refs":[],"special":false}],"special":false},{"data":{"b64":"AA==","len":2},"refs":[{"data":{"b64":"AA==","len":2},"refs":[{"data":{"b64":"UD0z/6APpAIfAF7UTQ+gD6QPpA1DBRNqFSKscF8uLBKML/8uLCVDRCcFQgE1QUA8hQBPoCWM8WAc8WzMkiyMsBEvQA9ADLAMkg+QBwdMjLAsoHy//J0AT6QPQEMfoAd4AYyMsFUAjPFnD6AhfLaxPMghAXjUUZyMsfGQ","len":980},"refs":[{"data":{"b64":"yz9QB/oCIs8WUAbPFiX6AlADzxbJUAXMB6oAE6CCCJiWgKoAggiYloCgoBS88uLFBMmAQPsAECPIUAT6AljPFgHPFszJ7VQ=","len":568},"refs":[],"special":false}],"special":false},{"data":{"b64":"AA==","len":2},"refs":[{"data":{"b64":"O1E0PoA+kD6QNQwB9M/+gBRUaAF+kD6QFNaxwVUc2xwVCATVBQDyFAE+gJYzxYBzxbMySLIywES9AD0AMsAyfkAcHTIywLKB8v/ydBQDMcFG7Hy4sMJ+gCCCJiWgIIImJaAoBqhIZUQSThfBOMNJdcLAcMAJMIAsAA==","len":962},"refs":[{"data":{"b64":"UhmgGKGCEHNi0JzIyx9SQMs/UAP6AgHPFlAHzxbJcYAYyMsFJc8WUAf6AhbLahXMyXH7ABA0","len":432},"refs":[],"special":false},{"data":{"b64":"jiqCCJiWgHL7AoIQ1TJ223CAEMjLBVAIzxZQBfoCFstqE8sfE8s/yXL7AFiSbDPiVQLIUAT6AljPFgHPFszJ7VQ=","len":520},"refs":[],"special":false}],"special":false},{"data":{"b64":"O1E0PoA+kD6QNQwB9M/+gD6QDBRUaFSSccF8uLBJ8L/8uLCggiYloCqABagFrzy4sOCEHvdl97Iyx8Vyz9QA/oCIs8WAc8WyXGAEMjLBSTPFnD6AstqzMmAQPsAQBPIUAT6AljPFgHPFszJ7VQA=","len":874},"refs":[],"special":false}],"special":false}],"special":false},{"data":{"b64":"1AEGuQ9qJofQB9IH0gahgCaY/BCAvGooypEF1BCD3uy+8J3QlY+XFi6Z+Y/QAYCdAoEeQoAn0BLGeLAOeLZmT2qg","len":525},"refs":[],"special":false}],"special":false}],"special":false},{"data":{"b64":"oPYF2omh9AH0gfSBqGA=","len":111},"refs":[],"special":false}],"special":false}],"special":false}}]],"exit_code":0,"@extra":"1720256026.1644454:5:0.5447252260100836","block_id":{"@type":"ton.blockIdExt","workchain":-1,"shard":"-9223372036854775808","seqno":20780173,"root_hash":"1XC7rvIT/xnXfGA1ClXbDeJ0/tp1SqzV7YUBKRW5/Ds=","file_hash":"hJt4jLa2m1eBScKSvA0dsRIcdLwrKAULTR0cxJb6t8I="},"last_transaction_id":{"@type":"internal.transactionId","lt":"3641994000007","hash":"RxYNwNrHGmkalUAc41DShlGnhBIE96ml1GnzkbOIYfY="}}}'
+      string: '{"ok":true,"result":{"@type":"smc.runResult","gas_used":549,"stack":[["num","0xd85a6c673"],["cell",{"bytes":"te6cckEBAQEAJAAAQ4ATCJeRu43Ebx6QR06qt11pcm1LqYUcaSUg1sBzkDPAzNDYf6kI","object":{"data":{"b64":"gBMIl5G7jcRvHpBHTqq3XWlybUuphRxpJSDWwHOQM8DMwA==","len":267},"refs":[],"special":false}}],["cell",{"bytes":"te6cckEBAQEAJAAAQ4ARVuyx4y/z8OjhAGe/hcbv5xSEdDIn7lUnaFbA1hp/WDB7jQMN","object":{"data":{"b64":"gBFW7LHjL/Pw6OEAZ7+Fxu/nFIR0MifuVSdoVsDWGn9YIA==","len":267},"refs":[],"special":false}}],["cell",{"bytes":"te6cckECEQEAAxcAART/APSkE/S88sgLAQIBYgIDAgLMBAUAG6D2BdqJofQB9IH0gahhAgEgBgcCASAICQC30QY4B5IADoaYGAuNhKia+B+AZwfSB9IBj9ABi465D9ABj9ABgBaY/BCAfFP1KpEF1KmJos+ATwQQgLxqKMqRBdSxiZoBn4BXAawQgsr4PeXUms+AXwL4JCB/l4QAEWfpEMHC68uFNgIBIAoLAIPUAQa5D2omh9AH0gfSBqGAJpj8EIC8aijKkQXUEIPe7L7wndCVj5cWLpn5j9ABgJ0CgR5CgCfQEsZ4sA54tmZPaqQB9VA9M/+gD6QCHwBe1E0PoA+kD6QNQwUTahUirHBfLiwSjC//LiwlQ0QnBUIBNUFAPIUAT6AljPFgHPFszJIsjLARL0APQAywDJIPkAcHTIywLKB8v/ydAE+kD0BDH6AHeAGMjLBVAIzxZw+gIXy2sTzIIQF41FGcjLHxmAwCASANDgCOyz9QB/oCIs8WUAbPFiX6AlADzxbJUAXMB6oAE6CCCJiWgKoAggiYloCgoBS88uLFBMmAQPsAECPIUAT6AljPFgHPFszJ7VQC8TtRND6APpA+kDUMAfTP/oAUVGgBfpA+kBTWscFVHNscFQgE1QUA8hQBPoCWM8WAc8WzMkiyMsBEvQA9ADLAMn5AHB0yMsCygfL/8nQUAzHBRux8uLDCfoAggiYloCCCJiWgKAaoSGVEEk4XwTjDSXXCwHDACTCALCAPEADbO1E0PoA+kD6QNQwB9M/+gD6QDBRUaFSSccF8uLBJ8L/8uLCggiYloCqABagFrzy4sOCEHvdl97Iyx8Vyz9QA/oCIs8WAc8WyXGAEMjLBSTPFnD6AstqzMmAQPsAQBPIUAT6AljPFgHPFszJ7VSAAbFIZoBihghBzYtCcyMsfUkDLP1AD+gIBzxZQB88WyXGAGMjLBSXPFlAH+gIWy2oVzMlx+wAQNACCjiqCCJiWgHL7AoIQ1TJ223CAEMjLBVAIzxZQBfoCFstqE8sfE8s/yXL7AFiSbDPiVQLIUAT6AljPFgHPFszJ7VSqevm+","object":{"data":{"b64":"/wD0pBP0vPLICw==","len":80},"refs":[{"data":{"b64":"YA==","len":6},"refs":[{"data":{"b64":"zA==","len":8},"refs":[{"data":{"b64":"AA==","len":2},"refs":[{"data":{"b64":"0QY4B5IADoaYGAuNhKia+B+AZwfSB9IBj9ABi465D9ABj9ABgBaY/BCAfFP1KpEF1KmJos+ATwQQgLxqKMqRBdSxiZoBn4BXAawQgsr4PeXUms+AXwL4JCB/l4A=","len":733},"refs":[],"special":false},{"data":{"b64":"Z+kQwcLry4U0","len":70},"refs":[],"special":false}],"special":false},{"data":{"b64":"AA==","len":2},"refs":[{"data":{"b64":"AA==","len":2},"refs":[{"data":{"b64":"UD0z/6APpAIfAF7UTQ+gD6QPpA1DBRNqFSKscF8uLBKML/8uLCVDRCcFQgE1QUA8hQBPoCWM8WAc8WzMkiyMsBEvQA9ADLAMkg+QBwdMjLAsoHy//J0AT6QPQEMfoAd4AYyMsFUAjPFnD6AhfLaxPMghAXjUUZyMsfGQ","len":980},"refs":[{"data":{"b64":"yz9QB/oCIs8WUAbPFiX6AlADzxbJUAXMB6oAE6CCCJiWgKoAggiYloCgoBS88uLFBMmAQPsAECPIUAT6AljPFgHPFszJ7VQ=","len":568},"refs":[],"special":false}],"special":false},{"data":{"b64":"AA==","len":2},"refs":[{"data":{"b64":"O1E0PoA+kD6QNQwB9M/+gBRUaAF+kD6QFNaxwVUc2xwVCATVBQDyFAE+gJYzxYBzxbMySLIywES9AD0AMsAyfkAcHTIywLKB8v/ydBQDMcFG7Hy4sMJ+gCCCJiWgIIImJaAoBqhIZUQSThfBOMNJdcLAcMAJMIAsAA==","len":962},"refs":[{"data":{"b64":"UhmgGKGCEHNi0JzIyx9SQMs/UAP6AgHPFlAHzxbJcYAYyMsFJc8WUAf6AhbLahXMyXH7ABA0","len":432},"refs":[],"special":false},{"data":{"b64":"jiqCCJiWgHL7AoIQ1TJ223CAEMjLBVAIzxZQBfoCFstqE8sfE8s/yXL7AFiSbDPiVQLIUAT6AljPFgHPFszJ7VQ=","len":520},"refs":[],"special":false}],"special":false},{"data":{"b64":"O1E0PoA+kD6QNQwB9M/+gD6QDBRUaFSSccF8uLBJ8L/8uLCggiYloCqABagFrzy4sOCEHvdl97Iyx8Vyz9QA/oCIs8WAc8WyXGAEMjLBSTPFnD6AstqzMmAQPsAQBPIUAT6AljPFgHPFszJ7VQA=","len":874},"refs":[],"special":false}],"special":false}],"special":false},{"data":{"b64":"1AEGuQ9qJofQB9IH0gahgCaY/BCAvGooypEF1BCD3uy+8J3QlY+XFi6Z+Y/QAYCdAoEeQoAn0BLGeLAOeLZmT2qg","len":525},"refs":[],"special":false}],"special":false}],"special":false},{"data":{"b64":"oPYF2omh9AH0gfSBqGA=","len":111},"refs":[],"special":false}],"special":false}],"special":false}}]],"exit_code":0,"@extra":"1735468400.4063118:3:0.464730437954772","block_id":{"@type":"ton.blockIdExt","workchain":-1,"shard":"-9223372036854775808","seqno":26510802,"root_hash":"Vt6Qwl+wnUtZua30bKBZ1waQviSTfGnkbpjn+3QI+EI=","file_hash":"rX2cikQ9t77YbPRE6kd5STqV11Qt0x6Ty9EVAHXMUqk="},"last_transaction_id":{"@type":"internal.transactionId","lt":"24508681000001","hash":"ifUuC+eJp3BwnV/nr063UWu17Ehm3/Ujmyp9OTPWOo8="}}}'
     headers:
       Access-Control-Allow-Headers:
       - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
@@ -55,7 +63,7 @@ interactions:
       CF-Cache-Status:
       - DYNAMIC
       CF-RAY:
-      - 89ee5d844f6952de-LHR
+      - 8f99215fabac653e-LHR
       Connection:
       - keep-alive
       Content-Encoding:
@@ -63,11 +71,17 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Sat, 06 Jul 2024 08:53:36 GMT
+      - Sun, 29 Dec 2024 10:33:10 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=vQBscaH51C3KEu4%2BI%2Fp3oNdUDUekHIhtDidCBQX8vj%2FykJR27g9iaacpf9adNB%2Bm0%2BG%2FTcmQKqzyUX3f%2Bii7RKXfcovu6DChlO5u2%2BB7U4FDuQe%2BRx%2FDGZDFXGl4qZINsvs5nOwkkA%3D%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Transfer-Encoding:
       - chunked
+      server-timing:
+      - cfL4;desc="?proto=TCP&rtt=25704&min_rtt=24287&rtt_var=7690&sent=9&recv=10&lost=0&retrans=0&sent_bytes=4476&recv_bytes=1395&delivery_rate=237688&cwnd=236&unsent_bytes=0&cid=f2c0cf6b48cb4c06&ts=363&x=0"
     status:
       code: 200
       message: OK

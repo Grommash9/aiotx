@@ -29,6 +29,7 @@ Here's an example:
 
    async def main():
       eth_client = AioTxETHClient("NODE_URL")
+      await eth_client.connect()
 
       last_block = await eth_client.get_last_block_number()
       print("last_block", last_block)

@@ -21,6 +21,7 @@ Here's an example:
 
 
    async def main():
+      await tron_client.connect()
       last_block = await tron_client.get_last_block_number()
       print("last_block", last_block)
       Output: last_block 47393539

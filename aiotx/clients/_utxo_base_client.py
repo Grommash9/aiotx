@@ -406,6 +406,9 @@ class AioTxUTXOClient(AioTxClient):
         result = await self._make_rpc_call(payload)
         return self.to_satoshi(result["result"]["feerate"])
 
+    def _check_connection(self) -> None:
+        return None
+
     async def _make_rpc_call(self, payload) -> dict:
         payload["jsonrpc"] = "2.0"
         payload["id"] = "curltest"

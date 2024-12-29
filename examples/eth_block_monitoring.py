@@ -22,6 +22,7 @@ async def handle_block_transactions(transactions):
 
 
 async def main():
+    await eth_client.connect()
     await eth_client.start_monitoring()
 
 

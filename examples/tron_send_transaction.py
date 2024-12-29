@@ -6,6 +6,7 @@ tron_client = AioTxTRONClient(node_url="https://api.shasta.trongrid.io")
 
 
 async def main():
+    await tron_client.connect()
     wallet = tron_client.generate_address()
     print(wallet)
 

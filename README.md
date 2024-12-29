@@ -87,6 +87,27 @@ or for all of them:
 pip install aiotx[utxo,evm]
 ```
 
+Important Note
+
+^^^^^^^^^^^^^
+All AioTx clients require an active connection before use. You can establish a connection in two ways:
+
+```python
+
+   # Method 1: Using async context manager (recommended)
+   async with AioTxETHClient("NODE_URL") as client:
+      result = await client.get_balance("address")
+
+   # Method 2: Explicit connection management
+   client = AioTxETHClient("NODE_URL")
+   await client.connect()
+   try:
+      result = await client.get_balance("address")
+   finally:
+      await client.disconnect()
+
+```
+
 Once installed, you can import the desired client and start interacting with the respective blockchain. Here's a quick example of how to use the EVM client:
 
 Sending Bulk Transactions (Bitcoin):
@@ -95,7 +116,6 @@ from aiotx.clients import AioTxBTCClient
 
 async def main():
     btc_client = AioTxBTCClient("NODE_URL")
-    
     destinations = {
         "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa": 1000000,
         "1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2": 500000
@@ -114,7 +134,7 @@ from aiotx.clients import AioTxETHClient
 
 async def main():
     eth_client = AioTxETHClient("NODE_URL")
-    
+    await eth_client.connect()
     private_key = "YOUR_PRIVATE_KEY"
     to_address = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
     token_address = "0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984"  # Example token address (Uniswap)
@@ -132,6 +152,7 @@ Sending TON (for bulk please check [/examples](https://github.com/Grommash9/aiot
     import asyncio
 
     ton_client = AioTxTONClient("https://testnet.toncenter.com/api/v2", workchain=0)
+    await ton_client.connect()
     # We are adding workchain here because testnet.toncenter working bad and identify itself as -1 but it should be 0
     # If you are using any other provider it should work fine without workchain param
 
@@ -153,7 +174,7 @@ Transferring Jettons:
     import asyncio
 
     ton_client = AioTxTONClient("https://testnet.toncenter.com/api/v2", workchain=0)
-
+    await ton_client.connect()
     mnemonic_str = "your wallet mnemonic phrase here"
     recipient_address = "EQCc39VS5jcptHL8vMjEXrzGaRcCVYto7HUn4bpAOg8xqB2e"
     jetton_master_address = "EQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di"
@@ -177,7 +198,7 @@ from aiotx.clients import AioTxETHClient
 
 async def main():
     eth_client = AioTxETHClient("NODE_URL")
-    
+    await eth_client.connect()
     private_key = "YOUR_PRIVATE_KEY"
     to_address = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
     amount = eth_client.to_wei(0.5, "ether")  # Sending 0.5 ETH
@@ -194,7 +215,6 @@ from aiotx.clients import AioTxBTCClient
 
 async def main():
     btc_client = AioTxBTCClient("NODE_URL")
-    
     private_key = "YOUR_PRIVATE_KEY"
     to_address = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
     amount = 1000000  # Sending 0.01 BTC (amount is in satoshis)
@@ -211,7 +231,6 @@ from aiotx.clients import AioTxBTCClient
 
 async def main():
     btc_client = AioTxBTCClient("NODE_URL")
-    
     # Converting satoshis to BTC
     satoshis = 1000000
     btc = btc_client.from_satoshi(satoshis)

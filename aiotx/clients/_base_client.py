@@ -4,6 +4,14 @@ import signal
 from contextlib import suppress
 from typing import List, Optional
 
+import aiohttp
+
+
+class NotConnectedError(Exception):
+    """Raised when trying to use client methods before connecting."""
+
+    pass
+
 
 class AioTxClient:
     def __init__(self, node_url: str, headers: dict = {}):
@@ -13,6 +21,35 @@ class AioTxClient:
         self._stop_signal: Optional[asyncio.Event] = None
         self._stopped_signal: Optional[asyncio.Event] = None
         self._running_lock = asyncio.Lock()
+        self._session: Optional[aiohttp.ClientSession] = None
+        self._connected = False
+
+    async def connect(self) -> None:
+        """Establish connection and create session."""
+        if not self._connected:
+            self._session = aiohttp.ClientSession()
+            self._connected = True
+
+    async def disconnect(self) -> None:
+        """Close connection and cleanup session."""
+        if self._connected and self._session:
+            await self._session.close()
+            self._session = None
+            self._connected = False
+
+    def _check_connection(self) -> None:
+        """Check if client is connected before making requests."""
+        if not self._connected or not self._session:
+            raise NotConnectedError("Client is not connected. Call connect() first.")
+
+    async def __aenter__(self):
+        """Async context manager entry."""
+        await self.connect()
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """Async context manager exit."""
+        await self.disconnect()
 
     def _setup_signal_handlers(self):
         if os.name == "nt":
@@ -28,6 +65,8 @@ class AioTxClient:
         timeout_between_blocks: int = 1,
         **kwargs,
     ) -> None:
+        self._check_connection()
+
         if not self.monitor:
             raise ValueError(
                 "BlockMonitor instance must be set before starting monitoring"
@@ -85,6 +124,13 @@ class AioTxClient:
     async def wait_closed(self):
         if self._stopped_signal:
             await self._stopped_signal.wait()
+
+    async def _make_request(
+        self, method: str, url: str, **kwargs
+    ) -> aiohttp.ClientResponse:
+        """Make HTTP request using the shared session."""
+        self._check_connection()
+        return await self._session.request(method, url, **kwargs)
 
 
 class BlockMonitor:

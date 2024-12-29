@@ -67,12 +67,35 @@ pip install aiotx[utxo,evm]
 Getting Started
 ---------------
 
-To start using AioTx, simply install the package using pip:
+To start using AioTx, first install the package using pip:
+
+```python
+pip install aiotx
+```
+
+Important Note
+^^^^^^^^^^^^^
+All AioTx clients require an active connection before use. You can establish a connection in two ways:
 
 .. code-block:: python
 
-   pip install aiotx
+   # Method 1: Using async context manager (recommended)
+   async with AioTxETHClient("NODE_URL") as client:
+      result = await client.get_balance("address")
 
+   # Method 2: Explicit connection management
+   client = AioTxETHClient("NODE_URL")
+   await client.connect()
+   try:
+      result = await client.get_balance("address")
+   finally:
+      await client.disconnect()
+
+
+Basic Examples
+^^^^^^^^^^^^^
+
+Here are some examples of how to use different clients:
 
 Once installed, you can import the desired client and start interacting with the respective blockchain. Here's a quick example of how to use the EVM client:
 
@@ -105,6 +128,7 @@ Sending Tokens (Ethereum):
 
    async def main():
       eth_client = AioTxETHClient("NODE_URL")
+      await eth_client.connect()
       
       private_key = "YOUR_PRIVATE_KEY"
       to_address = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
@@ -124,7 +148,7 @@ Sending Tokens (Ethereum):
 
    async def main():
       eth_client = AioTxETHClient("NODE_URL")
-      
+      await eth_client.connect()
       private_key = "YOUR_PRIVATE_KEY"
       to_address = "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
       amount = eth_client.to_wei(0.5, "ether")  # Sending 0.5 ETH
@@ -143,7 +167,6 @@ Sending Native Currency (Bitcoin):#
 
    async def main():
       btc_client = AioTxBTCClient("NODE_URL")
-      
       private_key = "YOUR_PRIVATE_KEY"
       to_address = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
       amount = 1000000  # Sending 0.01 BTC (amount is in satoshis)
@@ -162,7 +185,6 @@ Satoshi Conversions:
 
    async def main():
       btc_client = AioTxBTCClient("NODE_URL")
-      
       # Converting satoshis to BTC
       satoshis = 1000000
       btc = btc_client.from_satoshi(satoshis)

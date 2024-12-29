@@ -16,6 +16,7 @@ async def handle_transaction(transaction):
 
 
 async def main():
+    await tron_client.connect()
     await tron_client.start_monitoring(5)
 
 

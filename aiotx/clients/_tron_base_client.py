@@ -5,7 +5,6 @@ from typing import Optional, Union
 
 import aiohttp
 import pkg_resources
-from aiohttp import ClientResponse
 from tronpy import Tron
 from tronpy.keys import PrivateKey
 
@@ -343,19 +342,21 @@ class AioTxTRONClient(AioTxEVMBaseClient):
     async def _make_api_call(self, payload, method, path) -> dict:
         url = self.node_url + path
         logger.info(f"api call payload: {payload} method: {method} path: {path}")
-        async with aiohttp.ClientSession() as session:
-            if method == "POST":
-                headers = {"Content-Type": "application/json"}
-                headers.update(self._headers)
-                payload_json = json.dumps(payload)
-                async with session.post(
-                    url, data=payload_json, headers=headers
-                ) as response:
-                    return await self._process_api_answer(response)
-            async with session.get(url) as response:
-                return await self._process_api_answer(response)
 
-    async def _process_api_answer(self, response: ClientResponse) -> dict:
+        headers = {"Content-Type": "application/json"} if method == "POST" else {}
+        headers.update(self._headers)
+
+        if method == "POST":
+            payload_json = json.dumps(payload)
+            response = await self._make_request(
+                method, url, data=payload_json, headers=headers
+            )
+        else:
+            response = await self._make_request(method, url, headers=headers)
+
+        return await self._process_api_answer(response)
+
+    async def _process_api_answer(self, response: aiohttp.ClientResponse) -> dict:
         response_text = await response.text()
         logger.info(f"api call result: {response_text} status: {response.status}")
         if response.status != 200:
@@ -371,29 +372,31 @@ class AioTxTRONClient(AioTxEVMBaseClient):
         payload_json = json.dumps(payload)
         logger.info(f"rpc call payload: {payload}")
         headers = {"Content-Type": "application/json"}
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                self.node_url + path, data=payload_json, headers=headers
-            ) as response:
-                response_text = await response.text()
-                logger.info(f"rpc call result: {response_text}")
-                if response.status != 200:
-                    raise RpcConnectionError(
-                        f"Node response status code: {response.status} response test: {response_text}"
-                    )
-                result = await response.json()
-                if "error" not in result.keys():
-                    return result["result"]
-                error_code = result["error"]["code"]
-                error_message = result["error"]["message"]
-                if (
-                    "invalid characters encountered in Hex string" in error_message
-                    or "invalid hash value" in error_message
-                    or "invalid address hash value" in error_message
-                ):
-                    raise InvalidArgumentError(error_message)
-                else:
-                    raise RpcConnectionError(f"Error {error_code}: {error_message}")
+        headers.update(self._headers)
+
+        response = await self._make_request(
+            "POST", self.node_url + path, data=payload_json, headers=headers
+        )
+
+        response_text = await response.text()
+        logger.info(f"rpc call result: {response_text}")
+        if response.status != 200:
+            raise RpcConnectionError(
+                f"Node response status code: {response.status} response test: {response_text}"
+            )
+        result = await response.json()
+        if "error" not in result.keys():
+            return result["result"]
+        error_code = result["error"]["code"]
+        error_message = result["error"]["message"]
+        if (
+            "invalid characters encountered in Hex string" in error_message
+            or "invalid hash value" in error_message
+            or "invalid address hash value" in error_message
+        ):
+            raise InvalidArgumentError(error_message)
+        else:
+            raise RpcConnectionError(f"Error {error_code}: {error_message}")
 
 
 class TronMonitor(BlockMonitor):

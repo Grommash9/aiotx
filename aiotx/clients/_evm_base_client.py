@@ -5,8 +5,6 @@ import secrets
 import sys
 from typing import Union
 
-import aiohttp
-
 from aiotx.clients._base_client import AioTxClient, BlockMonitor
 from aiotx.exceptions import (
     AioTxError,
@@ -347,74 +345,78 @@ class AioTxEVMClient(AioTxEVMBaseClient):
         return 0 if tx_count == "0x" else int(tx_count, 16)
 
     async def _make_rpc_call(self, payload) -> dict:
+        self._check_connection()
         payload["jsonrpc"] = "2.0"
         payload["id"] = 1
         logger.info(f"rpc call payload: {payload}")
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                self.node_url, data=json.dumps(payload), headers=self._headers
-            ) as response:
-                response_text = await response.text()
-                logger.info(f"rpc call result: {response_text}")
-                if response.status != 200:
-                    raise RpcConnectionError(response_text)
-                result = await response.json()
-                if "error" not in result.keys():
-                    return result["result"]
-                error_code = result["error"]["code"]
-                error_message = result["error"]["message"]
-                if error_code == -32000:
-                    if (
-                        "header not found" in error_message
-                        or "could not find block" in error_message
-                    ):
-                        raise BlockNotFoundError(error_message)
-                    elif "stack limit reached" in error_message:
-                        raise StackLimitReachedError(error_message)
-                    elif "method handler crashed" in error_message:
-                        raise MethodHandlerCrashedError(error_message)
-                    elif "execution timeout" in error_message:
-                        raise ExecutionTimeoutError(error_message)
-                    elif "nonce too low" in error_message:
-                        raise NonceTooLowError(error_message)
-                    elif "filter not found" in error_message:
-                        raise FilterNotFoundError(error_message)
-                    elif "replacement transaction underpriced" in error_message:
-                        raise ReplacementTransactionUnderpriced(error_message)
-                    else:
-                        raise AioTxError(f"Error {error_code}: {error_message}")
-                elif error_code == -32009:
-                    raise TraceRequestLimitExceededError(error_message)
-                elif error_code == -32010:
-                    raise TransactionCostExceedsGasLimitError(error_message)
-                elif error_code == -32011:
-                    raise NetworkError(error_message)
-                elif error_code == -32015:
-                    raise VMExecutionError(error_message)
-                elif error_code == -32601:
-                    if "method not found" in error_message:
-                        raise MethodNotFoundError(error_message)
-                    elif "failed to parse request" in error_message:
-                        raise InvalidRequestError(error_message)
-                elif error_code == -32602:
-                    if (
-                        "invalid argument" in error_message
-                        and "cannot unmarshal hex string without 0x prefix"
-                        in error_message
-                        or "cannot unmarshal hex string of odd length into"
-                        in error_message
-                        or "hex string has length" in error_message
-                    ):
-                        raise InvalidArgumentError(error_message)
-                    elif (
-                        "eth_getLogs and eth_newFilter are limited to a 10,000 blocks range"
-                        in error_message
-                    ):
-                        raise BlockRangeLimitExceededError(error_message)
-                elif error_code == -32603:
-                    raise InternalJSONRPCError(error_message)
-                else:
-                    raise RpcConnectionError(f"Error {error_code}: {error_message}")
+
+        response = await self._make_request(
+            "POST", self.node_url, data=json.dumps(payload), headers=self._headers
+        )
+
+        response_text = await response.text()
+        logger.info(f"rpc call result: {response_text}")
+
+        if response.status != 200:
+            raise RpcConnectionError(response_text)
+
+        result = await response.json()
+        if "error" not in result.keys():
+            return result["result"]
+
+        error_code = result["error"]["code"]
+        error_message = result["error"]["message"]
+
+        if error_code == -32000:
+            if (
+                "header not found" in error_message
+                or "could not find block" in error_message
+            ):
+                raise BlockNotFoundError(error_message)
+            elif "stack limit reached" in error_message:
+                raise StackLimitReachedError(error_message)
+            elif "method handler crashed" in error_message:
+                raise MethodHandlerCrashedError(error_message)
+            elif "execution timeout" in error_message:
+                raise ExecutionTimeoutError(error_message)
+            elif "nonce too low" in error_message:
+                raise NonceTooLowError(error_message)
+            elif "filter not found" in error_message:
+                raise FilterNotFoundError(error_message)
+            elif "replacement transaction underpriced" in error_message:
+                raise ReplacementTransactionUnderpriced(error_message)
+            else:
+                raise AioTxError(f"Error {error_code}: {error_message}")
+        elif error_code == -32009:
+            raise TraceRequestLimitExceededError(error_message)
+        elif error_code == -32010:
+            raise TransactionCostExceedsGasLimitError(error_message)
+        elif error_code == -32011:
+            raise NetworkError(error_message)
+        elif error_code == -32015:
+            raise VMExecutionError(error_message)
+        elif error_code == -32601:
+            if "method not found" in error_message:
+                raise MethodNotFoundError(error_message)
+            elif "failed to parse request" in error_message:
+                raise InvalidRequestError(error_message)
+        elif error_code == -32602:
+            if (
+                "invalid argument" in error_message
+                and "cannot unmarshal hex string without 0x prefix" in error_message
+                or "cannot unmarshal hex string of odd length into" in error_message
+                or "hex string has length" in error_message
+            ):
+                raise InvalidArgumentError(error_message)
+            elif (
+                "eth_getLogs and eth_newFilter are limited to a 10,000 blocks range"
+                in error_message
+            ):
+                raise BlockRangeLimitExceededError(error_message)
+        elif error_code == -32603:
+            raise InternalJSONRPCError(error_message)
+        else:
+            raise RpcConnectionError(f"Error {error_code}: {error_message}")
 
 
 class EvmMonitor(BlockMonitor):

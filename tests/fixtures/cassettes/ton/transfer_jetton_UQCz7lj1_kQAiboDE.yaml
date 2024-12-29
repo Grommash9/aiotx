@@ -1,0 +1,130 @@
+interactions:
+- request:
+    body: '{"method": "getWalletInformation", "params": {"address": "UQDGQx-qkikxyLLI7gaQOE1au7hsG4f3C6mmzyvoLtStLiMT"},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":true,"result":{"wallet":true,"balance":"869615516","account_state":"active","wallet_type":"wallet
+        v4 r2","seqno":7,"last_transaction_id":{"@type":"internal.transactionId","lt":"29617611000001","hash":"d7zpR4cWZofqgLER20Z7oHh2rJdUgiehqPkt5irG1y8="},"wallet_id":698983191},"id":"1","jsonrpc":"2.0"}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 8f991ba99aadedfa-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 29 Dec 2024 10:29:16 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=7y3BwJY%2B6dNK7sayrF86opxMX1gLEgv1e0b4hG1%2BS9Oxyl38kOuXC77T%2B4Gqe%2B%2FRF2Hw%2B%2FszP8g2WJDmicaGcFf2pOvEYWaDGTP8x5NHX%2FOK7iS4HJ00nBRZwbOIin5qxQCUAtOXBg%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      server-timing:
+      - cfL4;desc="?proto=TCP&rtt=19853&min_rtt=19480&rtt_var=8052&sent=4&recv=7&lost=0&retrans=0&sent_bytes=2415&recv_bytes=978&delivery_rate=128888&cwnd=243&unsent_bytes=0&cid=ef05f928072432b3&ts=167&x=0"
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"address": "kQAiboDEv_qRrcEdrYdwbVLNOXBHwShFbtKGbQVJ2OKxY_Di", "method":
+      "get_wallet_address", "stack": [["tvm.Slice", "te6cckEBAQEAJAAAQ4AYyGP1UkUmORZZHcDSBwmrV3cNg3D+4XU02eV9BdqVpdA4w1Af"]]}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/runGetMethod
+  response:
+    body:
+      string: '{"ok":true,"result":{"@type":"smc.runResult","gas_used":2961,"stack":[["cell",{"bytes":"te6cckEBAQEAJAAAQ4AIcv7XdKwxBbuh2KzAzfIJOeHsy2XbGX6xN1weSePNRBAfthGs","object":{"data":{"b64":"gAhy/td0rDEFu6HYrMDN8gk54ezLZdsZfrE3XB5J481EAA==","len":267},"refs":[],"special":false}}]],"exit_code":0,"@extra":"1735468166.644092:5:0.21419842632421326","block_id":{"@type":"ton.blockIdExt","workchain":-1,"shard":"-9223372036854775808","seqno":26510715,"root_hash":"Zifn1oP9yhDetlibT1fVSRH4KiFaIpjgl8uYc/AlYzo=","file_hash":"r7q+JDd+bIa2ZGdU4kPIwwluOQD+pTdTy7T3qddgFF0="},"last_transaction_id":{"@type":"internal.transactionId","lt":"29298800000001","hash":"8WvLBS5wkaIKZgGhAAwo0y0DMCR1uu2vQZuiZ6uwNwc="}}}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 8f991baa9d59edfa-LHR
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 29 Dec 2024 10:29:16 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=xs1WoF9FPUiMESlQ09aS8S%2Bkpu2KBBkEO1sv%2BHAO43iCk%2BBkMNVDWG4GaKLE5zF2r8EP%2BLsQXBSTB1a28lzsAHlb88%2FXjIUOL9%2Fb5ov2gYK8o%2Fi1kHWnItIBYzP%2FnF697cwRRhhrVw%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      Transfer-Encoding:
+      - chunked
+      server-timing:
+      - cfL4;desc="?proto=TCP&rtt=19564&min_rtt=17498&rtt_var=6616&sent=8&recv=10&lost=0&retrans=0&sent_bytes=4143&recv_bytes=1421&delivery_rate=247620&cwnd=246&unsent_bytes=0&cid=ef05f928072432b3&ts=329&x=0"
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"method": "sendBocReturnHash", "params": {"boc": "te6cckECBAEAAREAAeGIAYyGP1UkUmORZZHcDSBwmrV3cNg3D+4XU02eV9BdqVpcBK87J8i+RYsbtRI612z/+NH84sCDo8zcibum6XZgWZUVbgpR3Fl+TlPmaNlBJLpRpmNUzs50YdGY7i2tGObz6CFNTRi7O4klwAAAADgAHAEBaGIAIcv7XdKwxBbuh2KzAzfIJOeHsy2XbGX6xN1weSePNRAgF9eEAAAAAAAAAAAAAAAAAAECAagPin6lAAAAAAAAAABDuaygCAFn3LHqlijk3DuOl7HHK4vMCUAKMVGwBb7u6/yyjn6TawAxkMfqpIpMciyyO4GkDhNWru4bBuH9wupps8r6C7UrS4EDABoAAAAAdmNyIHRlc3RzeWj8zQ=="},
+      "jsonrpc": "2.0", "id": 1}'
+    headers:
+      Content-Type:
+      - application/json
+    method: POST
+    uri: https://testnet.toncenter.com/api/v2/jsonRPC
+  response:
+    body:
+      string: '{"ok":false,"result":"Ratelimit exceed","code":429}'
+    headers:
+      Access-Control-Allow-Headers:
+      - User-Agent,Keep-Alive,Content-Type,X-API-Key,X-Ton-Client-Version
+      Access-Control-Allow-Methods:
+      - GET, POST, OPTIONS
+      Access-Control-Allow-Origin:
+      - '*'
+      CF-Cache-Status:
+      - DYNAMIC
+      CF-RAY:
+      - 8f991bac08b2edfa-LHR
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '51'
+      Content-Type:
+      - application/json
+      Date:
+      - Sun, 29 Dec 2024 10:29:16 GMT
+      NEL:
+      - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
+      Report-To:
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v4?s=a2tlcMeA0zjBmOm9P9rHq8kvYQjKVkUGhPRAx8VJI0WoO94kaA7G0zIZF7ydXAp2mZhU9HGJYZp2L3fCNmKfTSumiWBrGy4YDJQZA3WDG%2FXmHxJZUg2M7cdXB2HI4eHiR24RwDsqZQ%3D%3D"}],"group":"cf-nel","max_age":604800}'
+      Server:
+      - cloudflare
+      server-timing:
+      - cfL4;desc="?proto=TCP&rtt=19459&min_rtt=17498&rtt_var=5174&sent=12&recv=13&lost=0&retrans=0&sent_bytes=5766&recv_bytes=2135&delivery_rate=247620&cwnd=249&unsent_bytes=0&cid=ef05f928072432b3&ts=494&x=0"
+    status:
+      code: 429
+      message: Too Many Requests
+version: 1
