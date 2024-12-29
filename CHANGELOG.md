@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [8.1.0]
+- cover _get_network_params by retry as well
+
 ## [8.0.0]
 - Added retry logic to TRON and TON block monitoring's
 - In TON during monitoring shards now pulled in gather (parallel) mode to be able to keep up with network
