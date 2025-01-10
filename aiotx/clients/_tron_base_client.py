@@ -429,6 +429,8 @@ class TronMonitor(BlockMonitor):
             self.client.get_block_by_number,
             target_block,
         )
+        if block_data is None:
+            return
         await self.process_transactions(block_data["transactions"])
         await self.process_block(target_block, network_last_block)
         self._latest_block = target_block + 1
