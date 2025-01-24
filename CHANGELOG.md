@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [9.0.0]
+- Added shard sequence tracking for TON monitoring
+- Now processing all intermediate shard blocks between masterchain references
+- Improved transaction completeness by filling shard block gaps
+- Added error handling for failed shard block fetches
+
 ## [8.1.0]
 - cover _get_network_params by retry as well
 
