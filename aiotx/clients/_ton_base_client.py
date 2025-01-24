@@ -53,9 +53,9 @@ class AioTxTONClient(AioTxClient):
         )
 
     def _unpack_mnemonic(self, mnemonic_str: str):
-        assert isinstance(
-            mnemonic_str, str
-        ), "Mnemonic should be represented as string!"
+        assert isinstance(mnemonic_str, str), (
+            "Mnemonic should be represented as string!"
+        )
         mnemonic_list = mnemonic_str.split(" ")
         if not mnemonic_is_valid(mnemonic_list):
             raise WrongPrivateKey("mnemonic phrase not valid!")
@@ -146,9 +146,9 @@ class AioTxTONClient(AioTxClient):
         seqno: int = None,
         memo: str = None,
     ) -> str:
-        assert isinstance(
-            amount, int
-        ), "Amount should be integer! Please use to_nano for convert it!"
+        assert isinstance(amount, int), (
+            "Amount should be integer! Please use to_nano for convert it!"
+        )
         if self.workchain is None:
             await self._get_network_params()
 
@@ -180,9 +180,9 @@ class AioTxTONClient(AioTxClient):
     def _create_bulk_transfer_boc(
         self, mnemonic_str: str, recipients_list: dict
     ) -> str:
-        assert (
-            self.wallet_version == WalletVersionEnum.hv2
-        ), "For using that method you should use HighloadWalletV2Contract"
+        assert self.wallet_version == WalletVersionEnum.hv2, (
+            "For using that method you should use HighloadWalletV2Contract"
+        )
         mnemonic_list = self._unpack_mnemonic(mnemonic_str)
         _, _, _, wallet = Wallets.from_mnemonics(
             mnemonic_list,
@@ -208,9 +208,9 @@ class AioTxTONClient(AioTxClient):
     def _create_transfer_boc(
         self, mnemonic_str: str, to_address, amount, seqno, memo
     ) -> str:
-        assert (
-            self.wallet_version != WalletVersionEnum.hv2
-        ), "For using that method you should not use HighloadWalletV2Contract"
+        assert self.wallet_version != WalletVersionEnum.hv2, (
+            "For using that method you should not use HighloadWalletV2Contract"
+        )
         mnemonic_list = self._unpack_mnemonic(mnemonic_str)
         _, _, _, wallet = Wallets.from_mnemonics(
             mnemonic_list, self.wallet_version, self.workchain
@@ -425,17 +425,44 @@ class TonMonitor(BlockMonitor):
         self._last_master_block = last_master_block
         self.max_retries = max_retries
         self.retry_delay = retry_delay
+        self.shard_last_seqno = {}  # (workchain, shard) -> last_seqno
 
     async def _process_shard(self, shard: dict, timeout_between_blocks: int):
-        """Process a single shard and its transactions."""
-        shard_transactions = await self._make_request_with_retry(
-            self.client.get_block_transactions,
-            shard["workchain"],
-            shard["shard"],
-            shard["seqno"],
-            1000,
-        )
-        await self.process_shard_transactions(shard_transactions)
+        """Process all blocks in shard chain since last seen seqno"""
+        shard_id = (shard["workchain"], shard["shard"])
+        current_seqno = shard["seqno"]
+
+        # Get last processed seqno for this shard
+        last_seqno = self.shard_last_seqno.get(shard_id, current_seqno - 1)
+
+        # If we're up-to-date, process just the latest block
+        if current_seqno <= last_seqno:
+            return
+
+        # Process all missing blocks in order
+        tasks = []
+        for seqno in range(last_seqno + 1, current_seqno + 1):
+            tasks.append(
+                self._make_request_with_retry(
+                    self.client.get_block_transactions,
+                    shard["workchain"],
+                    shard["shard"],
+                    seqno,
+                    1000,
+                )
+            )
+
+        # Process all blocks concurrently
+        results = await asyncio.gather(*tasks, return_exceptions=True)
+        for seqno, transactions in enumerate(results, start=last_seqno + 1):
+            if isinstance(transactions, Exception):
+                logger.error(f"Failed to process shard block {shard_id}:{seqno}")
+                continue
+
+            await self.process_shard_transactions(transactions)
+
+        # Update last processed seqno
+        self.shard_last_seqno[shard_id] = current_seqno
 
     async def poll_blocks(self, timeout_between_blocks: int):
         workchain, shard, seqno = await self._make_request_with_retry(

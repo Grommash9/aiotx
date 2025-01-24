@@ -5,95 +5,44 @@ from conftest import vcr_c
 from aiotx.clients import AioTxTONClient
 
 
-@vcr_c.use_cassette("tests/fixtures/cassettes/ton/test_async_monitoring.yaml")
-async def test_async_monitoring(ton_mainnet_client: AioTxTONClient):
+@vcr_c.use_cassette(
+    "tests/fixtures/cassettes/ton/test_async_monitoring_with_shard_gaps_case.yaml"
+)
+async def test_shard_block_skipping_monitoring_case(ton_client: AioTxTONClient):
     blocks = []
     transactions = []
-    block_transactions_list = []
 
-    await ton_mainnet_client.connect()
+    await ton_client.connect()
 
-    @ton_mainnet_client.monitor.on_block
+    @ton_client.monitor.on_block
     async def handle_block(block):
         blocks.append(block)
 
-    @ton_mainnet_client.monitor.on_transaction
+    @ton_client.monitor.on_transaction
     async def handle_transaction(transaction):
         transactions.append(transaction)
 
-    @ton_mainnet_client.monitor.on_block_transactions
-    async def handle_block_transactions(transactions):
-        block_transactions_list.append(transactions)
-
     asyncio.create_task(
-        ton_mainnet_client.start_monitoring(38093046, timeout_between_blocks=0.1)
+        ton_client.start_monitoring(27411722, timeout_between_blocks=0.1)
     )
+    # master block 27411723 have shard with seqno 29177784
+    # master block 27411724 have shard with seqno 29177786
+    # In that tests we are looking for transactions in shard 29177785
     try:
         await asyncio.sleep(3)
     except KeyboardInterrupt:
-        ton_mainnet_client.stop_monitoring()
+        ton_client.stop_monitoring()
 
     assert len(blocks) > 0
     assert len(transactions) > 0
 
-    assert 38093046 in blocks
-    assert 38093047 in blocks
-    assert 38093048 in blocks
+    assert 27411722 in blocks
+    assert 27411723 in blocks
+    assert 27411724 in blocks
 
-    # transactions from shard 43736268 of master block 38093046
-    # https://tonscan.org/block/0:6000000000000000:43736268
-    assert "r4r7FlGRAflxcnfEeDwVy1uqhEh/ajyZsUCgrwbATTY=" in [
+    # Our transaction from shard 29177785 which was skipped between 27411723 and 27411724 master blocks
+    assert "hssG0zMQPV4wFBiiuqUd5iJZIt/gWFzFD0us7GMK8eM=" in [
         tx["hash"] for tx in transactions
-    ]
-    # transactions from shard 43736268 of master block 38093046
-    assert "NZEK2M1V3VqEdhuEmj5qayWh2e0Sc/lEcOYGMpUDe0o=" in [
-        tx["hash"] for tx in transactions
-    ]
-
-    # transactions from shard 43735772 of master block 38093046
-    assert "ayDy6PrzGMCR4rMMD3FEThLEgjMB8heqmcUdJC3CI/A=" in [
-        tx["hash"] for tx in transactions
-    ]
-    # transactions from shard 43735772 of master block 38093046
-    assert "EPfqGpYOWZg1LpGQ06HfxFhxwwWNZKeQQtIAJ4U60Eg=" in [
-        tx["hash"] for tx in transactions
-    ]
-
-    # transactions from shard 43736270 of master block 38093047
-    assert "xcPkFFntBatwm/mC06Enl3tYZmCQhnfcQncZ0InbA3o=" in [
-        tx["hash"] for tx in transactions
-    ]
-
-    # transactions from shard 43736027 of master block 38093047
-    assert "WoQxVXUxtxC8nPdkvPdj0/wVTb6JkntyXg1fXxmdXQQ=" in [
-        tx["hash"] for tx in transactions
-    ]
-    assert "/NiBkmuPCaFdu4pv+Y1oxdJ0dlOWkEgCFPf+Mg/S6LU=" in [
-        tx["hash"] for tx in transactions
-    ]
-    assert "GKZ+EwkxxAONtWntnUTD/ISg2aZ2iy16XkVS/wiS3Lw=" in [
-        tx["hash"] for tx in transactions
-    ]
-
-    for block_number, tx_block_list in enumerate(block_transactions_list):
-        print(f"tx_block_list {block_number}:", tx_block_list)
-
-    assert "r4r7FlGRAflxcnfEeDwVy1uqhEh/ajyZsUCgrwbATTY=" in [
-        tx["hash"] for tx in block_transactions_list[1]
-    ]
-    assert "/NiBkmuPCaFdu4pv+Y1oxdJ0dlOWkEgCFPf+Mg/S6LU=" in [
-        tx["hash"] for tx in block_transactions_list[6]
-    ]
-
-    assert "xcPkFFntBatwm/mC06Enl3tYZmCQhnfcQncZ0InbA3o=" in [
-        tx["hash"] for tx in block_transactions_list[5]
-    ]
-    assert "EPfqGpYOWZg1LpGQ06HfxFhxwwWNZKeQQtIAJ4U60Eg=" in [
-        tx["hash"] for tx in block_transactions_list[0]
-    ]
-
-    assert "NZEK2M1V3VqEdhuEmj5qayWh2e0Sc/lEcOYGMpUDe0o=" in [
-        tx["hash"] for tx in block_transactions_list[1]
     ]
 
 

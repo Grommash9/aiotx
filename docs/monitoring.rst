@@ -216,8 +216,20 @@ Inside the `handle_block` handler, you can process the master block as needed. T
 
 Inside the `handle_transaction` handler, you can process each transaction encountered. The `transaction` parameter contains basic transaction information such as the account address, logical time, and transaction hash.
 
-The `handle_block_transactions` handler receives a list of transactions for each shard. Note that for TON, this handler will be triggered multiple times for each master block, as it processes shard transactions separately.
+The `handle_block_transactions` handler receives a list of transactions for each shard. Note that for TON:
+- This handler will be triggered for every shard block, even if not directly referenced by masterchain
+- Full transaction continuity is maintained by tracking shard sequence numbers
+- All intermediate blocks between masterchain updates are automatically processed
+- Missed blocks due to network issues are retried up to 10 times
 
+Example output showing gap handling:
+.. code-block:: text
+
+    ton_client: block 38104588  # Master block
+    ton_client: shard transactions [...]  # Shard 49232614
+    ton_client: shard transactions [...]  # Shard 49232615 (auto-filled gap)
+    ton_client: block 38104589  # Next master block
+    
 By default, the transaction details are not fetched for every transaction to avoid consuming a large number of API calls. If you want to retrieve more details about a specific transaction, you can use the `get_transactions` method of `AioTxTONClient`, as shown in the example:
 
 .. code-block:: python

@@ -49,7 +49,7 @@ vcr_c = vcr.VCR(
 async def ton_client() -> AioTxTONClient:
     # current test rpc connection returning -1 as workchain but it should be 0,
     # so we are setting that param by ourself
-    client = AioTxTONClient(TON_TEST_NODE_URL, workchain=0)
+    client = AioTxTONClient(TON_TEST_NODE_URL, workchain=0, headers={"X-API-KEY": "d"})
     await client.connect()
     return client
 
