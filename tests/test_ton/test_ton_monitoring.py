@@ -5,7 +5,9 @@ from conftest import vcr_c
 from aiotx.clients import AioTxTONClient
 
 
-@vcr_c.use_cassette("tests/fixtures/cassettes/ton/test_async_monitoring_with_shard_gaps_case.yaml")
+@vcr_c.use_cassette(
+    "tests/fixtures/cassettes/ton/test_async_monitoring_with_shard_gaps_case.yaml"
+)
 async def test_shard_block_skipping_monitoring_case(ton_client: AioTxTONClient):
     blocks = []
     transactions = []
@@ -42,6 +44,7 @@ async def test_shard_block_skipping_monitoring_case(ton_client: AioTxTONClient):
     assert "hssG0zMQPV4wFBiiuqUd5iJZIt/gWFzFD0us7GMK8eM=" in [
         tx["hash"] for tx in transactions
     ]
+
 
 @vcr_c.use_cassette("tests/fixtures/cassettes/ton/test_async_monitoring_testnet.yaml")
 async def test_async_monitoring_testnet(ton_client: AioTxTONClient):

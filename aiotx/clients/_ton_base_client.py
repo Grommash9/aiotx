@@ -431,10 +431,10 @@ class TonMonitor(BlockMonitor):
         """Process all blocks in shard chain since last seen seqno"""
         shard_id = (shard["workchain"], shard["shard"])
         current_seqno = shard["seqno"]
-        
+
         # Get last processed seqno for this shard
         last_seqno = self.shard_last_seqno.get(shard_id, current_seqno - 1)
-        
+
         # If we're up-to-date, process just the latest block
         if current_seqno <= last_seqno:
             return
@@ -448,7 +448,7 @@ class TonMonitor(BlockMonitor):
                     shard["workchain"],
                     shard["shard"],
                     seqno,
-                    1000
+                    1000,
                 )
             )
 
@@ -458,7 +458,7 @@ class TonMonitor(BlockMonitor):
             if isinstance(transactions, Exception):
                 logger.error(f"Failed to process shard block {shard_id}:{seqno}")
                 continue
-                
+
             await self.process_shard_transactions(transactions)
 
         # Update last processed seqno
