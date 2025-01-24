@@ -53,9 +53,9 @@ class AioTxTONClient(AioTxClient):
         )
 
     def _unpack_mnemonic(self, mnemonic_str: str):
-        assert isinstance(
-            mnemonic_str, str
-        ), "Mnemonic should be represented as string!"
+        assert isinstance(mnemonic_str, str), (
+            "Mnemonic should be represented as string!"
+        )
         mnemonic_list = mnemonic_str.split(" ")
         if not mnemonic_is_valid(mnemonic_list):
             raise WrongPrivateKey("mnemonic phrase not valid!")
@@ -146,9 +146,9 @@ class AioTxTONClient(AioTxClient):
         seqno: int = None,
         memo: str = None,
     ) -> str:
-        assert isinstance(
-            amount, int
-        ), "Amount should be integer! Please use to_nano for convert it!"
+        assert isinstance(amount, int), (
+            "Amount should be integer! Please use to_nano for convert it!"
+        )
         if self.workchain is None:
             await self._get_network_params()
 
@@ -180,9 +180,9 @@ class AioTxTONClient(AioTxClient):
     def _create_bulk_transfer_boc(
         self, mnemonic_str: str, recipients_list: dict
     ) -> str:
-        assert (
-            self.wallet_version == WalletVersionEnum.hv2
-        ), "For using that method you should use HighloadWalletV2Contract"
+        assert self.wallet_version == WalletVersionEnum.hv2, (
+            "For using that method you should use HighloadWalletV2Contract"
+        )
         mnemonic_list = self._unpack_mnemonic(mnemonic_str)
         _, _, _, wallet = Wallets.from_mnemonics(
             mnemonic_list,
@@ -208,9 +208,9 @@ class AioTxTONClient(AioTxClient):
     def _create_transfer_boc(
         self, mnemonic_str: str, to_address, amount, seqno, memo
     ) -> str:
-        assert (
-            self.wallet_version != WalletVersionEnum.hv2
-        ), "For using that method you should not use HighloadWalletV2Contract"
+        assert self.wallet_version != WalletVersionEnum.hv2, (
+            "For using that method you should not use HighloadWalletV2Contract"
+        )
         mnemonic_list = self._unpack_mnemonic(mnemonic_str)
         _, _, _, wallet = Wallets.from_mnemonics(
             mnemonic_list, self.wallet_version, self.workchain

@@ -12,9 +12,9 @@ from aiotx.exceptions import (
 )
 
 TRON_TEST_WALLET_PRIVATE_KEY = os.environ.get("TRON_TEST_WALLET_PRIVATE_KEY")
-assert (
-    TRON_TEST_WALLET_PRIVATE_KEY is not None
-), "Please provide TRON_TEST_WALLET_PRIVATE_KEY"
+assert TRON_TEST_WALLET_PRIVATE_KEY is not None, (
+    "Please provide TRON_TEST_WALLET_PRIVATE_KEY"
+)
 CONTRACT = "TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs"
 DESTINATION_ADDRESS = "TYge3Gid6vVaQvnPVRJ6SVwzC64cw2eBkN"
 
