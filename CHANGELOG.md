@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Now processing all intermediate shard blocks between masterchain references
 - Improved transaction completeness by filling shard block gaps
 - Added error handling for failed shard block fetches
+- Remove tests for python3.9 (it's recommended to stop using python 3.9 from now)
 
 ## [8.1.0]
 - cover _get_network_params by retry as well
