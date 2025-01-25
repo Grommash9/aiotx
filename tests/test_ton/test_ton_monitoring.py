@@ -23,7 +23,7 @@ async def test_shard_block_skipping_monitoring_case(ton_client: AioTxTONClient):
         transactions.append(transaction)
 
     asyncio.create_task(
-        ton_client.start_monitoring(27411722, timeout_between_blocks=0.1)
+        ton_client.start_monitoring(27411721, timeout_between_blocks=0.1)
     )
     # master block 27411723 have shard with seqno 29177784
     # master block 27411724 have shard with seqno 29177786
@@ -62,7 +62,7 @@ async def test_async_monitoring_testnet(ton_client: AioTxTONClient):
         transactions.append(transaction)
 
     asyncio.create_task(
-        ton_client.start_monitoring(19627950, timeout_between_blocks=0.1)
+        ton_client.start_monitoring(19627949, timeout_between_blocks=0.1)
     )
     try:
         await asyncio.sleep(3)

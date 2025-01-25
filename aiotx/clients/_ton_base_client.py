@@ -476,7 +476,7 @@ class TonMonitor(BlockMonitor):
             target_block = seqno
         # If behind network, process next block
         elif self._latest_block < seqno:
-            target_block = self._latest_block
+            target_block = self._latest_block + 1
         # No new blocks, sleep
         else:
             await asyncio.sleep(timeout_between_blocks)
@@ -493,7 +493,7 @@ class TonMonitor(BlockMonitor):
         await asyncio.gather(*shard_tasks)
 
         await self.process_master_block(target_block)
-        self._latest_block = target_block + 1
+        self._latest_block = target_block
 
     async def process_master_block(self, block):
         for handler in self.block_handlers:
