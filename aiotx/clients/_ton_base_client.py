@@ -471,8 +471,14 @@ class TonMonitor(BlockMonitor):
         if self.client.workchain is None:
             self.client.workchain = workchain
 
-        target_block = seqno if self._latest_block is None else self._latest_block
-        if target_block > seqno:
+        # If _latest_block is None, process the current seqno
+        if self._latest_block is None:
+            target_block = seqno
+        # If behind network, process next block
+        elif self._latest_block < seqno:
+            target_block = self._latest_block
+        # No new blocks, sleep
+        else:
             await asyncio.sleep(timeout_between_blocks)
             return
 
