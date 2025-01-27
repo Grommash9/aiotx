@@ -6,7 +6,7 @@ from typing import List, Optional
 
 import aiohttp
 
-from aiotx.exceptions import RpcConnectionError, BlockNotFoundError
+from aiotx.exceptions import BlockNotFoundError, RpcConnectionError
 from aiotx.log import logger
 
 
