@@ -6,7 +6,7 @@ from typing import List, Optional
 
 import aiohttp
 
-from aiotx.exceptions import RpcConnectionError
+from aiotx.exceptions import BlockNotFoundError, RpcConnectionError
 from aiotx.log import logger
 
 
@@ -169,7 +169,7 @@ class BlockMonitor:
         for attempt in range(self.max_retries):
             try:
                 return await request_func(*args, **kwargs)
-            except RpcConnectionError as e:
+            except (RpcConnectionError, BlockNotFoundError) as e:
                 if attempt < self.max_retries - 1:
                     delay = self.retry_delay * (2**attempt)
                     logger.warning(
