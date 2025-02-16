@@ -2,14 +2,14 @@ import decimal
 import json
 from decimal import localcontext
 from typing import Optional, Union
-
+from aiotx.types import TronContractType, UnDelegateResourceContractParameters, TransferAssetContractParameters, ResourceType
 import aiohttp
 import pkg_resources
 from tronpy import Tron
 from tronpy.keys import PrivateKey
-
+from hashlib import sha3_256
 from aiotx.clients._base_client import BlockMonitor
-from aiotx.clients._evm_base_client import AioTxEVMBaseClient
+from aiotx.clients._base_client import AioTxClient
 from aiotx.exceptions import (
     CreateTransactionError,
     InvalidArgumentError,
@@ -28,7 +28,12 @@ MIN_SUN = 1
 MAX_SUN = 10**18
 
 
-class AioTxTRONClient(AioTxEVMBaseClient):
+
+def function_signature_to_4byte_selector(signature: str) -> bytes:
+    return sha3_256(signature.encode()).digest()[:4]
+
+
+class AioTxTRONClient(AioTxClient):
     def __init__(
         self,
         node_url: str,
@@ -58,21 +63,9 @@ class AioTxTRONClient(AioTxEVMBaseClient):
 
         return client.generate_address(priv_key)
 
-    def hex_address_to_base58(self, hex_address: str) -> str:
-        # HACK sometimes we have address with 0x prefix?
-        # Should we handle it somehow?
-        if hex_address.startswith("0x"):
-            hex_address = "41" + hex_address[2:]
+    def _hex_to_base58_address(self, hex_address: str) -> str:
         client = Tron()
-        if not client.is_hex_address(hex_address):
-            raise TypeError("Please provide hex address")
         return client.to_base58check_address(hex_address)
-
-    def base58_to_hex_address(self, address) -> str:
-        client = Tron()
-        if not client.is_base58check_address(address):
-            raise TypeError("Please provide base58 address")
-        return client.to_hex_address(address)
 
     async def send(
         self,
@@ -145,6 +138,189 @@ class AioTxTRONClient(AioTxEVMBaseClient):
             },
             "POST",
             path="/wallet/gettransactionbyid",
+        )
+        if not result:
+            raise TransactionNotFound
+        if "Error" in result.keys():
+            raise RpcConnectionError(result["Error"])
+        return result
+    
+
+    def decode_transaction_input(self, transaction_data: dict) -> dict:
+        contract = transaction_data['raw_data']['contract'][0]
+        contract_type = contract['type']
+        parameter_value = contract['parameter']['value']
+        if contract_type == TronContractType.UNDELEGATE_RESOURCE.value:
+            if not parameter_value.get("resource"):
+                parameter_value["resource"] = "BANDWIDTH"
+            return {
+                "contract_type": TronContractType.UNDELEGATE_RESOURCE.value,
+                "parameters": UnDelegateResourceContractParameters(
+                    owner_address = self._hex_to_base58_address(parameter_value['owner_address']),
+                    receiver_address= self._hex_to_base58_address(parameter_value['receiver_address']),
+                    balance= parameter_value['balance'],
+                    resource=ResourceType(parameter_value['resource'])).to_dict()
+            }
+        elif contract_type == TronContractType.TRANSFER_ASSET.value:
+            # Convert hex asset_name to string (if needed)
+            return {
+                "contract_type": contract_type,
+                "parameters": {
+                    "owner_address": self._hex_to_base58_address(parameter_value['owner_address']),
+                    "to_address": self._hex_to_base58_address(parameter_value['to_address']),
+                    "asset_name": parameter_value['asset_name'],
+                    "amount": parameter_value['amount']
+                }
+            }
+        
+
+    
+        elif contract_type == 'DelegateResourceContract':
+            if not parameter_value.get("resource"):
+                parameter_value["resource"] = "BANDWIDTH"
+            return {
+            "contract_type": contract_type,
+            "parameters": {
+                "owner_address": self._hex_to_base58_address(parameter_value['owner_address']),
+                "receiver_address": self._hex_to_base58_address(parameter_value['receiver_address']),
+                "balance": parameter_value['balance'],
+                "resource": parameter_value['resource']
+            }
+        }
+        
+        elif contract_type == 'TransferContract':
+            # Handle native TRX transfer
+            return {
+                "contract_type": contract_type,
+                "parameters": {
+                    "from": self._hex_to_base58_address(parameter_value['owner_address']),
+                    "to": self._hex_to_base58_address(parameter_value['to_address']),
+                    "amount": parameter_value['amount']
+                }
+            }
+        
+        elif contract_type == "AccountCreateContract":
+            return {
+                "contract_type": contract_type,
+                "parameters": {
+                    "owner_address": self._hex_to_base58_address(parameter_value['owner_address']),
+                    "account_address": self._hex_to_base58_address(parameter_value['account_address']),
+                }
+            }
+        
+        elif contract_type == 'TriggerSmartContract':
+            input_data = parameter_value['data']
+            if not input_data.startswith("0x"):
+                input_data = "0x" + input_data
+            method_id = input_data[2:10]
+
+            for abi_entry in self._get_abi_entries():
+                function_name = abi_entry.get("name")
+                if function_name is None:
+                    continue
+
+                input_types = [inp["type"] for inp in abi_entry["inputs"]]
+                function_signature = f"{function_name}({','.join(input_types)})"
+                function_selector = function_signature_to_4byte_selector(function_signature)
+
+            
+                if not input_data.startswith("0x" + function_selector.hex()):
+                    continue
+                    
+                if function_name == "transfer":
+                    # For TRC20 token transfers, input_data format is:
+                    # 0x + 4 bytes function selector + 32 bytes (address) + 32 bytes (amount)
+                    # Example input_data:
+                    # 0xa9059cbb0000000000000000000000412a68baf67f1c497d9a4a609276a90dcd6ea7744400000000000000000000000000000000000000000000000000000000d693a400
+                    
+                    # Extract 20-byte address from the padded 32-byte field
+                    # Position 34:74 contains the address with padding
+                    # The address comes without '41' prefix and needs to be added
+                    address_hex = "41" + input_data[34:74].replace("000000000000000000000000", "")
+
+                    # Extract value from the last 32 bytes
+                    value = int(input_data[74:], 16)
+                    
+                    # Convert address to Base58 format
+                    tron_address = self._hex_to_base58_address(address_hex)
+
+                    return {
+                        "contract_type": contract_type,
+                        "parameters": {
+                            "function_name": function_name,
+                            "method_id": method_id,
+                            "from": self._hex_to_base58_address(parameter_value['owner_address']),
+                            "to": tron_address,
+                            "value": value,
+                            "contract_address": self._hex_to_base58_address(parameter_value['contract_address'])
+                        }
+                    }
+                elif function_name == "transferFrom":
+                    # Extract addresses and amount from the input data
+                    from_address = "41" + input_data[34:74].replace("000000000000000000000000", "")
+                    to_address = "41" + input_data[98:138].replace("000000000000000000000000", "")
+                    value = int(input_data[138:], 16)
+
+                    return {
+                        "contract_type": contract_type,
+                        "parameters": {
+                            "function_name": function_name,
+                            "method_id": method_id,
+                            "from": self._hex_to_base58_address(from_address),
+                            "to": self._hex_to_base58_address(to_address),
+                            "value": value,
+                            "contract_address": self._hex_to_base58_address(parameter_value['contract_address']),
+                            "owner": self._hex_to_base58_address(parameter_value['owner_address'])
+                        }
+                    }
+            else:
+                # We have iterated through all ABI entries and found no match
+                # This means the function is not in the ABI and we cannot decode it
+                # Return the function name and parameters as None
+                return {
+                        "contract_type": contract_type,
+                        "parameters": {
+                            "method_id": method_id,
+                        }
+                }
+        return {"contract_type": contract_type, "parameters": None}
+    
+    async def get_account_resource(self, address: str):
+        # getaccountresource
+        result = await self._make_api_call(
+            {
+                "address": address,
+            },
+            "POST",
+            path="/wallet/getaccountresource"
+        )
+        if "Error" in result.keys():
+            raise RpcConnectionError(result["Error"])
+        return result
+    
+    async def get_block_by_number(
+        self, 
+        block_number: Union[int, str], 
+    ):
+
+        result = await self._make_api_call(
+            {
+                "num": block_number,
+            },
+            "POST",
+            path="/wallet/getblockbynum",
+        )
+        if not result:
+            raise TransactionNotFound
+        if "Error" in result.keys():
+            raise RpcConnectionError(result["Error"])
+        return result
+    
+    async def get_latests_block(self):
+        result = await self._make_api_call(
+            {},
+            "POST",
+            path="/wallet/getnowblock",
         )
         if not result:
             raise TransactionNotFound
@@ -417,18 +593,15 @@ class TronMonitor(BlockMonitor):
         self.retry_delay = retry_delay
 
     async def poll_blocks(self, _: int):
-        network_last_block = await self._make_request_with_retry(
-            self.client.get_last_block_number
+        block_data = await self._make_request_with_retry(
+            self.client.get_latests_block
         )
+        network_last_block = block_data["block_header"]["raw_data"]["number"]
         target_block = (
             network_last_block if self._latest_block is None else self._latest_block
         )
         if target_block > network_last_block:
             return
-        block_data = await self._make_request_with_retry(
-            self.client.get_block_by_number,
-            target_block,
-        )
         await self.process_transactions(block_data["transactions"])
         await self.process_block(target_block, network_last_block)
         self._latest_block = target_block + 1
@@ -440,7 +613,7 @@ class TronMonitor(BlockMonitor):
     async def process_transactions(self, transactions):
         for transaction in transactions:
             transaction["aiotx_decoded_input"] = self.client.decode_transaction_input(
-                transaction["input"]
+                transaction
             )
             for handler in self.transaction_handlers:
                 await handler(transaction)

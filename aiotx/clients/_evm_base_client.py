@@ -93,11 +93,7 @@ class AioTxEVMBaseClient(AioTxClient):
                         address = input_data[address_start:address_end].replace(
                             "0000000000000000000000", ""
                         )
-                        if address.startswith("41"):
-                            address = "0x" + address[2:]  # Remove '41' and add '0x'
-                        else:
-                            address = "0x" + address
-
+                        address = "0x" + address
                         value = int(input_data[value_start:], 16)
 
                         decoded_data = [address, value]
