@@ -74,6 +74,11 @@ class AioTxClient:
             raise ValueError(
                 "BlockMonitor instance must be set before starting monitoring"
             )
+        
+        if 'max_retries' in kwargs:
+            self.monitor.max_retries = kwargs['max_retries']
+        if 'retry_delay' in kwargs:
+            self.monitor.retry_delay = kwargs['retry_delay']
 
         async with self._running_lock:
             if self._stop_signal is None:
