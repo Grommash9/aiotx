@@ -29,6 +29,8 @@ class NFTItem(Contract):
         forward_payload: bytes = None,
         query_id: int = 0,
     ) -> Cell:
+        if new_owner_address is None:
+            raise ValueError("new_owner_address cannot be None")
         cell = Cell()
         cell.bits.write_uint(0x5FCC3D14, 32)  # transfer OP
         cell.bits.write_uint(query_id, 64)
